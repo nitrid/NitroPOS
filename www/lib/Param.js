@@ -23,7 +23,7 @@ var Param = [
 		},
 		"PosSatis": {
 			"EvrakTip": "1",
-			"Seri": "IRS",
+			"Seri": "DNM2",
 			"TahSeri": "TIRS",
 			"TahsilatSeri": "A",
 			"NakitKasaKodu": "N01",
