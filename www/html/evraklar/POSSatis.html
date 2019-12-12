@@ -485,14 +485,14 @@
                     <div class="modal-body">
                         <div class="row py-10">
                             <div class="col-4">
-                                <select class="form-control form-control-sm ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="CmbStokAra">
+                                <select class="form-control form-control-sm ng-pristine ng-untouched ng-valid ng-not-empty" ng-keypress = "StokListeleEvent($event)" ng-model="CmbStokAra">
                                     <option value="0" selected="selected">ADI</option>
                                     <option value="1">KODU</option>
                                 </select>
                             </div>
                             <div class="col-lg-8 col-sm-8 col-md-8">
                                 <div class="input-group">
-                                    <input autofocus="true" type="text" class="form-control form-control" ng-model="TxtStokAra" id="TxtStokAra">
+                                    <input autofocus="true" type="text" class="form-control form-control"  ng-keypress = "StokListeleEvent($event)"  ng-model="TxtStokAra" id="TxtStokAra">
                                     <div class="input-group-append">
                                         <button type="button" class="btn btn-block btn-primary form-control" ng-click="BtnStokGridGetir()"><i class="icon wb-search" aria-hidden="true"></i></button>
                                     </div> 
@@ -1339,7 +1339,7 @@
                 </div>
                 <div class="row">
                     <div class="col-2 offset-10">
-                        {{ToplamIskonto | number:2}}
+                        {{ToplamFisIskonto | number:2}}
                     </div>
                 </div>
                 <div class="row">

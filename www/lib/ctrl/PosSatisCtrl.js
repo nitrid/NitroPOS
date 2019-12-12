@@ -72,6 +72,7 @@ function PosSatisCtrl($scope,$window,db)
         $scope.AraToplam = 0;
         $scope.ToplamKdv = 0;
         $scope.ToplamIskonto = 0;
+        $scope.ToplamFisIskonto = 0;
         $scope.GenelToplam = 0;
         $scope.ToplamMiktar = 0;
         $scope.ToplamSatir = 0;
@@ -549,13 +550,16 @@ function PosSatisCtrl($scope,$window,db)
         $scope.ToplamKdv = 0;
         $scope.GenelToplam = 0;
         $scope.ToplamIskonto = 0;
+        $scope.ToplamFisIskonto = 0;
 
         angular.forEach($scope.SatisList,function(value)
         {
             $scope.AraToplam += value.MIKTAR * value.FIYAT;
             $scope.ToplamIskonto += value.ISKONTO;
             $scope.ToplamKdv += ((value.MIKTAR * value.FIYAT) - value.ISKONTO) * (value.KDV / 100);        
+            $scope.ToplamFisIskonto += value.ISKONTO + (value.ISKONTO * (value.KDV / 100));
         });
+        console.log($scope.ToplamFisIskonto)  
 
         $scope.GenelToplam = ($scope.AraToplam - $scope.ToplamIskonto) + $scope.ToplamKdv;
     }
@@ -565,13 +569,17 @@ function PosSatisCtrl($scope,$window,db)
         $scope.ToplamKdv = 0;
         $scope.GenelToplam = 0;
         $scope.ToplamIskonto = 0;
+        $scope.ToplamFisIskonto = 0;
 
         angular.forEach($scope.SatisFisList,function(value)
         {
             $scope.AraToplam += value.MIKTAR * value.FIYAT;
             $scope.ToplamIskonto += value.ISKONTO;
-            $scope.ToplamKdv += ((value.MIKTAR * value.FIYAT) - value.ISKONTO) * (value.KDV / 100);        
+            $scope.ToplamKdv += ((value.MIKTAR * value.FIYAT) - value.ISKONTO) * (value.KDV / 100);
+            $scope.ToplamFisIskonto += value.ISKONTO * (value.KDV / 100);
         });
+        console.log($scope.ToplamFisIskonto)  
+
 
         $scope.GenelToplam = ($scope.AraToplam - $scope.ToplamIskonto) + $scope.ToplamKdv;
     }
@@ -694,9 +702,7 @@ function PosSatisCtrl($scope,$window,db)
         var $row = $("#TblIslem").jsGrid("rowByItem", pItem);
         $row.children('.jsgrid-cell').css('background-color','#2979FF').css('color','white');
         IslemSelectedRow = $row;
-        console.log(IslemSelectedRow)
         $scope.IslemListeSelectedIndex = pIndex;
-        console.log($scope.IslemListeSelectedIndex)
     }
     $scope.TahIslemListeRowClick = function(pIndex,pItem)
     {
@@ -1025,7 +1031,8 @@ function PosSatisCtrl($scope,$window,db)
         });
         db.GetData($scope.Firma,'PosFisSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosFisData)
         {   
-            InsertFisYenile(PosFisData);      
+            InsertFisYenile(PosFisData);   
+            console.log(PosFisData)   
         });
 
     }
@@ -1678,9 +1685,18 @@ function PosSatisCtrl($scope,$window,db)
                 db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosSatisData)
                 {   
                     InsertSonYenile(PosSatisData);      
-                    $scope.IslemListeRowClick(0,$scope.SatisList[0]);  
+                    $scope.IslemListeRowClick($scope.IslemListeSelectedIndex,$scope.SatisList[$scope.IslemListeSelectedIndex]);  
+                    $scope.ToplamMiktar = db.SumColumn($scope.SatisList,"MIKTAR")
+                    $scope.ToplamSatir =  $scope.SatisList.length
                 });
             });
+        }
+    }
+    $scope.StokListeleEvent = function(keyEvent)
+    {
+        if(keyEvent.which === 13)
+        {
+            $scope.BtnStokGridGetir()
         }
     }
     $scope.BtnTahTip = function(pTip)
@@ -1707,7 +1723,7 @@ function PosSatisCtrl($scope,$window,db)
             if($scope.CariKodu == UserParam.PosSatis.Cari)
             {   
                 $('#MdlAraToplam').modal('hide');
-                $('#MdlMusteriListele').modal('show');
+                alertify.alert("Lütfen Cari Seçin.");
             }
         }
     }
@@ -1751,7 +1767,7 @@ function PosSatisCtrl($scope,$window,db)
         db.GetData($scope.Firma,'PosFisSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.SonSatisDetayList[0].SERI,$scope.SonSatisDetayList[0].SIRA],function(PosSonFisData)
         {
             InsertFisYenile(PosSonFisData)
-
+            console.log(PosSonFisData)
         });
     }
     $scope.BtnYazdir = function()
