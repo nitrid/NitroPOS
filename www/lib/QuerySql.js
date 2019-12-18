@@ -165,6 +165,7 @@ var QuerySql =
                 "(SELECT dbo.fn_StokBirimi (sto_kod,bar_birimpntr)) AS BIRIM, " +
                 "sto_detay_takip AS DETAYTAKIP, " +
                 "ISNULL((SELECT dbo.fn_DepodakiMiktar (STOK.sto_kod,@DEPONO,CONVERT(VARCHAR(10),GETDATE(),112))),0) AS DEPOMIKTAR, " +
+                "ISNULL((SELECT dbo.fn_DepodakiMiktar (STOK.sto_kod,@DEPONO,CONVERT(VARCHAR(10),GETDATE(),112))),0) - ISNULL((SELECT SUM(MIKTAR) AS MIKTAR FROM TERP_POS_SATIS WHERE SKODU = STOK.sto_kod AND DURUM IN(0,1)),0) AS KALANDEPOMIKTARI, " +
                 "ISNULL(( SELECT  msg_S_0165  FROM [dbo].[fn_DepolardakiRenkBedenDetayliMiktar] ( sto_kod ,@DEPONO,GETDATE()) WHERE msg_S_0062=CASE WHEN bar_renkpntr=0 THEN bar_bedenpntr ELSE CASE WHEN bar_bedenpntr=0 THEN (bar_renkpntr-1)*40+1 ELSE (bar_renkpntr-1)*40+bar_bedenpntr END  END),0) AS KIRILIMMIKTAR, " +
                 "sto_siparis_dursun AS SIPARISDURSUN, " +
                 "sto_malkabul_dursun as MALKABULDURSUN, " +
@@ -215,6 +216,7 @@ var QuerySql =
                 "'' AS BIRIM, " +
                 "sto_detay_takip AS DETAYTAKIP, " +
                 "ISNULL((SELECT dbo.fn_DepodakiMiktar (STOK.sto_kod,@DEPONO,CONVERT(VARCHAR(10),GETDATE(),112))),0) AS DEPOMIKTAR, " +
+                "ISNULL((SELECT dbo.fn_DepodakiMiktar (STOK.sto_kod,@DEPONO,CONVERT(VARCHAR(10),GETDATE(),112))),0) - ISNULL((SELECT SUM(MIKTAR) AS MIKTAR FROM TERP_POS_SATIS WHERE SKODU = STOK.sto_kod AND DURUM IN(0,1)),0) AS KALANDEPOMIKTARI, " +
                 "0 AS KIRILIMMIKTAR, " +
                 "sto_siparis_dursun AS SIPARISDURSUN, " +
                 "sto_malkabul_dursun as MALKABULDURSUN, " +
@@ -1360,8 +1362,6 @@ var QuerySql =
                 "FIYAT AS FIYAT, " +
                 "ISKONTO AS ISKONTO, " +
                 "KDVPNTR AS KDVPNTR, " +
-                "ROUND(FIYAT * (((SELECT dbo.fn_VergiYuzde (KDVPNTR)) / 100) + 1),4) AS BKDVDAHIL, " +
-                "ROUND((FIYAT * (((SELECT dbo.fn_VergiYuzde (KDVPNTR)) / 100) + 1)),4) * MIKTAR AS TKDVDAHIL, " + 
                 "(SELECT dbo.fn_VergiYuzde (KDVPNTR)) AS KDV, " +
                 "MIKTAR * FIYAT AS TUTAR " +
                 "FROM TERP_POS_SATIS WHERE SUBE = @SUBE AND TIP = @TIP AND SERI = @SERI AND SIRA = @SIRA ORDER BY RECID DESC" ,
@@ -1370,26 +1370,26 @@ var QuerySql =
     },
     PosFisSatisGetir :
     {
-        query: "SELECT " +
-        "MAX(RECID) AS RECID, " +
-        "SERI AS SERI, " +
-        "SIRA AS SIRA, " +
-        "MIN(SATIRNO) AS SATIRNO, " +
-        "MAX(MKODU) AS MKODU, " +
-        "SKODU AS SKODU, " +
-        "ISNULL((SELECT TOP 1 sto_isim FROM STOKLAR WHERE sto_kod = SKODU),'') AS SADI, " +
-        "BARKOD AS BARKOD, " +
-        "SUM(MIKTAR) AS MIKTAR, " +
-        "BIRIMPNTR AS BIRIMPNTR, " +
-        "(SELECT dbo.fn_StokBirimi (SKODU,BIRIMPNTR)) AS BIRIM, " +
-        "FIYAT AS FIYAT, " +
-        "SUM(ISKONTO) AS ISKONTO, " +
-        "KDVPNTR AS KDVPNTR, " +
-        "ROUND(FIYAT * (((SELECT dbo.fn_VergiYuzde (KDVPNTR)) / 100) + 1),4) AS BKDVDAHIL, " +
-        "ROUND((FIYAT * (((SELECT dbo.fn_VergiYuzde (KDVPNTR)) / 100) + 1)),4) * SUM(MIKTAR) AS TKDVDAHIL,  " +
-        "(SELECT dbo.fn_VergiYuzde (KDVPNTR)) AS KDV, " +
-        "SUM(MIKTAR * FIYAT) AS TUTAR " +
-        "FROM TERP_POS_SATIS WHERE SUBE = @SUBE AND TIP = @TIP AND SERI = @SERI AND SIRA = @SIRA GROUP BY SERI,SIRA,SKODU,BARKOD,BIRIMPNTR,FIYAT,KDVPNTR ",
+        query:  "SELECT " +
+                "MAX(RECID) AS RECID, " +
+                "SERI AS SERI, " +
+                "SIRA AS SIRA, " +
+                "MIN(SATIRNO) AS SATIRNO, " +
+                "MAX(MKODU) AS MKODU, " +
+                "SKODU AS SKODU, " +
+                "ISNULL((SELECT TOP 1 sto_isim FROM STOKLAR WHERE sto_kod = SKODU),'') AS SADI, " +
+                "BARKOD AS BARKOD, " +
+                "SUM(MIKTAR) AS MIKTAR, " +
+                "BIRIMPNTR AS BIRIMPNTR, " +
+                "(SELECT dbo.fn_StokBirimi (SKODU,BIRIMPNTR)) AS BIRIM, " +
+                "FIYAT AS FIYAT, " +
+                "SUM(ISKONTO) * (((SELECT dbo.fn_VergiYuzde (KDVPNTR)) / 100) + 1) AS ISKONTO, " +
+                "KDVPNTR AS KDVPNTR, " +
+                "ROUND(FIYAT * (((SELECT dbo.fn_VergiYuzde (KDVPNTR)) / 100) + 1),4) AS BKDVDAHIL, " +
+                "ROUND((FIYAT * (((SELECT dbo.fn_VergiYuzde (KDVPNTR)) / 100) + 1)),4) * SUM(MIKTAR) AS TKDVDAHIL,  " +
+                "(SELECT dbo.fn_VergiYuzde (KDVPNTR)) AS KDV, " +
+                "SUM(MIKTAR * FIYAT) AS TUTAR " +
+                "FROM TERP_POS_SATIS WHERE SUBE = @SUBE AND TIP = @TIP AND SERI = @SERI AND SIRA = @SIRA GROUP BY SERI,SIRA,SKODU,BARKOD,BIRIMPNTR,FIYAT,KDVPNTR ",
         param:   ['SUBE','TIP','SERI','SIRA'],
         type:    ['int','int','string|25','int']
     },

@@ -1123,117 +1123,95 @@
     <div class="row" id="A4" style="display: none">
         <div class="col-12">
             <div class="panel">
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
                 <div class="panel-body">
-                    <div class="row">
-                        <div class="col-2">
-                            <p style="font-size:130%;">
-                                <br>TEKNOERP Yazılım Teknolojileri A.Ş
-                                Ataşehir / Üsküdar
-                                <br>
-                                <b>www.teknoerp.com.tr</b>
-                                <br>
-                                info@teknoerp.com.tr
-                                05495250675
-                                <br>
-                                <b>TEKNOERP</b>
-                                <br>
-                                <br>
-                                Ticaret Sicil N
-                            </p>
+                    <div class="row" >
+                        <div class="col-6">
+                            {{CariKodu}}
                         </div>
-                        <div class="col-2 offset-2">
-                            <a href="http://www.teknoerp.com.tr/"><img class="img-fluid" src="img/TEKNOERP.png"></a>
+                    </div>
+                    <div class="row" >
+                        <div class="col-6">
+                            {{CariAdi}}
                         </div>
-                        <div class="col-2 offset-3">
-                            <p style="font-size:130%;">
-                                <b>SERİ : </b>{{Seri}}
-                                <br>
-                                <b>SİRA : </b>{{Sira}}
-                                <br>
-                                <br>
-                                <b>MÜŞTERİ</b>
-                                <br>
-                                {{CariAdi}}
-                                <br>
-                                <br>
-                                <b>FATURA TARİHİ:</b>
-                                <br>
-                                {{Tarih}}
-                            </p>
+                        <div class="col-2 offset-4">
+                            {{FisTarih}}
+                        </div>
+                    </div>    
+                    <div class="row" >
+                        <div class="col-6">
+                            {{CariAdres2}}
+                        </div>
+                        <div class="col-2 offset-4">
+                            {{FisSaat}}
+                        </div>
+                    </div>
+                    <div class="row" >
+                        <div class="col-6">
+                            {{CariAdres1}}
                         </div>
                     </div>
                 </div>
-                <!-- <div class="row">
-                    <div class="col-2">
-                        <b>AÇIKLAMA</b>
-                    </div>
-                    <div class="col-2 offset-4">
-                        MİKTAR
-                    </div>
-                    <div class="col-2">
-                        BİRİM FİYATI
-                    </div>
-                    <div class="col-2">
-                        <b>TOPLAM</b>
-                    </div>
-                </div> -->
-                <div class="row">
+                <br>
+                <br>
+                <br>
+                <div class="row pb-100">
                     <div class="col-12">
-                        ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <table style="width:100%"> 
-                            <tr style="font-size:130%;">
-                                <th>ADI</th>
-                                <th>BİRİM</th>
-                                <th>MİKTAR</th>
-                                <th>FİYAT</th>
-                                <th>TUTAR</th>
+                        <table style="width:100%">
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>             
+                                <th></th>
+                                <th></th>                             
                             </tr>
-                            <tr ng-repeat="Item in SatisList" style="font-size:130%;">
-                                <td>{{Item.SADI}}</td>
-                                <td>{{Item.BIRIM}}</td>
-                                <td>{{Item.MIKTAR}}</td>
-                                <td>{{Item.FIYAT}}</td>
-                                <td>{{Item.TUTAR}}</td>
+                            <tr ng-repeat="Item in SatisFisList">
+                                <td style="font-size:15px; width: 30px;">{{Item.SKODU}}</td>
+                                <td style="font-size:15px; width: 150px;">{{Item.SADI}}</td>
+                                <td style="font-size:15px; width: 10px;">{{Item.MIKTAR}}</td>
+                                <td style="font-size:15px; width: 15px;">{{Item.BIRIM}}</td>
+                                <td style="font-size:15px; width: 5px;">{{Item.ISKONTO | number:2}}</td>
+                                <td style="font-size:15px; width: 5px;">0,00</td>
+                                <td style="font-size:15px; width: 5px;">{{Item.KDV}}</td>                               
+                                <td style="font-size:15px; width: 30px;">{{Item.BKDVDAHIL | number:2}}</td>
+                                <td style="font-size:15px; width: 30px;">{{Item.TKDVDAHIL | number:2}}</td>                         
                             </tr>
                         </table>
                     </div>
                 </div>
-                <div class="row pb-100">
-                    <div class="col-12">
-                        ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                    </div>
-                </div>
                 <div class="row pt-100" style="font-size:160%;">
-                    <div class="col-2 offset-10">
-                        <b>ARA TOPLAM</b>
+                    <div class="col-3 offset-7">
+                        ARA TOPLAM
                     </div>
-                </div>
-                <div class="row" style="font-size:160%;">
-                    <div class="col-2 offset-10">
+                    <div class="col-2">
                         {{AraToplam | number:2}}
                     </div>
                 </div>
-                <div class="row" style="font-size:160%;">
-                    <div class="col-2 offset-10">
-                        <b>TOPLAM K.D.V</b>
+                <div class="row pt-20" style="font-size:160%;">
+                    <div class="col-3 offset-7">
+                        K.D.V(%){{SatisFisList[0].KDV}}
                     </div>
-                </div>
-                <div class="row" style="font-size:160%;">
-                    <div class="col-2 offset-10">
+                    <div class="col-2">
                         {{ToplamKdv | number:2}}
-                    </div>
+                    </div>             
                 </div>
-                <div class="row" style="font-size:160%;">
-                    <div class="col-2 offset-10">
-                        <b>GENEL TOPLAM</b>
+                <div class="row pt-20" style="font-size:160%;">
+                    <div class="col-3 offset-7">
+                        YEKÜN
                     </div>
-                </div>
-                <div class="row" style="font-size:160%;">
-                    <div class="col-2 offset-10">
+                    <div class="col-2">
                         {{GenelToplam | number:2}}
                     </div>
                 </div>
@@ -1245,30 +1223,30 @@
         <div class="col-12">
             <div class="panel">
                 <div class="panel-body">
-                <div class="row hb-50" style="font-size:160%;">
+                <div class="row hb-50" stlye="font-size:160%;">
                     <div class="col-4 offset-4">
                         <h1>FİYAT TEKLİFİ</h1>
                     </div>
                 </div>
                 <div class="row" >
                     <div class="col-4">
-                    <p style="font-size:160%;">
-                        <br>
-                        <br>
-                        <b>Müşteri Kodu :</b> {{CariKodu}}
-                        <br>
-                        <br>
-                        <b>Müşteri Adı :</b> {{CariAdi}}
-                    </p>
+                        <p stlye="font-size:160%;">
+                            <br>
+                            <br>
+                            <b><h4>Müşteri Kodu :</b><h4> {{CariKodu}}</h4>
+                            <br>
+                            <br>
+                            <b><h4>Müşteri Adı :</b></h4><h4> {{CariAdi}}</h4>
+                        </p>
                     </div>
-                    <div class="col-2 offset-6">
-                        <p style="font-size:140%;">
+                    <div class="col-3 offset-4">
+                        <p stlye="font-size:140%;">
                             <br>
                             <br>
-                            <b>Evrak No : </b>{{FisSeri}} - {{FisSira}}
+                            <b><h4>Evrak No : </b></h4><h4>{{FisSeri}} - {{FisSira}}</h4>
                             <br>
                             <br>
-                            <b>TARİH:</b> {{Tarih}}
+                            <b><h4>TARİH:</b></h4><h4> {{Tarih}}<h4>
                             <br>
                         </p>
                     </div>
@@ -1296,23 +1274,23 @@
                 <div class="row">
                     <div class="col-12">
                         <table style="width:100%">
-                            <tr style="font-size:160%;">
-                                <th>STOK KODU</th>
-                                <th>ADI</th>
-                                <th>BİRİM</th>
-                                <th>MİKTAR</th>
-                                <th>BİRİM FİYATI</th>
-                                <th>TUTAR</th>
-                                <th>ISKONTO</th>
+                            <tr>
+                                <th style="font: size 20px;">STOK KODU</th>
+                                <th style="font-size:20px;">ADI</th>
+                                <th style="font-size:20px;">BİRİM</th>
+                                <th style="font-size:20px;">MİKTAR</th>
+                                <th style="font-size:20px;">BİRİM FİYATI</th>
+                                <th style="font-size:20px;">TUTAR</th>
+                                <th style="font-size:20px;">ISKONTO</th>
                             </tr>
-                            <tr ng-repeat="Item in SatisFisList" style="font-size:160%;">
-                                <td>{{Item.SKODU}}</td>
-                                <td>{{Item.SADI}}</td>
-                                <td>{{Item.BIRIM}}</td>
-                                <td>{{Item.MIKTAR}}</td>
-                                <td>{{Item.BKDVDAHIL}}</td>
-                                <td>{{Item.TKDVDAHIL}}</td>
-                                <td>{{Item.ISKONTO}}</td>
+                            <tr ng-repeat="Item in SatisFisList">
+                                <td style="font-size:18px;">{{Item.SKODU}}</td>
+                                <td style="font-size:18px;">{{Item.SADI}}</td>
+                                <td style="font-size:18px;">ADET</td>
+                                <td style="font-size:18px;">{{Item.MIKTAR}}</td>
+                                <td style="font-size:18px;">{{Item.BKDVDAHIL | number:2}}</td>
+                                <td style="font-size:18px;">{{Item.TKDVDAHIL | number:2}}</td>
+                                <td style="font-size:18px;">{{Item.ISKONTO | number:2}}</td>
                             </tr>
                         </table>
                     </div>
@@ -1322,49 +1300,45 @@
                         ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
                     </div>
                 </div>
-                <div class="row pt-100" style="font-size:160%;">
-                    <div class="col-2 offset-10">
+                <!-- <div class="row pt-20" style="font-size:160%;">
+                    <div class="col-4 offset-8">
                         <b>ARA TOPLAM</b>
                     </div>
                 </div>
                 <div class="row" style="font-size:160%;">
-                    <div class="col-2 offset-10">
-                        {{AraToplam}}
+                    <div class="col-4 offset-8">
+                        {{AraToplam | number:2}}
                     </div>
-                </div>
+                </div> -->
                 <div class="row" style="font-size:160%;">
-                    <div class="col-2 offset-10">
-                        <h4>TOPLAM İNDİRİM</h4>
+                    <div class="col-4 offset-5">
+                        <b>TOPLAM İNDİRİM :</b>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-2 offset-10">
+                    <div class="col-3">
                         {{ToplamFisIskonto | number:2}}
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-2 offset-10">
+              
+                <!-- <div class="row" style="font-size:160%;">
+                    <div class="col-4 offset-8">
                         <b>TOPLAM K.D.V</b>
                     </div>
                 </div>
                 <div class="row" style="font-size:160%;">
-                    <div class="col-2 offset-10">
+                    <div class="col-4 offset-8">
                         {{ToplamKdv | number:2}}
                     </div>
-                </div>
+                </div> -->
                 <div class="row" style="font-size:160%;">
-                    <div class="col-2 offset-10">
-                        <b>GENEL TOPLAM</b>
+                    <div class="col-4 offset-5">
+                        <b>GENEL TOPLAM :</b>
                     </div>
-                </div>
-                <div class="row" style="font-size:160%;">
-                    <div class="col-2 offset-10">
+                    <div class="col-3">
                         {{GenelToplam | number:2}}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
 
