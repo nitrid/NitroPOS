@@ -37,15 +37,15 @@ function AnaSayfaCtrl($scope,$window,db)
     }
     function DivShowHide()
     {   
-        if(UserParam.Yetkili == true && UserParam.AnasayfaRaporlari == "1")
+        if(UserParam.Yetkili == true && UserParam.Sistem.AnasayfaRaporlari == "1")
         {
             $scope.YoneticiPaneli = true;
         }
-        else if (UserParam.Yetkili == false && UserParam.AnasayfaRaporlari == "1")
+        else if (UserParam.Yetkili == false && UserParam.Sistem.AnasayfaRaporlari == "1")
         {
             $scope.KullaniciPaneli = true;
         }
-        else if(UserParam.Yetkili == false && UserParam.AnasayfaRaporlari == "0")
+        else if(UserParam.Yetkili == false && UserParam.Sistem.AnasayfaRaporlari == "0")
         {
             $scope.KullaniciPaneli = false;
         }
