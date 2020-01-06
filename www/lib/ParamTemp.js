@@ -11,6 +11,8 @@ var ParamTemp =
 		"KKartiKasaSecim" : {"Title" : "K.Kartı Kasa","DefaultValue" : "1"},
 		"SifreDegistir" : {"Title" : "Şifre Değiştir","DefaultValue" : "0"},
 		"StokEksiyeDusme" : {"Title" : "Stok Eksiye Düşme","DefaultValue" : "1"},
+		"AnasayfaRaporlari" : {"Title" : "Anasayfa Raporları","DefaultValue" : "1"},
+		
 		"Sistem" : 
 		{
 			"KiloBarkod" : {"Title" : "Kilo Barkodu","DefaultValue" : "0"},
