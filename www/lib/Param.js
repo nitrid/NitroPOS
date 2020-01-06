@@ -11,6 +11,7 @@ var Param = [
 		"KKartiKasaSecim": "1",
 		"SifreDegistir": "0",
 		"StokEksiyeDusme": "1",
+		"AnasayfaRaporlari": "0",
 		"Sistem": {
 			"KiloBarkod": "0",
 			"KiloFlag": "",

@@ -37,14 +37,17 @@ function AnaSayfaCtrl($scope,$window,db)
     }
     function DivShowHide()
     {   
-        if(UserParam.Yetkili == true)
+        if(UserParam.Yetkili == true && UserParam.AnasayfaRaporlari == "1")
         {
             $scope.YoneticiPaneli = true;
         }
-        else
+        else if (UserParam.Yetkili == false && UserParam.AnasayfaRaporlari == "1")
         {
-            $scope.YoneticiPaneli = false;
             $scope.KullaniciPaneli = true;
+        }
+        else if(UserParam.Yetkili == false && UserParam.AnasayfaRaporlari == "0")
+        {
+            $scope.KullaniciPaneli = false;
         }
     }
     function AnaSayfaRaporlari() 
