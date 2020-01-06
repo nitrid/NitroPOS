@@ -11,7 +11,6 @@ var Param = [
 		"KKartiKasaSecim": "1",
 		"SifreDegistir": "0",
 		"StokEksiyeDusme": "1",
-		"SifreDegistir": "0",
 		"Sistem": {
 			"KiloBarkod": "0",
 			"KiloFlag": "",
@@ -62,6 +61,7 @@ var Param = [
 		"Email": "",
 		"MikroId": "1",
 		"Yetkili": false,
+		"SifreDegistir": "0",
 		"Sistem": {
 			"KiloBarkod": "0",
 			"KiloFlag": "",
@@ -73,8 +73,7 @@ var Param = [
 			"SatirBirlestir": "1",
 			"IskontoMatrisTip": "0",
 			"StokEksiyeDusme": "1",
-			"AnasayfaRaporlari": "1",
-			"SifreDegistir": "0"
+			"AnasayfaRaporlari": "1"
 		},
 		"PosSatis": {
 			"EvrakTip": "0",
@@ -102,7 +101,7 @@ var Param = [
 			"Mağaza Ciro Raporu": "1",
 			"Mağaza Satış Raporu": "1",
 			"Mağaza Stok Raporu": "1"
-		},
+		}
 	},
 	{
 		"Kullanici": "TEST1",
@@ -114,6 +113,7 @@ var Param = [
 		"MikroId": "1",
 		"Yetkili": false,
 		"KKartiKasaSecim": "1",
+		"SifreDegistir": "0",
 		"Sistem": {
 			"KiloBarkod": "0",
 			"KiloFlag": "",
@@ -125,8 +125,7 @@ var Param = [
 			"SatirBirlestir": "1",
 			"IskontoMatrisTip": "0",
 			"StokEksiyeDusme": "1",
-			"AnasayfaRaporlari": "1",
-			"SifreDegistir": "0"
+			"AnasayfaRaporlari": "0"
 		},
 		"PosSatis": {
 			"EvrakTip": "0",
@@ -154,7 +153,6 @@ var Param = [
 			"Mağaza Ciro Raporu": "1",
 			"Mağaza Satış Raporu": "1",
 			"Mağaza Stok Raporu": "1"
-		},
-		"SifreDegistir": "0"
+		}
 	}
 ]
