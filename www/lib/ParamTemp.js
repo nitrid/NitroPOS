@@ -10,6 +10,7 @@ var ParamTemp =
 		"Yetkili" : {"Title" : "Yetkili","DefaultValue" : "1"},
 		"KKartiKasaSecim" : {"Title" : "K.Kartı Kasa","DefaultValue" : "1"},
 		"SifreDegistir" : {"Title" : "Şifre Değiştir","DefaultValue" : "0"},
+		"StokEksiyeDusme" : {"Title" : "Stok Eksiye Düşme","DefaultValue" : "1"},	
 		
 		"Sistem" : 
 		{
