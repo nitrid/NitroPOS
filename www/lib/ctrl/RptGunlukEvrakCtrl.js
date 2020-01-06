@@ -1,6 +1,7 @@
 function RptGunlukEvrakCtrl($scope,$window,db)
 {   
     let SonSatisSelectedRow = null;
+    
     function InitIslemGrid()
     {
         $("#TblIslem").jsGrid

@@ -8,7 +8,6 @@ var Param = [
 		"Email": "mhrgndz171@gmail.com",
 		"MikroId": "1",
 		"Yetkili": true,
-		"KKartiKasaSecim": "1",
 		"SifreDegistir": "0",
 		"Sistem": {
 			"KiloBarkod": "0",
@@ -30,7 +29,7 @@ var Param = [
 			"TahSeri": "TIRS",
 			"TahsilatSeri": "A",
 			"NakitKasaKodu": "01",
-			"KrediKartKasa": "",
+			"KrediKartKasa": "01",
 			"AcikHesapKodu": "01",
 			"Cari": "01",
 			"Sube": "",
@@ -53,15 +52,15 @@ var Param = [
 		}
 	},
 	{
-		"Kullanici": "TEST1",
+		"Kullanici": "TEST",
 		"Sifre": "1",
-		"Adi": "TEST1",
-		"Soyadi": "TEST1",
+		"Adi": "TEST",
+		"Soyadi": "TEST",
 		"Telefon": "1",
 		"Email": "1",
 		"MikroId": "1",
 		"Yetkili": false,
-		"KKartiKasaSecim": "1",
+		"SifreDegistir": "0",
 		"Sistem": {
 			"KiloBarkod": "0",
 			"KiloFlag": "",
@@ -72,9 +71,8 @@ var Param = [
 			"SubeNo": "0",
 			"SatirBirlestir": "1",
 			"IskontoMatrisTip": "0",
-			"StokEksiyeDusme": "0",
-			"AnasayfaRaporlari": "0",
-			"SifreDegistir": "0",
+			"StokEksiyeDusme": "1",
+			"AnasayfaRaporlari": "",
 			"FisCiktisi": "1"
 		},
 		"PosSatis": {
@@ -82,11 +80,11 @@ var Param = [
 			"Seri": "IRS",
 			"TahSeri": "TIRS",
 			"TahsilatSeri": "A",
-			"NakitKasaKodu": "01",
+			"NakitKasaKodu": "",
 			"KrediKartKasa": "",
-			"AcikHesapKodu": "01",
-			"Cari": "01",
-			"Sube": "2",
+			"AcikHesapKodu": "",
+			"Cari": "",
+			"Sube": "0",
 			"SorumlulukKodu": "",
 			"Personel": "",
 			"FiyatListe": "0"
@@ -103,7 +101,6 @@ var Param = [
 			"Mağaza Ciro Raporu": "1",
 			"Mağaza Satış Raporu": "1",
 			"Mağaza Stok Raporu": "1"
-		},
-		"SifreDegistir": "0"
+		}
 	}
 ]

@@ -8,9 +8,7 @@ var ParamTemp =
 		"Email" : {"Title" : "Email","DefaultValue" : ""},
 		"MikroId" : {"Title" : "Mikro Id","DefaultValue" : "1"},
 		"Yetkili" : {"Title" : "Yetkili","DefaultValue" : "1"},
-		"KKartiKasaSecim" : {"Title" : "K.Kartı Kasa","DefaultValue" : "1"},
 		"SifreDegistir" : {"Title" : "Şifre Değiştir","DefaultValue" : "0"},
-		"StokEksiyeDusme" : {"Title" : "Stok Eksiye Düşme","DefaultValue" : "1"},	
 		
 		"Sistem" : 
 		{
@@ -26,7 +24,6 @@ var ParamTemp =
 			"StokEksiyeDusme" : {"Title" : "Stok Eksiye Düşme","DefaultValue" : "1"},
 			"AnasayfaRaporlari" : {"Title" : "Anasayfa Raporları","DefaultValue" : ""},
 			"FisCiktisi" : {"Title" : "Fiş Çıktısı","DefaultValue" : "1"},
-			
 		},
 		"PosSatis" :
 		{

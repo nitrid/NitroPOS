@@ -1189,7 +1189,7 @@ function PosSatisCtrl($scope,$window,db)
 
         db.StokBarkodGetir($scope.Firma,$scope.SatisList[0].BARKOD,$scope.Sube,function(BarkodData)
         {   
-            if(UserParam.StokEksiyeDusme = "1")
+            if(UserParam.Sistem.StokEksiyeDusme == "1")
             {
                 if(pMiktar < BarkodData[0].KALANDEPOMIKTARI)
                 {
@@ -1245,7 +1245,7 @@ function PosSatisCtrl($scope,$window,db)
 
         db.StokBarkodGetir($scope.Firma,$scope.SatisList[0].BARKOD,$scope.Sube,function(BarkodData)
         {   
-            if(UserParam.StokEksiyeDusme = "1")
+            if(UserParam.Sistem.StokEksiyeDusme == "1")
             {
                 if(pMiktar * BarkodData[0].KATSAYI < BarkodData[0].KALANDEPOMIKTARI)
                 {
