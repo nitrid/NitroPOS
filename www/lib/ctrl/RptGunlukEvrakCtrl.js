@@ -1,7 +1,6 @@
 function RptGunlukEvrakCtrl($scope,$window,db)
 {   
     let SonSatisSelectedRow = null;
-
     function InitIslemGrid()
     {
         $("#TblIslem").jsGrid
@@ -71,7 +70,32 @@ function RptGunlukEvrakCtrl($scope,$window,db)
                     type: "number",
                     align: "center",
                     width: 75
-                }, 
+                },
+                [
+                    { 
+                        itemTemplate: function(_, item) 
+                        {
+                            return $("<button type='submit' class='btn btn-primary btn-block btn-sm'></button>").text("Detay")
+                                .on("click", function() 
+                                {
+                                    $scope.BtnDuzenle();
+                                    //alert(item.Name);
+                                });
+                        },
+                        width: 50
+                    },
+                    { 
+                        itemTemplate: function(_, item) 
+                        {
+                            return $("<button type='submit' class='btn btn-danger btn-block btn-sm'></button>").text("Kilidi Aç")
+                                .on("click", function() 
+                                {
+                                    $scope.BtnKilidiAc();
+                                });
+                        },
+                        width: 50
+                    },
+                ]
             ],
             rowClick: function(args)
             {
@@ -167,10 +191,11 @@ function RptGunlukEvrakCtrl($scope,$window,db)
         $scope.ToplamIndirim = 0;
         $scope.ToplamKdv = 0;
         $scope.GenelToplam = 0;
+        $scope.Seri = "";
+        $scope.Sira = 0;
 
         $scope.IslemListe = [];
         $scope.SubeListe = [];
-        
 
         $scope.SonSatisListeSelectedIndex = 0; 
 
@@ -188,7 +213,61 @@ function RptGunlukEvrakCtrl($scope,$window,db)
                 $scope.SubeLock = true;
             }
         });
-   
+    }
+    $scope.BtnDuzenle = function()
+    {
+        $('#MdlSonSatisDetay').modal('show');
+    }
+    $scope.BtnKilidiAc = function()
+    {
+        if(UserParam.Yetkili == true)
+        {
+            alertify.okBtn('Evet');
+            alertify.cancelBtn('Hayır');
+
+            alertify.confirm('Evrağın Kilidini Açmak İstediğinize Emin Misiniz ?', 
+            function()
+            { 
+                var TmpQuery = 
+                {
+                    db : '{M}.' + $scope.Firma,
+                    query:  "UPDATE TERP_POS_SATIS SET DURUM = 0 WHERE SERI = @SERI AND SIRA = @SIRA",
+                    param:  ['SERI','SIRA'],
+                    type:   ['string|25','int'],
+                    value:  [$scope.Seri,$scope.Sira]
+                }
+
+                db.ExecuteQuery(TmpQuery,function(UpdateResult)
+                {   
+                    if(typeof(UpdateResult.result.err) == 'undefined')
+                    {
+                        var TmpDeleteQuery = 
+                        {
+                            db : '{M}.' + $scope.Firma,
+                            query:  "DELETE FROM TERP_POS_TAHSILAT WHERE SERI = @SERI AND SIRA = @SIRA",
+                            param:  ['SERI','SIRA'],
+                            type:   ['string|25','int'],
+                            value:  [$scope.Seri,$scope.Sira]
+                        }
+                        
+                        db.ExecuteQuery(TmpDeleteQuery,function(DeleteResult)
+                        {
+                            $scope.BtnGetir();
+                            alertify.alert("Kilit Açma İşlemi Gerçekleşti");
+                        });
+                    }
+                    else
+                    {
+                        alertify.alert("Kilit Açma İşleminde Hata");
+                    }
+                });
+            }
+            ,function(){});
+        }
+        else
+        {
+            alertify.alert("Kilit Açma İşlemini Sadece Yetkili Kullanıcı Yapabilir.");
+        }
     }
     $scope.BtnGetir = function()
     {
@@ -213,35 +292,31 @@ function RptGunlukEvrakCtrl($scope,$window,db)
             type:   ['int','date','date',],
             value:  [$scope.Sube,$scope.IlkTarih,$scope.SonTarih]
         }
-
         db.GetDataQuery(TmpQuery,function(Data)
         {
             $scope.IslemListe = Data;
             $("#TblIslem").jsGrid({data : $scope.IslemListe});
             $scope.GenelToplam = db.SumColumn($scope.IslemListe,"TUTAR")
-            console.log($scope.IslemListe)
         });
-
-
     }
     $scope.SonSatisRowClick = function(pIndex,pItem,pObj)
     {
         if ( SonSatisSelectedRow ) { SonSatisSelectedRow.children('.jsgrid-cell').css('background-color', '').css('color',''); }
         var $row = $("#TblSonSatis").jsGrid("rowByItem", pItem);
         
-        $row.children('.jsgrid-cell').css('background-color','#2979FF').css('color','white');
+        $row.children('.jsgrid-cell').css('background-color','#2979FF').css('color','red');
         SonSatisSelectedRow = $row;
         $scope.SonSatisListeSelectedIndex = pIndex;
-
         let SonSatisDetay = pItem;
-        
+
+        $scope.Seri = pItem.SERI;
+        $scope.Sira = pItem.SIRA;
+
         db.GetData($scope.Firma,'PosSonSatisDetayGetir',[$scope.Sube,SonSatisDetay.SERI,SonSatisDetay.SIRA],function(PosSonSatisDetay)
         {  
             $scope.SonSatisDetayList = PosSonSatisDetay;
             $("#TblSonSatisDetay").jsGrid({data : $scope.SonSatisDetayList});
         });
-
-        $('#MdlSonSatisDetay').modal('show');
     }
     $scope.BtnGeri = function()
     {
