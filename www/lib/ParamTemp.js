@@ -23,12 +23,13 @@ var ParamTemp =
 			"SatirBirlestir" : {"Title" : "Satır Birleştir","DefaultValue" : "1"},
 			"IskontoMatrisTip" : {"Title" : "Iskonto Matris Tipi","DefaultValue" : "0"},
 			"StokEksiyeDusme" : {"Title" : "Stok Eksiye Düşme","DefaultValue" : "1"},
-			"AnasayfaRaporlari" : {"Title" : "Anasayfa Raporları","DefaultValue" : "1"}
+			"AnasayfaRaporlari" : {"Title" : "Anasayfa Raporları","DefaultValue" : ""},
+			"FisCiktisi" : {"Title" : "Fiş Çıktısı","DefaultValue" : "1"},
 			
 		},
 		"PosSatis" :
 		{
-			"EvrakTip" : {"Title" : "Evrak Tipi","DefaultValue" : "0"},
+			"EvrakTip" : {"Title" : "Evrak Tipi","DefaultValue" : "1"},
 			"Seri" : {"Title" : "Seri","DefaultValue" : "IRS"},
 			"TahSeri" : {"Title" : "TahSeri","DefaultValue" : "TIRS"},
 			"TahsilatSeri" : {"Title" : "Tahsilat Seri","DefaultValue" : "A"},			

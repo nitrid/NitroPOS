@@ -195,7 +195,7 @@
                     </div>
                     <div class="row">
                         <div class="col-2 px-1">
-                            <button class="form-group btn btn-block btn-danger my-1" style="height:70px;" ng-click="BtnIadeAl()">İade Al</button>
+                            <button class="form-group btn btn-block btn-danger my-1" style="height:70px;" ng-click="BtnIadeAl(0)">İade Al</button>
                         </div>
                         <div class="col-2 px-1">
                             <button class="form-group btn btn-block btn-warning my-1" ng-click="BtnSonSatis()" style="height:70px;">Son Yapılan Satışlar</button>
@@ -1132,15 +1132,15 @@
                         <div class="row pt-20">
                             <div class="col-4 text-primary"><div class="col-form-label py-2">İade Tipi :</div></div>
                             <div class="col-8">
-                                <select class="form-control text-primary">
-                                    <option value="0" selected>NAKİT</option>
+                                <select class="form-control text-primary" ng-model="CmbIadeTip">
+                                    <option value="0">NAKİT</option>
                                     <option value="1">KREDİ KARTI</option>
                                 </select>
                             </div>
                         </div>
                         <div class="row pt-40 pb-10 my-0">
                             <div class="col-12 px-1">
-                                <button class="form-group btn btn-block btn-primary mb-0">İade Al</button>
+                                <button class="form-group btn btn-block btn-primary mb-0" ng-click = BtnIadeAl(1)>İade Al</button>
                             </div>
                         </div>
                     </div>

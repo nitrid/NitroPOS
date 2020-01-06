@@ -79,6 +79,7 @@ function PosSatisCtrl($scope,$window,db)
         $scope.ParkIslemSayisi = 0;
         $scope.CiktiTip = 1;
         $scope.Kasa = UserParam.PosSatis.NakitKasaKodu;
+        $scope.CmbIadeTip = "0";
 
         $scope.TahPanelKontrol = false;
         $scope.Klavye = false;
@@ -110,7 +111,6 @@ function PosSatisCtrl($scope,$window,db)
         $scope.SonSatisList = [];
         $scope.SonSatisDetayList = [];
 
-        $('#MdlIadeTip').modal('show');
     }
     function InitCariGrid()
     {
@@ -852,8 +852,6 @@ function PosSatisCtrl($scope,$window,db)
         let Kodu = '';
         let Adi = '';
 
-
-
         if($scope.TxtCariAra != "")
         {
             if($scope.CmbCariAra == "0")
@@ -937,7 +935,7 @@ function PosSatisCtrl($scope,$window,db)
         {
             db.StokBarkodGetir($scope.Firma,pBarkod,$scope.Sube,function(BarkodData)
             {
-                if(UserParam.StokEksiyeDusme == "1")
+                if(UserParam.Sistem.StokEksiyeDusme == "1")
                 {
                     if(BarkodData[0].KATSAYI < BarkodData[0].KALANDEPOMIKTARI)
                     {
@@ -1629,72 +1627,89 @@ function PosSatisCtrl($scope,$window,db)
             });
         }
     }
-    $scope.BtnIadeAl = function()
+    $scope.BtnIadeAl = function(pTip)
     {
-        alertify.okBtn('Evet');
-        alertify.cancelBtn('Hayır');
+        if(pTip == 0)
+        {
+            $('#MdlIadeTip').modal('show');
+        }
+        else
+        {    
+            $('#MdlIadeTip').modal('hide'); 
+            alertify.okBtn('Evet');
+            alertify.cancelBtn('Hayır');
 
-        alertify.confirm('Iade almak istediğinize eminmisiniz ?', 
-        function()
-        { 
-            if($scope.SatisList.length > 0)
-            {
-                 //POS SATIS UPDATE
-                 var TmpQuery = 
-                 {
-                     db : '{M}.' + $scope.Firma,
-                     query:  "UPDATE TERP_POS_SATIS SET TIP = 2,DURUM = 1 WHERE SUBE = @SUBE AND TIP = @TIP AND SERI = @SERI AND SIRA = @SIRA",
-                     param:  ['SUBE','TIP','SERI','SIRA'],
-                     type:   ['int','int','string|25','int'],
-                     value:  [$scope.Sube,1,$scope.Seri,$scope.Sira]
-                 }
+            alertify.confirm('Iade almak istediğinize eminmisiniz ?', 
+            function()
+            { 
+                if($scope.SatisList.length > 0)
+                {
+                    let IadeTip = "";
+                    //POS SATIS UPDATE
+                    var TmpQuery = 
+                    {
+                        db : '{M}.' + $scope.Firma,
+                        query:  "UPDATE TERP_POS_SATIS SET TIP = 2,DURUM = 1 WHERE SUBE = @SUBE AND TIP = @TIP AND SERI = @SERI AND SIRA = @SIRA",
+                        param:  ['SUBE','TIP','SERI','SIRA'],
+                        type:   ['int','int','string|25','int'],
+                        value:  [$scope.Sube,1,$scope.Seri,$scope.Sira]
+                    }
 
-                 db.ExecuteQuery(TmpQuery,function(UpdateResult)
-                 {
-                    if(typeof(UpdateResult.result.err) == 'undefined')
-                    {                       
-                        var InsertData = 
-                        [
-                            UserParam.MikroId,
-                            $scope.Sube,
-                            0, //TIP
-                            1, //EVRAKTIP
-                            $scope.Tarih,
-                            $scope.Seri,
-                            $scope.Sira,
-                            $scope.CariKodu,
-                            UserParam.PosSatis.NakitKasaKodu,
-                            $scope.GenelToplam,
-                            0, //PARA USTU
-                            1
-                        ];
-            
-                        db.ExecuteTag($scope.Firma,'PosTahInsert',InsertData,function(InsertResult)
-                        {
-                            if(typeof(InsertResult.result.err) == 'undefined')
-                            {                       
-                                $scope.YeniEvrak();
-                                $scope.TxtBarkod = "";
-                            }
-                            else
-                            {
-                                console.log(InsertResult.result.err);
-                            }
-                        });    
+                    if($scope.CmbIadeTip == "0")
+                    {
+                        IadeTip = 0; //Nakit
                     }
                     else
                     {
-                        console.log(UpdateResult.result.err);
+                        IadeTip = 1; //Kredi Kartı
                     }
-                 });
+                    db.ExecuteQuery(TmpQuery,function(UpdateResult)
+                    {
+                        if(typeof(UpdateResult.result.err) == 'undefined')
+                        {                       
+                            var InsertData = 
+                            [
+                                UserParam.MikroId,
+                                $scope.Sube,
+                                IadeTip, //TIP
+                                1, //EVRAKTIP
+                                $scope.Tarih,
+                                $scope.Seri,
+                                $scope.Sira,
+                                $scope.CariKodu,
+                                UserParam.PosSatis.NakitKasaKodu,
+                                $scope.GenelToplam,
+                                0, //PARA USTU
+                                1
+                            ];
+                
+                            db.ExecuteTag($scope.Firma,'PosTahInsert',InsertData,function(InsertResult)
+                            {
+                                if(typeof(InsertResult.result.err) == 'undefined')
+                                {                       
+                                    $scope.YeniEvrak();
+                                    $scope.TxtBarkod = "";
+                                }
+                                else
+                                {
+                                    console.log(InsertResult.result.err);
+                                }
+                            });    
+                        }
+                        else
+                        {
+                            console.log(UpdateResult.result.err);
+                        }
+                    });
+                }
+                else
+                {
+                    alertify.okBtn("Tamam");
+                    alertify.alert("Kayıtlı evrak olmadan iade alamazsınız !");
+                }
             }
-            else
-            {
-                alertify.okBtn("Tamam");
-                alertify.alert("Kayıtlı evrak olmadan iade alamazsınız !");
-            }
-        }
-        ,function(){});
+            ,function(){});
+       }
     }
     $scope.PosSatisKapatUpdate = function()
     {      
