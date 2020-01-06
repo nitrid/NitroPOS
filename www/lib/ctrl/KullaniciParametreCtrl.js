@@ -123,6 +123,8 @@ function KullaniciParametreCtrl($scope,$window,db)
     }
     $scope.BtnParametre = function()
     {
+        console.log(ParamData = GetParamObject($scope.ParamName))
+        console.log($scope.KullaniciListeSelectedIndex);
         $("#Grup1").hide();
         $("#Grup2").show();
 
@@ -133,6 +135,7 @@ function KullaniciParametreCtrl($scope,$window,db)
                 $scope.CmbParamList.push({Name : Object.keys(Param[$scope.KullaniciListeSelectedIndex])[i]});
             }
         }
+        $scope.CmbParamChange();
     }
     $scope.CmbParamChange = function()
     {
@@ -175,6 +178,9 @@ function KullaniciParametreCtrl($scope,$window,db)
         {
             Param[$scope.KullaniciListeSelectedIndex][$scope.ParamName][Object.keys(ParamData)[i]] = document.getElementById(Object.keys(ParamData)[i]).value;
         }
+        console.log($scope.KullaniciListeSelectedIndex)
+        console.log(ParamData)
+        console.log()
 
         alertify.okBtn('Evet');
         alertify.cancelBtn('Hayır');

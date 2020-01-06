@@ -10,8 +10,7 @@ var ParamTemp =
 		"Yetkili" : {"Title" : "Yetkili","DefaultValue" : "1"},
 		"KKartiKasaSecim" : {"Title" : "K.Kartı Kasa","DefaultValue" : "1"},
 		"SifreDegistir" : {"Title" : "Şifre Değiştir","DefaultValue" : "0"},
-		"StokEksiyeDusme" : {"Title" : "Stok Eksiye Düşme","DefaultValue" : "1"},
-		
+		"StokEksiyeDusme" : {"Title" : "Stok Eksiye Düşme","DefaultValue" : "1"},	
 		
 		"Sistem" : 
 		{
@@ -24,7 +23,7 @@ var ParamTemp =
 			"SubeNo" : {"Title" : "Şube No","DefaultValue" : "0"},
 			"SatirBirlestir" : {"Title" : "Satır Birleştir","DefaultValue" : "1"},
 			"IskontoMatrisTip" : {"Title" : "Iskonto Matris Tipi","DefaultValue" : "0"},
-			"AnasayfaRaporlari" : {"Title" : "Anasayfa Raporları","DefaultValue" : "1"}
+			"AnasayfaRaporlari" : {"Title" : "Anasayfa Raporları","DefaultValue" : ""}
 		},
 		"PosSatis" :
 		{
