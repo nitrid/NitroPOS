@@ -11,7 +11,7 @@ var Param = [
 		"KKartiKasaSecim": "1",
 		"SifreDegistir": "0",
 		"StokEksiyeDusme": "1",
-		"AnasayfaRaporlari": "1",
+		"SifreDegistir": "0",
 		"Sistem": {
 			"KiloBarkod": "0",
 			"KiloFlag": "",
@@ -23,8 +23,7 @@ var Param = [
 			"SatirBirlestir": "1",
 			"IskontoMatrisTip": "0",
 			"StokEksiyeDusme": "1",
-			"AnasayfaRaporlari": "1",
-			"SifreDegistir": "0"
+			"AnasayfaRaporlari": "1"
 		},
 		"PosSatis": {
 			"EvrakTip": "0",
