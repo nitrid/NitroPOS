@@ -109,6 +109,8 @@ function PosSatisCtrl($scope,$window,db)
         $scope.ParkList =[];     
         $scope.SonSatisList = [];
         $scope.SonSatisDetayList = [];
+
+        $('#MdlIadeTip').modal('show');
     }
     function InitCariGrid()
     {
