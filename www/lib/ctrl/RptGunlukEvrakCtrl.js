@@ -196,7 +196,6 @@ function RptGunlukEvrakCtrl($scope,$window,db)
 
         $scope.IslemListe = [];
         $scope.SubeListe = [];
-        
 
         $scope.SonSatisListeSelectedIndex = 0; 
 
