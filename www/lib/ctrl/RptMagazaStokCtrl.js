@@ -67,7 +67,7 @@ function RptMagazaStokCtrl($scope,$window,db)
         $scope.Firma = $window.sessionStorage.getItem('Firma');
         UserParam = Param[$window.sessionStorage.getItem('User')];
 
-        $scope.IlkTarih = moment(new Date()).format("DD.MM.YYYY");
+        $scope.Tarih = moment(new Date()).format("DD.MM.YYYY");
         $scope.SonTarih = moment(new Date()).format("DD.MM.YYYY");
         $scope.Sube = "0";
         $scope.AlisEnvanter = 0;
@@ -100,15 +100,15 @@ function RptMagazaStokCtrl($scope,$window,db)
                     "sto_isim AS ADI, " + 
                     "ISNULL((SELECT TOP 1 ROUND(sfiyat_fiyati,2) FROM STOK_SATIS_FIYAT_LISTELERI WHERE sfiyat_stokkod = sto_kod AND sfiyat_deposirano = 0 AND sfiyat_listesirano = 3),0) AS ALISFIYAT, " + 
                     "ISNULL((SELECT TOP 1 ROUND(sfiyat_fiyati,2) FROM STOK_SATIS_FIYAT_LISTELERI WHERE sfiyat_stokkod = sto_kod AND sfiyat_deposirano = 0 AND sfiyat_listesirano = 1),0) AS SATISFIYAT, " + 
-                    "(SELECT dbo.fn_DepodakiMiktar(sto_kod,@SUBE,GETDATE())) - " + 
+                    "(SELECT dbo.fn_DepodakiMiktar(sto_kod,@SUBE,@TARIH)) - " + 
                     "ISNULL((SELECT SUM(CASE WHEN TIP = 1 THEN MIKTAR ELSE MIKTAR * -1 END) FROM TERP_POS_SATIS WHERE SKODU = sto_kod AND SUBE = @SUBE AND DURUM = 1),0) AS DEPOMIKTAR, " + 
-                    "((SELECT dbo.fn_DepodakiMiktar(sto_kod,@SUBE,GETDATE())) - ISNULL((SELECT SUM(CASE WHEN TIP = 1 THEN MIKTAR ELSE MIKTAR * -1 END) FROM TERP_POS_SATIS WHERE SKODU = sto_kod AND SUBE = @SUBE AND DURUM = 1),0)) " + 
+                    "((SELECT dbo.fn_DepodakiMiktar(sto_kod,@SUBE,@TARIH)) - ISNULL((SELECT SUM(CASE WHEN TIP = 1 THEN MIKTAR ELSE MIKTAR * -1 END) FROM TERP_POS_SATIS WHERE SKODU = sto_kod AND SUBE = @SUBE AND DURUM = 1),0)) " + 
                     "* ISNULL((SELECT TOP 1 ROUND(sfiyat_fiyati,0) FROM STOK_SATIS_FIYAT_LISTELERI WHERE sfiyat_stokkod = sto_kod AND sfiyat_deposirano = 0 AND sfiyat_listesirano = 3),0) AS ALISENVANTER " + 
                     "FROM STOKLAR " + 
-                    "WHERE (SELECT dbo.fn_DepodakiMiktar(sto_kod,@SUBE,GETDATE())) > 0",
-            param:  ['SUBE'],
-            type:   ['string|10'],
-            value:  [$scope.Sube]
+                    "WHERE (SELECT dbo.fn_DepodakiMiktar(sto_kod,@SUBE,@TARIH)) > 0",
+            param:  ['SUBE','TARIH'],
+            type:   ['string|10','date'],
+            value:  [$scope.Sube,$scope.Tarih]
         }
 
         db.GetDataQuery(TmpQuery,function(Data)
