@@ -23,7 +23,7 @@ var ParamTemp =
 			"SubeNo" : {"Title" : "Şube No","DefaultValue" : "0"},
 			"SatirBirlestir" : {"Title" : "Satır Birleştir","DefaultValue" : "1"},
 			"IskontoMatrisTip" : {"Title" : "Iskonto Matris Tipi","DefaultValue" : "0"},
-			"AnasayfaRaporlari" : {"Title" : "Anasayfa Raporları","DefaultValue" : ""}
+			"AnasayfaRaporlari" : {"Title" : "Anasayfa Raporları","DefaultValue" : "1"}
 		},
 		"PosSatis" :
 		{

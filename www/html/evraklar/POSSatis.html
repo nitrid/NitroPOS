@@ -23,7 +23,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="input-group">
-                                <input class="form-control" ng-model="TxtBarkod" id="TxtBarkod" ng-keypress="TxtBarkodPress($event)" autocomplete="off""">
+                                <input class="form-control" ng-model="TxtBarkod" id="TxtBarkod" ng-keypress="TxtBarkodPress($event)" autocomplete="off">
                                 <span class="input-group-append">
                                     
                                 <button type="submit" class="btn btn-primary"><i class="icon wb-search" aria-hidden="true"></i></button>
@@ -1128,16 +1128,19 @@
                         </button>
                         <h4 class="modal-title">İade Tipini Seçiniz</h4>
                     </div>
-                    <div class="modal-body">
-                        <div class="row my-0 py-0">
-                            <div class="col-4 text-info px-1 py-0 my-0"><div class="col-form-label float-right py-2">İade Tipi :</div></div>
-                            <div class="col-8 px-1">
-                                <select class="form-control ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="GDepo">
-                                    <select class="form-control" >
-                                        <option value="0">NAKİT</option>
-                                        <option value="1">NAKİT</option>
-                                    </select>
+                    <div class="modal-body py-0">
+                        <div class="row pt-20">
+                            <div class="col-4 text-primary"><div class="col-form-label py-2">İade Tipi :</div></div>
+                            <div class="col-8">
+                                <select class="form-control text-primary">
+                                    <option value="0" selected>NAKİT</option>
+                                    <option value="1">KREDİ KARTI</option>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="row pt-40 pb-10 my-0">
+                            <div class="col-12 px-1">
+                                <button class="form-group btn btn-block btn-primary mb-0">İade Al</button>
                             </div>
                         </div>
                     </div>
@@ -1391,6 +1394,5 @@
             </div>
         </div>
     </div>
-    
 </div>
 
