@@ -123,12 +123,9 @@ function KullaniciParametreCtrl($scope,$window,db)
     }
     $scope.BtnParametre = function()
     {
-        console.log(ParamData = GetParamObject($scope.ParamName))
-        console.log($scope.KullaniciListeSelectedIndex);
         $("#Grup1").hide();
         $("#Grup2").show();
 
-        console.log(Param[$scope.KullaniciListeSelectedIndex])
         for(i = 0; i < Object.keys(Param[$scope.KullaniciListeSelectedIndex]).length;i++)
         {
             if(typeof Object.values(Param[$scope.KullaniciListeSelectedIndex])[i] == "object")
