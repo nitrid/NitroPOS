@@ -10,7 +10,7 @@ var Param = [
 		"Yetkili": true,
 		"KKartiKasaSecim": "1",
 		"SifreDegistir": "0",
-		"StokEksiyeDusme": "1",
+		"StokEksiyeDusme": "0",
 		"AnaSayfaRapoları" : "1",
 		"Sistem": {
 			"KiloBarkod": "0",
