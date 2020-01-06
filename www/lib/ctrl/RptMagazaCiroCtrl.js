@@ -133,7 +133,6 @@ function RptMagazaCiroCtrl($scope,$window,db)
             
             ExcelDataListe.push(Dizi)
         }
-        console.log(ExcelDataListe)
         var RaporListeData = 
         [
             {

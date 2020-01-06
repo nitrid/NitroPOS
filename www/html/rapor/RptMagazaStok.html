@@ -7,12 +7,25 @@
                     <option ng-repeat="option in SubeListe" value="{{option.KODU}}">{{option.ADI}}</option>
                 </select>
             </div>
+            <div class="row py-10">
+                <div class="col-sm-4 col-md-1 text-primary px-1"><div class="col-form-label px-1 float-left  py-2">Tarih:</div></div>
+                <div class="col-sm-8 col-md-4 px-1">
+                    <div class="input-group input-group-icon">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <span class="icon wb-calendar" aria-hidden="true"></span>
+                            </div>
+                        </div>
+                        <input type="text" class="form-control" id="Tarih" type="text" ng-model="Tarih" data-provide="datepicker">
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-6">
-                    <button type="submit" class="btn btn-primary btn-block btn-sm" ng-click="BtnGetir()">Getir</button>
+                    <button type="submit" class="btn btn-primary btn-block btn-sm" ng-click="ExcelExport()">Excel Aktar</button>
                 </div>
                 <div class="col-6">
-                    <button type="submit" class="btn btn-primary btn-block btn-sm" ng-click="ExcelExport()">Excel Aktar</button>
+                    <button type="submit" class="btn btn-primary btn-block btn-sm" ng-click="BtnGetir()">Getir</button>
                 </div>
             </div>
             <div class="row">
@@ -32,7 +45,7 @@
     </div>
 </div>
 <script>
-    $("#IlkTarih").datepicker({
+    $("#Tarih").datepicker({
     language: "tr"
     });
     $("#SonTarih").datepicker({
