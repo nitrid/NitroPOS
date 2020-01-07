@@ -19,7 +19,7 @@ var Param = [
 			"SubeNo": "0",
 			"SatirBirlestir": "1",
 			"IskontoMatrisTip": "0",
-			"StokEksiyeDusme": "1",
+			"StokEksiyeDusme": "0",
 			"AnasayfaRaporlari": "1",
 			"FisCiktisi": "1"
 		},
@@ -28,11 +28,11 @@ var Param = [
 			"Seri": "IRS",
 			"TahSeri": "TIRS",
 			"TahsilatSeri": "A",
-			"NakitKasaKodu": "",
-			"KrediKartKasa": "",
-			"AcikHesapKodu": "",
+			"NakitKasaKodu": "01",
+			"KrediKartKasa": "01",
+			"AcikHesapKodu": "01",
 			"Cari": "",
-			"Sube": "0",
+			"Sube": "1",
 			"SorumlulukKodu": "",
 			"Personel": "",
 			"FiyatListe": "0"
@@ -84,7 +84,7 @@ var Param = [
 			"KrediKartKasa": "01",
 			"AcikHesapKodu": "01",
 			"Cari": "",
-			"Sube": "0",
+			"Sube": "2",
 			"SorumlulukKodu": "",
 			"Personel": "",
 			"FiyatListe": "0"

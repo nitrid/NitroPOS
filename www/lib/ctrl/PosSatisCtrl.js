@@ -78,8 +78,7 @@ function PosSatisCtrl($scope,$window,db)
         $scope.ToplamSatir = 0;
         $scope.ParkIslemSayisi = 0;
         $scope.CiktiTip = 1;
-        $scope.Kasa = UserParam.PosSatis.NakitKasaKodu;
-        $scope.CmbIadeTip = "0";
+        
 
         $scope.TahPanelKontrol = false;
         $scope.Klavye = false;
@@ -96,6 +95,7 @@ function PosSatisCtrl($scope,$window,db)
 
         $scope.CmbCariAra = "0";
         $scope.CmbStokAra = "0";
+        $scope.CmbIadeTip = "0";
         $scope.TxtCariAra = "";
         $scope.TxtStokAra = "";
 
@@ -110,7 +110,6 @@ function PosSatisCtrl($scope,$window,db)
         $scope.ParkList =[];     
         $scope.SonSatisList = [];
         $scope.SonSatisDetayList = [];
-
     }
     function InitCariGrid()
     {
@@ -787,7 +786,10 @@ function PosSatisCtrl($scope,$window,db)
         $scope.EvrakTip = UserParam.PosSatis.EvrakTip;
         $scope.CariKodu = UserParam.PosSatis.Cari;
         $scope.Sube = UserParam.PosSatis.Sube;
+        $scope.Kasa = UserParam.PosSatis.NakitKasaKodu;
         $scope.Miktar = 1;
+
+        console.log($scope.Kasa)
 
         $scope.Stok = 
         [
@@ -835,15 +837,6 @@ function PosSatisCtrl($scope,$window,db)
             $("#TblParkIslem").jsGrid({data : $scope.ParkList}); 
         });
         
-        if(UserParam.PosSatis.KasaSecim == true)
-        {
-            $scope.KasaSecim = true;
-        }
-        else
-        {
-            $scope.KasaSecim = false;
-        }
-
         await db.MaxSira($scope.Firma,'MaxPosSatisSira',[$scope.Sube,$scope.Seri,$scope.EvrakTip],function(data){$scope.Sira = data});
         await db.MaxSira($scope.Firma,'MaxPosTahSira',[$scope.Sube,$scope.TahSeri,0],function(data){$scope.TahSira = data});
     }
