@@ -58,7 +58,6 @@ function PosSatisCtrl($scope,$window,db)
         UserParam = Param[$window.sessionStorage.getItem('User')];
         $scope.Firma = $window.sessionStorage.getItem('Firma');
 
-        $scope.Kullanici = UserParam.Kullanici
         $scope.Seri = "";
         $scope.TahSeri = "";
         $scope.Sira = 0;
@@ -79,7 +78,6 @@ function PosSatisCtrl($scope,$window,db)
         $scope.ParkIslemSayisi = 0;
         $scope.CiktiTip = 1;
         
-
         $scope.TahPanelKontrol = false;
         $scope.Klavye = false;
 
@@ -786,10 +784,8 @@ function PosSatisCtrl($scope,$window,db)
         $scope.EvrakTip = UserParam.PosSatis.EvrakTip;
         $scope.CariKodu = UserParam.PosSatis.Cari;
         $scope.Sube = UserParam.PosSatis.Sube;
-        $scope.Kasa = UserParam.PosSatis.NakitKasaKodu;
+        $scope.Kullanici = UserParam.Kullanici
         $scope.Miktar = 1;
-
-        console.log($scope.Kasa)
 
         $scope.Stok = 
         [
@@ -928,10 +924,13 @@ function PosSatisCtrl($scope,$window,db)
         {
             db.StokBarkodGetir($scope.Firma,pBarkod,$scope.Sube,function(BarkodData)
             {
-                if(UserParam.Sistem.StokEksiyeDusme == "1")
+                if(BarkodData[0].KATSAYI > BarkodData[0].KALANDEPOMIKTARI)
                 {
-                    if(BarkodData[0].KATSAYI < BarkodData[0].KALANDEPOMIKTARI)
-                    {
+                    alertify.okBtn('Evet');
+                    alertify.cancelBtn('Hayır');
+                    alertify.confirm('Stok - ye Düşecek Devam Etmek İstediğinize Emin Misiniz ?', 
+                    function()
+                    { 
                         if(BarkodData.length > 0)
                         { 
                             $scope.Stok = BarkodData;
@@ -976,50 +975,47 @@ function PosSatisCtrl($scope,$window,db)
                             $scope.TxtBarkod = "";
                         }
                     }
-                    else
-                    {
-                        alertify.alert("Dikkat Stok - Düşme Parametreniz Aktif Değil");
-                    }
+                    ,function(){});
                 }
                 else
                 {
                     if(BarkodData.length > 0)
-                    { 
-                        $scope.Stok = BarkodData;
-                        $scope.Stok[0].FIYAT = 0;
-                        $scope.Stok[0].TUTAR = 0;
-                        $scope.Stok[0].INDIRIM = 0;
-                        $scope.Stok[0].KDV = 0;
-                        $scope.Stok[0].TOPTUTAR = 0;
+                        { 
+                            $scope.Stok = BarkodData;
+                            $scope.Stok[0].FIYAT = 0;
+                            $scope.Stok[0].TUTAR = 0;
+                            $scope.Stok[0].INDIRIM = 0;
+                            $scope.Stok[0].KDV = 0;
+                            $scope.Stok[0].TOPTUTAR = 0;
 
-                        if($scope.Stok[0].CARPAN < 0 )
-                        {
-                            $scope.Stok[0].CARPAN = $scope.Stok[0].CARPAN * -1
-                        }
+                            if($scope.Stok[0].CARPAN < 0 )
+                            {
+                                $scope.Stok[0].CARPAN = $scope.Stok[0].CARPAN * -1
+                            }
 
-                        //**** FİYAT GETİR */
+                            //**** FİYAT GETİR */
 
-                        $scope.DepoNo = UserParam.PosSatis.Sube
+                            $scope.DepoNo = UserParam.PosSatis.Sube
 
-                        let FiyatParam = 
-                        {
-                            CariKodu : $scope.CariKodu,
-                            CariFiyatListe : 1,
-                            DepoNo : $scope.DepoNo,
-                            OdemeNo : 0,
-                            AlisSatis : 1
-                        };
+                            let FiyatParam = 
+                            {
+                                CariKodu : $scope.CariKodu,
+                                CariFiyatListe : 1,
+                                DepoNo : $scope.DepoNo,
+                                OdemeNo : 0,
+                                AlisSatis : 1
+                            };
 
-                        db.FiyatGetir($scope.Firma,BarkodData,FiyatParam,UserParam.PosSatis,function(pFiyat)
-                        {   
-                            $scope.Stok[0].FIYAT = pFiyat
-                            $scope.Stok[0].TUTAR = ($scope.Stok[0].CARPAN * $scope.Miktar) * $scope.Stok[0].FIYAT;
-                            $scope.Stok[0].KDV = ($scope.Stok[0].TUTAR - $scope.Stok[0].INDIRIM) * ($scope.Stok[0].TOPTANVERGI / 100);
-                            $scope.Stok[0].TOPTUTAR = ($scope.Stok[0].TUTAR - $scope.Stok[0].INDIRIM) + $scope.Stok[0].KDV;
-                        
-                            $scope.$apply();
-                            $scope.PosSatisInsert();
-                        });
+                            db.FiyatGetir($scope.Firma,BarkodData,FiyatParam,UserParam.PosSatis,function(pFiyat)
+                            {   
+                                $scope.Stok[0].FIYAT = pFiyat
+                                $scope.Stok[0].TUTAR = ($scope.Stok[0].CARPAN * $scope.Miktar) * $scope.Stok[0].FIYAT;
+                                $scope.Stok[0].KDV = ($scope.Stok[0].TUTAR - $scope.Stok[0].INDIRIM) * ($scope.Stok[0].TOPTANVERGI / 100);
+                                $scope.Stok[0].TOPTUTAR = ($scope.Stok[0].TUTAR - $scope.Stok[0].INDIRIM) + $scope.Stok[0].KDV;
+                            
+                                $scope.$apply();
+                                $scope.PosSatisInsert();
+                            });
                     }
                     else   
                     {
@@ -1086,20 +1082,6 @@ function PosSatisCtrl($scope,$window,db)
     {   
         let TahTutar = 0
         let TahParaUstu = 0;
-        //let TahKasa = "";
-
-        if($scope.TahTip == 0)
-        {
-            TahKasa = UserParam.PosSatis.NakitKasaKodu;
-        }
-        else if($scope.TahTip == 1)
-        {
-            TahKasa = UserParam.PosSatis.KrediKartKasa;
-        }
-        else
-        {
-            TahKasa = UserParam.PosSatis.AcikHesapKodu;
-        }
       
         if($scope.OdemeTip == 1)
         {
@@ -1170,6 +1152,8 @@ function PosSatisCtrl($scope,$window,db)
                 }
             });
         }
+    
+        localStorage.KasaKodu = $scope.Kasa
     }
     $scope.PosSatisMiktarUpdate = function(pMiktar)
     {   
@@ -1856,7 +1840,15 @@ function PosSatisCtrl($scope,$window,db)
             db.GetData($scope.Firma,'CmbBankaGetir',[],function(KasaData)
             {
                 $scope.KasaListe = KasaData;
-                $scope.Kasa = UserParam.PosSatis.KrediKartKasa;
+                
+                if(typeof localStorage.KasaKodu == 'undefined')
+                {
+                    $scope.Kasa = UserParam.PosSatis.KrediKartKasa;
+                }
+                else
+                {
+                    $scope.Kasa = localStorage.KasaKodu.toString();
+                }
             });
         }
 
