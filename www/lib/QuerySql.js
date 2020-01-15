@@ -1373,7 +1373,7 @@ var QuerySql =
     },
     PosFisSatisGetir :
     {
-        query:  "SELECT " +
+        query: "SELECT " +
                 "MAX(RECID) AS RECID, " +
                 "SERI AS SERI, " +
                 "SIRA AS SIRA, " +
@@ -1383,14 +1383,16 @@ var QuerySql =
                 "ISNULL((SELECT TOP 1 sto_isim FROM STOKLAR WHERE sto_kod = SKODU),'') AS SADI, " +
                 "BARKOD AS BARKOD, " +
                 "SUM(MIKTAR) AS MIKTAR, " +
-                "ROUND((SELECT dbo.fn_StokBirimHesapla(SKODU,1,(SELECT dbo.fn_StokBirimHesapla (SKODU,1,ROUND(SUM(MIKTAR),2),1)),2)),0) AS KOLIMIKTAR, " +
                 "BIRIMPNTR AS BIRIMPNTR, " +
-                "(SELECT dbo.fn_StokBirimi (SKODU,BIRIMPNTR)) AS BIRIM, " +
-                "FIYAT AS FIYAT, " +
+                "ISNULL((SELECT dbo.fn_StokBirimHesapla(SKODU,1,SUM(MIKTAR),BIRIMPNTR)),'') AS BIRIM, " +
+                "ISNULL((SELECT dbo.fn_StokBirimi(SKODU,BIRIMPNTR)),'') AS BIRIMADI, " +
+                "ROUND(FIYAT,4) AS FIYAT, " +
                 "SUM(ISKONTO) * (((SELECT dbo.fn_VergiYuzde (KDVPNTR)) / 100) + 1) AS ISKONTO, " +
-                "KDVPNTR AS KDVPNTR, " +
+                "ROUND(KDVPNTR,4) AS KDVPNTR, " +
+                "MAX(CONVERT(NVARCHAR, OTARIH, 104)) AS TARIH, " +
+                "MAX(CONVERT(NVARCHAR, OTARIH, 108)) AS SAAT, " +
                 "ROUND(FIYAT * (((SELECT dbo.fn_VergiYuzde (KDVPNTR)) / 100) + 1),4) AS BKDVDAHIL, " +
-                "ROUND((FIYAT * (((SELECT dbo.fn_VergiYuzde (KDVPNTR)) / 100) + 1)),4) * SUM(MIKTAR) AS TKDVDAHIL,  " +
+                "ROUND(FIYAT * (((SELECT dbo.fn_VergiYuzde (KDVPNTR)) / 100) + 1) * SUM(MIKTAR),4)  AS TKDVDAHIL, " +
                 "(SELECT dbo.fn_VergiYuzde (KDVPNTR)) AS KDV, " +
                 "ROUND(SUM(MIKTAR * FIYAT),4) AS TUTAR " +
                 "FROM TERP_POS_SATIS WHERE SUBE = @SUBE AND TIP = @TIP AND SERI = @SERI AND SIRA = @SIRA GROUP BY SERI,SIRA,SKODU,BARKOD,BIRIMPNTR,FIYAT,KDVPNTR ",

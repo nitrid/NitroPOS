@@ -1069,7 +1069,6 @@ function PosSatisCtrl($scope,$window,db)
             {                                        
                 db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosSatisData)
                 {   
-                    console.log(PosSatisData)
                     InsertSonYenile(PosSatisData);      
                     $scope.TxtBarkod = ""; 
                     $scope.IslemListeRowClick(0,$scope.SatisList[0]);
@@ -1086,7 +1085,6 @@ function PosSatisCtrl($scope,$window,db)
         {   
             InsertFisYenile(PosFisData);   
         });
-
     }
     $scope.PosTahInsert = function(pCallBack)
     {   
@@ -1358,7 +1356,6 @@ function PosSatisCtrl($scope,$window,db)
         alertify.confirm('Satırı iptal etmek istediğinize eminmisiniz ?', 
         function()
         {   
-
             if($scope.IslemListeSelectedIndex > -1)
             {
                 db.ExecuteTag($scope.Firma,'PosSatisSatirIptal',[$scope.SatisList[$scope.IslemListeSelectedIndex].RECID],function(data)
