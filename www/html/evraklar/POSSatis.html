@@ -1309,6 +1309,7 @@
                                 <th style="font-size:20px;">ADI</th>
                                 <th style="font-size:20px;">BİRİM</th>
                                 <th style="font-size:20px;">MİKTAR</th>
+                                <th style="font-size:20px;">KOLI MİKTAR</th>
                                 <th style="font-size:20px;">BİRİM FİYATI</th>
                                 <th style="font-size:20px;">TUTAR</th>
                                 <th style="font-size:20px;">ISKONTO</th>
@@ -1316,8 +1317,10 @@
                             <tr ng-repeat="Item in SatisFisList">
                                 <td style="font-size:18px;">{{Item.SKODU}}</td>
                                 <td style="font-size:18px;">{{Item.SADI}}</td>
-                                <td style="font-size:18px;">ADET</td>
+                                <td style="font-size:18px;">{{Item.BIRIM}}</td>
                                 <td style="font-size:18px;">{{Item.MIKTAR}}</td>
+                                <td style="font-size:18px;">{{Item.KOLIMIKTAR}}</td>
+                                
                                 <td style="font-size:18px;">{{Item.BKDVDAHIL | number:2}}</td>
                                 <td style="font-size:18px;">{{Item.TKDVDAHIL | number:2}}</td>
                                 <td style="font-size:18px;">{{Item.ISKONTO | number:2}}</td>

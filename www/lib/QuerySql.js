@@ -161,6 +161,7 @@ var QuerySql =
                 "(SELECT dbo.fn_renk_kirilimi (bar_renkpntr,sto_renk_kodu)) AS RENK, " +
                 "(SELECT dbo.fn_VergiYuzde (sto_perakende_vergi)) AS PERAKENDEVERGI, " +
                 "(SELECT dbo.fn_VergiYuzde (sto_toptan_vergi)) AS TOPTANVERGI, " +
+                "ISNULL((SELECT dbo.fn_StokBirimHesapla(sto_kod,1,(SELECT dbo.fn_StokBirimHesapla (sto_kod,bar_birimpntr,1,1)),2)),0) AS KATSAYI2, " +
                 "ISNULL((SELECT dbo.fn_StokBirimHesapla (sto_kod,bar_birimpntr,1,1)),1) AS KATSAYI, " +
                 "(SELECT dbo.fn_StokBirimi (sto_kod,bar_birimpntr)) AS BIRIM, " +
                 "sto_detay_takip AS DETAYTAKIP, " +
@@ -212,6 +213,7 @@ var QuerySql =
                 "'' AS RENK, " +
                 "(SELECT dbo.fn_VergiYuzde (sto_perakende_vergi)) AS PERAKENDEVERGI, " +
                 "(SELECT dbo.fn_VergiYuzde (sto_toptan_vergi)) AS TOPTANVERGI, " +
+                "ISNULL((SELECT dbo.fn_StokBirimHesapla(sto_kod,1,(SELECT dbo.fn_StokBirimHesapla (sto_kod,bar_birimpntr,1,1)),2)),0) AS KATSAYI2, " +
                 "1 AS KATSAYI, " +
                 "'' AS BIRIM, " +
                 "sto_detay_takip AS DETAYTAKIP, " +
@@ -1357,13 +1359,14 @@ var QuerySql =
                 "ISNULL((SELECT TOP 1 sto_isim FROM STOKLAR WHERE sto_kod = SKODU),'') AS SADI, " +
                 "BARKOD AS BARKOD, " +
                 "MIKTAR AS MIKTAR, " +
+                "ROUND((SELECT dbo.fn_StokBirimHesapla(SKODU,1,(SELECT dbo.fn_StokBirimHesapla (SKODU,1,ROUND(MIKTAR,2),1)),2)),0) AS KOLIMIKTAR, " +
                 "BIRIMPNTR AS BIRIMPNTR, " +
                 "(SELECT dbo.fn_StokBirimi (SKODU,BIRIMPNTR)) AS BIRIM, " +
                 "FIYAT AS FIYAT, " +
                 "ISKONTO AS ISKONTO, " +
                 "KDVPNTR AS KDVPNTR, " +
                 "(SELECT dbo.fn_VergiYuzde (KDVPNTR)) AS KDV, " +
-                "MIKTAR * FIYAT AS TUTAR " +
+                "ROUND(MIKTAR * FIYAT,4) AS TUTAR " +
                 "FROM TERP_POS_SATIS WHERE SUBE = @SUBE AND TIP = @TIP AND SERI = @SERI AND SIRA = @SIRA ORDER BY RECID DESC" ,
         param:   ['SUBE','TIP','SERI','SIRA'],
         type:    ['int','int','string|25','int']
@@ -1380,6 +1383,7 @@ var QuerySql =
                 "ISNULL((SELECT TOP 1 sto_isim FROM STOKLAR WHERE sto_kod = SKODU),'') AS SADI, " +
                 "BARKOD AS BARKOD, " +
                 "SUM(MIKTAR) AS MIKTAR, " +
+                "ROUND((SELECT dbo.fn_StokBirimHesapla(SKODU,1,(SELECT dbo.fn_StokBirimHesapla (SKODU,1,ROUND(SUM(MIKTAR),2),1)),2)),0) AS KOLIMIKTAR, " +
                 "BIRIMPNTR AS BIRIMPNTR, " +
                 "(SELECT dbo.fn_StokBirimi (SKODU,BIRIMPNTR)) AS BIRIM, " +
                 "FIYAT AS FIYAT, " +
@@ -1388,7 +1392,7 @@ var QuerySql =
                 "ROUND(FIYAT * (((SELECT dbo.fn_VergiYuzde (KDVPNTR)) / 100) + 1),4) AS BKDVDAHIL, " +
                 "ROUND((FIYAT * (((SELECT dbo.fn_VergiYuzde (KDVPNTR)) / 100) + 1)),4) * SUM(MIKTAR) AS TKDVDAHIL,  " +
                 "(SELECT dbo.fn_VergiYuzde (KDVPNTR)) AS KDV, " +
-                "SUM(MIKTAR * FIYAT) AS TUTAR " +
+                "ROUND(SUM(MIKTAR * FIYAT),4) AS TUTAR " +
                 "FROM TERP_POS_SATIS WHERE SUBE = @SUBE AND TIP = @TIP AND SERI = @SERI AND SIRA = @SIRA GROUP BY SERI,SIRA,SKODU,BARKOD,BIRIMPNTR,FIYAT,KDVPNTR ",
         param:   ['SUBE','TIP','SERI','SIRA'],
         type:    ['int','int','string|25','int']

@@ -20,7 +20,8 @@ var Param = [
 			"SatirBirlestir": "1",
 			"IskontoMatrisTip": "0",
 			"AnasayfaRaporlari": "1",
-			"FisCiktisi": "1"
+			"FisCiktisi": "1",
+			"StokEksiyeDusme": "0",
 		},
 		"PosSatis": {
 			"EvrakTip": "1",
@@ -71,7 +72,8 @@ var Param = [
 			"SatirBirlestir": "1",
 			"IskontoMatrisTip": "0",
 			"AnasayfaRaporlari": "1",
-			"FisCiktisi": "1"
+			"FisCiktisi": "1",
+			"StokEksiyeDusme": "1",
 		},
 		"PosSatis": {
 			"EvrakTip": "1",
@@ -122,7 +124,8 @@ var Param = [
 			"SatirBirlestir": "1",
 			"IskontoMatrisTip": "0",
 			"AnasayfaRaporlari": "0",
-			"FisCiktisi": "1"
+			"FisCiktisi": "1",
+			"StokEksiyeDusme": "1",
 		},
 		"PosSatis": {
 			"EvrakTip": "1",

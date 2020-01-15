@@ -23,6 +23,7 @@ var ParamTemp =
 			"IskontoMatrisTip" : {"Title" : "Iskonto Matris Tipi","DefaultValue" : "0"},
 			"AnasayfaRaporlari" : {"Title" : "Anasayfa Raporları","DefaultValue" : "1"},
 			"FisCiktisi" : {"Title" : "Fiş Çıktısı","DefaultValue" : "1"},
+			"StokEksiyeDusme" : {"Title" : "Stok Eksiye Düşme","DefaultValue" : "1"},
 		},
 		"PosSatis" :
 		{
