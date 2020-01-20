@@ -21,7 +21,7 @@ var Param = [
 			"IskontoMatrisTip": "0",
 			"AnasayfaRaporlari": "1",
 			"FisCiktisi": "1",
-			"StokEksiyeDusme": "0",
+			"StokEksiyeDusme": "1",
 		},
 		"PosSatis": {
 			"EvrakTip": "1",
