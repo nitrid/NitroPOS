@@ -837,9 +837,9 @@ function PosSatisCtrl($scope,$window,db)
 
             $("#TblParkIslem").jsGrid({data : $scope.ParkList}); 
         });
-        
-        await db.MaxSira($scope.Firma,'MaxPosSatisSira',[$scope.Sube,$scope.Seri,$scope.EvrakTip],function(data){$scope.Sira = data});
-        await db.MaxSira($scope.Firma,'MaxPosTahSira',[$scope.Sube,$scope.TahSeri,0],function(data){$scope.TahSira = data});
+
+        await db.MaxSiraPromiseTag($scope.Firma,'MaxPosSatisSira',[$scope.Sube,$scope.Seri,$scope.EvrakTip],function(data){$scope.Sira = data;});
+        await db.MaxSiraPromiseTag($scope.Firma,'MaxPosTahSira',[$scope.Sube,$scope.TahSeri,0],function(data){$scope.TahSira = data;});
     }
     $scope.BtnCariGridGetir = function()
     {
@@ -929,103 +929,98 @@ function PosSatisCtrl($scope,$window,db)
         {
             db.StokBarkodGetir($scope.Firma,pBarkod,$scope.Sube,function(BarkodData)
             {
-                if(UserParam.Sistem.StokEksiyeDusme == "1")
+                if(BarkodData[0].KATSAYI > BarkodData[0].KALANDEPOMIKTARI && UserParam.Sistem.StokEksiyeDusme == "1")
                 {
-                    if(BarkodData[0].KATSAYI > BarkodData[0].KALANDEPOMIKTARI)
-                    {
-                        console.log(BarkodData[0].KALANDEPOMIKTARI)
-                        console.log(BarkodData[0].KATSAYI)
-                        alertify.okBtn('Evet');
-                        alertify.cancelBtn('Hayır');
-                        alertify.confirm('Stok - ye Düşecek Devam Etmek İstediğinize Emin Misiniz ?', 
-                        function()
+                    alertify.okBtn('Evet');
+                    alertify.cancelBtn('Hayır');
+                    alertify.confirm('Stok - ye Düşecek Devam Etmek İstediğinize Emin Misiniz ?', 
+                    function()
+                    { 
+                        if(BarkodData.length > 0)
                         { 
-                            if(BarkodData.length > 0)
-                            { 
-                                $scope.Stok = BarkodData;
-                                $scope.Stok[0].FIYAT = 0;
-                                $scope.Stok[0].TUTAR = 0;
-                                $scope.Stok[0].INDIRIM = 0;
-                                $scope.Stok[0].KDV = 0;
-                                $scope.Stok[0].TOPTUTAR = 0;
+                            $scope.Stok = BarkodData;
+                            $scope.Stok[0].FIYAT = 0;
+                            $scope.Stok[0].TUTAR = 0;
+                            $scope.Stok[0].INDIRIM = 0;
+                            $scope.Stok[0].KDV = 0;
+                            $scope.Stok[0].TOPTUTAR = 0;
 
-                                if($scope.Stok[0].CARPAN < 0 )
-                                {
-                                    $scope.Stok[0].CARPAN = $scope.Stok[0].CARPAN * -1
-                                }
-
-                                //**** FİYAT GETİR */
-
-                                $scope.DepoNo = UserParam.PosSatis.Sube
-
-                                let FiyatParam = 
-                                {
-                                    CariKodu : $scope.CariKodu,
-                                    CariFiyatListe : 1,
-                                    DepoNo : $scope.DepoNo,
-                                    OdemeNo : 0,
-                                    AlisSatis : 1
-                                };
-
-                                db.FiyatGetir($scope.Firma,BarkodData,FiyatParam,UserParam.PosSatis,function(pFiyat)
-                                {   
-                                    $scope.Stok[0].FIYAT = pFiyat
-                                    $scope.Stok[0].TUTAR = ($scope.Stok[0].CARPAN * $scope.Miktar) * $scope.Stok[0].FIYAT;
-                                    $scope.Stok[0].KDV = ($scope.Stok[0].TUTAR - $scope.Stok[0].INDIRIM) * ($scope.Stok[0].TOPTANVERGI / 100);
-                                    $scope.Stok[0].TOPTUTAR = ($scope.Stok[0].TUTAR - $scope.Stok[0].INDIRIM) + $scope.Stok[0].KDV;
-                                
-                                    $scope.$apply();
-                                    $scope.PosSatisInsert();
-                                });
-                            }
-                            else   
+                            if($scope.Stok[0].CARPAN < 0 )
                             {
-                                alertify.alert("Okuttuğunuz Barkod Sistemde Bulunamadı.");
-                                $scope.TxtBarkod = "";
+                                $scope.Stok[0].CARPAN = $scope.Stok[0].CARPAN * -1
                             }
+
+                            //**** FİYAT GETİR */
+
+                            $scope.DepoNo = UserParam.PosSatis.Sube
+
+                            let FiyatParam = 
+                            {
+                                CariKodu : $scope.CariKodu,
+                                CariFiyatListe : 1,
+                                DepoNo : $scope.DepoNo,
+                                OdemeNo : 0,
+                                AlisSatis : 1
+                            };
+
+                            db.FiyatGetir($scope.Firma,BarkodData,FiyatParam,UserParam.PosSatis,function(pFiyat)
+                            {   
+                                $scope.Stok[0].FIYAT = pFiyat
+                                $scope.Stok[0].TUTAR = ($scope.Stok[0].CARPAN * $scope.Miktar) * $scope.Stok[0].FIYAT;
+                                $scope.Stok[0].KDV = ($scope.Stok[0].TUTAR - $scope.Stok[0].INDIRIM) * ($scope.Stok[0].TOPTANVERGI / 100);
+                                $scope.Stok[0].TOPTUTAR = ($scope.Stok[0].TUTAR - $scope.Stok[0].INDIRIM) + $scope.Stok[0].KDV;
+                            
+                                $scope.$apply();
+                                $scope.PosSatisInsert();
+                            });
                         }
-                        ,function(){});
+                        else   
+                        {
+                            alertify.alert("Okuttuğunuz Barkod Sistemde Bulunamadı.");
+                            $scope.TxtBarkod = "";
+                        }
                     }
+                    ,function(){});
                 }
                 else
                 {
                     if(BarkodData.length > 0)
-                    { 
-                        $scope.Stok = BarkodData;
-                        $scope.Stok[0].FIYAT = 0;
-                        $scope.Stok[0].TUTAR = 0;
-                        $scope.Stok[0].INDIRIM = 0;
-                        $scope.Stok[0].KDV = 0;
-                        $scope.Stok[0].TOPTUTAR = 0;
+                        { 
+                            $scope.Stok = BarkodData;
+                            $scope.Stok[0].FIYAT = 0;
+                            $scope.Stok[0].TUTAR = 0;
+                            $scope.Stok[0].INDIRIM = 0;
+                            $scope.Stok[0].KDV = 0;
+                            $scope.Stok[0].TOPTUTAR = 0;
 
-                        if($scope.Stok[0].CARPAN < 0 )
-                        {
-                            $scope.Stok[0].CARPAN = $scope.Stok[0].CARPAN * -1
-                        }
+                            if($scope.Stok[0].CARPAN < 0 )
+                            {
+                                $scope.Stok[0].CARPAN = $scope.Stok[0].CARPAN * -1
+                            }
 
-                        //**** FİYAT GETİR */
+                            //**** FİYAT GETİR */
 
-                        $scope.DepoNo = UserParam.PosSatis.Sube
+                            $scope.DepoNo = UserParam.PosSatis.Sube
 
-                        let FiyatParam = 
-                        {
-                            CariKodu : $scope.CariKodu,
-                            CariFiyatListe : 1,
-                            DepoNo : $scope.DepoNo,
-                            OdemeNo : 0,
-                            AlisSatis : 1
-                        };
+                            let FiyatParam = 
+                            {
+                                CariKodu : $scope.CariKodu,
+                                CariFiyatListe : 1,
+                                DepoNo : $scope.DepoNo,
+                                OdemeNo : 0,
+                                AlisSatis : 1
+                            };
 
-                        db.FiyatGetir($scope.Firma,BarkodData,FiyatParam,UserParam.PosSatis,function(pFiyat)
-                        {   
-                            $scope.Stok[0].FIYAT = pFiyat
-                            $scope.Stok[0].TUTAR = ($scope.Stok[0].CARPAN * $scope.Miktar) * $scope.Stok[0].FIYAT;
-                            $scope.Stok[0].KDV = ($scope.Stok[0].TUTAR - $scope.Stok[0].INDIRIM) * ($scope.Stok[0].TOPTANVERGI / 100);
-                            $scope.Stok[0].TOPTUTAR = ($scope.Stok[0].TUTAR - $scope.Stok[0].INDIRIM) + $scope.Stok[0].KDV;
-                        
-                            $scope.$apply();
-                            $scope.PosSatisInsert();
-                        });
+                            db.FiyatGetir($scope.Firma,BarkodData,FiyatParam,UserParam.PosSatis,function(pFiyat)
+                            {   
+                                $scope.Stok[0].FIYAT = pFiyat
+                                $scope.Stok[0].TUTAR = ($scope.Stok[0].CARPAN * $scope.Miktar) * $scope.Stok[0].FIYAT;
+                                $scope.Stok[0].KDV = ($scope.Stok[0].TUTAR - $scope.Stok[0].INDIRIM) * ($scope.Stok[0].TOPTANVERGI / 100);
+                                $scope.Stok[0].TOPTUTAR = ($scope.Stok[0].TUTAR - $scope.Stok[0].INDIRIM) + $scope.Stok[0].KDV;
+                            
+                                $scope.$apply();
+                                $scope.PosSatisInsert();
+                            });
                     }
                     else   
                     {

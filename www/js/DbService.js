@@ -577,6 +577,48 @@ angular.module('app.db', []).service('db',function($rootScope)
             }
         });
     }
+    this.MaxSiraPromiseTag = function(pFirma,pQueryTag,pQueryParam,pCallback)
+    {
+        return new Promise(resolve => 
+        {
+            var m = 
+            {
+                db : '{M}.' + pFirma,
+                tag : pQueryTag,
+                param : pQueryParam
+            }
+            _SqlExecute(m,function(data)
+            {
+                if(pCallback)
+                {
+                    pCallback(data.result.recordset[0].MAXEVRSIRA);
+                    resolve(data.result.recordset[0].MAXEVRSIRA);
+                }
+            });
+        });
+    }
+    function _GetPromiseTag(pFirma,pQueryTag,pQueryParam,pCallback)
+    {
+        return new Promise(resolve => 
+        {
+            var m = 
+            {
+                db : '{M}.' + pFirma,
+                tag : pQueryTag,
+                param : pQueryParam
+            }
+            _SqlExecute(m,function(data)
+            {
+                if(pCallback)
+                {
+                    pCallback(data.result.recordset);
+                    resolve();
+                }
+            });            
+        });
+    }
+
+
     this.DepoGetir = function(pFirma,pDepoListe,pCallback)
     {
         let TmpQuery = 

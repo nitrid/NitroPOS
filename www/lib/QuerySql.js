@@ -1414,7 +1414,7 @@ var QuerySql =
                 "CONVERT(VARCHAR(10), MAX(OTARIH), 108) AS SAAT, " +
                 "CONVERT(VARCHAR(10), MAX(OTARIH), 104) AS TARIH " +
                 "FROM TERP_POS_SATIS AS PS WHERE SUBE = @SUBE AND DURUM <> 0 " +
-                "GROUP BY SERI,SIRA ORDER BY RECID DESC " ,
+                "GROUP BY SERI,SIRA,TIP ORDER BY RECID DESC " ,
         param: ['SUBE'],
         type: ['int']
     },
