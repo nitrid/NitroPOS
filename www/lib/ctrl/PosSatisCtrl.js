@@ -1037,9 +1037,15 @@ function PosSatisCtrl($scope,$window,db)
         $scope.TxtBarkod = pBarkod;
         $scope.StokGetir($scope.TxtBarkod);
     }
-    $scope.PosSatisInsert = function()
+    $scope.PosSatisInsert = async function()
     {    
-        var InsertData = 
+        if($scope.Sira == "0" || $scope.Sira == 0)
+        {
+            alertify.alert("Dikkat İnternet Bağlantınız Yavaş Olduğundan Sıra Getirilemedi Sayfayı Yenileyelin.");
+        }
+        else
+        {
+            var InsertData = 
         [
             UserParam.Kullanici,
             $scope.Sube,
@@ -1056,30 +1062,32 @@ function PosSatisCtrl($scope,$window,db)
             0, //ISKONTO TUTAR 1
             $scope.Stok[0].TOPTANVERGIPNTR,
             0  //DURUM
-        ];
-        
-        db.ExecuteTag($scope.Firma,'PosSatisInsert',InsertData,function(InsertResult)
-        {   
-            if(typeof(InsertResult.result.err) == 'undefined')
-            {                                        
-                db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosSatisData)
-                {   
-                    InsertSonYenile(PosSatisData);      
-                    $scope.TxtBarkod = ""; 
-                    $scope.IslemListeRowClick(0,$scope.SatisList[0]);
-                    $scope.ToplamMiktar = db.SumColumn($scope.SatisList,"MIKTAR"); 
-                    $scope.ToplamSatir =  $scope.SatisList.length  
-                });
-            }
-            else
-            {
-                console.log(InsertResult.result.err);
-            }
-        });
-        db.GetData($scope.Firma,'PosFisSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosFisData)
-        {   
-            InsertFisYenile(PosFisData);   
-        });
+            ];
+            
+            await db.ExecuteTag($scope.Firma,'PosSatisInsert',InsertData,function(InsertResult)
+            {   
+                if(typeof(InsertResult.result.err) == 'undefined')
+                {                                        
+                    db.GetPromiseTag($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosSatisData)
+                    {   
+                        InsertSonYenile(PosSatisData);      
+                        $scope.TxtBarkod = ""; 
+                        $scope.IslemListeRowClick(0,$scope.SatisList[0]);
+                        $scope.ToplamMiktar = db.SumColumn($scope.SatisList,"MIKTAR"); 
+                        $scope.ToplamSatir =  $scope.SatisList.length  
+                    });
+                }
+                else
+                {
+                    console.log(InsertResult.result.err);
+                }
+            });
+            await db.GetPromiseTag($scope.Firma,'PosFisSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosFisData)
+            {   
+                console.log(PosFisData)
+                InsertFisYenile(PosFisData);   
+            });
+        }
     }
     $scope.PosTahInsert = function(pCallBack)
     {   
@@ -1155,8 +1163,11 @@ function PosSatisCtrl($scope,$window,db)
                 }
             });
         }
-    
-        localStorage.KasaKodu = $scope.Kasa
+
+        if($scope.TahTip == 1)
+        {
+            localStorage.KasaKodu = $scope.Kasa
+        }
     }
     $scope.PosSatisMiktarUpdate = function(pMiktar)
     {   
