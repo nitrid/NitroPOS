@@ -197,6 +197,8 @@ function PosSatisCtrl($scope,$window,db)
             heading: true,
             selecting: true,
             data : $scope.SatisList,
+            autoload: true,
+            
             rowClass: function (item, itemIndex)
             {
                 return "rowheight";
@@ -253,13 +255,15 @@ function PosSatisCtrl($scope,$window,db)
                 title: "BARKOD",
                 type: "number",
                 align: "center",
-                width: 75
+                width: 75,
+                validate: "required"
             }],
             rowClick: function(args)
             {
                 $scope.IslemListeRowClick(args.itemIndex,args.item);
                 $scope.$apply();
             }
+            
         });
     }
     function InitTahIslemGrid()
@@ -1084,7 +1088,6 @@ function PosSatisCtrl($scope,$window,db)
             });
             await db.GetPromiseTag($scope.Firma,'PosFisSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosFisData)
             {   
-                console.log(PosFisData)
                 InsertFisYenile(PosFisData);   
             });
         }
@@ -1879,11 +1882,9 @@ function PosSatisCtrl($scope,$window,db)
     $scope.BtnYazdirr = function(pdata)
     {
         $scope.SonSatisDetayList = pdata
-        console.log(pdata)
         db.GetData($scope.Firma,'PosFisSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.SonSatisDetayList[0].SERI,$scope.SonSatisDetayList[0].SIRA],function(PosSonFisData)
         {
             InsertFisYenile(PosSonFisData)
-            console.log(PosSonFisData)
         });
     }
     $scope.BtnYazdir = function()

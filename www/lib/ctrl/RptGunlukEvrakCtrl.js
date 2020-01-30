@@ -349,12 +349,10 @@ function RptGunlukEvrakCtrl($scope,$window,db)
                 let b = {};
                 b.text = $scope.IslemListe[i][Object.keys($scope.IslemListe[i])[m]]
                 Dizi.push(b);
-                console.log(Dizi)
             }
             
             ExcelDataListe.push(Dizi)
         }
-        console.log(ExcelDataListe)
         var RaporListeData = 
         [
             {
