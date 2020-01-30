@@ -232,10 +232,10 @@ function RptGunlukEvrakCtrl($scope,$window,db)
                 var TmpQuery = 
                 {
                     db : '{M}.' + $scope.Firma,
-                    query:  "UPDATE TERP_POS_SATIS SET DURUM = 0 WHERE SERI = @SERI AND SIRA = @SIRA",
-                    param:  ['SERI','SIRA'],
-                    type:   ['string|25','int'],
-                    value:  [$scope.Seri,$scope.Sira]
+                    query:  "UPDATE TERP_POS_SATIS SET DURUM = 0 WHERE SERI = @SERI AND SIRA = @SIRA AND TIP=@TIP",
+                    param:  ['SERI','SIRA','TIP'],
+                    type:   ['string|25','int','int'],
+                    value:  [$scope.Seri,$scope.Sira,$scope.Tip]
                 }
 
                 db.ExecuteQuery(TmpQuery,function(UpdateResult)
@@ -245,10 +245,10 @@ function RptGunlukEvrakCtrl($scope,$window,db)
                         var TmpDeleteQuery = 
                         {
                             db : '{M}.' + $scope.Firma,
-                            query:  "DELETE FROM TERP_POS_TAHSILAT WHERE SERI = @SERI AND SIRA = @SIRA",
-                            param:  ['SERI','SIRA'],
-                            type:   ['string|25','int'],
-                            value:  [$scope.Seri,$scope.Sira]
+                            query:  "DELETE FROM TERP_POS_TAHSILAT WHERE SERI = @SERI AND SIRA = @SIRA AND TIP=@TIP",
+                            param:  ['SERI','SIRA','TIP'],
+                            type:   ['string|25','int','int'],
+                            value:  [$scope.Seri,$scope.Sira,$scope.Tip]
                         }
                         
                         db.ExecuteQuery(TmpDeleteQuery,function(DeleteResult)
@@ -310,6 +310,8 @@ function RptGunlukEvrakCtrl($scope,$window,db)
         $scope.SonSatisListeSelectedIndex = pIndex;
         let SonSatisDetay = pItem;
 
+        
+        $scope.Tip = pItem.TIP;
         $scope.Seri = pItem.SERI;
         $scope.Sira = pItem.SIRA;
 

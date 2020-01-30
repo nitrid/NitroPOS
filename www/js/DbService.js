@@ -617,8 +617,6 @@ angular.module('app.db', []).service('db',function($rootScope)
             });            
         });
     }
-
-
     this.DepoGetir = function(pFirma,pDepoListe,pCallback)
     {
         let TmpQuery = 
