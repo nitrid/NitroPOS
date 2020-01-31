@@ -244,6 +244,13 @@ function PosSatisCtrl($scope,$window,db)
                 width: 60
             },
             {
+                name: "ISKONTO",
+                title: "ISKONTO",
+                type: "number",
+                align: "center",
+                width: 60
+            },
+            {
                 name: "TUTAR",
                 title: "TUTAR",
                 type: "number",
@@ -594,6 +601,10 @@ function PosSatisCtrl($scope,$window,db)
         {   
             $scope.PosSatisMiktarUpdate($scope.TxtBarkod.split("-")[1]);
         }
+        else if($scope.TxtBarkod.indexOf("//") !=-1)
+        {
+            $scope.BtnIskonto((parseFloat($scope.TxtBarkod.split("//")[1] / $scope.IslemListeSelectedItem.FIYAT) * 100).toFixed(2));
+        }
         else if($scope.TxtBarkod.indexOf("/") != -1)
         {
             $scope.BtnIskonto($scope.TxtBarkod.split("/")[1]);
@@ -708,6 +719,7 @@ function PosSatisCtrl($scope,$window,db)
         $row.children('.jsgrid-cell').css('background-color','#2979FF').css('color','white');
         IslemSelectedRow = $row;
         $scope.IslemListeSelectedIndex = pIndex;
+        $scope.IslemListeSelectedItem = pItem;
     }
     $scope.TahIslemListeRowClick = function(pIndex,pItem)
     {
