@@ -7,7 +7,7 @@ var express = require('express');
 var app = express();
 
 app.use('/',express.static(__dirname + "/www/"));
-app.listen(8081);
+app.listen(8082);
 
 //******** LOG **********************************************************************/
 var trueLog = console.log;

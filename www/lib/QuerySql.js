@@ -223,7 +223,7 @@ var QuerySql =
                 "sto_siparis_dursun AS SIPARISDURSUN, " +
                 "sto_malkabul_dursun as MALKABULDURSUN, " +
                 "sto_otvtutar AS OTVTUTAR " +
-                "FROM STOKLAR AS STOK " + 
+                "FROM STOKLAR AS STOK INNER JOIN BARKOD_TANIMLARI AS BARKOD ON STOK.sto_kod = BARKOD.bar_stokkodu " + 
                 "WHERE ((sto_kod LIKE @KODU) OR (@KODU = '')) AND ((sto_isim LIKE @ADI) OR (@ADI = ''))" ,
         param : ['KODU',"ADI",'DEPONO'],
         type : ['string|25','string|50','int']

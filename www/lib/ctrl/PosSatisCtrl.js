@@ -552,6 +552,7 @@ function PosSatisCtrl($scope,$window,db)
     } 
     function InsertFisYenile(pData)
     {   
+        console.log(pData)
         $scope.SatisFisList = pData;
         $scope.FisSeri = pData[0].SERI
         $scope.FisSira = pData[0].SIRA
@@ -600,6 +601,14 @@ function PosSatisCtrl($scope,$window,db)
         if($scope.TxtBarkod.indexOf("-") != -1)
         {   
             $scope.PosSatisMiktarUpdate($scope.TxtBarkod.split("-")[1]);
+        }
+        else if($scope.TxtBarkod.indexOf("/*") !=-1)
+        {
+            $scope.BtnEvrakIskonto($scope.TxtBarkod.split("/*")[1]);
+        }
+        else if($scope.TxtBarkod.indexOf("/+") !=-1)
+        {
+            $scope.BtnEvrakIskonto(parseFloat($scope.TxtBarkod.split("/+")[1] / db.SumColumn($scope.SatisList,"TUTAR") * 100).toFixed(2));
         }
         else if($scope.TxtBarkod.indexOf("//") !=-1)
         {
@@ -919,7 +928,6 @@ function PosSatisCtrl($scope,$window,db)
         {
             Kodu = $scope.TxtStokAra.replace("*","%").replace("*","%");
         }
-            
         db.GetData($scope.Firma,'StokGetir',[Kodu,Adi,$scope.Sube],function(StokData)
         {
             $scope.StokListe = StokData;
@@ -1090,17 +1098,18 @@ function PosSatisCtrl($scope,$window,db)
                         $scope.TxtBarkod = ""; 
                         $scope.IslemListeRowClick(0,$scope.SatisList[0]);
                         $scope.ToplamMiktar = db.SumColumn($scope.SatisList,"MIKTAR"); 
-                        $scope.ToplamSatir =  $scope.SatisList.length  
+                        $scope.ToplamSatir =  $scope.SatisList.length 
+
+                        db.GetPromiseTag($scope.Firma,'PosFisSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosFisData)
+                        {   
+                            InsertFisYenile(PosFisData);   
+                        });
                     });
                 }
                 else
                 {
                     console.log(InsertResult.result.err);
                 }
-            });
-            await db.GetPromiseTag($scope.Firma,'PosFisSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosFisData)
-            {   
-                InsertFisYenile(PosFisData);   
             });
         }
     }
@@ -1814,6 +1823,26 @@ function PosSatisCtrl($scope,$window,db)
                 });
             });
         }
+    }
+    $scope.BtnEvrakIskonto = function(pIskonto)
+    {
+        for (let i = 0; i < $scope.SatisList.length; i++) 
+        {
+            let tutar = $scope.SatisList[i].FIYAT * $scope.SatisList[i].MIKTAR;
+            let hesapla = tutar * (pIskonto / 100)
+            hesapla = parseFloat(hesapla).toFixed(2)
+
+            db.ExecuteTag($scope.Firma,'PosSatisIskonto',[hesapla,$scope.SatisList[i].RECID],function(InsertResult)
+            { 
+            });
+        }
+
+        db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosSatisData)
+        { 
+            InsertSonYenile(PosSatisData);
+            $scope.ToplamMiktar = db.SumColumn($scope.SatisList,"MIKTAR")
+            $scope.ToplamSatir =  $scope.SatisList.length
+        });
     }
     $scope.StokListeleEvent = function(keyEvent)
     {
