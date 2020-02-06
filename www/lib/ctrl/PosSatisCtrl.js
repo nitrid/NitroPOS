@@ -192,7 +192,7 @@ function PosSatisCtrl($scope,$window,db)
         $("#TblIslem").jsGrid({
             responsive: true,
             width: "100%",
-            height: "385px",
+            height: "auto",
             updateOnResize: true,
             heading: true,
             selecting: true,
@@ -602,19 +602,19 @@ function PosSatisCtrl($scope,$window,db)
         {   
             $scope.PosSatisMiktarUpdate($scope.TxtBarkod.split("-")[1]);
         }
-        else if($scope.TxtBarkod.indexOf("/*") !=-1)
+        else if($scope.TxtBarkod.indexOf("/**") !=-1) //Yüzdesel Evrak iskonto
         {
-            $scope.BtnEvrakIskonto($scope.TxtBarkod.split("/*")[1]);
+            $scope.BtnEvrakIskonto($scope.TxtBarkod.split("/**")[1]);
         }
-        else if($scope.TxtBarkod.indexOf("/+") !=-1)
+        else if($scope.TxtBarkod.indexOf("/*") !=-1) //Tutarsal Evrak İskonto
         {
-            $scope.BtnEvrakIskonto(parseFloat($scope.TxtBarkod.split("/+")[1] / db.SumColumn($scope.SatisList,"TUTAR") * 100).toFixed(2));
+            $scope.BtnEvrakIskonto(parseFloat($scope.TxtBarkod.split("/*")[1] / db.SumColumn($scope.SatisList,"TUTAR") * 100).toFixed(2));
         }
-        else if($scope.TxtBarkod.indexOf("//") !=-1)
+        else if($scope.TxtBarkod.indexOf("//") !=-1) //Tutarsal Satır İskonto
         {
             $scope.BtnIskonto((parseFloat($scope.TxtBarkod.split("//")[1] / $scope.IslemListeSelectedItem.FIYAT) * 100).toFixed(2));
         }
-        else if($scope.TxtBarkod.indexOf("/") != -1)
+        else if($scope.TxtBarkod.indexOf("/") != -1) //Yüzdesel Satır İskonto
         {
             $scope.BtnIskonto($scope.TxtBarkod.split("/")[1]);
         }
@@ -686,6 +686,8 @@ function PosSatisCtrl($scope,$window,db)
                     if($scope.SatisList.length > 0)
                     {
                         $scope.BtnUpClick();
+                        var elmnt = document.getElementById("IslemDıv");
+                        elmnt.scrollTop -= 30;
                     }
                 }
                 else if(e.which == 40)
@@ -693,6 +695,8 @@ function PosSatisCtrl($scope,$window,db)
                     if($scope.SatisList.length > 0)
                     {
                         $scope.BtnDownClick();
+                        var elmnt = document.getElementById("IslemDıv");
+                        elmnt.scrollTop += 30;
                     }
                 }
             }
@@ -1082,7 +1086,7 @@ function PosSatisCtrl($scope,$window,db)
             $scope.Stok[0].BARKOD,
             $scope.Miktar * $scope.Stok[0].CARPAN,
             $scope.Stok[0].BIRIMPNTR,
-            $scope.Stok[0].FIYAT = parseFloat($scope.Stok[0].FIYAT).toFixed(2),
+            $scope.Stok[0].FIYAT = parseFloat($scope.Stok[0].FIYAT).toFixed(4),
             0, //ISKONTO TUTAR 1
             $scope.Stok[0].TOPTANVERGIPNTR,
             0  //DURUM
@@ -1824,7 +1828,7 @@ function PosSatisCtrl($scope,$window,db)
             });
         }
     }
-    $scope.BtnEvrakIskonto = function(pIskonto)
+    $scope.BtnEvrakIskonto = async function(pIskonto)
     {
         for (let i = 0; i < $scope.SatisList.length; i++) 
         {
@@ -1832,13 +1836,18 @@ function PosSatisCtrl($scope,$window,db)
             let hesapla = tutar * (pIskonto / 100)
             hesapla = parseFloat(hesapla).toFixed(2)
 
-            db.ExecuteTag($scope.Firma,'PosSatisIskonto',[hesapla,$scope.SatisList[i].RECID],function(InsertResult)
+            await db.ExecutePromiseTag($scope.Firma,'PosSatisIskonto',[hesapla,$scope.SatisList[i].RECID],function(InsertResult)
             { 
+                console.log(1)
             });
         }
 
-        db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosSatisData)
+        await db.GetPromiseTag($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosSatisData)
         { 
+            db.GetData($scope.Firma,'PosFisSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosSatisFisData)
+            {  
+                InsertFisYenile(PosSatisFisData);   
+            }); 
             InsertSonYenile(PosSatisData);
             $scope.ToplamMiktar = db.SumColumn($scope.SatisList,"MIKTAR")
             $scope.ToplamSatir =  $scope.SatisList.length
