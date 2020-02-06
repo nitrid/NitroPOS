@@ -1158,104 +1158,133 @@
             </div>
         </div>
     </div>
-     <!--Fatura Dizayn -->
-    <div class="row" id="A4" style="display: none">
-        <div class="col-12">
-            <div class="panel">
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <div class="panel-body">
-                    <div class="row" >
-                        <div class="col-6">
-                            {{CariKodu}}
-                        </div>
+<!--Fatura Dizayn -->
+<div class="row" id="A4">
+    <div class="col-12">
+        <div class="panel">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-2">
+                        <a><img class="img-fluid" src="img/bygross.jpg"></a>
                     </div>
-                    <div class="row" >
-                        <div class="col-6">
+                </div>
+                    <div class="row">
+                    <div class="col-4">
+                        <p style="font-size:100%;">
+                            <div class="col-12 px-0">
+                            </div>
+                            <br>BY GROSS MAĞAZACILIK İNŞAAT HAYVANCILIK SAN. VE TİC.
+                            LTD. ŞTİ.
+                            <br>
+                            Adres: Namık Kemal Mah. 4. Kalkan Sk. A Apt No:7A
+                            Osmangazi/ BURSA
+                            <br>
+                            Tel: (224) 2711617 
+                            <br>
+                            Vergi Dairesi: YILDIRIM VERGİ DAİRESİ MÜD. 
+                            <br>
+                            VKN: 1910653025
+                            <br>
+                            TICARETSICILNO: 0191065302500001
+                            <br>
+                        </p>
+                    </div>
+                    <div class="col-2 offset-1">
+                       <p style="font-size:50%;"> <img class="img-fluid" src="img/e-fatura-logo.png"></p style="font-size:50%;">
+                    </div>
+                    <div class="col-3 offset-2">
+                        <p style="font-size:100%;">
+                            <b>Fatura No : </b>{{Seri}} - {{Sira}}
+                            <br>
+                            <b>Fatura Tarihi : </b>{{Tarih}}
+                            <br>
+                            <b>Fatura Zamanı :</b>{{Saat}}
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <p style="font-size:100%;">
+                            <b>SAYIN</b>
+                            <br>
                             {{CariAdi}}
-                        </div>
-                        <div class="col-2 offset-4">
-                            {{FisTarih}}
-                        </div>
-                    </div>    
-                    <div class="row" >
-                        <div class="col-6">
-                            {{CariAdres2}}
-                        </div>
-                        <div class="col-2 offset-4">
-                            {{FisSaat}}
-                        </div>
-                    </div>
-                    <div class="row" >
-                        <div class="col-6">
-                            {{CariAdres1}}
-                        </div>
+                            <br>
+                            Adres : {{CariAdres}} 
+                            <br>
+                            E-Posta: {{CariEmail}}
+                            <br>
+                            Vergi Dairesi : {{CariVergiAdi}}
+                        </p>
                     </div>
                 </div>
-                <br>
-                <br>
-                <div class="row pb-100">
-                    <div class="col-12">
-                        <table style="width:100%">
-                            <tr>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>             
-                                <th></th>
-                                <th></th>                             
-                            </tr>
-                            <tr ng-repeat="Item in SatisFisList">
-                                <td style="font-size:15px; width: 30px;">{{Item.SKODU}}</td>
-                                <td style="font-size:15px; width: 150px;">{{Item.SADI}}</td>
-                                <td style="font-size:15px; width: 10px;">{{Item.MIKTAR}}</td>
-                                <td style="font-size:15px; width: 15px;">{{Item.BIRIM}}</td>
-                                <td style="font-size:15px; width: 5px;">{{Item.ISKONTO | number:2}}</td>
-                                <td style="font-size:15px; width: 5px;">0,00</td>
-                                <td style="font-size:15px; width: 5px;">{{Item.KDV}}</td>                               
-                                <td style="font-size:15px; width: 30px;">{{Item.FIYAT | number:2}}</td>
-                                <td style="font-size:15px; width: 30px;">{{Item.TUTAR | number:2}}</td>                         
-                            </tr>
-                        </table>
-                    </div>
+            </div>
+            <!-- <div class="row">
+                <div class="col-2">
+                    <b>AÇIKLAMA</b>
                 </div>
-                <div class="row pt-100" style="font-size:160%;">
-                    <div class="col-3 offset-7">
-                        ARA TOPLAM
-                    </div>
-                    <div class="col-2">
-                        {{AraToplam | number:2}}
-                    </div>
+                <div class="col-2 offset-4">
+                    MİKTAR
                 </div>
-                <div class="row pt-20" style="font-size:160%;">
-                    <div class="col-3 offset-7">
-                        K.D.V(%){{SatisFisList[0].KDV}}
-                    </div>
-                    <div class="col-2">
-                        {{ToplamKdv | number:2}}
-                    </div>             
+                <div class="col-2">
+                    BİRİM FİYATI
                 </div>
-                <div class="row pt-20" style="font-size:160%;">
-                    <div class="col-3 offset-7">
-                        YEKÜN
-                    </div>
-                    <div class="col-2">
-                        {{GenelToplam | number:2}}
-                    </div>
+                <div class="col-2">
+                    <b>TOPLAM</b>
+                </div>
+            </div> -->
+            <div class="row">
+                <div class="col-12">
+                    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <table style="width:100%">
+                        <tr>
+                            <th style="font: size 20px;">STOK KODU</th>
+                            <th style="font-size:20px;">ADI</th>
+                            <th style="font-size:20px;">BİRİM</th>
+                            <th style="font-size:20px;">MİKTAR</th>
+                            <th style="font-size:20px;">BİRİM FİYATI</th>
+                            <th style="font-size:20px;">TUTAR</th>
+                            <th style="font-size:20px;">ISKONTO</th>
+                        </tr>
+                        <tr ng-repeat="Item in SatisFisList">
+                            <td style="font-size:18px;">{{Item.SKODU}}</td>
+                            <td style="font-size:18px;">{{Item.SADI}}</td>
+                            <td style="font-size:18px;">{{Item.BIRIMADI}}</td>
+                            <td style="font-size:18px;">{{Item.BIRIM | number:2}}</td>
+                            <td style="font-size:18px;">{{Item.BKDVDAHIL | number:2}}</td>
+                            <td style="font-size:18px;">{{Item.TKDVDAHIL | number:2}}</td>
+                            <td style="font-size:18px;">{{Item.ISKONTO | number:2}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row pb-100">
+                <div class="col-12">
+                    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                </div>
+            </div>
+            <div class="row" style="font-size:160%;">
+                <div class="col-4 offset-5">
+                    <b>TOPLAM İNDİRİM :</b>
+                </div>
+                <div class="col-3">
+                    {{ToplamIskonto | number:2}}
+                </div>
+            </div>
+            <div class="row" style="font-size:160%;">
+                <div class="col-4 offset-5">
+                    <b>GENEL TOPLAM :</b>
+                </div>
+                <div class="col-3">
+                    {{FisGenelToplam | number:2}}
                 </div>
             </div>
         </div>
     </div>
+</div>
     <!--Fiş Dizayn -->
     <div class="row" id="A5" style="display: none">
         <div class="col-12">
@@ -1324,8 +1353,8 @@
                             <tr ng-repeat="Item in SatisFisList">
                                 <td style="font-size:18px;">{{Item.SKODU}}</td>
                                 <td style="font-size:18px;">{{Item.SADI}}</td>
-                                <td style="font-size:18px;">{{Item.BIRIM}}</td>
-                                <td style="font-size:18px;">{{Item.MIKTAR}}</td>
+                                <td style="font-size:18px;">{{Item.BIRIMADI}}</td>
+                                <td style="font-size:18px;">{{Item.BIRIM | number:2}}</td>
                                 <td style="font-size:18px;">{{Item.BKDVDAHIL | number:2}}</td>
                                 <td style="font-size:18px;">{{Item.TKDVDAHIL | number:2}}</td>
                                 <td style="font-size:18px;">{{Item.ISKONTO | number:2}}</td>
@@ -1338,16 +1367,6 @@
                         ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
                     </div>
                 </div>
-                <!-- <div class="row pt-20" style="font-size:160%;">
-                    <div class="col-4 offset-8">
-                        <b>ARA TOPLAM</b>
-                    </div>
-                </div>
-                <div class="row" style="font-size:160%;">
-                    <div class="col-4 offset-8">
-                        {{AraToplam | number:2}}
-                    </div>
-                </div> -->
                 <div class="row" style="font-size:160%;">
                     <div class="col-4 offset-5">
                         <b>TOPLAM İNDİRİM :</b>
@@ -1356,16 +1375,6 @@
                         {{ToplamIskonto | number:2}}
                     </div>
                 </div>
-                <!-- <div class="row" style="font-size:160%;">
-                    <div class="col-4 offset-8">
-                        <b>TOPLAM K.D.V</b>
-                    </div>
-                </div>
-                <div class="row" style="font-size:160%;">
-                    <div class="col-4 offset-8">
-                        {{ToplamKdv | number:2}}
-                    </div>
-                </div> -->
                 <div class="row" style="font-size:160%;">
                     <div class="col-4 offset-5">
                         <b>GENEL TOPLAM :</b>
