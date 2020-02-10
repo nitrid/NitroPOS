@@ -556,7 +556,6 @@ function PosSatisCtrl($scope,$window,db)
     } 
     function InsertFisYenile(pData)
     {   
-        console.log(pData)
         $scope.SatisFisList = pData;
         $scope.FisSeri = pData[0].SERI
         $scope.FisSira = pData[0].SIRA
@@ -608,11 +607,11 @@ function PosSatisCtrl($scope,$window,db)
         }
         else if($scope.TxtBarkod.indexOf("/**") !=-1) //Yüzdesel Evrak iskonto
         {
-            $scope.BtnEvrakIskonto($scope.TxtBarkod.split("/**")[1]);
+            $scope.BtnEvrakIskonto($scope.TxtBarkod.split("/**")[0]);
         }
         else if($scope.TxtBarkod.indexOf("/*") !=-1) //Tutarsal Evrak İskonto
         {
-            $scope.BtnEvrakIskonto(parseFloat($scope.TxtBarkod.split("/*")[1] / db.SumColumn($scope.SatisList,"TUTAR") * 100).toFixed(2));
+            $scope.BtnEvrakIskonto(parseFloat($scope.TxtBarkod.split("/*")[0] / db.SumColumn($scope.SatisList,"TUTAR") * 100).toFixed(4));
         }
         else if($scope.TxtBarkod.indexOf("//") !=-1) //Tutarsal Satır İskonto
         {
@@ -763,7 +762,6 @@ function PosSatisCtrl($scope,$window,db)
             $row.children('.jsgrid-cell').css('background-color','#2979FF').css('color','white');
             CariSelectedRow = $row;
             
-            console.log($scope.CariListe[pIndex])
             $scope.CariKodu = $scope.CariListe[pIndex].KODU;
             $scope.CariAdi = $scope.CariListe[pIndex].UNVAN1;
             $scope.CariBakiye = $scope.CariListe[pIndex].BAKIYE;
@@ -1208,10 +1206,6 @@ function PosSatisCtrl($scope,$window,db)
     {   
         if(UserParam.Sistem.StokEksiyeDusme == "1")
         {
-            if(BarkodData[0].KATSAYI > BarkodData[0].KALANDEPOMIKTARI)
-            {
-
-            }
             let pIskonto = 0;
             if($scope.SatisList[$scope.IslemListeSelectedIndex].ISKONTO > 0)
             {
@@ -1330,7 +1324,7 @@ function PosSatisCtrl($scope,$window,db)
     {   
         if(FocusBarkod)
         {
-            $scope.TxtBarkod = $scope.TxtBarkod + Key; 
+            $scope.TxtBarkod = $scope.TxtBarkod + Key;
         }
         else if(FocusAraToplam)
         {
@@ -1841,11 +1835,10 @@ function PosSatisCtrl($scope,$window,db)
         {
             let tutar = $scope.SatisList[i].FIYAT * $scope.SatisList[i].MIKTAR;
             let hesapla = tutar * (pIskonto / 100)
-            hesapla = parseFloat(hesapla).toFixed(2)
+            hesapla = parseFloat(hesapla).toFixed(4)
 
             await db.ExecutePromiseTag($scope.Firma,'PosSatisIskonto',[hesapla,$scope.SatisList[i].RECID],function(InsertResult)
             { 
-                console.log(1)
             });
         }
 
