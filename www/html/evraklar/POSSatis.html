@@ -23,7 +23,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="input-group">
-                                <input class="form-control" ng-model="TxtBarkod" id="TxtBarkod" ng-keypress="TxtBarkodPress($event)" autocomplete="off">
+                                <input class="form-control" ng-model="TxtBarkod" id="TxtBarkod" ng-keypress="TxtBarkodPress($event)" autocomplete="off" onfocus="this.value = this.value">
                                 <span class="input-group-append">
                                     
                                 <button type="submit" class="btn btn-primary"><i class="icon wb-search" aria-hidden="true"></i></button>
@@ -233,10 +233,10 @@
                             <button class="form-group btn btn-block bg-pink-600 my-1" ng-click="BtnKullaniciDegistir()" style="height:70px;"><span style="color:white;">Kullanıcı Değiştir</span></button>
                         </div>
                         <div class="col-2 px-1">
-                            <button role="menu-item" class="form-group btn btn-block btn-pink my-1" style="height:70px;">Yüzdesel</button>
+                            <button role="menu-item" class="form-group btn btn-block btn-default my-1" style="height:70px;"><span style="color:white;"></span></button>
                         </div>
                         <div class="col-2 px-1">
-                            <button class="form-group btn btn-block btn-default my-1" data-toggle="modal" style="height:70px;"></button>
+                            <button role="menu-item" class="form-group btn btn-block btn-default my-1" style="height:70px;"><span style="color:white;"></span></button>
                         </div>
                         <div class="col-2 px-1">
                             <button class="form-group btn btn-default btn-block my-1" style="height:70px;"></button>
@@ -256,17 +256,27 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-2 px-1">
-                            <button ng-click="BtnEvrakIskonto('10')" class="form-group btn bg-green-600 btn-block my-1" style="height:70px;"><span style="color:white;">%10 İndirim</span></button>
+                        <div class="col-4">
+                            <div class="row">
+                                <div class="col-3 px-1">
+                                    <button ng-click="BtnEvrakIskonto('10')" class="form-group btn bg-teal-600 btn-block my-1" style="height:70px;"><span style="color:white;">%10</span></button>
+                                </div>
+                                <div class="col-3 px-1">
+                                    <button ng-click="BtnEvrakIskonto('20')" class="form-group btn bg-teal-600 btn-block my-1" style="height:70px;"><span style="color:white;">%20</span></button>
+                                </div>
+                                <div class="col-3 px-1">
+                                    <button ng-click="BtnEvrakIskonto('30')" class="form-group btn bg-teal-600 btn-block my-1" style="height:70px;"><span style="color:white;">%30</span></button>
+                                </div>
+                                <div class="col-3 px-1">
+                                    <button ng-click="BtnEvrakIskonto('50')" class="form-group btn bg-teal-600 btn-block my-1" style="height:70px;"><span style="color:white;">%50</span></button>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-2 px-1">
-                            <button ng-click="BtnEvrakIskonto('20')" class="form-group btn bg-green-600 btn-block my-1" style="height:70px;"><span style="color:white;">%20 İndirim</span></button>
+                            <button role="menu-item" class="form-group btn btn-block bg-teal-600 my-1" style="height:70px;" ng-click="BtnTusClick('/**')"><span style="color:white;">Yüzdesel İndirim</span></button>
                         </div>
                         <div class="col-2 px-1">
-                            <button ng-click="BtnEvrakIskonto('30')" class="form-group btn bg-green-600 btn-block my-1" style="height:70px;"><span style="color:white;">%30 İndirim</span></button>
-                        </div>
-                        <div class="col-2 px-1">
-                            <button ng-click="BtnEvrakIskonto('50')" class="form-group btn bg-green-600 btn-block my-1" style="height:70px;"><span style="color:white;">%50 İndirim</span></button>
+                            <button role="menu-item" class="form-group btn btn-block bg-teal-600 my-1" style="height:70px;" ng-click="BtnTusClick('/*')"><span style="color:white;">Tutarsal İndirim</span></button>
                         </div>
                         <div class="col-4">
                             <div class="row">
@@ -1159,7 +1169,7 @@
         </div>
     </div>
 <!--Fatura Dizayn -->
-<div class="row" id="A4">
+<div class="row" id="A4" style="display: none">
     <div class="col-12">
         <div class="panel">
             <div class="panel-body">
@@ -1293,107 +1303,107 @@
         </div>
     </div>
 </div>
-    <!--Fiş Dizayn -->
-    <div class="row" id="A5" style="display: none">
-        <div class="col-12">
-            <div class="panel">
-                <div class="panel-body">
-                <div class="row hb-50" stlye="font-size:160%;">
-                    <div class="col-4 offset-4">
-                        <h1>FİYAT TEKLİFİ</h1>
-                    </div>
+<!--Fiş Dizayn -->
+<div class="row" id="A5" style="display: none">
+    <div class="col-12">
+        <div class="panel">
+            <div class="panel-body">
+            <div class="row hb-50" stlye="font-size:160%;">
+                <div class="col-4 offset-4">
+                    <h1>FİYAT TEKLİFİ</h1>
                 </div>
-                <div class="row" >
-                    <div class="col-4">
-                        <p stlye="font-size:160%;">
-                            <br>
-                            <br>
-                            <b><h4>Müşteri Kodu :</b><h4> {{CariKodu}}</h4>
-                            <br>
-                            <br>
-                            <b><h4>Müşteri Adı :</b></h4><h4> {{CariAdi}}</h4>
-                        </p>
-                    </div>
-                    <div class="col-3 offset-4">
-                        <p stlye="font-size:140%;">
-                            <br>
-                            <br>
-                            <b><h4>Evrak No : </b></h4><h4>{{FisSeri}} - {{FisSira}}</h4>
-                            <br>
-                            <br>
-                            <b><h4>TARİH:</b></h4><h4> {{Tarih}}<h4>
-                            <br>
-                        </p>
-                    </div>
+            </div>
+            <div class="row" >
+                <div class="col-4">
+                    <p stlye="font-size:160%;">
+                        <br>
+                        <br>
+                        <b><h4>Müşteri Kodu :</b><h4> {{CariKodu}}</h4>
+                        <br>
+                        <br>
+                        <b><h4>Müşteri Adı :</b></h4><h4> {{CariAdi}}</h4>
+                    </p>
                 </div>
+                <div class="col-3 offset-4">
+                    <p stlye="font-size:140%;">
+                        <br>
+                        <br>
+                        <b><h4>Evrak No : </b></h4><h4>{{FisSeri}} - {{FisSira}}</h4>
+                        <br>
+                        <br>
+                        <b><h4>TARİH:</b></h4><h4> {{Tarih}}<h4>
+                        <br>
+                    </p>
                 </div>
-                <!-- <div class="row">
-                    <div class="col-2">
-                        <b>AÇIKLAMA</b>
-                    </div>
-                    <div class="col-2 offset-4">
-                        MİKTAR
-                    </div>
-                    <div class="col-2">
-                        BİRİM FİYATI
-                    </div>
-                    <div class="col-2">
-                        <b>TOPLAM</b>
-                    </div>
-                </div> -->
-                <div class="row">
-                    <div class="col-12">
-                        ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                    </div>
+            </div>
+            </div>
+            <!-- <div class="row">
+                <div class="col-2">
+                    <b>AÇIKLAMA</b>
                 </div>
-                <div class="row">
-                    <div class="col-12">
-                        <table style="width:100%">
-                            <tr>
-                                <th style="font: size 20px;">STOK KODU</th>
-                                <th style="font-size:20px;">ADI</th>
-                                <th style="font-size:20px;">BİRİM</th>
-                                <th style="font-size:20px;">MİKTAR</th>
-                                <th style="font-size:20px;">BİRİM FİYATI</th>
-                                <th style="font-size:20px;">TUTAR</th>
-                                <th style="font-size:20px;">ISKONTO</th>
-                            </tr>
-                            <tr ng-repeat="Item in SatisFisList">
-                                <td style="font-size:18px;">{{Item.SKODU}}</td>
-                                <td style="font-size:18px;">{{Item.SADI}}</td>
-                                <td style="font-size:18px;">{{Item.BIRIMADI}}</td>
-                                <td style="font-size:18px;">{{Item.BIRIM | number:2}}</td>
-                                <td style="font-size:18px;">{{Item.BKDVDAHIL | number:2}}</td>
-                                <td style="font-size:18px;">{{Item.TKDVDAHIL | number:2}}</td>
-                                <td style="font-size:18px;">{{Item.ISKONTO | number:2}}</td>
-                            </tr>
-                        </table>
-                    </div>
+                <div class="col-2 offset-4">
+                    MİKTAR
                 </div>
-                <div class="row pb-100">
-                    <div class="col-12">
-                        ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                    </div>
+                <div class="col-2">
+                    BİRİM FİYATI
                 </div>
-                <div class="row" style="font-size:160%;">
-                    <div class="col-4 offset-5">
-                        <b>TOPLAM İNDİRİM :</b>
-                    </div>
-                    <div class="col-3">
-                        {{ToplamIskonto | number:2}}
-                    </div>
+                <div class="col-2">
+                    <b>TOPLAM</b>
                 </div>
-                <div class="row" style="font-size:160%;">
-                    <div class="col-4 offset-5">
-                        <b>GENEL TOPLAM :</b>
-                    </div>
-                    <div class="col-3">
-                        {{FisGenelToplam | number:2}}
-                    </div>
+            </div> -->
+            <div class="row">
+                <div class="col-12">
+                    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <table style="width:100%">
+                        <tr>
+                            <th style="font: size 20px;">STOK KODU</th>
+                            <th style="font-size:20px;">ADI</th>
+                            <th style="font-size:20px;">BİRİM</th>
+                            <th style="font-size:20px;">MİKTAR</th>
+                            <th style="font-size:20px;">BİRİM FİYATI</th>
+                            <th style="font-size:20px;">TUTAR</th>
+                            <th style="font-size:20px;">ISKONTO</th>
+                        </tr>
+                        <tr ng-repeat="Item in SatisFisList">
+                            <td style="font-size:18px;">{{Item.SKODU}}</td>
+                            <td style="font-size:18px;">{{Item.SADI}}</td>
+                            <td style="font-size:18px;">{{Item.BIRIMADI}}</td>
+                            <td style="font-size:18px;">{{Item.BIRIM | number:2}}</td>
+                            <td style="font-size:18px;">{{Item.BKDVDAHIL | number:2}}</td>
+                            <td style="font-size:18px;">{{Item.TKDVDAHIL | number:2}}</td>
+                            <td style="font-size:18px;">{{Item.ISKONTO | number:2}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row pb-100">
+                <div class="col-12">
+                    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                </div>
+            </div>
+            <div class="row" style="font-size:160%;">
+                <div class="col-4 offset-5">
+                    <b>TOPLAM İNDİRİM :</b>
+                </div>
+                <div class="col-3">
+                    {{ToplamIskonto | number:2}}
+                </div>
+            </div>
+            <div class="row" style="font-size:160%;">
+                <div class="col-4 offset-5">
+                    <b>GENEL TOPLAM :</b>
+                </div>
+                <div class="col-3">
+                    {{FisGenelToplam | number:2}}
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 </div>
 

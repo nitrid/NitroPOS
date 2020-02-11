@@ -1364,8 +1364,8 @@ var QuerySql =
                 "ROUND((SELECT dbo.fn_StokBirimHesapla(SKODU,1,(SELECT dbo.fn_StokBirimHesapla (SKODU,1,ROUND(MIKTAR,2),1)),2)),0) AS KOLIMIKTAR, " +
                 "BIRIMPNTR AS BIRIMPNTR, " +
                 "(SELECT dbo.fn_StokBirimi (SKODU,BIRIMPNTR)) AS BIRIM, " +
-                "FIYAT AS FIYAT, " +
-                "ISKONTO AS ISKONTO, " +
+                "ROUND(FIYAT,4) AS FIYAT, " +
+                "ROUND(ISKONTO,4) AS ISKONTO, " +
                 "KDVPNTR AS KDVPNTR, " +
                 "(SELECT dbo.fn_VergiYuzde (KDVPNTR)) AS KDV, " +
                 "ROUND(MIKTAR * FIYAT,4) AS TUTAR " +
