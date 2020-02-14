@@ -12,6 +12,13 @@ function RptGunlukKasaCtrl($scope,$window,db)
             data : $scope.IslemListe,
             fields: 
             [
+
+                {
+                    name: "SIRA",
+                    type: "number",
+                    align: "center",
+                    width: 75
+                },
                 {
                     name: "TIPADI",
                     title: "TİPİ",
@@ -70,6 +77,7 @@ function RptGunlukKasaCtrl($scope,$window,db)
         {
             db : '{M}.' + $scope.Firma,
             query:  "SELECT " +
+                    "ROW_NUMBER() OVER (ORDER BY RECID DESC) AS SIRA," +
                     "CASE WHEN EVRAKTIP = 0 THEN 'ÖDEME' WHEN EVRAKTIP = 1 THEN 'TEDİYE' END AS TIPADI, " +
                     "EVRAKTIP AS EVRAKTIP, " +
                     "CASE WHEN TIP = 0 THEN " +
@@ -81,7 +89,7 @@ function RptGunlukKasaCtrl($scope,$window,db)
                     "END AS TIP, " +
                     "ROUND(SUM(TUTAR),4) AS TUTAR " +
                     "FROM TERP_POS_TAHSILAT WHERE SUBE = @SUBE AND TARIH >= @ILKTARIH AND TARIH <= @SONTARIH " +
-                    "GROUP BY TIP,EVRAKTIP",
+                    "GROUP BY TIP,EVRAKTIP,RECID",
             param:  ['SUBE','ILKTARIH','SONTARIH'],
             type:   ['int','date','date'],
             value:  [$scope.Sube,$scope.IlkTarih,$scope.SonTarih]

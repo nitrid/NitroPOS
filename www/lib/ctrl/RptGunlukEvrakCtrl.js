@@ -23,6 +23,12 @@ function RptGunlukEvrakCtrl($scope,$window,db)
             fields: 
             [
                 {
+                    name: "SIRA",
+                    type: "number",
+                    align: "center",
+                    width: 75
+                },
+                {
                     name: "KULLANICI",
                     type: "text",
                     align: "center",
@@ -30,12 +36,6 @@ function RptGunlukEvrakCtrl($scope,$window,db)
                 },
                 {
                     name: "SERI",
-                    type: "text",
-                    align: "center",
-                    width: 75
-                },
-                {
-                    name: "SIRA",
                     type: "text",
                     align: "center",
                     width: 75
@@ -276,6 +276,7 @@ function RptGunlukEvrakCtrl($scope,$window,db)
         {
             db : '{M}.' + $scope.Firma,
             query:  "SELECT " +
+                    "ROW_NUMBER() OVER (ORDER BY RECID DESC) AS SIRA," +
                     "MAX(KULLANICI) AS KULLANICI, " +
                     "MAX(RECID) AS RECID, " +
                     "MAX(TIP) AS TIP, " +

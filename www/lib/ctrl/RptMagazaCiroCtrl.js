@@ -17,6 +17,12 @@ function RptMagazaCiroCtrl($scope,$window,db)
             fields: 
             [
                 {
+                    name: "SIRA",
+                    type: "number",
+                    align: "center",
+                    width: 100
+                },
+                {
                     name: "SUBEADI",
                     title: "ŞUBE ADI",
                     type: "text",
@@ -83,6 +89,7 @@ function RptMagazaCiroCtrl($scope,$window,db)
         {
             db : '{M}.' + $scope.Firma,
             query:  "SELECT " + 
+                    "ROW_NUMBER() OVER (ORDER BY SUBE DESC) AS SIRA," +
                     "ISNULL((SELECT dep_adi FROM DEPOLAR WHERE dep_no = SUBE),'') AS SUBEADI, " + 
                     "CAST(SUM(CASE WHEN TIP = 1 THEN MIKTAR * FIYAT ELSE (MIKTAR * FIYAT) * -1 END)  AS decimal(10,2)) AS ARATOPLAM, " + 
                     "CAST(SUM(CASE WHEN TIP = 1 THEN ISKONTO ELSE ISKONTO * -1 END) AS decimal(10,2)) AS ISKONTO, " + 

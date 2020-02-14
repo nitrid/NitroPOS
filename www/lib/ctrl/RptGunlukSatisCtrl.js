@@ -17,6 +17,12 @@ function RptGunlukSatisCtrl($scope,$window,db)
             fields: 
             [
                 {
+                    name: "SIRA",
+                    type: "number",
+                    align: "center",
+                    width: 100
+                },
+                {
                     name: "KULLANICI",
                     type: "text",
                     align: "center",
@@ -134,6 +140,7 @@ function RptGunlukSatisCtrl($scope,$window,db)
         {
             db : '{M}.' + $scope.Firma,
             query:  "SELECT " +
+                    "ROW_NUMBER() OVER (ORDER BY RECID DESC) AS SIRA," +
                     "KULLANICI AS KULLANICI, " +
                     "CONVERT(varchar(10), OTARIH, 108) AS SAAT, " +
                     "SKODU AS KODU, " +
@@ -173,6 +180,7 @@ function RptGunlukSatisCtrl($scope,$window,db)
         {
             db : '{M}.' + $scope.Firma,
             query:  "SELECT " +
+                    "ROW_NUMBER() OVER (ORDER BY RECID DESC) AS SIRA," +
                     "MAX(KULLANICI) AS KULLANICI, " +
                     "SKODU AS KODU, " +
                     "BARKOD AS BARKOD, " +
