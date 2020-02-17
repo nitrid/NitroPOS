@@ -84,7 +84,7 @@ var Param = [
 			"KrediKartKasa": "01",
 			"AcikHesapKodu": "01",
 			"Cari": "",
-			"Sube": "2",
+			"Sube": "1",
 			"SorumlulukKodu": "",
 			"Personel": "",
 			"FiyatListe": "0"
