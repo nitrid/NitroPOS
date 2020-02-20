@@ -81,6 +81,8 @@ function PosSatisCtrl($scope,$window,db)
         $scope.ToplamSatir = 0;
         $scope.ParkIslemSayisi = 0;
         $scope.CiktiTip = 1;
+        $scope.FiyatListe = UserParam.PosSatis.FiyatListe;
+        console.log($scope.FiyatListe)
         
         $scope.TahPanelKontrol = false;
         $scope.Klavye = false;
@@ -112,6 +114,7 @@ function PosSatisCtrl($scope,$window,db)
         $scope.ParkList =[];     
         $scope.SonSatisList = [];
         $scope.SonSatisDetayList = [];
+        $scope.DepoMiktarListe = [];
     }
     function InitCariGrid()
     {
@@ -148,6 +151,46 @@ function PosSatisCtrl($scope,$window,db)
             rowClick: function(args)
             {
                 $scope.CariListeRowClick(args.itemIndex,args.item,this);
+                $scope.$apply();
+            }
+        });
+    }
+    function InitDepoMiktarGrid()
+    {
+        $("#TblDepoMiktar").jsGrid
+        ({
+            width: "100%",
+            height: "150px",
+            updateOnResize: true,
+            heading: true,
+            selecting: true,
+            data : $scope.DepoMiktarListe,
+            fields: [
+                {
+                    name: "DEPONO",
+                    title: "DEPONO",
+                    type: "number",
+                    align: "center",
+                    width: 75
+                }, 
+                {
+                    name: "DEPOADI",
+                    title: "DEPOADI",
+                    type: "text",
+                    align: "center",
+                    width: 210
+                }, 
+                {
+                    name: "DEPOMIKTAR",
+                    title: "DEPO MIKTAR",
+                    type: "number",
+                    align: "center",
+                    width: 100
+                } 
+            ],
+            rowClick: function(args)
+            {
+                $scope.StokListeRowClick(args.itemIndex,args.item,this);
                 $scope.$apply();
             }
         });
@@ -817,6 +860,7 @@ function PosSatisCtrl($scope,$window,db)
         InitStokGrid();
         InitSonSatisGrid();
         InitSonSatisDetayGrid();
+        InitDepoMiktarGrid();
 
         $scope.Seri = UserParam.PosSatis.Seri;
         $scope.TahSeri = UserParam.PosSatis.TahSeri;
@@ -964,6 +1008,7 @@ function PosSatisCtrl($scope,$window,db)
             {
                     if(BarkodData[0].KATSAYI > BarkodData[0].KALANDEPOMIKTARI && UserParam.Sistem.StokEksiyeDusme == "1")
                     {
+                        console.log(BarkodData[0].KALANDEPOMIKTARI)
                         alertify.okBtn('Evet');
                         alertify.cancelBtn('Hayır');
                         alertify.confirm('Stok - ye Düşecek Devam Etmek İstediğinize Emin Misiniz ?', 
@@ -971,6 +1016,7 @@ function PosSatisCtrl($scope,$window,db)
                         { 
                             if(BarkodData.length > 0)
                             { 
+                                console.log(1)
                                 $scope.Stok = BarkodData;
                                 $scope.Stok[0].FIYAT = 0;
                                 $scope.Stok[0].TUTAR = 0;
@@ -1032,6 +1078,60 @@ function PosSatisCtrl($scope,$window,db)
                                 {
                                     $scope.Stok[0].CARPAN = $scope.Stok[0].CARPAN * -1
                                 }
+                                //BARKOD DETAY EKREM İLK 18.02.2020 16:15
+                                $scope.Barkod = $scope.Stok[0].BARKOD;
+                                $scope.StokKodu = $scope.Stok[0].KODU;
+                                $scope.BarkodLock = true;
+            
+                                //Fiyat Getir
+                                var Fiyat = 
+                                {
+                                    db : '{M}.' + $scope.Firma,
+                                    query : "SELECT TOP 1 " + 
+                                            "CASE WHEN (SELECT sfl_kdvdahil FROM STOK_SATIS_FIYAT_LISTE_TANIMLARI WHERE sfl_sirano=sfiyat_listesirano) = 0 THEN " + 
+                                            "dbo.fn_StokSatisFiyati(sfiyat_stokkod,sfiyat_listesirano,sfiyat_deposirano,1) " + 
+                                            "ELSE " + 
+                                            "dbo.fn_StokSatisFiyati(sfiyat_stokkod,sfiyat_listesirano,sfiyat_deposirano,1) / ((SELECT dbo.fn_VergiYuzde ((SELECT TOP 1 sto_toptan_vergi FROM STOKLAR WHERE sto_kod = sfiyat_stokkod)) / 100) + 1) " + 
+                                            "END AS FIYAT, " + 
+                                            "sfiyat_doviz AS DOVIZ, " + 
+                                            "ISNULL((SELECT dbo.fn_DovizSembolu(ISNULL(sfiyat_doviz,0))),'TL') AS DOVIZSEMBOL, " + 
+                                            "ISNULL((SELECT dbo.fn_KurBul(CONVERT(VARCHAR(10),GETDATE(),112),ISNULL(sfiyat_doviz,0),2)),1) AS DOVIZKUR, " + 
+                                            "sfiyat_iskontokod AS ISKONTOKOD " + 
+                                            "FROM STOK_SATIS_FIYAT_LISTELERI " +
+                                            "WHERE sfiyat_stokkod = @STOKKODU AND sfiyat_listesirano = @FIYATLISTE AND sfiyat_deposirano IN (0,@DEPONO) " +
+                                            "ORDER BY sfiyat_deposirano DESC", 
+                                    param: ['STOKKODU','FIYATLISTE','DEPONO'],
+                                    type:  ['string|50','int','int'],
+                                    value: [$scope.StokKodu,$scope.FiyatListe,$scope.DepoNo]
+                                }
+                                db.GetDataQuery(Fiyat,function(pFiyat)
+                                {  
+                                    console.log($scope.FiyatListe)
+                                    $scope.Fiyat = pFiyat[0].FIYAT
+                                    $scope.Stok[0].DOVIZSEMBOL = pFiyat[0].DOVIZSEMBOL;
+                                    $scope.SatisFiyatListe2 = (pFiyat.length > 1) ? pFiyat[1].FIYAT : 0;
+                                });
+                                
+                                //Depo Miktar Getir
+                                var DepoMiktar =
+                                {
+                                    db : '{M}.' + $scope.Firma,
+                                    query : "SELECT dep_adi DEPOADI,dep_no DEPONO,((SELECT dbo.fn_DepodakiMiktar(@STOKKODU,dep_no,GETDATE()) - (select sum(MIKTAR) AS MIKTAR FROM TERP_POS_SATIS  WHERE DURUM = '1' AND SUBE = DEPOLAR.dep_no and SKODU = @STOKKODU GROUP BY SUBE))) AS DEPOMIKTAR FROM DEPOLAR ",
+                                    param : ['STOKKODU'],
+                                    type : ['string|50'],
+                                    value : [$scope.StokKodu]
+                                }
+                               //Son Alış Getir
+                                /*db.GetData($scope.Firma,'TumSonAlisGetir',[BarkodData[0].KODU],function(data)
+                                {
+                                    $scope.SonAlis = data[0].SONFIYAT
+                                });*/
+                                db.GetDataQuery(DepoMiktar,function(pDepoMiktar)
+                                {   
+                                    $scope.DepoMiktarListe = pDepoMiktar
+                                    $("#TblDepoMiktar").jsGrid({data : $scope.DepoMiktarListe});
+                                });
+                                //BARKOD DETAY EKREM SON 18.02.2020 16:15
     
                                 //**** FİYAT GETİR */
     

@@ -289,7 +289,7 @@ function RptGunlukEvrakCtrl($scope,$window,db)
                     "CONVERT(VARCHAR(10), MAX(OTARIH), 108) AS SAAT, " +
                     "CONVERT(VARCHAR(10), MAX(OTARIH), 104) AS TARIH " +
                     "FROM TERP_POS_SATIS AS PS WHERE SUBE = @SUBE AND TARIH >= @ILKTARIH AND TARIH <= @SONTARIH AND DURUM IN (1,2) " +
-                    "GROUP BY SERI,SIRA,TIP ORDER BY RECID DESC " ,
+                    "GROUP BY SERI,SIRA,TIP,RECID ORDER BY RECID DESC " ,
             param:  ['SUBE','ILKTARIH','SONTARIH'],
             type:   ['int','date','date',],
             value:  [$scope.Sube,$scope.IlkTarih,$scope.SonTarih]

@@ -233,7 +233,7 @@
                             <button class="form-group btn btn-block bg-pink-600 my-1" ng-click="BtnKullaniciDegistir()" style="height:70px;"><span style="color:white;">Kullanıcı Değiştir</span></button>
                         </div>
                         <div class="col-2 px-1">
-                            <button role="menu-item" class="form-group btn btn-block btn-default my-1" style="height:70px;"><span style="color:white;"></span></button>
+                            <button role="menu-item" class="form-group btn btn-block btn-danger my-1" data-target="#MdlStokDetay" data-toggle="modal" style="height:70px;"><span style="color:white;">Barkod Detay</span></button>
                         </div>
                         <div class="col-2 px-1">
                             <button role="menu-item" class="form-group btn btn-block btn-default my-1" style="height:70px;"><span style="color:white;"></span></button>
@@ -296,6 +296,44 @@
             </div>
         </div>
         <!-- MODALLAR  -->
+        <!-- Stok Detay -->
+        <div class="modal fade" id="MdlStokDetay" aria-hidden="true" aria-labelledby="examplePositionCenter" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple modal-center modal-primary">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">X</span>
+                        </button>
+                        <h4 class="modal-title">Stok Detay</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row pt-5">
+                            <div class="col-3 px-0 text-info"><label class="form-control-label float-right"><b>Ana Grup :</b></label></div>
+                            <div class="col-8 px-0"><label class="form-control-label pl-10 text-primary">{{Stok[0].ANAGRUP}} - {{Stok[0].ANAGRUPADI}}</label></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 px-0 text-info"><label class="form-control-label float-right"><b>Alt Grup :</b></label></div>
+                            <div class="col-8 px-0"><label class="form-control-label pl-10 text-primary">{{Stok[0].ALTGRUP}} - {{Stok[0].ALTGRUPADI}}</label></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 px-0 text-info"><label class="form-control-label float-right"><b>Reyon :</b></label></div>
+                            <div class="col-8 px-0"><label class="form-control-label pl-10 text-primary">{{Stok[0].REYON}} - {{Stok[0].REYONADI}}</label></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 px-0 text-info"><label class="form-control-label float-right"><b>Fiyat 1 :</b></label></div>
+                            <div class="col-8 px-0"><label class="form-control-label pl-10 text-primary">{{Fiyat}}</label></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 px-0 text-info"><label class="form-control-label float-right"><b>Fiyat 2 :</b></label></div>
+                            <div class="col-8 px-0"><label class="form-control-label pl-10 text-primary">{{SatisFiyatListe2}}</label></div>
+                        </div>
+                        <div class="row py-1 px-1">
+                            <div id="TblDepoMiktar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Müşteri Listesi -->
         <div class="modal fade " id="MdlMusteriListele" aria-hidden="true" aria-labelledby="examplePositionCenter" role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple modal-primary modal-lg">
@@ -1169,7 +1207,7 @@
         </div>
     </div>
 <!--Fatura Dizayn -->
-<div class="row" id="A4" style="display: none">
+<div class="row" id="A4" >
     <div class="col-12">
         <div class="panel">
             <div class="panel-body">
@@ -1295,9 +1333,10 @@
                     {{FisGenelToplam | number:2}}
                 </div>
             </div>
+            <br>
             <div class="row">
-                <div class="col-3 offset-1">
-                    E-arşiv faturanız kayıtlı mail adresinize gönderilecektir
+                <div class="col-12 offset-1">
+                    Verilen fiş bilgi amaçlıdır faturanız belirtmiş olduğunuz mail adresinize ulaştırılacaktır. Ulaşmaması halinde muhasebe departmanı ile görüşebilirsiniz.
                 </div>
             </div>
         </div>

@@ -11,5 +11,7 @@ angular.module('app.controller', [])
 .controller('RptMagazaCiroCtrl',['$scope','$window','db',RptMagazaCiroCtrl])
 .controller('RptMagazaSatisCtrl',['$scope','$window','db',RptMagazaSatisCtrl])
 .controller('RptMagazaStokCtrl',['$scope','$window','db',RptMagazaStokCtrl])
+.controller('RptDepoSatisHarCtrl',['$scope','$window','db',RptDepoSatisHarCtrl])
 .controller('PluTanitimCtrl',['$scope','$window','db',PluTanitimCtrl])
 .controller('AnaSayfaCtrl',['$scope','$window','db',AnaSayfaCtrl])
+

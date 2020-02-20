@@ -54,6 +54,10 @@ angular.module("app",
     .when("/RptMagazaStok",
     {
         templateUrl : "html/rapor/RptMagazaStok.html"
+    })
+    .when("/RptDepoSatisHar",
+    {
+        templateUrl : "html/rapor/RptDepoSatisHar.html"
     })  
     .when("/KullaniciParametre",
     {

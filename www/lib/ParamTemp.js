@@ -9,6 +9,7 @@ var ParamTemp =
 		"MikroId" : {"Title" : "Mikro Id","DefaultValue" : "1"},
 		"Yetkili" : {"Title" : "Yetkili","DefaultValue" : "1"},
 		"SifreDegistir" : {"Title" : "Şifre Değiştir","DefaultValue" : "0"},
+		"BagliKullanici" : {"Title" : "Şifre Değiştir","DefaultValue" : ""},
 		
 		"Sistem" : 
 		{

@@ -9,6 +9,7 @@ var Param = [
 		"MikroId": "1",
 		"Yetkili": true,
 		"SifreDegistir": "0",
+		"BagliKullanici": "Admin,TEST,Tümü",
 		"Sistem": {
 			"KiloBarkod": "0",
 			"KiloFlag": "",
@@ -21,7 +22,7 @@ var Param = [
 			"IskontoMatrisTip": "0",
 			"AnasayfaRaporlari": "1",
 			"FisCiktisi": "1",
-			"StokEksiyeDusme": "0",
+			"StokEksiyeDusme": "0"
 		},
 		"PosSatis": {
 			"EvrakTip": "1",
@@ -35,7 +36,7 @@ var Param = [
 			"Sube": "1",
 			"SorumlulukKodu": "",
 			"Personel": "",
-			"FiyatListe": "0"
+			"FiyatListe": "1"
 		},
 		"Menu": {
 			"POS Satış Ekranı": "1",
@@ -48,7 +49,8 @@ var Param = [
 			"Tahsilat Aktarımı": "1",
 			"Mağaza Ciro Raporu": "1",
 			"Mağaza Satış Raporu": "1",
-			"Mağaza Stok Raporu": "1"
+			"Mağaza Stok Raporu": "1",
+			"Depo Satış Hareketleri": "1"
 		}
 	},
 	{
@@ -61,6 +63,7 @@ var Param = [
 		"MikroId": "1",
 		"Yetkili": false,
 		"SifreDegistir": "0",
+		"BagliKullanici": "TEST,TEST2",
 		"Sistem": {
 			"KiloBarkod": "0",
 			"KiloFlag": "",
@@ -73,7 +76,7 @@ var Param = [
 			"IskontoMatrisTip": "0",
 			"AnasayfaRaporlari": "1",
 			"FisCiktisi": "1",
-			"StokEksiyeDusme": "1",
+			"StokEksiyeDusme": "1"
 		},
 		"PosSatis": {
 			"EvrakTip": "1",
@@ -125,18 +128,18 @@ var Param = [
 			"IskontoMatrisTip": "0",
 			"AnasayfaRaporlari": "0",
 			"FisCiktisi": "1",
-			"StokEksiyeDusme": "1",
+			"StokEksiyeDusme": "1"
 		},
 		"PosSatis": {
 			"EvrakTip": "1",
 			"Seri": "IRS",
 			"TahSeri": "TIRS",
 			"TahsilatSeri": "A",
-			"NakitKasaKodu": "",
+			"NakitKasaKodu": "00",
 			"KrediKartKasa": "",
 			"AcikHesapKodu": "",
 			"Cari": "",
-			"Sube": "0",
+			"Sube": "1",
 			"SorumlulukKodu": "",
 			"Personel": "",
 			"FiyatListe": "0"
