@@ -9,7 +9,7 @@ var Param = [
 		"MikroId": "1",
 		"Yetkili": true,
 		"SifreDegistir": "0",
-		"BagliKullanici": "Admin,TEST,Tümü",
+		"BagliKullanici": "Tümü,Admin,TEST",
 		"Sistem": {
 			"KiloBarkod": "0",
 			"KiloFlag": "",
@@ -50,7 +50,7 @@ var Param = [
 			"Mağaza Ciro Raporu": "1",
 			"Mağaza Satış Raporu": "1",
 			"Mağaza Stok Raporu": "1",
-			"Depo Satış Hareketleri": "1"
+			"Satış Hareketleri Raporu": "1"
 		}
 	},
 	{

@@ -110,7 +110,7 @@ function RptGunlukSatisCtrl($scope,$window,db)
         $scope.IlkTarih = moment(new Date()).format("DD.MM.YYYY");
         $scope.SonTarih = moment(new Date()).format("DD.MM.YYYY");
         $scope.Sube = "0";
-        $scope.Kullanici = "";
+        $scope.Kullanici = "Tümü";
         $scope.AraToplam = 0;
         $scope.ToplamIndirim = 0;
         $scope.ToplamKdv = 0;
@@ -143,7 +143,6 @@ function RptGunlukSatisCtrl($scope,$window,db)
                 $scope.SubeLock = true;
             }
         });
-   
     }
     $scope.BtnGetir = function()
     {

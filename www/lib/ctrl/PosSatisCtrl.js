@@ -1028,7 +1028,7 @@ function PosSatisCtrl($scope,$window,db)
                                 {
                                     $scope.Stok[0].CARPAN = $scope.Stok[0].CARPAN * -1
                                 }
-    
+   
                                 //**** FİYAT GETİR */
     
                                 $scope.DepoNo = UserParam.PosSatis.Sube
@@ -1064,7 +1064,6 @@ function PosSatisCtrl($scope,$window,db)
                     }
                     else
                     {
-                        console.log($scope.Stok[0].TUTAR)
                         if(BarkodData.length > 0)
                             { 
                                 $scope.Stok = BarkodData;
@@ -1910,6 +1909,18 @@ function PosSatisCtrl($scope,$window,db)
     {
         $('#MdlSonSatisDetay').modal('hide');
         $('#MdlSonSatis').modal('show');
+    }
+    $scope.BtnDetayGiris = function()
+    {
+        if($scope.SatisList.length < 1)
+        {
+            alertify.alert("Lütfen Ürün Seçiniz")
+        }
+        else
+        {
+            $('#MdlStokDetay').modal('show');
+        }
+        
     }
     $scope.BtnIskonto = function(pIskonto)
     {   
