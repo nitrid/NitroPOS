@@ -13,5 +13,6 @@ angular.module('app.controller', [])
 .controller('RptMagazaStokCtrl',['$scope','$window','db',RptMagazaStokCtrl])
 .controller('RptDepoSatisHarCtrl',['$scope','$window','db',RptDepoSatisHarCtrl])
 .controller('PluTanitimCtrl',['$scope','$window','db',PluTanitimCtrl])
+.controller('SayimCtrl',['$scope','$window','$timeout','db',SayimCtrl])
 .controller('AnaSayfaCtrl',['$scope','$window','db',AnaSayfaCtrl])
 

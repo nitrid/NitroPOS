@@ -229,7 +229,7 @@ var QuerySql =
                 "WHERE ((sto_kod LIKE @KODU) OR (@KODU = '')) AND ((sto_isim LIKE @ADI) OR (@ADI = ''))" ,
         param : ['KODU',"ADI",'DEPONO'],
         type : ['string|25','string|50','int']
-    },    
+    },
     FiyatGetir : 
     {
         query : "SELECT FIYAT.sfiyat_stokkod AS STOKKODU, " +
@@ -443,6 +443,133 @@ var QuerySql =
         query:  "DELETE BEDEN_HAREKETLERI WHERE BdnHar_Har_uid = @BdnHar_Har_uid AND BdnHar_Tipi = @BdnHar_Tipi",
         param:  ['BdnHar_Har_uid','BdnHar_Tipi'],
         type:   ['string|50','int']
+    },
+    //Sayım
+    SayimGetir : 
+    {
+        query: "SELECT ISNULL((SELECT sto_isim FROM STOKLAR WHERE sto_kod = sym_Stokkodu),'') AS ADI, " +
+                "ROW_NUMBER() OVER(ORDER BY sym_Guid) AS NO, " +
+                "* FROM SAYIM_SONUCLARI " +
+                "WHERE sym_depono = @sym_depono AND sym_evrakno = @sym_evrakno AND sym_tarihi = @sym_tarihi ORDER BY sym_lastup_date DESC" ,
+        param: ['sym_depono','sym_evrakno','sym_tarihi'],
+        type:  ['int','int','date'] 
+    },
+    SayimInsert :
+    {
+        query : "DECLARE @sym_satirno AS INT " +
+                "SET @sym_satirno = (SELECT ISNULL(MAX(sym_satirno),-1) + 1 FROM SAYIM_SONUCLARI WHERE sym_evrakno=@sym_evrakno AND sym_depono=@sym_depono AND sym_tarihi=@sym_tarihi) " +
+                "INSERT INTO [SAYIM_SONUCLARI] " +
+                "([sym_DBCno] " +
+                ",[sym_SpecRECno] " +
+                ",[sym_iptal] " +
+                ",[sym_fileid] " +
+                ",[sym_hidden] " +
+                ",[sym_kilitli] " +
+                ",[sym_degisti] " +
+                ",[sym_checksum] " +
+                ",[sym_create_user] " +
+                ",[sym_create_date] " +
+                ",[sym_lastup_user] " +
+                ",[sym_lastup_date] " +
+                ",[sym_special1] " +
+                ",[sym_special2] " +
+                ",[sym_special3] " +
+                ",[sym_tarihi] " +
+                ",[sym_depono] " +
+                ",[sym_evrakno] " +
+                ",[sym_satirno] " +
+                ",[sym_Stokkodu] " +
+                ",[sym_reyonkodu] " +
+                ",[sym_koridorkodu] " +
+                ",[sym_rafkodu] " +
+                ",[sym_miktar1] " + 
+                ",[sym_miktar2] " +
+                ",[sym_miktar3] " +
+                ",[sym_miktar4] " +
+                ",[sym_miktar5] " +
+                ",[sym_birim_pntr] " +
+                ",[sym_barkod] " +
+                ",[sym_renkno] " +
+                ",[sym_bedenno] " +
+                ",[sym_parti_kodu] " +
+                ",[sym_lot_no] " +
+                ",[sym_serino] " +
+                ") VALUES ( " +
+                "0					--<sym_DBCno, int,> \n" +
+                ",0		 			--<sym_SpecRECno, int,> \n" +
+                ",0	 				--<sym_iptal, bit,> \n" +
+                ",28		 			--<sym_fileid, smallint,> \n" +
+                ",0		 			--<sym_hidden, bit,> \n" +
+                ",0		 			--<sym_kilitli, bit,> \n" +
+                ",0		 			--<sym_degisti, bit,> \n" +
+                ",0		 			--<sym_checksum, int,> \n" +
+                ",@sym_create_user 			--<sym_create_user, smallint,> \n" +
+                ",CONVERT(VARCHAR(10),GETDATE(),112) 		--<sym_create_date, datetime,> \n" +
+                ",@sym_lastup_user 				--<sym_lastup_user, smallint,> \n" +
+                ",GETDATE()		--<sym_lastup_date, datetime,> \n" +
+                ",''		 			--<sym_special1, varchar(4),> \n" +
+                ",''		 			--<sym_special2, varchar(4),> \n" +
+                ",''		 			--<sym_special3, varchar(4),> \n" +
+                ",@sym_tarihi 			--<sym_tarihi, datetime,> \n" +
+                ",@sym_depono 			--<sym_depono, int,> \n" +
+                ",@sym_evrakno 			--<sym_evrakno, int,> \n" +
+                ",@sym_satirno			--<sym_satirno, int,> \n" +
+                ",@sym_Stokkodu 		--<sym_Stokkodu, varchar(25),> \n" +
+                ",''		 		--<sym_reyonkodu, varchar(4),> \n" +
+                ",''		 		--<sym_koridorkodu, varchar(4),> \n" +
+                ",''		 		--<sym_rafkodu, varchar(4),> \n" +
+                ",@sym_miktar1 		--<sym_miktar1, float,> \n" +
+                ",0		 		--<sym_miktar2, float,> \n" +
+                ",0		 		--<sym_miktar3, float,> \n" +
+                ",0		 		--<sym_miktar4, float,> \n" +
+                ",0		 		--<sym_miktar5, float,> \n" +
+                ",@sym_birim_pntr 		--<sym_birim_pntr, tinyint,> \n" +
+                ",@sym_barkod 		--<sym_barkod, varchar(25),> \n" +
+                ",@sym_renkno 		--<sym_renkno, int,> \n" +
+                ",@sym_bedenno 		--<sym_bedenno, int,> \n" +
+                ",@sym_parti_kodu 		--<sym_parti_kodu, varchar(25),> \n" +
+                ",@sym_lot_no	 		--<sym_lot_no, int,> \n" +
+                ",@sym_serino			--<sym_serino, varchar(25),> \n" +
+                ") " +
+                "SELECT ISNULL((SELECT sto_isim FROM STOKLAR WHERE sto_kod = sym_Stokkodu),'') AS ADI, " +
+                "ROW_NUMBER() OVER(ORDER BY sym_Guid) AS NO,*  FROM SAYIM_SONUCLARI WHERE sym_tarihi = @sym_tarihi AND " +
+                "sym_depono = @sym_depono AND sym_evrakno = @sym_evrakno AND sym_satirno = @sym_satirno ",
+            param : ["sym_create_user:int","sym_lastup_user:int","sym_tarihi:date","sym_depono:int","sym_evrakno:int","sym_Stokkodu:string|25",
+                    "sym_miktar1:float","sym_birim_pntr:int","sym_barkod:string|25","sym_renkno:int","sym_bedenno:int","sym_parti_kodu:string|25",
+                    "sym_lot_no:int","sym_serino:string|25"]
+    },
+    SayimEvrDelete :
+    {
+        query: "DELETE FROM SAYIM_SONUCLARI WHERE sym_evrakno = @sym_evrakno AND " +
+                "sym_tarihi=@sym_tarihi and sym_depono = @sym_depono",
+        param:  ['sym_evrakno','sym_tarihi','sym_depono'],
+        type:   ["int","date","int"]
+    },
+    SayimSatirDelete :
+    {
+        query : "DELETE FROM SAYIM_SONUCLARI WHERE sym_Guid = @sym_Guid",
+        param : ['sym_Guid'],
+        type : ['string|50']
+    },
+    SayimUpdate : 
+    {
+        query : "UPDATE SAYIM_SONUCLARI " +
+                "SET sym_miktar1 = @sym_miktar1 " +
+                ",sym_miktar2 = @sym_miktar2 " +
+                ",sym_miktar3 = @sym_miktar3 " +
+                ",sym_miktar4 = @sym_miktar4 " +
+                ",sym_miktar5 = @sym_miktar5 " +
+                ",sym_lastup_date = GETDATE() " +
+                "WHERE CONVERT(NVARCHAR(50),sym_Guid) = @sym_Guid",
+        param : ['sym_miktar1','sym_miktar2','sym_miktar3','sym_miktar4','sym_miktar5','sym_Guid'],
+        type : ['int','int','int','int','int','string|50']
+    },
+    MaxSayimSira :
+    {
+        query : "SELECT ISNULL(MAX(sym_evrakno),0) + 1 AS MAXEVRSIRA FROM SAYIM_SONUCLARI " +
+                "WHERE sym_depono = @sym_depono AND sym_tarihi = @sym_tarihi " ,
+        param : ['sym_depono','sym_tarihi'],
+        type : ['int','date']
     },
     //Stok Hareket
     StokHarGetir : 

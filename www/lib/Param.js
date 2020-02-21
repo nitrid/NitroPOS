@@ -38,7 +38,16 @@ var Param = [
 			"Personel": "",
 			"FiyatListe": "1"
 		},
+		"Sayim": {
+			"EvrakNo": "1",
+			"DepoNo": "1",
+			"DepoListe": "",
+			"BelgeBilgisi": "",
+			"BarkodOlustur": "1",
+			"EvrakSil": "0"
+		},
 		"Menu": {
+			"Sayım Fişi": "1",
 			"POS Satış Ekranı": "1",
 			"POS İade Ekranı": "1",
 			"Günlük Satış Raporu": "1",

@@ -59,6 +59,10 @@ angular.module("app",
     {
         templateUrl : "html/rapor/RptDepoSatisHar.html"
     })  
+    .when("/SayimFisi",
+    {
+        templateUrl : "html/evraklar/SayimFisi.html"
+    }) 
     .when("/KullaniciParametre",
     {
         templateUrl : "html/ayarlar/KullaniciParametre.html"

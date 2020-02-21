@@ -1,0 +1,316 @@
+<style>
+.rowheight
+{
+font-size: 12
+421px;    
+}
+</style>
+<div class="col px-0" ng-controller="SayimCtrl" ng-init="YeniEvrak()">
+<div class="panel panel-bordered">
+<div class="panel-body py-1">
+<div class="tab-content">
+    <div id="TbMain" class="tab-pane active">
+        <div class="row pb-20">
+            <div class="col-8 px-1">
+                    <select class="form-control form-control" ng-model="CmbEvrakTip">
+                        <option value="0">Sayım 1</option>
+                        <option value="1">Sayım 2</option>
+                    </select>
+            </div>
+            <div class="col-4  px-1">
+                <button type="button" class="btn btn-primary btn-block dropdown-toggle px-0" id="DrpwSiparis" data-toggle="dropdown" aria-expanded="false">İşlemler</button>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="orderdropdownanimation" role="menu" x-placement="bottom-start">
+                    <button class="dropdown-item" href="#" role="menu-item" ng-click="YeniEvrak()">Yeni Evrak</button>
+                    <button class="dropdown-item" data-target="#MdlEvrakGetir" data-toggle="modal" role="menu-item">Evrak Getir</a>                                
+                    <button class="dropdown-item" href="#" role="menu-item" ng-click="EvrakDelete()">Evrak Sil</button>
+                    <button class="dropdown-item" href="#" role="menu-item" ng-click="EvrakGonder()">Gönder</a>
+                </div>
+            </div>
+        </div>
+        <div class="row pt-50">
+            <div class="col-4 px-0 text-info"><label class="form-control-label float-right">Evrak No :</label></div>
+            <div class="col-8 px-0"><label class="form-control-label pl-10">{{EvrakNo}}</label></div>
+        </div>
+        <div class="row">
+            <div class="col-4 px-0 text-info"><label class="form-control-label float-right">Depo :</label></div>
+            <div class="col-8 px-0 text-truncate"><label class="form-control-label pl-10">{{DepoAdi}}</label></div>
+        </div>
+        <div class="row pb-100">
+            <div class="col-4 px-0 text-info"><label class="form-control-label float-right">Toplam Satır :</label></div>
+            <div class="col-8 px-0 text-truncate"><label class="form-control-label pl-10">{{ToplamSatir | number:2}}</label></div>
+        </div>
+        <div class="row pt-20 py-10">
+            <div class="col-6">
+                <button class="btn btn-block btn-primary h-50" ng-click="BelgeBilgisiClick()">Belge Bilgisi</button>
+            </div>
+        </div>
+        <div class="row py-10">
+            <div class="col-6">
+                <button class="btn btn-block btn-primary h-50" ng-click="BarkodGirisClick()">Barkod Giriş</button>
+            </div>
+            <div class="col-6">
+                <button class="btn btn-block btn-primary h-50" ng-click="TbIslemSatirlariClick()">İşlem Satırları</button>
+            </div>
+        </div>                
+    </div>
+    <div id="TbBelgeBilgisi" class="tab-pane">
+        <div class="row pt-0 pb-1 pb-5">
+            <div class="col-4 px-1">
+                <button class="form-group btn btn-block btn-primary mb-1 h-40" ng-click="MainClick()"><i class="icon wb-arrow-left" aria-hidden="true"></i></button>
+            </div>
+            <div class="col-4 px-1">
+                <button class="form-group btn btn-block btn-primary mb-1 h-40" ng-click="BarkodGirisClick()"><i class="fas fa-barcode fa-lg"></i></button>
+            </div>
+        </div>
+        <div class="row my-0 py-0 pt-20">
+            <div class="col-4 text-info px-1"><div class="col-form-label float-right py-2">Evrak No:</div></div>
+            <div class="col-8 px-1">
+                <input type="text" class="form-control" ng-model="EvrakNo" ng-disabled="EvrakLock">
+            </div>
+        </div>
+        <div class="row my-0 py-0 pt-5">
+            <div class="col-4 text-info px-1 py-0 my-0"><div class="col-form-label float-right py-2">Depo:</div></div>
+            <div class="col-8 px-1">
+                <select class="form-control" ng-model="DepoNo" ng-change="PageRefresh()"  ng-disabled="EvrakLock">
+                    <option ng-repeat="option in DepoListe" value="{{option.KODU}}">{{option.ADI}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="row my-0 py-0 pt-5">
+            <div class="col-4 text-info px-1"><div class="col-form-label px-1 float-right  py-2">Tarih:</div></div>
+            <div class="col-8 px-1">
+                <div class="input-group input-group-icon">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <span class="icon wb-calendar" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                    <input type="text" class="form-control" type="text" id="Tarih"  ng-model="Tarih" data-provide="datepicker" ng-disabled="EvrakLock">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="TbBarkodGiris" class="tab-pane">
+        <div class="row pt-0 pb-1 pb-5">
+            <div class="col-4 px-1">
+                <button class="form-group btn btn-block btn-primary mb-1 h-40" ng-click="MainClick()"><i class="icon wb-arrow-left" aria-hidden="true"></i></button>
+            </div>
+            <div class="col-4 px-1">
+                <button class="form-group btn btn-block btn-primary mb-1 h-40" ng-click="TbIslemSatirlariClick()"><i class="far fa-file-alt fa-lg" ></i></button>
+            </div>
+            <div class="col-4 px-1">
+                <div class="checkbox-custom checkbox-info">
+                    <input type="checkbox" name="inputCheckboxes" ng-model="OtoEkle" checked="">
+                    <label for="inputUnchecked"><div class="text-info"><div class="col-form-label py-0"><b>Oto. Ekle</b></div></div></label>
+                </div>
+            </div>
+        </div>
+        <div class="row py-1">
+            <div class="col-12 px-1">
+                <div class="input-group">
+                    <input type="text" class="form-control" ng-model="Barkod" ng-keypress = "BtnStokBarkodGetir($event)" ng-disabled="BarkodLock" id="Barkod">
+                    <span class="input-group-append">
+                    <button type="submit" class="btn btn-primary" ng-click="BtnTemizle()"><i class="fas fa-backspace fa-lg"></i></button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row pt-5">
+            <div class="col-5 px-1">
+                <button type="submit" data-target="#MdlStokGetir" data-toggle="modal" class="btn btn-primary btn-block h-40">Manuel Arama</button>        
+            </div>
+            <div class="col-2 px-1">
+                <button type="submit" class="btn btn-primary btn-block h-40" ng-click="ScanBarkod()"><i class="fas fa-camera-retro fa-lg"></i></button>        
+            </div>
+            <div class="col-5 px-1">
+                <button type="submit" class="btn btn-primary btn-block h-40" ng-click="BtnBarkodGetirClick()">Getir</button>        
+            </div>
+        </div>
+        <div class="row pt-5 pb-50">
+            <div class="col-lg-12" style="display: inline; text-align: center; overflow: hidden;">  
+                <label class="mb-0 h4 text-primary">{{Stok[0].KODU}} - {{Stok[0].ADI}} - {{Stok[0].BEDEN}} - {{Stok[0].RENK}}</label> 
+            </div>
+        </div>
+        <div class="row my-0 pt-50">
+            <div class="col-4 offset-4 text-info px-1">
+                <div class="col-form-label px-1 float-right py-1">Birim:</div>
+            </div>
+            <div class="col-4 px-1">
+                <select class="form-control form-control-sm" ng-model="Birim" ng-change="BirimChange()">
+                    <option ng-repeat="option in BirimListe" value="{{option.BIRIMPNTR}}">{{option.BIRIM}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="row my-0">
+            <div class="col-3 text-info px-1">
+                <div class="col-form-label float-right py-1">Miktar:</div>
+            </div>
+            <div class="col-4 px-1">
+                <input disabled type="text" class="form-control form-control-sm" ng-model="Stok[0].CARPAN">
+            </div>
+            <div class="col-1 text-info px-1">
+                <div class="col-form-label text-center py-1">X</div>
+            </div>
+            <div class="col-4 px-1">
+                <input type="text" class="form-control form-control-sm" ng-model="Miktar" ng-change="MiktarFiyatValid()" id="Miktar" ng-keydown="MiktarPress($event)">
+            </div>
+        </div>
+        <div class="row my-0">
+            <div class="col-8 text-info px-1">
+                <div class="col-form-label float-right py-1">Toplam Miktar:</div>
+            </div>
+            <div class="col-4 px-1">
+                <input disabled type="text" class="form-control form-control-sm" value="{{Stok[0].TOPMIKTAR | number:2}}">
+            </div>
+        </div>
+        <div class="row my-0">
+            <div class="col-12 pt-10 px-1">
+                <button type="submit" class="btn btn-primary btn-block h-40" ng-disabled="InsertLock" ng-click="Insert()">Ekle</button>
+            </div>
+        </div>
+    </div>
+    <div id="TbIslemSatirlari" class="tab-pane">
+        <div class="row py-1">
+            <div class="col-4 px-1">
+                <button class="form-group btn btn-block btn-primary mb-1 h-40" ng-click="MainClick()"><i class="icon wb-arrow-left" aria-hidden="true"></i></button>
+            </div>
+            <div class="col-4 px-1">
+                <button class="form-group btn btn-block btn-primary mb-1 h-40" ng-click="BarkodGirisClick()"><i class="fas fa-barcode fa-lg"></i></button>
+            </div>
+            <div class="col-4 px-1">
+                <button type="button" class="btn btn-primary btn-block dropdown-toggle mb-1 h-40" id="DrpwSiparis" data-toggle="dropdown" aria-expanded="false">İşlemler</button>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="orderdropdownanimation" role="menu" x-placement="bottom-start">
+                    <button class="dropdown-item" role="menu-item" ng-click="SatirDelete()">Satır Sil</button>
+                    <button class="dropdown-item" ng-click="BtnDuzenle()" data-toggle="modal" role="menu-item">Düzenle</button>
+                </div> 
+            </div>
+        </div>
+        <div class="row py-1 px-1">
+            <div id="TblIslem"></div>
+        </div>
+        <h5 class="text-right my-1"><span style="color:dodgerblue;">Satır :</span> {{ToplamSatir | number:2}}</h5>
+        <h5 class="text-right my-1"><span style="color:dodgerblue;">Toplam Miktar:</span> {{ToplamMiktar1 | number:2}}</h5>
+        <!-- <h5 class="text-right"><span style="color:dodgerblue;">Toplam Miktar 2:</span> {{ToplamMiktar2 | number:2}}</h5>
+        <h5 class="text-right"><span style="color:dodgerblue;">Toplam Miktar 3:</span> {{ToplamMiktar3 | number:2}}</h5>
+        <h5 class="text-right"><span style="color:dodgerblue;">Toplam Miktar 4:</span> {{ToplamMiktar4 | number:2}}</h5>
+        <h5 class="text-right"><span style="color:dodgerblue;">Toplam Miktar 5:</span> {{ToplamMiktar5 | number:2}}</h5> -->
+    </div>
+</div>            
+</div>
+</div>
+<!-- MODALLAR -->
+<!-- Evrak Getir Modal Başlangıç-->
+<div class="modal fade" id="MdlEvrakGetir" aria-labelledby="exampleOptionalSmall" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true">
+<div class="modal-dialog modal-simple modal-primary modal-center px-10">
+<div class="modal-content ">
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">X</span>
+    </button>
+    <h4 class="modal-title">Evrak Getir</h4>
+</div>
+    <div class="modal-body py-10">
+        <div class="panel">
+            <div class="form-group row my-2">
+                <label class="form-control-label col-lg-2 col-md-2 col-sm-4 offset-0 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Evrak No:</b></span></div></label>
+                <input type="text" class="form-control col-lg-10 col-md-10 col-sm-8 offset-0" ng-model="EvrakNo">
+            </div>
+            <div class="form-group row my-2">
+                <label class="form-control-label col-lg-2 col-md-2 col-sm-4 offset-0 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Depo:</b></span></div></label>
+                <select class="form-control col-lg-10 col-md-10 col-sm-8" ng-model="DepoNo" ng-change="PageRefresh()" ng-disabled="EvrakLock">
+                    <option ng-repeat="option in DepoListe" value="{{option.KODU}}">{{option.ADI}}</option>
+                </select>
+            </div>
+            <div class="row my-0 py-0">
+                <div class="col-sm-4 col-lg-2 col-md-2 "><div class="col-form-label px-1 float-right  py-2"><span style="color:dodgerblue;"><b>Tarih:</b></span></div></div>
+                <div class="col-sm-8 col-lg-10 col-md-10 px-1">
+                    <div class="input-group input-group-icon">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <span class="icon wb-calendar" aria-hidden="true"></span>
+                            </div>
+                        </div>
+                        <input type="text" class="form-control" type="text" id="ETarih" ng-model="Tarih" data-provide="datepicker" ng-disabled="EvrakLock" ng-change="PageRefresh()">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row my-5">
+            <button type="submit" class="btn btn-primary form-control-sm btn-block col-12" ng-click="EvrakGetir()">Evrak Getir</button>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<!-- MODALLAR -->
+<!-- Manuel Giriş -->
+<div class="modal fade" id="MdlStokGetir" aria-hidden="true" aria-labelledby="examplePositionCenter" role="dialog" tabindex="-1">
+<div class="modal-dialog modal-simple modal-center modal-primary">
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">X</span>
+        </button>
+        <h4 class="modal-title">Manuel Giriş</h4>
+    </div>
+    <div class="modal-body px-1 py-1">
+        <div class="row py-10">
+            <div class="col-lg-4 col-md-4 col-sm-4 offset-0">
+                <select class="form-control form-control-sm ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="StokGridTip">
+                <option value="0" selected="selected">ADI</option>
+                <option value="1">KODU</option>
+                </select>
+            </div>
+            <div class="col-lg-8 col-sm-8 col-md-8">
+                <input type="text" class="form-control form-control-sm ng-pristine ng-untouched ng-valid ng-empty" ng-model="StokGridText">
+            </div>
+        </div>  
+        <div class="row">
+            <div class="form-group row col-lg-12 my-0 ml-5">
+                <div class="col-lg-6 col-sm-6 col-lg-6">
+                <button class="btn btn-block btn-primary" ng-click="BtnStokGridSec()">Seç</button>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-lg-6">
+                    <button class="btn btn-block btn-primary" ng-click="BtnStokGridGetir()">Getir</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-1 offset-5" ng-show="Loading">
+            <div class="loader vertical-align-middle loader-circle"></div>
+        </div>
+        <div id="TblStok" class="pt-5" ng-show="TblLoading"></div>
+    </div>
+</div>
+</div>
+</div>
+<!--Düzenle MODAL-->
+<div class="modal fade" id="MdlDuzenle" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true">
+<div class="modal-dialog modal-simple modal-primary modal-center px-10">
+<div class="modal-content ">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">X</span>
+        </button>
+        <h4 class="modal-title">Edit</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-group row my-5">
+            <label class="form-control-label col-4 pr-5"><div class="float-right"><span style="color:dodgerblue;"><b>Miktar :</b></span></div></label>
+            <input type="text" class="form-control col-8" ng-model="MiktarEdit">
+        </div>
+        <div class="row px-10">
+            <button type="submit" class="btn btn-primary btn-block col-12" ng-click="BtnDuzenleKaydet(this.IslemListeSelectedIndex)">Kaydet</button>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+<script>    
+$("#Tarih").datepicker({
+language: "tr"
+});
+$("#ETarih").datepicker({
+language: "tr"
+});
+</script>
