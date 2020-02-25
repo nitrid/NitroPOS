@@ -68,7 +68,14 @@ function RptMagazaSatisCtrl($scope,$window,db)
         });
     }
     $scope.Init = function()
-    {
+    {   
+        gtag('config', 'UA-12198315-15', 
+        {
+            'page_title' : 'MagazaSatis',
+            'page_path': '/MagazaSatis',
+            'user_id' : 'UserParam.Kullanici'
+        });
+
         InitIslemGrid();
         
         $scope.Firma = $window.sessionStorage.getItem('Firma');
@@ -79,6 +86,7 @@ function RptMagazaSatisCtrl($scope,$window,db)
         $scope.Sube = "0";
         $scope.ToplamSatis = 0;
         $scope.ToplamKar = 0;
+        $scope.AlisFiyat = UserParam.PosSatis.RaporAlisFiyat;
 
         $scope.IslemListe = [];
         $scope.SubeListe = [];
@@ -110,82 +118,27 @@ function RptMagazaSatisCtrl($scope,$window,db)
                     "FROM (SELECT " +
                     "SKODU AS KODU, " +
                     "ISNULL((SELECT sto_isim FROM STOKLAR WHERE sto_kod = SKODU),'') AS ADI, " +
-                    "ISNULL((SELECT TOP 1 sfiyat_fiyati FROM STOK_SATIS_FIYAT_LISTELERI WHERE sfiyat_stokkod = SKODU AND sfiyat_deposirano = 0 AND sfiyat_listesirano = 3),0) AS ALISFIYAT, " +
-                    "ISNULL((SELECT TOP 1 sfiyat_fiyati FROM STOK_SATIS_FIYAT_LISTELERI WHERE sfiyat_stokkod = SKODU AND sfiyat_deposirano = 0 AND sfiyat_listesirano = 1),0) AS SATISFIYAT, " +
+                    "ISNULL((SELECT TOP 1 sfiyat_fiyati FROM STOK_SATIS_FIYAT_LISTELERI WHERE sfiyat_stokkod = SKODU AND sfiyat_deposirano = 0 AND sfiyat_listesirano = @ALISFIYAT),0) AS ALISFIYAT, " +
+                    "FIYAT AS SATISFIYAT, " +
                     "SUM(CASE WHEN TIP = 1 THEN MIKTAR ELSE MIKTAR * -1 END) AS MIKTAR, " +
-                    "SUM(CASE WHEN TIP = 1 THEN ROUND(((MIKTAR * FIYAT) - ISKONTO),0) ELSE ROUND(((MIKTAR * FIYAT ) - ISKONTO) * -1,0) END) AS SATISTUTAR  " +
+                    "CASE WHEN TIP = 1 THEN CAST(((SUM(MIKTAR) * MAX(FIYAT)) - SUM(ISNULL(ISKONTO,0))) * (((SELECT dbo.fn_VergiYuzde (MAX(KDVPNTR))) / 100) + 1) AS decimal(10,2)) ELSE CAST((((SUM(MIKTAR) * MAX(FIYAT)) - SUM(ISNULL(ISKONTO,0))) * (((SELECT dbo.fn_VergiYuzde (MAX(KDVPNTR))) / 100) + 1) * -1) AS decimal(10,2)) END AS SATISTUTAR " +
                     "FROM TERP_POS_SATIS WHERE SUBE = @SUBE AND TARIH >= @ILKTARIH AND TARIH <= @SONTARIH " +
-                    "GROUP BY SKODU) AS SATIS",
-            param:  ['SUBE','ILKTARIH','SONTARIH'],
-            type:   ['string|10','date','date',],
-            value:  [$scope.Sube,$scope.IlkTarih,$scope.SonTarih]
+                    "GROUP BY SKODU,TIP,FIYAT) AS SATIS",
+            param:  ['SUBE','ILKTARIH','SONTARIH','ALISFIYAT'],
+            type:   ['string|10','date','date','int'],
+            value:  [$scope.Sube,$scope.IlkTarih,$scope.SonTarih,$scope.AlisFiyat]
         }
 
         db.GetDataQuery(TmpQuery,function(Data)
         {
             $scope.IslemListe = Data;
 
+            //console.log($scope.IslemListe[152])
+
             $("#TblIslem").jsGrid({data : $scope.IslemListe});
             
             $scope.ToplamSatis = db.SumColumn($scope.IslemListe,"SATISTUTAR");
             $scope.ToplamKar = db.SumColumn($scope.IslemListe,"KAR");
         });
-    }
-    $scope.ExcelExport = function()
-    {
-        let ExcelDataListe = [];
-        let ExcelHeaderListe = [];
-
-        for(i = 0; i < Object.keys($scope.IslemListe[0]).length; i++)
-        {
-            let a = {};
-            
-            a.text = Object.keys($scope.IslemListe[0])[i];
-            ExcelHeaderListe.push(a)
-        }
-
-        ExcelDataListe.push(ExcelHeaderListe)
-
-        for(i = 0; i < $scope.IslemListe.length; i++)
-        {
-            let Dizi = [];
-
-            for(m = 0;m < Object.keys($scope.IslemListe[i]).length;m++)
-            {
-                let b = {};
-                b.text = $scope.IslemListe[i][Object.keys($scope.IslemListe[i])[m]]
-                Dizi.push(b);
-                console.log(Dizi)
-            }
-            
-            ExcelDataListe.push(Dizi)
-        }
-        console.log(ExcelDataListe)
-        var RaporListeData = 
-        [
-            {
-                "sheetName":"Sayfa",
-                "data":  ExcelDataListe
-            }
-        ];
-        var options = {
-            fileName:"MagazaSatisRapor",
-            extension:".xlsx",
-            sheetName:"Sayfa",
-            fileFullName:"report.xlsx",
-            header:true,
-            maxCellWidth: 20
-        };
-
-        Jhxlsx.export(RaporListeData, options);
-
-        var url ='data.json';
-        $.get(url, {},function (data) 
-        {
-            Jhxlsx.export(data.RaporListeData, data.options);
-            db.Connection(function(data)
-            {
-            });
-        })
     }
 }
