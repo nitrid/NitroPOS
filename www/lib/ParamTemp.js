@@ -39,7 +39,8 @@ var ParamTemp =
 			"Sube" : {"Title" : "Şube No","DefaultValue" : "0"},
 			"SorumlulukKodu" : {"Title" : "Sorumluluk Merkezi","DefaultValue" : ""},
 			"Personel" : {"Title" : "Personel Kodu","DefaultValue" : ""},	
-			"FiyatListe" : {"Title" : "Fiyat Liste","DefaultValue" : "0"}		
+			"FiyatListe" : {"Title" : "Fiyat Liste","DefaultValue" : "0"},
+			"RaporAlisFiyat" : {"Title" : "RaporFiyat","DefaultValue" : "0"}		
 		},
 		"Menu" :
 		{

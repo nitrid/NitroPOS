@@ -12,13 +12,6 @@ function RptGunlukKasaCtrl($scope,$window,db)
             data : $scope.IslemListe,
             fields: 
             [
-
-                {
-                    name: "SIRA",
-                    type: "number",
-                    align: "center",
-                    width: 75
-                },
                 {
                     name: "TIPADI",
                     title: "TİPİ",
@@ -42,7 +35,14 @@ function RptGunlukKasaCtrl($scope,$window,db)
         });
     }
     $scope.Init = function()
-    {
+    {   
+        gtag('config', 'UA-12198315-15', 
+        {
+            'page_title' : 'GunlukKasa',
+            'page_path': '/GunlukKasa',
+            'user_id' : 'UserParam.Kullanici'
+        });
+
         InitIslemGrid();
         
         $scope.Firma = $window.sessionStorage.getItem('Firma');
@@ -56,7 +56,7 @@ function RptGunlukKasaCtrl($scope,$window,db)
         $scope.IslemListe = [];
         $scope.SubeListe = [];
 
-          db.FillCmbDocInfo($scope.Firma,'CmbDepoGetir',function(data)
+        db.FillCmbDocInfo($scope.Firma,'CmbDepoGetir',function(data)
         {
             $scope.SubeListe = data; 
             
@@ -70,6 +70,15 @@ function RptGunlukKasaCtrl($scope,$window,db)
                 $scope.SubeLock = true;
             }
         });
+
+        if(UserParam.MagazaRaporları == true)
+        {
+            $scope.DivGenelToplam = true;
+        }
+        else
+        {
+            $scope.DivGenelToplam = false;
+        }
     }
     $scope.BtnGetir = function()
     {
@@ -77,9 +86,10 @@ function RptGunlukKasaCtrl($scope,$window,db)
         {
             db : '{M}.' + $scope.Firma,
             query:  "SELECT " +
-                    "ROW_NUMBER() OVER (ORDER BY RECID DESC) AS SIRA," +
                     "CASE WHEN EVRAKTIP = 0 THEN 'ÖDEME' WHEN EVRAKTIP = 1 THEN 'TEDİYE' END AS TIPADI, " +
                     "EVRAKTIP AS EVRAKTIP, " +
+                    "MKODU AS KODU, " +
+                    "ISNULL((SELECT cari_unvan1 FROM CARI_HESAPLAR WHERE cari_kod = MKODU),'') AS CARIADI, " +
                     "CASE WHEN TIP = 0 THEN " +
                     "'NAKİT' " +
                     "WHEN TIP = 1 THEN " +
@@ -87,9 +97,9 @@ function RptGunlukKasaCtrl($scope,$window,db)
                     "WHEN TIP = 2 THEN " +
                     "'AÇIK HESAP' " +
                     "END AS TIP, " +
-                    "ROUND(SUM(TUTAR),4) AS TUTAR " +
+                    "CAST(SUM(TUTAR) AS decimal(10,2)) AS TUTAR " +
                     "FROM TERP_POS_TAHSILAT WHERE SUBE = @SUBE AND TARIH >= @ILKTARIH AND TARIH <= @SONTARIH " +
-                    "GROUP BY TIP,EVRAKTIP,RECID",
+                    "GROUP BY MKODU,TIP,EVRAKTIP",
             param:  ['SUBE','ILKTARIH','SONTARIH'],
             type:   ['int','date','date'],
             value:  [$scope.Sube,$scope.IlkTarih,$scope.SonTarih]
@@ -99,7 +109,7 @@ function RptGunlukKasaCtrl($scope,$window,db)
         {
             $scope.IslemListe = Data;
             $("#TblIslem").jsGrid({data : $scope.IslemListe});
-            $scope.GenelToplam = db.SumColumn($scope.IslemListe,"TUTAR","EVRAKTIP = 0") - db.SumColumn($scope.IslemListe,"TUTAR","EVRAKTIP = 1") 
+            $scope.GenelToplam = db.SumColumn($scope.IslemListe,"TUTAR","EVRAKTIP = 0") - db.SumColumn($scope.IslemListe,"TUTAR","EVRAKTIP = 1");
         });
     }
     $scope.ExcelExport = function()

@@ -689,6 +689,8 @@ angular.module('app.db', []).service('db',function($rootScope)
     }
     this.FiyatGetir = async function (pFirma,BarkodData,pFiyatParam,pEvrParam,pCallback)
     {
+        console.log(pFiyatParam)
+        console.log(BarkodData)
         let FiyatParam = [BarkodData[0].KODU,1,pFiyatParam.DepoNo,pFiyatParam.OdemeNo];
         let Fiyat = 0;
 

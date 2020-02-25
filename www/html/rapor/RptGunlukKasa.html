@@ -79,10 +79,10 @@
             </div> -->
             <div class="row">
                 <div class="col-6">
-                    <button type="submit" class="btn btn-primary btn-block btn-sm" ng-click="BtnGetir()">Getir</button>
+                    <button type="submit" class="btn btn-primary btn-block btn-sm" ng-click="ExcelExport()">Excel Aktar</button>
                 </div>
                 <div class="col-6">
-                    <button type="submit" class="btn btn-primary btn-block btn-sm" ng-click="ExcelExport()">Excel Aktar</button>
+                    <button type="submit" class="btn btn-primary btn-block btn-sm" ng-click="BtnGetir()">Getir</button>
                 </div>
             </div>
             <div class="row">
@@ -90,7 +90,7 @@
                     <div id="TblIslem"></div>
                 </div>
             </div>
-            <div class="row px-20">
+            <div class="row px-20" ng-show = "DivGenelToplam">
                 <div class="col-12">
                     <div class="row">
                         <label class="form-control-label col-9 text-primary"><div class="float-right">Toplam :</div></label>

@@ -129,7 +129,7 @@ function AnaSayfaCtrl($scope,$window,db)
                         "CAST(SUM(ISKONTO) AS decimal(10,2)) AS ISKONTO, " +
                         "ROUND(((SUM(MIKTAR) * MAX(FIYAT)) - SUM(ISKONTO)) * ((SELECT dbo.fn_VergiYuzde (MAX(KDVPNTR))) / 100),4) AS KDV, " +
                         "ROUND(SUM((ROUND((MIKTAR * FIYAT),4) - ROUND(ISKONTO,4)) * (((ROUND((dbo.fn_VergiYuzde (KDVPNTR)),4)) / 100) + 1)),4) AS TOPLAM " +
-                        "FROM TERP_POS_SATIS WHERE SUBE = @SUBE AND TARIH > DATEADD(DAY,-30,GETDATE()) AND DURUM IN (1,2) " +
+                        "FROM TERP_POS_SATIS WHERE SUBE = @SUBE AND TARIH >= DATEADD(MONTH, DATEDIFF(MONTH, 1, GETDATE()), 0) AND TARIH <= GETDATE() AND DURUM IN (1,2) " +
                         "GROUP BY SKODU,TIP",
                 param:  ['SUBE'],
                 type:   ['int'],
@@ -152,7 +152,7 @@ function AnaSayfaCtrl($scope,$window,db)
                         "CAST(SUM(ISKONTO) AS decimal(10,2)) AS ISKONTO, " +
                         "ROUND(((SUM(MIKTAR) * MAX(FIYAT)) - SUM(ISKONTO)) * ((SELECT dbo.fn_VergiYuzde (MAX(KDVPNTR))) / 100),4) AS KDV, " +
                         "ROUND(SUM((ROUND((MIKTAR * FIYAT),4) - ROUND(ISKONTO,4)) * (((ROUND((dbo.fn_VergiYuzde (KDVPNTR)),4)) / 100) + 1)),4) AS TOPLAM " +
-                        "FROM TERP_POS_SATIS WHERE SUBE = @SUBE AND TARIH > DATEADD(DAY,-30,GETDATE()) AND KULLANICI = @KULLANICI AND DURUM IN (1,2) " +
+                        "FROM TERP_POS_SATIS WHERE SUBE = @SUBE AND TARIH >= DATEADD(MONTH, DATEDIFF(MONTH, 1, GETDATE()), 0) AND TARIH <= GETDATE() AND KULLANICI = @KULLANICI AND DURUM IN (1,2) " +
                         "GROUP BY SKODU,TIP,KULLANICI",
                 param:  ['SUBE','KULLANICI'],
                 type:   ['int','string|25'],
@@ -175,7 +175,7 @@ function AnaSayfaCtrl($scope,$window,db)
                         "CAST(SUM(ISKONTO) AS decimal(10,2)) AS ISKONTO, " +
                         "ROUND(((SUM(MIKTAR) * MAX(FIYAT)) - SUM(ISKONTO)) * ((SELECT dbo.fn_VergiYuzde (MAX(KDVPNTR))) / 100),4) AS KDV, " +
                         "ROUND(SUM((ROUND((MIKTAR * FIYAT),4) - ROUND(ISKONTO,4)) * (((ROUND((dbo.fn_VergiYuzde (KDVPNTR)),4)) / 100) + 1)),4) AS TOPLAM " +
-                        "FROM TERP_POS_SATIS WHERE SUBE = @SUBE AND TARIH > DATEADD(DAY,-365,GETDATE()) AND DURUM IN (1,2) " +
+                        "FROM TERP_POS_SATIS WHERE SUBE = @SUBE AND TARIH >= DATEADD(YEAR, DATEDIFF(YEAR, 1, GETDATE()), 0) AND DURUM IN (1,2) " +
                         "GROUP BY SKODU,TIP",
                 param:  ['SUBE'],
                 type:   ['int'],
@@ -198,7 +198,7 @@ function AnaSayfaCtrl($scope,$window,db)
                         "CAST(SUM(ISKONTO) AS decimal(10,2)) AS ISKONTO, " +
                         "ROUND(((SUM(MIKTAR) * MAX(FIYAT)) - SUM(ISKONTO)) * ((SELECT dbo.fn_VergiYuzde (MAX(KDVPNTR))) / 100),4) AS KDV, " +
                         "ROUND(SUM((ROUND((MIKTAR * FIYAT),4) - ROUND(ISKONTO,4)) * (((ROUND((dbo.fn_VergiYuzde (KDVPNTR)),4)) / 100) + 1)),4) AS TOPLAM " +
-                        "FROM TERP_POS_SATIS WHERE SUBE = @SUBE AND TARIH > DATEADD(DAY,-365,GETDATE()) AND KULLANICI = @KULLANICI AND DURUM IN (1,2) " +
+                        "FROM TERP_POS_SATIS WHERE SUBE = @SUBE AND TARIH >= DATEADD(YEAR, DATEDIFF(YEAR, 1, GETDATE()), 0) AND KULLANICI = @KULLANICI AND DURUM IN (1,2) " +
                         "GROUP BY SKODU,TIP,KULLANICI",
                 param:  ['SUBE','KULLANICI'],
                 type:   ['int','string|25'],

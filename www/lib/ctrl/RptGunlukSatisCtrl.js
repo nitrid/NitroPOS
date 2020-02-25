@@ -146,7 +146,6 @@ function RptGunlukSatisCtrl($scope,$window,db)
     }
     $scope.BtnGetir = function()
     {
-        console.log($scope.Kullanici)
         var TmpQuery = 
         {
             db : '{M}.' + $scope.Firma,

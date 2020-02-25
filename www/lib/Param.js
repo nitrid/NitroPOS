@@ -9,7 +9,7 @@ var Param = [
 		"MikroId": "1",
 		"Yetkili": true,
 		"SifreDegistir": "0",
-		"BagliKullanici": "Tümü,Admin,TEST",
+		"BagliKullanici": "Tümü,TEST,TEST2",
 		"Sistem": {
 			"KiloBarkod": "0",
 			"KiloFlag": "",
@@ -36,7 +36,8 @@ var Param = [
 			"Sube": "1",
 			"SorumlulukKodu": "",
 			"Personel": "",
-			"FiyatListe": "1"
+			"FiyatListe": "1",
+			"RaporAlisFiyat": "4"
 		},
 		"Sayim": {
 			"EvrakNo": "1",
