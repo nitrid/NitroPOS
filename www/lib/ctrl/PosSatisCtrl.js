@@ -745,10 +745,32 @@ function PosSatisCtrl($scope,$window,db)
                         elmnt.scrollTop += 30;
                     }
                 }
+                else if(e.which == 120)
+                {
+                    if($scope.SatisList.length < 1)
+                    {
+                        alertify.alert("Lütfen Ürün Seçiniz")
+                    }
+                    else
+                    {
+                        $scope.BtnAraToplam(1);     
+                       
+                    }
+                }
+                
             }
             else if(FocusAraToplam == true)
-            {
-                $window.document.getElementById("TxtAraToplamTutar").focus();
+            { 
+                $window.document.getElementById("TxtAraToplamTutar").focus();    
+                if(e.which == 121)
+                {                    
+                    console.log("ss")       
+                    $scope.PosSatisKapatUpdate();  
+                }  
+                if(e.which == 39)
+                {
+                    
+                }                   
             }
             else if(FocusMusteri == true)
             {
@@ -1006,6 +1028,7 @@ function PosSatisCtrl($scope,$window,db)
         {
             db.StokBarkodGetir($scope.Firma,pBarkod,$scope.Sube,function(BarkodData)
             {
+                    console.log(pBarkod)
                     if(BarkodData[0].KATSAYI > BarkodData[0].KALANDEPOMIKTARI && UserParam.Sistem.StokEksiyeDusme == "1")
                     {
                         console.log(BarkodData[0].KALANDEPOMIKTARI)
@@ -1067,6 +1090,7 @@ function PosSatisCtrl($scope,$window,db)
                         if(BarkodData.length > 0)
                             { 
                                 $scope.Stok = BarkodData;
+                                console.log($scope.Stok)
                                 $scope.Stok[0].FIYAT = 0;
                                 $scope.Stok[0].TUTAR = 0;
                                 $scope.Stok[0].INDIRIM = 0;
@@ -1077,9 +1101,12 @@ function PosSatisCtrl($scope,$window,db)
                                 {
                                     $scope.Stok[0].CARPAN = $scope.Stok[0].CARPAN * -1
                                 }
+    
                                 //BARKOD DETAY EKREM İLK 18.02.2020 16:15
+                                console.log($scope.Stok[0].BARKOD)
                                 $scope.Barkod = $scope.Stok[0].BARKOD;
                                 $scope.StokKodu = $scope.Stok[0].KODU;
+
                                 $scope.BarkodLock = true;
             
                                 //Fiyat Getir
@@ -1103,14 +1130,15 @@ function PosSatisCtrl($scope,$window,db)
                                     type:  ['string|50','int','int'],
                                     value: [$scope.StokKodu,$scope.FiyatListe,$scope.DepoNo]
                                 }
+                                console.log(1)
                                 db.GetDataQuery(Fiyat,function(pFiyat)
                                 {  
-                                    console.log($scope.FiyatListe)
+                                    console.log(pFiyat[0].FIYAT)
                                     $scope.Fiyat = pFiyat[0].FIYAT
                                     $scope.Stok[0].DOVIZSEMBOL = pFiyat[0].DOVIZSEMBOL;
                                     $scope.SatisFiyatListe2 = (pFiyat.length > 1) ? pFiyat[1].FIYAT : 0;
                                 });
-                                
+                                console.log(2)
                                 //Depo Miktar Getir
                                 var DepoMiktar =
                                 {
@@ -1130,8 +1158,8 @@ function PosSatisCtrl($scope,$window,db)
                                     $scope.DepoMiktarListe = pDepoMiktar
                                     $("#TblDepoMiktar").jsGrid({data : $scope.DepoMiktarListe});
                                 });
-                                //BARKOD DETAY EKREM SON 18.02.2020 16:15
-    
+                                //BARKOD DETAY EKREM SON 18.02.2020 16:15 */
+
                                 //**** FİYAT GETİR */
     
                                 $scope.DepoNo = UserParam.PosSatis.Sube
@@ -1144,16 +1172,22 @@ function PosSatisCtrl($scope,$window,db)
                                     OdemeNo : 0,
                                     AlisSatis : 1
                                 };
-                                console.log($scope.Stok[0].TUTAR)
+                                console.log($scope.Stok[0].FIYAT)
                                 db.FiyatGetir($scope.Firma,BarkodData,FiyatParam,UserParam.PosSatis,function(pFiyat)
-                                {   
-                                    
+                                {  
+                                    console.log($scope.Firma)
+                                    console.log(BarkodData) 
+                                    console.log(FiyatParam)
+                                    console.log(UserParam.PosSatis)
+                                    console.log($scope.Stok[0].FIYAT)
                                     $scope.Stok[0].FIYAT = pFiyat
                                     $scope.Stok[0].TUTAR = ($scope.Stok[0].CARPAN * $scope.Miktar) * $scope.Stok[0].FIYAT;
+                                    console.log($scope.Stok[0].FIYAT)
                                     if($scope.Stok[0].TUTAR == "0")
                                     {
                                         alertify.alert("Tutarı 0 olan stok getirtilemez")
                                     }
+                                    
                                     else
                                     {
                                         $scope.Stok[0].KDV = ($scope.Stok[0].TUTAR - $scope.Stok[0].INDIRIM) * ($scope.Stok[0].TOPTANVERGI / 100);
@@ -1162,7 +1196,7 @@ function PosSatisCtrl($scope,$window,db)
                                         $scope.$apply();
                                         $scope.PosSatisInsert();
                                     }
-                                });
+                                });    
                         }
                         else
                         {

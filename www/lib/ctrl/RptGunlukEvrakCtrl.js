@@ -194,9 +194,20 @@ function RptGunlukEvrakCtrl($scope,$window,db)
         $scope.GenelToplam = 0;
         $scope.Seri = "";
         $scope.Sira = 0;
+        $scope.Kullanici = "Tümü"
 
         $scope.IslemListe = [];
         $scope.SubeListe = [];
+
+        //ŞUBE YÖNETİCİSİNE BAĞLI KULLANICILARI GETİRMEK İÇİN YAPILAN FONKSİYON
+        let TmpObj = [];
+        UserParam.BagliKullanici.toString().split(',').forEach(element => 
+        {
+            TmpObj.push({KULLANICI : element});
+        });
+        
+        $scope.KullaniciListe = TmpObj;
+        //FONKSİYON BİTİR
 
         $scope.SonSatisListeSelectedIndex = 0; 
 
@@ -288,11 +299,11 @@ function RptGunlukEvrakCtrl($scope,$window,db)
                     "CAST(SUM(((MIKTAR * FIYAT) - ISKONTO) * (((dbo.fn_VergiYuzde (KDVPNTR)) /100) + 1 ))as DECIMAL(10,2)) AS TUTAR, " +
                     "CONVERT(VARCHAR(10), MAX(OTARIH), 108) AS SAAT, " +
                     "CONVERT(VARCHAR(10), MAX(OTARIH), 104) AS TARIH " +
-                    "FROM TERP_POS_SATIS AS PS WHERE SUBE = @SUBE AND TARIH >= @ILKTARIH AND TARIH <= @SONTARIH AND DURUM IN (1,2) " +
-                    "GROUP BY SERI,SIRA,TIP,RECID ORDER BY RECID DESC " ,
-            param:  ['SUBE','ILKTARIH','SONTARIH'],
-            type:   ['int','date','date',],
-            value:  [$scope.Sube,$scope.IlkTarih,$scope.SonTarih]
+                    "FROM TERP_POS_SATIS AS PS WHERE SUBE = @SUBE AND TARIH >= @ILKTARIH AND TARIH <= @SONTARIH AND DURUM IN (1,2) AND ((KULLANICI = @KULLANICI) OR (@KULLANICI = 'Tümü')) " +
+                    "GROUP BY SERI,SIRA,TIP,KULLANICI,RECID ORDER BY RECID DESC " ,
+            param:  ['SUBE','ILKTARIH','SONTARIH','KULLANICI'],
+            type:   ['int','date','date','string|25'],
+            value:  [$scope.Sube,$scope.IlkTarih,$scope.SonTarih,$scope.Kullanici]
         }
         db.GetDataQuery(TmpQuery,function(Data)
         {
