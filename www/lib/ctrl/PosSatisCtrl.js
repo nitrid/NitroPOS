@@ -82,7 +82,6 @@ function PosSatisCtrl($scope,$window,db)
         $scope.ParkIslemSayisi = 0;
         $scope.CiktiTip = 1;
         $scope.FiyatListe = UserParam.PosSatis.FiyatListe;
-        console.log($scope.FiyatListe)
         
         $scope.TahPanelKontrol = false;
         $scope.Klavye = false;
@@ -1820,13 +1819,14 @@ function PosSatisCtrl($scope,$window,db)
                     {   
                         if($scope.CariKodu != UserParam.PosSatis.Cari && $scope.CiktiTip == 1)
                         {  
-                            $('#MdlAraToplam').modal('hide');
-                            $('#MdlSeriSira').modal('show'); 
-                            FocusBarkod = false;
-                            FocusSeriSira = true;
-                            FocusAraToplam = false;
-                            FocusMusteri = false;
-                            FocusStok = false;
+                            db.GetData($scope.Firma,'PosSatisKapatUpdate',[$scope.Sube,$scope.Seri,$scope.Sira,$scope.EvrakTip],function(data)
+                            {
+                                printDiv("A4");
+                                $('#MdlAraToplam').modal('hide');
+                                $scope.YeniEvrak();
+                                $scope.TxtBarkod = "";
+                                $scope.TahPanelKontrol = false;
+                            });
                         }
                         else
                         {   
