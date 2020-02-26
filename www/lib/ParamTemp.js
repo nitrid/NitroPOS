@@ -40,7 +40,7 @@ var ParamTemp =
 			"SorumlulukKodu" : {"Title" : "Sorumluluk Merkezi","DefaultValue" : ""},
 			"Personel" : {"Title" : "Personel Kodu","DefaultValue" : ""},	
 			"FiyatListe" : {"Title" : "Fiyat Liste","DefaultValue" : "0"},
-			"RaporAlisFiyat" : {"Title" : "RaporFiyat","DefaultValue" : "0"}		
+			"RaporAlisFiyat" : {"Title" : "RaporFiyat","DefaultValue" : "3"}		
 		},
 		"Menu" :
 		{
