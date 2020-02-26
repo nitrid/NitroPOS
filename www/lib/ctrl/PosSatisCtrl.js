@@ -753,8 +753,7 @@ function PosSatisCtrl($scope,$window,db)
                     }
                     else
                     {
-                        $scope.BtnAraToplam(1);     
-                       
+                        $scope.BtnAraToplam(1);
                     }
                 }
                 
@@ -769,8 +768,12 @@ function PosSatisCtrl($scope,$window,db)
                 }  
                 if(e.which == 39)
                 {
-                    
-                }                   
+                    $window.document.getElementById("ChkKredi").click();
+                }
+                else if(e.which == 37)
+                {
+                    $window.document.getElementById("ChkAcikHesap").click();
+                }                     
             }
             else if(FocusMusteri == true)
             {
