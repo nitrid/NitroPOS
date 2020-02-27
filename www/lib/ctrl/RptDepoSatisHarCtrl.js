@@ -94,34 +94,34 @@ function RptDepoSatisHarCtrl($scope,$window,db)
                 title: "SERI",
                 type: "TEXT",
                 align: "center",
-                width: 35
+                width: 40
             },
             {
                 name: "SIRA",
                 title: "SIRA",
                 type: "number",
                 align: "center",
-                width: 35
+                width: 50
             },
             {
                 name: "TARIH",
                 type: "date",
                 align: "center",
-                width: 200
+                width: 50
             },
             {
                 name: "STOKKOD",
                 title: "STOK KODU",
                 type: "number",
                 align: "center",
-                width: 50
+                width: 70
             },
             {
                 name: "STOKADI",
                 title: "STOK ADI",
                 type: "number",
                 align: "center",
-                width: 50
+                width: 60
             },
             {
                 name: "MIKTAR",
@@ -190,10 +190,12 @@ function RptDepoSatisHarCtrl($scope,$window,db)
                     "(SELECT sfiyat_fiyati FROM STOK_SATIS_FIYAT_LISTELERI WHERE sth_stok_kod = sfiyat_stokkod) as FIYAT," +
                     "sth_miktar AS MIKTAR, " +
                     "sth_tutar AS TUTAR " +
-                    "FROM STOK_HAREKETLERI WHERE sth_giris_depo_no = @SUBE AND sth_tip = 2 AND sth_cins = 6 AND sth_evraktip = 15 ",
-            param:  ['SUBE'],
-            type:   ['int'],
-            value:  [$scope.Sube]
+                    "FROM STOK_HAREKETLERI " +
+                    "WHERE sth_giris_depo_no = @SUBE AND sth_tip = 2 AND sth_cins = 6 AND sth_evraktip = 15 " +
+                    "AND sth_belge_tarih >= @ILKTARIH AND sth_belge_tarih <= @SONTARIH ",
+                    param:  ['SUBE','ILKTARIH','SONTARIH'],
+                    type:   ['int','date','date',],
+                    value:  [$scope.Sube,$scope.IlkTarih,$scope.SonTarih]
         }
 
         db.GetDataQuery(TmpQuery,function(Data)
