@@ -891,17 +891,11 @@ function PosSatisCtrl($scope,$window,db)
             $scope.CariKodu = $scope.CariListe[pIndex].KODU;
             $scope.CariAdi = $scope.CariListe[pIndex].UNVAN1;
             $scope.CariBakiye = $scope.CariListe[pIndex].BAKIYE;
-<<<<<<< HEAD
             $scope.CariAdres = $scope.CariListe[pIndex].ADRES; //EKREM
             $scope.CariEmail = $scope.CariListe[pIndex].EMAIL; //EKREM
             $scope.CariVergiAdi = $scope.CariListe[pIndex].VDADI; //EKREM
             $scope.CariAdres1 = $scope.CariListe[pIndex].ADRES1;
             $scope.CariAdres2 = $scope.CariListe[pIndex].ADRES2;
-=======
-            $scope.CariAdres = $scope.CariListe[pIndex].ADRES;
-            $scope.CariEmail = $scope.CariListe[pIndex].EMAIL;
-            $scope.CariVergiAdi = $scope.CariListe[pIndex].VDADI;
->>>>>>> master
         }
     }
     $scope.StokListeRowClick = function(pIndex,pItem,pObj)

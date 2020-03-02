@@ -1158,35 +1158,6 @@
                 </div>
             </div>
         </div>
-<<<<<<< HEAD
-        <!-- İade Tip Modal -->
-        <div class="modal fade" id="MdlIadeTip" aria-hidden="true" aria-labelledby="examplePositionCenter" role="dialog" tabindex="-1">
-            <div class="modal-dialog modal-simple modal-primary modal-center">
-                <div class="modal-content">
-                    <div class="modal-header py-2">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">X</span>
-                        </button>
-                        <h4 class="modal-title">İade Tipini Seçiniz</h4>
-                    </div>
-                    <div class="modal-body py-0">
-                        <div class="row pt-20">
-                            <div class="col-4 text-primary"><div class="col-form-label py-2">İade Tipi :</div></div>
-                            <div class="col-8">
-                                <select class="form-control text-primary" ng-model="CmbIadeTip">
-                                    <option value="0">NAKİT</option>
-                                    <option value="1">KREDİ KARTI</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row pt-40 pb-10 my-0">
-                            <div class="col-6 px-1">
-                                <button class="form-group btn btn-block btn-info mb-0" ng-click = BtnYazdir()>Fiş Yazdır</button>
-                            </div>
-                            <div class="col-6 px-1">
-                                <button class="form-group btn btn-block btn-primary mb-0" ng-click = BtnIadeAl(1)>İade Al</button>
-                            </div>
-=======
     </div>
     <!--Fatura Dizayn -->
     <div class="row" id="A4">
@@ -1245,7 +1216,6 @@
                                 <br>
                                 Vergi Dairesi : {{CariVergiAdi}}
                             </p>
->>>>>>> master
                         </div>
                     </div>
                 </div>
@@ -1289,102 +1259,6 @@
                     <div class="col-2 offset-1">
                        <p style="font-size:50%;"> <img class="img-fluid" src="img/e-fatura-logo.png"></p style="font-size:50%;">
                     </div>
-<<<<<<< HEAD
-                    <div class="col-3 offset-2">
-                        <p style="font-size:100%;">
-                            <b>Fatura No : </b>{{Seri}} - {{Sira}}
-                            <br>
-                            <b>Fatura Tarihi : </b>{{Tarih}}
-                            <br>
-                            <b>Fatura Zamanı :</b>{{Saat}}
-                        </p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-4">
-                        <p style="font-size:100%;">
-                            <b>SAYIN</b>
-                            <br>
-                            {{CariAdi}}
-                            <br>
-                            Adres : {{CariAdres}} 
-                            <br>
-                            E-Posta: {{CariEmail}}
-                            <br>
-                            Vergi Dairesi : {{CariVergiAdi}}
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <!-- <div class="row">
-                <div class="col-2">
-                    <b>AÇIKLAMA</b>
-                </div>
-                <div class="col-2 offset-4">
-                    MİKTAR
-                </div>
-                <div class="col-2">
-                    BİRİM FİYATI
-                </div>
-                <div class="col-2">
-                    <b>TOPLAM</b>
-                </div>
-            </div> -->
-            <div class="row">
-                <div class="col-12">
-                    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <table style="width:100%">
-                        <tr>
-                            <th style="font: size 20px;">STOK KODU</th>
-                            <th style="font-size:20px;">ADI</th>
-                            <th style="font-size:20px;">BİRİM</th>
-                            <th style="font-size:20px;">MİKTAR</th>
-                            <th style="font-size:20px;">BİRİM FİYATI</th>
-                            <th style="font-size:20px;">TUTAR</th>
-                            <th style="font-size:20px;">ISKONTO</th>
-                        </tr>
-                        <tr ng-repeat="Item in SatisFisList">
-                            <td style="font-size:18px;">{{Item.SKODU}}</td>
-                            <td style="font-size:18px;">{{Item.SADI}}</td>
-                            <td style="font-size:18px;">{{Item.BIRIMADI}}</td>
-                            <td style="font-size:18px;">{{Item.BIRIM | number:2}}</td>
-                            <td style="font-size:18px;">{{Item.BKDVDAHIL | number:2}}</td>
-                            <td style="font-size:18px;">{{Item.TKDVDAHIL | number:2}}</td>
-                            <td style="font-size:18px;">{{Item.ISKONTO | number:2}}</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-            <div class="row pb-100">
-                <div class="col-12">
-                    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                </div>
-            </div>
-            <div class="row" style="font-size:160%;">
-                <div class="col-4 offset-5">
-                    <b>TOPLAM İNDİRİM :</b>
-                </div>
-                <div class="col-3">
-                    {{ToplamIskonto | number:2}}
-                </div>
-            </div>
-            <div class="row" style="font-size:160%;">
-                <div class="col-4 offset-5">
-                    <b>GENEL TOPLAM :</b>
-                </div>
-                <div class="col-3">
-                    {{FisGenelToplam | number:2}}
-                </div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-12 offset-1">
-                    Verilen fiş bilgi amaçlıdır faturanız belirtmiş olduğunuz mail adresinize ulaştırılacaktır. Ulaşmaması halinde muhasebe departmanı ile görüşebilirsiniz.
-=======
                 </div> -->
                 <div class="row">
                     <div class="col-12">
@@ -1435,34 +1309,10 @@
                     <div class="col-3">
                         {{FisGenelToplam | number:2}}
                     </div>
->>>>>>> master
                 </div>
             </div>
         </div>
     </div>
-<<<<<<< HEAD
-</div>
-<!--Fiş Dizayn -->
-<div class="row" id="A5" style="display: none">
-    <div class="col-12">
-        <div class="panel">
-            <div class="panel-body">
-            <div class="row hb-50" stlye="font-size:160%;">
-                <div class="col-4 offset-4">
-                    <h1>FİYAT TEKLİFİ</h1>
-                </div>
-            </div>
-            <div class="row" >
-                <div class="col-4">
-                    <p stlye="font-size:160%;">
-                        <br>
-                        <br>
-                        <b><h4>Müşteri Kodu :</b><h4> {{CariKodu}}</h4>
-                        <br>
-                        <br>
-                        <b><h4>Müşteri Adı :</b></h4><h4> {{CariAdi}}</h4>
-                    </p>
-=======
     <!--Fiş Dizayn -->
     <div class="row" id="A5" style="display: none">
         <div class="col-12">
@@ -1495,7 +1345,6 @@
                             <br>
                         </p>
                     </div>
->>>>>>> master
                 </div>
                 <div class="col-3 offset-4">
                     <p stlye="font-size:140%;">
@@ -1508,16 +1357,6 @@
                         <br>
                     </p>
                 </div>
-<<<<<<< HEAD
-            </div>
-            </div>
-            <!-- <div class="row">
-                <div class="col-2">
-                    <b>AÇIKLAMA</b>
-                </div>
-                <div class="col-2 offset-4">
-                    MİKTAR
-=======
                 <div class="row">
                     <div class="col-12">
                         ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1546,65 +1385,10 @@
                             </tr>
                         </table>
                     </div>
->>>>>>> master
                 </div>
                 <div class="col-2">
                     BİRİM FİYATI
                 </div>
-<<<<<<< HEAD
-                <div class="col-2">
-                    <b>TOPLAM</b>
-                </div>
-            </div> -->
-            <div class="row">
-                <div class="col-12">
-                    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <table style="width:100%">
-                        <tr>
-                            <th style="font: size 20px;">STOK KODU</th>
-                            <th style="font-size:20px;">ADI</th>
-                            <th style="font-size:20px;">BİRİM</th>
-                            <th style="font-size:20px;">MİKTAR</th>
-                            <th style="font-size:20px;">BİRİM FİYATI</th>
-                            <th style="font-size:20px;">TUTAR</th>
-                            <th style="font-size:20px;">ISKONTO</th>
-                        </tr>
-                        <tr ng-repeat="Item in SatisFisList">
-                            <td style="font-size:18px;">{{Item.SKODU}}</td>
-                            <td style="font-size:18px;">{{Item.SADI}}</td>
-                            <td style="font-size:18px;">{{Item.BIRIMADI}}</td>
-                            <td style="font-size:18px;">{{Item.BIRIM | number:2}}</td>
-                            <td style="font-size:18px;">{{Item.BKDVDAHIL | number:2}}</td>
-                            <td style="font-size:18px;">{{Item.TKDVDAHIL | number:2}}</td>
-                            <td style="font-size:18px;">{{Item.ISKONTO | number:2}}</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-            <div class="row pb-100">
-                <div class="col-12">
-                    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                </div>
-            </div>
-            <div class="row" style="font-size:160%;">
-                <div class="col-4 offset-5">
-                    <b>TOPLAM İNDİRİM :</b>
-                </div>
-                <div class="col-3">
-                    {{ToplamIskonto | number:2}}
-                </div>
-            </div>
-            <div class="row" style="font-size:160%;">
-                <div class="col-4 offset-5">
-                    <b>GENEL TOPLAM :</b>
-                </div>
-                <div class="col-3">
-                    {{FisGenelToplam | number:2}}
-=======
                 <div class="row" style="font-size:160%;">
                     <div class="col-4 offset-5">
                         <b>TOPLAM İNDİRİM :</b>
@@ -1620,7 +1404,6 @@
                     <div class="col-3">
                         {{FisGenelToplam | number:2}}
                     </div>
->>>>>>> master
                 </div>
             </div>
         </div>

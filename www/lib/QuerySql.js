@@ -66,11 +66,7 @@ var QuerySql =
                 "cari_sektor_kodu AS SEKTOR," +
                 "cari_bolge_kodu AS BOLGE," +
                 "cari_grup_kodu AS GRUP," +
-<<<<<<< HEAD
                 "cari_EMail as EMAIL," + //EKREM
-=======
-                "cari_EMail as EMAIL," +
->>>>>>> master
                 "cari_temsilci_kodu AS TEMSILCI," +
                 "(SELECT dbo.fn_DovizSembolu(ISNULL(cari_doviz_cinsi,0))) AS DOVIZSEMBOL," +
                 "(SELECT dbo.fn_DovizSembolu(ISNULL(cari_doviz_cinsi1,0))) AS DOVIZSEMBOL1," + 
@@ -108,11 +104,7 @@ var QuerySql =
                 "cari_sektor_kodu AS SEKTOR," +
                 "cari_bolge_kodu AS BOLGE," +
                 "cari_grup_kodu AS GRUP," +
-<<<<<<< HEAD
                 "cari_EMail as EMAIL," + //EKREM
-=======
-                "cari_EMail as EMAIL," +
->>>>>>> master
                 "cari_temsilci_kodu AS TEMSILCI," +
                 "(SELECT dbo.fn_DovizSembolu(ISNULL(cari_doviz_cinsi,0))) AS DOVIZSEMBOL," +
                 "(SELECT dbo.fn_DovizSembolu(ISNULL(cari_doviz_cinsi1,0))) AS DOVIZSEMBOL1," + 
