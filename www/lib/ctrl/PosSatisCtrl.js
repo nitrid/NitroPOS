@@ -65,11 +65,19 @@ function PosSatisCtrl($scope,$window,db)
         $scope.EvrakTip = 0;
         $scope.CariKodu = "";
         $scope.CariAdi = "";
+<<<<<<< HEAD
         $scope.CariAdres = ""; //EKREM
         $scope.CariEmail = ""; //EKREM
         $scope.CariVergiAdi = ""; //EKREM
         $scope.Tarih = new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' });
         $scope.Saat = new Date().toLocaleTimeString('tr-TR',{hour:'numeric', minute: 'numeric', second: 'numeric'}); //EKREM
+=======
+        $scope.CariAdres = "";
+        $scope.CariEmail = "";
+        $scope.CariVergiAdi = "";
+        $scope.Tarih = new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' });
+        $scope.Saat = new Date().toLocaleTimeString('tr-TR',{hour:'numeric', minute: 'numeric', second: 'numeric'});
+>>>>>>> master
         $scope.Sube = "0";
         $scope.TxtBarkod = "";
         $scope.AraToplam = 0;
@@ -142,11 +150,17 @@ function PosSatisCtrl($scope,$window,db)
                     width: 300
                 },
                 {
+                    name: "ADRES",
+                    type: "text",
+                    align: "center",
+                    width: 300
+                },
+                {
                     name: "BAKIYE",
                     type: "number",
                     align: "center",
                     width: 75
-                } 
+                }
             ],
             rowClick: function(args)
             {
@@ -877,11 +891,17 @@ function PosSatisCtrl($scope,$window,db)
             $scope.CariKodu = $scope.CariListe[pIndex].KODU;
             $scope.CariAdi = $scope.CariListe[pIndex].UNVAN1;
             $scope.CariBakiye = $scope.CariListe[pIndex].BAKIYE;
+<<<<<<< HEAD
             $scope.CariAdres = $scope.CariListe[pIndex].ADRES; //EKREM
             $scope.CariEmail = $scope.CariListe[pIndex].EMAIL; //EKREM
             $scope.CariVergiAdi = $scope.CariListe[pIndex].VDADI; //EKREM
             $scope.CariAdres1 = $scope.CariListe[pIndex].ADRES1;
             $scope.CariAdres2 = $scope.CariListe[pIndex].ADRES2;
+=======
+            $scope.CariAdres = $scope.CariListe[pIndex].ADRES;
+            $scope.CariEmail = $scope.CariListe[pIndex].EMAIL;
+            $scope.CariVergiAdi = $scope.CariListe[pIndex].VDADI;
+>>>>>>> master
         }
     }
     $scope.StokListeRowClick = function(pIndex,pItem,pObj)
