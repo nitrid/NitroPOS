@@ -65,19 +65,11 @@ function PosSatisCtrl($scope,$window,db)
         $scope.EvrakTip = 0;
         $scope.CariKodu = "";
         $scope.CariAdi = "";
-<<<<<<< HEAD
         $scope.CariAdres = ""; //EKREM
         $scope.CariEmail = ""; //EKREM
         $scope.CariVergiAdi = ""; //EKREM
         $scope.Tarih = new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' });
         $scope.Saat = new Date().toLocaleTimeString('tr-TR',{hour:'numeric', minute: 'numeric', second: 'numeric'}); //EKREM
-=======
-        $scope.CariAdres = "";
-        $scope.CariEmail = "";
-        $scope.CariVergiAdi = "";
-        $scope.Tarih = new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' });
-        $scope.Saat = new Date().toLocaleTimeString('tr-TR',{hour:'numeric', minute: 'numeric', second: 'numeric'});
->>>>>>> master
         $scope.Sube = "0";
         $scope.TxtBarkod = "";
         $scope.AraToplam = 0;
