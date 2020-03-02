@@ -803,7 +803,7 @@ function PosSatisCtrl($scope,$window,db)
             }
         }
     }
-    $scope.IslemListeRowClick = function(pIndex,pItem,pBarkod)
+    $scope.IslemListeRowClick = function(pIndex,pItem)
     {
         if ( IslemSelectedRow ) { IslemSelectedRow.children('.jsgrid-cell').css('background-color', '').css('color',''); }
         var $row = $("#TblIslem").jsGrid("rowByItem", pItem);
