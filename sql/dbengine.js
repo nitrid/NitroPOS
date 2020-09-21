@@ -1,20 +1,50 @@
-var fs = require('fs');
-var _sql = require("./sqllib");
-var io = require('socket.io')();
-var lic = require('./license');
+let fs = require('fs');
+let _sql = require("./sqllib");
+let io = require('socket.io')();
+let lic = require('./license');
 
-var msql;
-var tsql;
+let msql;
+let tsql;
 
-var LicKullanici = 0;
-var LicMenu = "";
+let LicKullanici = 0;
+let LicMenu = "";
 
 function dbengine(config)
 {    
-    
     this.config = config;
-    io.listen(config.port);
-    
+    io.listen(8092);
+
+    //BELİRLİ ZAMANLARDA LİSANS DURUMU KONTROL EDİLİYOR. 
+
+    setInterval(function()
+    {
+        
+        lic.LicenseCheck(function(data)
+        {
+            if(data != "")
+            {
+                if(typeof(data.result.err) == 'undefined')
+                {
+                    if(data.result.length == 0)
+                    {
+                        console.log("Lisansınız geçerli değil. lütfen ürün sorumlusuyla görüşünüz !");
+                        io.close();
+                    }
+                }
+                else
+                {
+                    console.log("Lisans server da data hatası !");
+                    io.close();
+                }
+            }
+            else
+            {
+                console.log("Lisans server'a ulaşılmıyor !");
+                io.close();
+            }
+        })
+    },3600000);
+    //NORMAL LİSANS KONTROL İŞLEMİ
     lic.LicenseCheck(function(data)
     {
         if(data != "")
@@ -27,7 +57,7 @@ function dbengine(config)
                     LicMenu = data.result[0].MENUDATA;
                     
                     io.close();
-                    io.listen(config.port);
+                    io.listen(8092);
                 }
                 else
                 {
@@ -48,17 +78,9 @@ function dbengine(config)
         }
     });
 }
+
 io.on('connection', function(socket) 
-{     
-    //console.log(io.engine.clientsCount);
-    // if(Object.keys(io.sockets.connected).length > LicKullanici)
-    // {
-    //     socket.emit('MaxUserCounted');
-    // }
-    // else
-    // {
-    //     socket.emit('MaxUserCounted',LicMenu);
-    // }
+{
     socket.on('GetMenu',function(pParam,pFn)
     {
         if(Object.keys(io.sockets.connected).length > LicKullanici)
@@ -103,7 +125,7 @@ io.on('connection', function(socket)
                 {
                     tag : pQuery.tag, 
                     result : obj
-                });                  
+                });   
                 fn({tag : pQuery.tag,result : obj});
             });
         }
@@ -120,53 +142,20 @@ io.on('connection', function(socket)
             console.log(tmperr);
         }
     });
-    socket.on("QSMikroDb",function(pQuery,fn)
+    socket.on("QSMikroDb",function(pQuery)
     {
         try
         {
-            let TmpDb = config.database;
-
-            if (typeof(pQuery.db) != "undefined") 
-            {
-                if(pQuery.db.indexOf("{M}.") > -1)
-                    TmpDb = config.database + '_' + pQuery.db.replace('{M}.','');
-                else
-                    TmpDb = pQuery.db;            
-            }
-            
-            let Tmp = [];
-            msql = new _sql(config.server,TmpDb,config.uid,config.pwd,config.trustedConnection);
+            msql = new _sql(config.server, pQuery.db,config.uid,config.pwd,config.trustedConnection);
             msql.QueryStream(pQuery,function(data)
             {
                 var obj = JSON.parse(data);
-
-                if(obj.tagdata == "row")
+                socket.emit('RSMikroDb',
                 {
-                    Tmp.push(obj.result);
-                    
-                    if(Tmp.length == 5000)
-                    {
-                        console.log(Tmp.length);
-                        socket.emit('RSMikroDb',
-                        {
-                            tag : obj.tagdata, 
-                            result : Tmp
-                        }); 
-                    }
-                }
-
-                if(obj.tagdata == "done")
-                {
-                    socket.emit('RSMikroDb',
-                    {
-                        tag : obj.tagdata, 
-                        result : Tmp,
-                    });  
-                }
-                
+                    tag : pQuery.tag, 
+                    result : obj
+                });   
             });
-
-            
         }
         catch(err)
         {
@@ -176,6 +165,7 @@ io.on('connection', function(socket)
                 tag : pQuery.tag, 
                 result : tmperr
             });  
+            console.log(tmperr);
         }
     });
     socket.on('QToneDb',function(pQuery) 

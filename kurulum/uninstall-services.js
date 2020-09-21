@@ -3,8 +3,8 @@ const path = require('path');
 
 var svc = new Service
 ({
-    name:'NitroGen POS',
-    description: 'NitroGen POS Server.',
+    name:'XPOS',
+    description: 'XPOS',
     script: path.join(process.cwd(), '..\\server.js'),
     env: 
     [

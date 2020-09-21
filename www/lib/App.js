@@ -7,64 +7,20 @@ angular.module("app",
 .config(function($routeProvider)
 {       
     $routeProvider 
-    .when("/",
+    .when("/Stok",
     {
-        templateUrl : "html/evraklar/Anasayfa.html"
+        templateUrl : "html/kartlar/Stok.html"
     })
-    .when("/POSSatis",
+    .when("/Cari",
     {
-        templateUrl : "html/evraklar/POSSatis.html"
+        templateUrl : "html/kartlar/Cari.html"
     })
-    .when("/POSIade",
+    .when("/StokListesi",
     {
-        templateUrl : "html/evraklar/POSIade.html"
+        templateUrl : "html/kartlar/StokListesi.html"
     })
-    .when("/PluTanitim",
+    .when("/CariListesi",
     {
-        templateUrl : "html/evraklar/PluTanitim.html"
+        templateUrl : "html/kartlar/CariListesi.html"
     })
-    .when("/SatisAktarim",
-    {
-        templateUrl : "html/evraklar/SatisAktarim.html"
-    })
-    .when("/TahsilatAktarim",
-    {
-        templateUrl : "html/evraklar/TahsilatAktarim.html"
-    })
-    .when("/RptGunlukSatis",
-    {
-        templateUrl : "html/rapor/RptGunlukSatis.html"
-    })
-    .when("/RptGunlukEvrak",
-    {
-        templateUrl : "html/rapor/RptGunlukEvrak.html"
-    })
-    .when("/RptGunlukKasa",
-    {
-        templateUrl : "html/rapor/RptGunlukKasa.html"
-    })    
-    .when("/RptMagazaCiro",
-    {
-        templateUrl : "html/rapor/RptMagazaCiro.html"
-    })  
-    .when("/RptMagazaSatis",
-    {
-        templateUrl : "html/rapor/RptMagazaSatis.html"
-    })  
-    .when("/RptMagazaStok",
-    {
-        templateUrl : "html/rapor/RptMagazaStok.html"
-    })
-    .when("/RptDepoSatisHar",
-    {
-        templateUrl : "html/rapor/RptDepoSatisHar.html"
-    })  
-    .when("/SayimFisi",
-    {
-        templateUrl : "html/evraklar/SayimFisi.html"
-    }) 
-    .when("/KullaniciParametre",
-    {
-        templateUrl : "html/ayarlar/KullaniciParametre.html"
-    });
 });

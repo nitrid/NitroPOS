@@ -1,4 +1,4 @@
-//1.0.2
+//1.0.1
 var fs = require('fs');
 var config = require('./config.json');
 var dbengine = require('./sql/dbengine')(config);
@@ -7,7 +7,7 @@ var express = require('express');
 var app = express();
 
 app.use('/',express.static(__dirname + "/www/"));
-app.listen(8082);
+app.listen(80);
 
 //******** LOG **********************************************************************/
 var trueLog = console.log;

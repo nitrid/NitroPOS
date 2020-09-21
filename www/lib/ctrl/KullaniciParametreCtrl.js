@@ -2,7 +2,7 @@ function KullaniciParametreCtrl($scope,$window,db)
 {
     let KullaniciSelectedRow = null;
     let DGetir = false;
-    let File = "./www/lib/Param.js";
+    let File = "./www/_pos/lib/Param.js";
 
     $scope.Init = function()
     {
@@ -18,7 +18,7 @@ function KullaniciParametreCtrl($scope,$window,db)
         $scope.Telefon = "";
         $scope.Email = "";
         $scope.MikroId = "";
-        $scope.SifreDegistir = false;
+
         $scope.Yetkili = false;
 
         InitKullaniciGrid();
@@ -50,7 +50,6 @@ function KullaniciParametreCtrl($scope,$window,db)
             Param[$scope.KullaniciListeSelectedIndex].Email = $scope.Email;
             Param[$scope.KullaniciListeSelectedIndex].MikroId = $scope.MikroId;
             Param[$scope.KullaniciListeSelectedIndex].Yetkili = $scope.Yetkili;
-            Param[$scope.KullaniciListeSelectedIndex].SifreDegistir = ($scope.SifreDegistir == false) ? "0" : "1";
         }
         else
         {
@@ -63,7 +62,6 @@ function KullaniciParametreCtrl($scope,$window,db)
             Param[Param.length-1].Email = $scope.Email;
             Param[Param.length-1].MikroId = $scope.MikroId;
             Param[Param.length-1].Yetkili = $scope.Yetkili;
-            Param[Param.length-1].SifreDegistir = ($scope.SifreDegistir == false) ? "0" : "1";
         }
         
         db.Emit('ParamSave',[Param,File]);
@@ -81,7 +79,6 @@ function KullaniciParametreCtrl($scope,$window,db)
         $scope.Telefon = "";
         $scope.Email = "";
         $scope.MikroId = "";
-        $scope.SifreDegistir = "0";
         $scope.Yetkili = false;
     }
     $scope.BtnDuzenle = function()
@@ -95,7 +92,6 @@ function KullaniciParametreCtrl($scope,$window,db)
         $scope.Telefon = $scope.KullaniciListe[$scope.KullaniciListeSelectedIndex].Telefon;
         $scope.Email = $scope.KullaniciListe[$scope.KullaniciListeSelectedIndex].Email;
         $scope.MikroId = $scope.KullaniciListe[$scope.KullaniciListeSelectedIndex].MikroId;
-        $scope.SifreDegistir = ($scope.KullaniciListe[$scope.KullaniciListeSelectedIndex].SifreDegistir == "0") ? false : true;
         $scope.Yetkili = $scope.KullaniciListe[$scope.KullaniciListeSelectedIndex].Yetkili;
     }
     $scope.BtnSil = function()
@@ -133,7 +129,6 @@ function KullaniciParametreCtrl($scope,$window,db)
                 $scope.CmbParamList.push({Name : Object.keys(Param[$scope.KullaniciListeSelectedIndex])[i]});
             }
         }
-        $scope.CmbParamChange();
     }
     $scope.CmbParamChange = function()
     {
@@ -176,9 +171,6 @@ function KullaniciParametreCtrl($scope,$window,db)
         {
             Param[$scope.KullaniciListeSelectedIndex][$scope.ParamName][Object.keys(ParamData)[i]] = document.getElementById(Object.keys(ParamData)[i]).value;
         }
-        console.log($scope.KullaniciListeSelectedIndex)
-        console.log(ParamData)
-        console.log()
 
         alertify.okBtn('Evet');
         alertify.cancelBtn('Hayır');

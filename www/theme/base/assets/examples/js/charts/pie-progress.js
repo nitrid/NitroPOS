@@ -28,7 +28,7 @@
       $example.asPieProgress('finish');
     });
     (0, _jquery.default)('.pie-api-go').on('click', function () {
-      $example.asPieProgress('go', 100);
+      $example.asPieProgress('go', 200);
     });
     (0, _jquery.default)('.pie-api-go_percentage').on('click', function () {
       $example.asPieProgress('go', '50%');

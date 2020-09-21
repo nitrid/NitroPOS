@@ -1985,8 +1985,8 @@ textarea.form-control {
       -ms-user-select: none;
           user-select: none;
   border: 1px solid transparent;
-  padding: 0.429rem 1rem;
-  font-size: 0.9rem;
+  padding: 0.429rem 0.76rem;
+  font-size: 1rem;
   line-height: 1.57142857;
   border-radius: 0.215rem;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; }

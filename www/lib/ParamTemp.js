@@ -8,9 +8,6 @@ var ParamTemp =
 		"Email" : {"Title" : "Email","DefaultValue" : ""},
 		"MikroId" : {"Title" : "Mikro Id","DefaultValue" : "1"},
 		"Yetkili" : {"Title" : "Yetkili","DefaultValue" : "1"},
-		"SifreDegistir" : {"Title" : "Şifre Değiştir","DefaultValue" : "0"},
-		"BagliKullanici" : {"Title" : "Şifre Değiştir","DefaultValue" : ""},
-		
 		"Sistem" : 
 		{
 			"KiloBarkod" : {"Title" : "Kilo Barkodu","DefaultValue" : "0"},
@@ -21,17 +18,14 @@ var ParamTemp =
 			"FirmaNo" : {"Title" : "Firma No","DefaultValue" : "0"},
 			"SubeNo" : {"Title" : "Şube No","DefaultValue" : "0"},
 			"SatirBirlestir" : {"Title" : "Satır Birleştir","DefaultValue" : "1"},
-			"IskontoMatrisTip" : {"Title" : "Iskonto Matris Tipi","DefaultValue" : "0"},
-			"AnasayfaRaporlari" : {"Title" : "Anasayfa Raporları","DefaultValue" : "1"},
-			"FisCiktisi" : {"Title" : "Fiş Çıktısı","DefaultValue" : "1"},
-			"StokEksiyeDusme" : {"Title" : "Stok Eksiye Düşme","DefaultValue" : "1"},
+			"IskontoMatrisTip" : {"Title" : "Iskonto Matris Tipi","DefaultValue" : "0"}
 		},
 		"PosSatis" :
 		{
-			"EvrakTip" : {"Title" : "Evrak Tipi","DefaultValue" : "1"},
+			"EvrakTip" : {"Title" : "Evrak Tipi","DefaultValue" : "0"},
 			"Seri" : {"Title" : "Seri","DefaultValue" : "IRS"},
 			"TahSeri" : {"Title" : "TahSeri","DefaultValue" : "TIRS"},
-			"TahsilatSeri" : {"Title" : "Tahsilat Seri","DefaultValue" : "A"},			
+			"AvansSeri" : {"Title" : "AvansSeri Seri","DefaultValue" : "AVNS"},			
 			"NakitKasaKodu" : {"Title" : "Nakit Kasa Kodu","DefaultValue" : ""},
 			"KrediKartKasa" : {"Title" : "Kredi Kartı Kasa Kodu","DefaultValue" : ""},
 			"AcikHesapKodu" : {"Title" : "Açık Hesap Kodu","DefaultValue" : ""},
@@ -39,8 +33,7 @@ var ParamTemp =
 			"Sube" : {"Title" : "Şube No","DefaultValue" : "0"},
 			"SorumlulukKodu" : {"Title" : "Sorumluluk Merkezi","DefaultValue" : ""},
 			"Personel" : {"Title" : "Personel Kodu","DefaultValue" : ""},	
-			"FiyatListe" : {"Title" : "Fiyat Liste","DefaultValue" : "0"},
-			"RaporAlisFiyat" : {"Title" : "RaporFiyat","DefaultValue" : "3"}		
+			"FiyatListe" : {"Title" : "Fiyat Liste","DefaultValue" : "0"}		
 		},
 		"Menu" :
 		{

@@ -19,7 +19,7 @@
   }); // Example Gauge Dynamic
   // ---------------------
 
-  /*(0, _jquery.default)(document).ready(function ($$$1) {
+  (0, _jquery.default)(document).ready(function ($$$1) {
     var dynamicGauge = $$$1("#exampleDynamicGauge").data('gauge');
     setInterval(function () {
       var random = Math.round(Math.random() * 1000);
@@ -35,7 +35,7 @@
 
       dynamicGauge.setOptions(options).set(random);
     }, 1500);
-  });*/ // Example Donut Dynamic
+  }); // Example Donut Dynamic
   // ---------------------
 
   (0, _jquery.default)(document).ready(function ($$$1) {

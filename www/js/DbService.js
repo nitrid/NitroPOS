@@ -1,17 +1,12 @@
-//const moment = require("moment");
-
 angular.module('app.db', []).service('db',function($rootScope)
 {
-    let _Host = "";
-    let _LocalDb = new LocalDb(this);
+    let _Host = 'http://172.16.122.250:8092';
     let _Socket = null;
     let _MenuData = {};
+    let _CardPayment = new CardPayment();
     moment.locale('tr');
+    let PosNo = "1"
 
-    if (typeof(localStorage.host) !== "undefined") 
-    {
-        _Host = 'http://' + localStorage.host + ':' + localStorage.socketport;
-    }
     if (typeof(localStorage.mode) !== "undefined")
     {
         if(localStorage.mode == 'true')
@@ -29,7 +24,7 @@ angular.module('app.db', []).service('db',function($rootScope)
         {
             _Socket = io.connect(_Host,{autoConnect: false,reconnectionDelay:10});
             _Socket.open();
-    
+            console.log(_Host)
             _Socket.on('MaxUserCounted',function(MenuData)
             {               
                 if (typeof(MenuData) !== "undefined")
@@ -59,6 +54,7 @@ angular.module('app.db', []).service('db',function($rootScope)
             });
             _Socket.on('connect_error',(error) => 
             {
+                console.log(error)
                 this.SocketConnected = false;                    
                 console.log('connect_error');
 
@@ -69,6 +65,7 @@ angular.module('app.db', []).service('db',function($rootScope)
             });
             _Socket.on('error', (error) => 
             {
+                console.log(error)
                 this.SocketConnected = false;
                 if(typeof pCallback != 'undefined')
                 {
@@ -108,110 +105,18 @@ angular.module('app.db', []).service('db',function($rootScope)
     function _SqlExecute(pParam,pCallback)
     {   
         let TmpQuery;
-        if(localStorage.mode == 'true')
-        {
-            if(_Socket.connected)
-            {
-                TmpQuery = window["QuerySql"][pParam.tag];
-                TmpQuery.value = pParam.param;
-                TmpQuery.db = pParam.db;
-                _Socket.emit('QMikroDb', TmpQuery, function (data) 
-                {
-                    if(typeof(data.result.err) == 'undefined')
-                    {
-                        var args = arguments;
-                        $rootScope.$apply(function () 
-                        {
-                            if (pCallback) 
-                            {
-                                pCallback.apply(_Socket, args);
-                            }
-                        });
-                    }
-                    else
-                    {                        
-                        console.log("Mikro Sql Query Çalıştırma Hatası : " + data.result.err);
-                    }
-                });
-            }
-            else
-            {
-                console.log("Server Erişiminiz Yok.");
-            }
-        }
-        else
-        {
-            
-            TmpQuery = JSON.parse(JSON.stringify(window["QueryLocal"][pParam.tag]));
 
-            if (typeof (TmpQuery.param) != 'undefined')
-            {
-                for(i = 0;i < TmpQuery.param.length;i++)
-                {  
-                    let pVal = pParam.param[i];
-                    let pPrm = TmpQuery.param[i];
-
-                    if(typeof TmpQuery.type != 'undefined')
-                    {
-                        if(TmpQuery.type[i] == "date")
-                        {
-                            let TmpDate = moment(pParam.param[i],'DD.MM.YYYY');
-    
-                            pVal = TmpDate.year().toString() + '-' + (TmpDate.month() + 1).toString().padStart(2,'0') + '-' + TmpDate.date().toString().padStart(2,'0')
-                        }
-                    }
-                    else
-                    {
-                        if(TmpQuery.param[i].split(":").length > 1)
-                        {
-                            pPrm = TmpQuery.param[i].split(':')[0];
-
-                            if(TmpQuery.param[i].split(':')[1] == "date")
-                            {
-                                let TmpDate = moment(pParam.param[i],'DD.MM.YYYY');
-    
-                                pVal = TmpDate.year().toString() + '-' + (TmpDate.month() + 1).toString().padStart(2,'0') + '-' + TmpDate.date().toString().padStart(2,'0')  
-                            }
-                        }
-                    }
-                    
-
-                    TmpQuery.query = TmpQuery.query.replace('@' + pPrm,pVal);
-                    TmpQuery.query = TmpQuery.query.replace('@' + pPrm,pVal);
-                    TmpQuery.query = TmpQuery.query.replace('@' + pPrm,pVal);
-                    TmpQuery.query = TmpQuery.query.replace('@' + pPrm,pVal);
-                }
-                
-                pParam.param = [];
-            } 
-            
-            _LocalDb.GetData(TmpQuery,pParam.param,function(data)
-            { 
-                if(typeof(data.result.err) == 'undefined')
-                {
-                    var args = arguments;
-                    $rootScope.$apply(function () 
-                    {
-                        if (pCallback) 
-                        {
-                            pCallback.apply(null, args);
-                        }
-                    });
-                }
-                else
-                {
-                    console.log("Mikro Sql Query Çalıştırma Hatası : " + data.result.err);
-                }
-            });
-        }
-    }
-    function _SqlQueryStream(pQuery,pCallback)
-    {
         if(_Socket.connected)
         {
-            _Socket.emit('QSMikroDb',pQuery);
-            _Socket.on('RSMikroDb',function(data)
-            {                
+            TmpQuery = window["QuerySql"][pParam.tag];
+            TmpQuery.value = pParam.param;
+            TmpQuery.db = pParam.db;
+            
+            $rootScope.LoadingShow();
+
+            _Socket.emit('QMikroDb', TmpQuery, function (data) 
+            {
+                $rootScope.LoadingHide();
                 if(typeof(data.result.err) == 'undefined')
                 {
                     var args = arguments;
@@ -221,7 +126,43 @@ angular.module('app.db', []).service('db',function($rootScope)
                         {
                             pCallback.apply(_Socket, args);
                         }
-                    });    
+                    });
+                }
+                else
+                {      
+                    $rootScope.MessageBox(data.result.err);                  
+                    console.log("Mikro Sql Query Çalıştırma Hatası : " + data.result.err);
+                }
+            });
+        }
+        else
+        {
+            console.log("Server Erişiminiz Yok.");
+        }        
+    }
+    function _SqlExecuteQuery(pQuery,pCallback)
+    {
+        if(_Socket.connected)
+        {
+            $rootScope.LoadingShow();
+            _Socket.emit('QMikroDb', pQuery, function(data) 
+            {     
+                $rootScope.LoadingHide();
+                if(typeof(data.result.err) == 'undefined')
+                {
+                    var args = arguments;
+                    $rootScope.$apply(function () 
+                    {
+                        if (pCallback) 
+                        {
+                            pCallback.apply(_Socket, args);
+                        }
+                    });
+                }
+                else
+                {
+                    $rootScope.MessageBox(data.result.err);
+                    console.log("Mikro Sql Query Çalıştırma Hatası : " + data.result.err);
                 }
             });
         }
@@ -230,129 +171,221 @@ angular.module('app.db', []).service('db',function($rootScope)
             console.log("Server Erişiminiz Yok.");
         }
     }
-    function _SqlExecuteQuery(pQuery,pCallback)
-    {
-        if(localStorage.mode == 'true')
-        {
-            if(_Socket.connected)
-            {
-                _Socket.emit('QMikroDb', pQuery, function(data) 
-                {     
-                    if(typeof(data.result.err) == 'undefined')
-                    {
-                        var args = arguments;
-                        $rootScope.$apply(function () 
-                        {
-                            if (pCallback) 
-                            {
-                                pCallback.apply(_Socket, args);
-                            }
-                        });
-                    }
-                    else
-                    {
-                        console.log("Mikro Sql Query Çalıştırma Hatası : " + data.result.err);
-                    }
-                });
-            }
-            else
-            {
-                console.log("Server Erişiminiz Yok.");
-            }
-        }
-        else
-        {
-            _LocalDb.GetData(pQuery,pQuery.value,function(data)
-            {
-                if(typeof(data.result.err) == 'undefined')
-                {
-                    var args = arguments;
-                    $rootScope.$apply(function () 
-                    {
-                        if (pCallback) 
-                        {
-                            pCallback.apply(_Socket, args);
-                        }
-                    });
-                }  
-                else
-                {
-                    console.log("Mikro Sql Query Çalıştırma Hatası : " + data.result.err);
-                }
-            });
-        }
-    }
-    function _GetPromiseTag(pFirma,pQueryTag,pQueryParam,pCallback)
+    function _GetPromiseTag(pDb,pQueryTag,pQueryParam)
     {
         return new Promise(resolve => 
         {
             var m = 
             {
-                db : '{M}.' + pFirma,
+                db : pDb,
                 tag : pQueryTag,
                 param : pQueryParam
             }
             _SqlExecute(m,function(data)
             {
-                if(pCallback)
-                {
-                    pCallback(data.result.recordset);
-                    resolve();
-                }
+                resolve(data.result.recordset);
             });            
         });
     }    
-    function _GetPromiseQuery(pQuery,pCallback)
+    function _GetPromiseQuery(pQuery)
     {
         return new Promise(resolve => 
         {
             _SqlExecuteQuery(pQuery,function(data)
             {
-                if(pCallback)
-                {
-                    pCallback(data.result.recordset);
-                    resolve();
-                }
+                resolve(data.result.recordset);
             });            
         });
     } 
-    function _ExecutePromiseTag(pFirma,pQueryTag,pQueryParam,pCallback)
+    function _ExecutePromiseTag(pDb,pQueryTag,pQueryParam)
     {
         return new Promise(resolve => 
         {
             var m = 
             {
-                db : '{M}.' + pFirma,
+                db : pDb,
                 tag : pQueryTag,
                 param : pQueryParam
             }
             _SqlExecute(m,function(data)
             {
-                if(pCallback)
-                {
-                    pCallback(data);
-                    resolve();
-                }
+                resolve(data);
             });            
         });
     }
-    function _ExecutePromiseQuery(pQuery,pCallback)
+    function _ExecutePromiseQuery(pQuery)
     {
         return new Promise(resolve => 
         {
             _SqlExecuteQuery(pQuery,function(data)
             {
-                if(pCallback)
-                {
-                    pCallback(data);
-                    resolve();
-                }
+                resolve(data);
             });            
         });
     }   
+    function _PrintText(pData,pLen,pType)
+    {
+        if(pData.length > pLen)
+        {
+            pData = pData.toString().substring(0,pLen);
+        }
+
+        if(typeof pType == 'undefined')
+        {
+            return pData.toString().padEnd(pLen,' ');
+        }
+           
+        if(pType == "End")
+        {
+            return pData.toString().padEnd(pLen,' ');
+        }
+        else if(pType == "Start")
+        {
+            return pData.toString().padStart(pLen,' ');
+        }
+    }
+    function _SumColumn(pData,pColumn,pFilter)    
+    {
+        let Sum = 0;
+        for(i=0;i<pData.length;i++)
+        {
+            if (typeof(pFilter) != "undefined")
+            {
+                if(pData[i][pFilter.toString().split('=')[0].trim()] == pFilter.toString().split('=')[1].trim())
+                {
+                    Sum += parseFloat(pData[i][pColumn]);
+                }
+            }
+            else
+            {
+                Sum += pData[i][pColumn];
+            }
+        }
+        
+        return Sum;
+    }
+    function _EscposPrint(pData,fn)
+    {
+        if(typeof require == 'undefined')
+        {
+            fn();
+            return;
+        }
+        const escpos = require('escpos');
+        escpos.USB = require('escpos-usb');
+
+        let device  = new escpos.USB();
+        let options = { encoding: "GB18030" /* default */ }
+        let printer = new escpos.Printer(device, options);
+        //B FONT 64 CHAR
+        device.open(function(error)
+        {            
+            printer.flush();
+
+            for (let i = 0; i < pData.length; i++) 
+            {
+                printer.size(0,0);
+                printer.font(pData[i].font);
+                printer.align(pData[i].align);
+
+                if(typeof pData[i].style != 'undefined')
+                {
+                    printer.style(pData[i].style);
+                }
+                else
+                {
+                    printer.style("normal");
+                }
+                
+                if(typeof pData[i].size != 'undefined')
+                {
+                    printer.size(pData[i].size[0],pData[i].size[1]);
+                }
+                
+                printer.text(pData[i].data);
+            }                                    
+            printer.cut().close
+            (
+                function()
+                {
+                    fn();
+                }
+            );
+        });      
+    }
+    function _EscposCaseOpen()
+    {
+        if(typeof require == 'undefined')
+        {
+            return;
+        }
+
+        const escpos = require('escpos');
+        escpos.USB = require('escpos-usb');
+
+        let device  = new escpos.USB();
+        let options = { encoding: "GB18030" /* default */ }
+        let printer = new escpos.Printer(device, options);
+
+        device.open(function(error)
+        {
+            // for (let i = 0; i < 5; i++) 
+            // {
+            //     printer.cashdraw(i+1);
+            // }
+            printer.cashdraw(2);
+            printer.close();
+        })
+    }
+    function _LCDPrint(pData)
+    {
+        if(typeof require == 'undefined')
+        {
+            return;
+        }
+        
+        const escpos = require('escpos');
+        escpos.Serial = require('escpos-serialport');
+        escpos.Screen = require('escpos-screen');
+
+        let device  = new escpos.Serial("COM3", { baudRate: 9600, autoOpen: false });
+        let options = { encoding: "GB18030" /* default */ }
+        let usbScreen = new escpos.Screen(device,options);
+
+        device.open(function(error)
+        {
+            usbScreen.blink(pData.blink);
+            usbScreen.clear();
+            usbScreen.text(pData.text).close();
+        });
+    }
+    function _LCDClear()
+    {
+        if(typeof require == 'undefined')
+        {
+            return;
+        }
+
+        const escpos = require('escpos');
+        escpos.Serial = require('escpos-serialport');
+        escpos.Screen = require('escpos-screen');
+
+        let device  = new escpos.Serial("COM3", { baudRate: 9600, autoOpen: false });
+        let options = { encoding: "GB18030" /* default */ }
+        let usbScreen = new escpos.Screen(device,options);
+
+        device.open(function(error)
+        {
+            usbScreen.clear();
+        });
+    }
+    function _PaymentSend(pTutar)
+    {
+        _CardPayment.transaction_start(pTutar);
+    }
     //#region "PUBLIC"
-    this.LocalDb = _LocalDb;
     this.Socket = _Socket;
+    this.CardPayment = _CardPayment;
     this.Connection = _Connection;
     this.ConnectionPromise = _ConnectionPromise;
     this.Disconnect = _Disconnect;
@@ -362,7 +395,14 @@ angular.module('app.db', []).service('db',function($rootScope)
     this.GetPromiseQuery = _GetPromiseQuery;
     this.ExecutePromiseTag = _ExecutePromiseTag;
     this.ExecutePromiseQuery = _ExecutePromiseQuery;
+    this.SumColumn = _SumColumn;
+    this.PrintText = _PrintText;
     this.SocketConnected = false;
+    this.EscposCaseOpen = _EscposCaseOpen;
+    this.LCDPrint = _LCDPrint;
+    this.LCDClear = _LCDClear;
+    this.PaymentSend = _PaymentSend;
+    
     // $APPLY YERİNE YAPILDI.
     this.SafeApply = function(pScope,pFn) 
     {
@@ -380,7 +420,7 @@ angular.module('app.db', []).service('db',function($rootScope)
     };     
     this.SetHost = function(host,port)
     {
-        _Host = 'http://' + host + ':' + port;
+        _Host = 'http://' + host + ':8092';
         //_Socket.io.uri = _Host;
     }
     this.On = function(eventName,callback)
@@ -408,11 +448,11 @@ angular.module('app.db', []).service('db',function($rootScope)
             });
         });
     }
-    this.GetData = function(pFirma,pQueryTag,pQueryParam,pCallback)
+    this.GetData = function(pDb,pQueryTag,pQueryParam,pCallback)
     {
         var m = 
         {
-            db : '{M}.' + pFirma,
+            db : pDb,
             tag : pQueryTag,
             param : pQueryParam
         }
@@ -434,49 +474,14 @@ angular.module('app.db', []).service('db',function($rootScope)
             }
         });
     }    
-    this.GetDataQueryStream = function(pQuery,pCallback)
-    {
-        let Tmp = [];
-        _SqlQueryStream(pQuery,function(data)
-        {            
-            if(typeof data.err == 'undefined')
-            {
-                if(data.tag == "row")
-                {
-                    data.result.forEach(x => 
-                    {
-                        Tmp.push();        
-                    });
-                }
-    
-                if(data.tag == "done")
-                {
-                    data.result.forEach(x => 
-                    {
-                        Tmp.push(x);        
-                    });
-    
-                    if(pCallback)
-                    {
-                        pCallback(Tmp);
-                    }    
-                }
-            }
-            else
-            {
-                console.log(data.err);
-            }
-        });
-    }
-    this.ExecuteTag = function(pFirma,pQueryTag,pQueryParam,pCallback)
+    this.ExecuteTag = function(pDb,pQueryTag,pQueryParam,pCallback)
     {
         var m = 
         {
-            db : '{M}.' + pFirma,
+            db : pDb,
             tag : pQueryTag,
             param : pQueryParam
         }
-        
         _SqlExecute(m,function(data)
         {
             if(pCallback)
@@ -494,27 +499,7 @@ angular.module('app.db', []).service('db',function($rootScope)
                 pCallback(data);
             }
         });
-    }
-    this.SumColumn = function(pData,pColumn,pFilter)    
-    {
-        let Sum = 0;
-        for(i=0;i<pData.length;i++)
-        {
-            if (typeof(pFilter) != "undefined")
-            {
-                if(pData[i][pFilter.toString().split('=')[0].trim()] == pFilter.toString().split('=')[1].trim())
-                {
-                    Sum += pData[i][pColumn];
-                }
-            }
-            else
-            {
-                Sum += pData[i][pColumn];
-            }
-        }
-        
-        return Sum;
-    }
+    }    
     this.ListEqual = function(pData,pFiltre)
     {
         let Deger = true;
@@ -546,26 +531,11 @@ angular.module('app.db', []).service('db',function($rootScope)
         }
         return null;
     }
-    this.FillCmbDocInfo = function(pFirma,pQueryTag,pCallback)
-    {
-        var m = 
-        {
-            db : '{M}.' + pFirma,
-            tag : pQueryTag
-        }
-        _SqlExecute(m,function(data)
-        {
-            if(pCallback)
-            {
-                pCallback(data.result.recordset);
-            }
-        });
-    }
     this.MaxSira = function(pFirma,pQueryTag,pQueryParam,pCallback)
     {
         var m = 
         {
-            db : '{M}.' + pFirma,
+            db : pFirma,
             tag : pQueryTag,
             param : pQueryParam
         }
@@ -573,91 +543,17 @@ angular.module('app.db', []).service('db',function($rootScope)
         {
             if(pCallback)
             {
-                pCallback(data.result.recordset[0].MAXEVRSIRA);
+                pCallback(data.result.recordset[0].MAXREFNO);
             }
         });
     }
-    this.MaxSiraPromiseTag = function(pFirma,pQueryTag,pQueryParam,pCallback)
-    {
-        return new Promise(resolve => 
-        {
-            var m = 
-            {
-                db : '{M}.' + pFirma,
-                tag : pQueryTag,
-                param : pQueryParam
-            }
-            _SqlExecute(m,function(data)
-            {
-                if(pCallback)
-                {
-                    pCallback(data.result.recordset[0].MAXEVRSIRA);
-                    resolve(data.result.recordset[0].MAXEVRSIRA);
-                }
-            });
-        });
-    }
-    function _GetPromiseTag(pFirma,pQueryTag,pQueryParam,pCallback)
-    {
-        return new Promise(resolve => 
-        {
-            var m = 
-            {
-                db : '{M}.' + pFirma,
-                tag : pQueryTag,
-                param : pQueryParam
-            }
-            _SqlExecute(m,function(data)
-            {
-                if(pCallback)
-                {
-                    pCallback(data.result.recordset);
-                    resolve();
-                }
-            });            
-        });
-    }
-    this.DepoGetir = function(pFirma,pDepoListe,pCallback)
-    {
-        let TmpQuery = 
-        {
-            db : '{M}.' + pFirma,
-            query:  window["QuerySql"]["CmbDepoGetir"].query                
-        }
-
-        if(localStorage.mode != 'true')
-        {
-            TmpQuery.query = window["QueryLocal"]["CmbDepoGetir"].query;
-            TmpQuery.value = [];
-        }
-
-        if(pDepoListe != "")
-        {
-            TmpQuery.query = TmpQuery.query + " WHERE dep_no IN (" + pDepoListe + ")";
-        }
-        
-        _SqlExecuteQuery(TmpQuery,function(data)
-        {
-            if(pCallback)
-            {
-                if(typeof data.result.err == 'undefined')
-                {
-                    pCallback(data.result.recordset);
-                }
-                else
-                {
-                    console.log(data.result.err)
-                }
-            }
-        });                
-    }
-    this.StokBarkodGetir = function(pFirma,pBarkod,pDepoNo,pCallback)
+    this.StokBarkodGetir = function(pFirma,pBarkod,pCallback)
     {
         let m = 
         {
-            db : '{M}.' + pFirma,
+            db : pFirma,
             tag : 'BarkodGetir',
-            param : [pBarkod,pDepoNo]
+            param : [pBarkod]
         }
         _SqlExecute(m,function(data)
         {
@@ -672,9 +568,9 @@ angular.module('app.db', []).service('db',function($rootScope)
                 {
                     let m = 
                     {
-                        db : '{M}.' + pFirma,
+                        db : pFirma,
                         tag : 'StokGetir',
-                        param : [pBarkod,'',pDepoNo,'']
+                        param : [pBarkod,'']
                     }
                     _SqlExecute(m,function(data)
                     {
@@ -687,102 +583,153 @@ angular.module('app.db', []).service('db',function($rootScope)
             }
         });
     }
-    this.FiyatGetir = async function (pFirma,BarkodData,pFiyatParam,pEvrParam,pCallback)
+    this.EscposPrint = function(pSData,pTData,pVData,pCallback)
     {
-        console.log(pFiyatParam)
-        console.log(BarkodData)
-        let FiyatParam = [BarkodData[0].KODU,1,pFiyatParam.DepoNo,pFiyatParam.OdemeNo];
-        let Fiyat = 0;
-
-        if(pEvrParam.FiyatListe  == 0)
-            FiyatParam[1] = pFiyatParam.CariFiyatListe;
-        else
-            FiyatParam[1] = pEvrParam.FiyatListe;
-
-        // FİYAT GETİR
-        await _GetPromiseTag(pFirma,'FiyatGetir',FiyatParam,function(FiyatData)
-        {   
-            if(FiyatData.length > 0)
-            {   
-                BarkodData[0].FIYAT = FiyatData[0].FIYAT;
+        let TmpData = [];
+        let TmpLine = {};
+        // ÜST BİLGİ
+        TmpData.push({font:"a",style:"b",align:"ct",data:"Z.C. HECKENWALD N3"});
+        TmpData.push({font:"a",style:"b",align:"ct",data:"57740 LONGVILLE LES ST AVOLD"});
+        TmpData.push({font:"a",style:"b",align:"ct",data:"Tel : 03 87 92 00 32"});
+        TmpData.push({font:"a",style:"b",align:"ct",data:"longeville@prodorplus.fr"});
+        TmpData.push({font:"a",style:"b",align:"ct",data:"www.prodorplus.fr"});
+        TmpData.push({font:"b",align:"lt",data:_PrintText(moment(new Date()).locale('fr').format('dddd') + " " + moment(new Date()).format("DD.MM.YYYY"),59) + _PrintText(moment(new Date()).format("LTS"),5)});
+        TmpData.push({font:"b",align:"lt",data:_PrintText("Caissier: " + pSData[0].CUSER,41) + _PrintText("Caisse: " + PosNo + " - Ticket: " + pVData[0].TICKET,23)});
+        TmpData.push({font:"b",style:"b",align:"ct",data: _PrintText(" ",64)});
+        //HEADER
+        TmpLine = 
+        {
+            font:"b",
+            style:"bu",
+            align:"lt",
+            data:"T " + 
+                _PrintText("Libelle",37) + " " + 
+                _PrintText("Qte",8) + " " + 
+                _PrintText("P/u",7) + " " + 
+                _PrintText("Prix",7)
+        }
+        TmpData.push(TmpLine);
+        // SATIŞ LİSTESİ
+        for (let i = 0; i < pSData.length; i++) 
+        {
+            let TmpQt = ""
+            if(pSData[i].UNIT != "U")
+            {
+                TmpQt = parseFloat(pSData[i].QUANTITY).toFixed(3) + pSData[i].UNIT;
             }
             else
             {
-                BarkodData[0].FIYAT = 0;
+                TmpQt = pSData[i].QUANTITY;
             }
-        });
 
-        if(pFiyatParam.AlisSatis == 0)
-        {
-            // SON ALIŞ GETİR
-            if(pEvrParam.SonAlisFiyati == 1)
+            TmpLine = 
             {
-                await _GetPromiseTag(pFirma,'SonAlisFiyatGetir',[pFiyatParam.CariKodu,BarkodData[0].KODU,pFiyatParam.DepoNo],function(SonAlisFiyatData)
-                {
-                    if(SonAlisFiyatData.length > 0)
-                        BarkodData[0].FIYAT = SonAlisFiyatData[0].SONFIYAT;
-                });
+                font: "b",
+                align: "lt",
+                data: _PrintText(pSData[i].VAT_TYPE) + " " +
+                      _PrintText(pSData[i].ITEM_NAME,34) + " " +
+                      _PrintText(TmpQt,8,"Start") + " " + 
+                      _PrintText(parseFloat(pSData[i].PRICE).toFixed(2),7,"Start") + " " + 
+                      _PrintText(parseFloat(pSData[i].AMOUNT).toFixed(2) + "EUR",10,"Start")
             }
-            // ALIŞ ŞARTI GETİR
-            if(pEvrParam.AlisSarti == 1)
-            {
-                await _GetPromiseTag(pFirma,'AlisSartiGetir',[pFiyatParam.CariKodu,BarkodData[0].KODU],function(AlisSartiData)
-                {
-                    if(AlisSartiData.length > 0)
-                        BarkodData[0].FIYAT = SonAlisFiyatData[0].FIYAT;
-                });
-            }
+            TmpData.push(TmpLine);
         }
-        else
+        TmpData.push({font:"b",style:"bu",align:"lt",data:_PrintText(" ",64)});
+        //DİP TOPLAM
+        TmpLine = 
         {
-            // SON SATIŞ FİYATI GETİR
-            if(pEvrParam.SonSatisFiyati == 1)
-            {
-                await _GetPromiseTag(pFirma,'SonSatisFiyatGetir',[pFiyatParam.CariKodu,BarkodData[0].KODU],function(SonSatisFiyatData)
-                {
-                    if(SonSatisFiyatData.length > 0)
-                        BarkodData[0].FIYAT = SonSatisFiyatData[0].SONFIYAT;
-                });
-            }
-            // SATIŞ ŞARTI GETİR
-            if(pEvrParam.SatisSarti == 1)
-            {
-                await _GetPromiseTag(pFirma,'SatisSartiGetir',[pFiyatParam.CariKodu,BarkodData[0].KODU,pFiyatParam.DepoNo],function(SatisSartiData)
-                {
-                    if(SatisSartiData.length > 0)
-                        BarkodData[0].FIYAT = SatisSartiData[0].FIYAT;
-                });
-            }
+            font: "b",
+            size : [1,1],
+            style: "b",
+            align: "lt",
+            data: _PrintText("Total TTC",17) + 
+                  _PrintText(parseFloat(_SumColumn(pSData,"AMOUNT")).toFixed(2) + " EUR",15,"Start")
         }
+        TmpData.push(TmpLine);
+        //ÖDEME TOPLAMLARI
+        for (let i = 0; i < pTData.length; i++) 
+        {
+            let TmpType = "";
+            if(pTData[i].TYPE == 0)
+                TmpType = "Espece" //BUNLAR PARAMETRİK OLACAK.
+            else if (pTData[i].TYPE == 1)
+                TmpType = "CB"
+            else if(pTData[i].TYPE == 2)
+                TmpType = "T.Rest"
+            else if(pTData[i].TYPE == 3)
+                TmpType = "CHEQUE"
+            else if(pTData[i].TYPE == 4)
+                TmpType = "BONE AVOIR"
+            else if(pTData[i].TYPE == 5)
+                TmpType = "AVOIR"
+            else if(pTData[i].TYPE == 6)
+                TmpType = "VIRMENT"
+            else if(pTData[i].TYPE == 7)
+                TmpType = "PRLV"
 
-        if(pCallback)
-        {
-            Fiyat = BarkodData[0].FIYAT;
-            pCallback(Fiyat);
-        }
-    }
-    this.KiloBarkod = function(pBarkod,pParam)
-    {
-        // KİLO BARKODU KONTROLÜ - RECEP KARACA 10.09.2019
-        let Kilo = pBarkod;
-        let KiloFlag = pParam.Sistem.KiloFlag;
-        let FlagDizi = KiloFlag.split(',')
-        let Flag = Kilo.slice(0,2);
-        let Miktar = 1;
-
-        for (i = 0; i < FlagDizi.length; i++ )
-        {
-            if(Flag == FlagDizi[i])
+            TmpLine = 
             {
-                var kBarkod = Kilo.slice(0,pParam.Sistem.KiloBaslangic);
-                var Uzunluk = Kilo.slice(pParam.Sistem.KiloBaslangic,((pParam.Sistem.KiloBaslangic)+(pParam.Sistem.KiloUzunluk)));
-                pBarkod = kBarkod
-                Miktar = (Uzunluk / pParam.Sistem.KiloCarpan)
+                font: "a",
+                align: "lt",
+                data: _PrintText(TmpType,33) +
+                      _PrintText(parseFloat(_SumColumn(pTData,"AMOUNT","TYPE = " + pTData[i].TYPE)).toFixed(2) + " EUR",15,"Start")
             }
+            TmpData.push(TmpLine);
         }
+        //PARA ÜSTÜ
+        TmpLine = 
+        {
+            font: "a",
+            align: "lt",
+            data: _PrintText("Rendu",33) +
+                  _PrintText(parseFloat(_SumColumn(pTData,"CHANGE")).toFixed(2) + " EUR",15,"Start")
+        }
+        TmpData.push(TmpLine);
         
-        let pResult = {Barkod : pBarkod,Miktar : Miktar};
-        return pResult;
+        TmpData.push({font:"b",align:"lt",data:_PrintText(" ",64)});
+
+        TmpLine = 
+        {
+            font: "b",
+            style: "bu",
+            align: "lt",
+            data: _PrintText(" ",5) + " " +
+                  _PrintText("Taux",10) + " " +
+                  _PrintText("HT",10) + " " +
+                  _PrintText("TVA",10) + " " +
+                  _PrintText("TTC",10)
+        }
+
+        TmpData.push(TmpLine);        
+
+        for (let i = 0; i < pVData.length; i++) 
+        {
+            TmpLine = 
+            {
+                font: "b",
+                align: "lt",
+                data: _PrintText(pVData[i].VAT_TYPE,5) + " " +
+                      _PrintText(pVData[i].VAT + "%",10) + " " +
+                      _PrintText(parseFloat(pVData[i].HT).toFixed(2),10) + " " + 
+                      _PrintText(parseFloat(pVData[i].TVA).toFixed(2),10) + " " + 
+                      _PrintText(parseFloat(pVData[i].TTC).toFixed(2),10)
+            }
+            TmpData.push(TmpLine);  
+        }
+
+        TmpData.push({font:"b",style:"b",align:"lt",data:_PrintText(" ",64)});
+        TmpData.push({font:"b",align:"lt",data:_PrintText(pSData.length.toString() + " Aricle(s)",14)});
+
+        TmpData.push({font:"a",style:"b",align:"ct",data:"Avoir valable 3 mois apres edition..."});
+        TmpData.push({font:"b",style:"b",align:"lt",data:_PrintText(" ",64)});
+        TmpData.push({font:"a",style:"b",align:"ct",data:"Merci de votre fidelite a tres bientot ..."});
+        TmpData.push({font:"b",style:"b",align:"lt",data:_PrintText(" ",64)});
+        TmpData.push({font:"b",style:"b",align:"lt",data:_PrintText(" ",64)});
+        
+        _EscposPrint(TmpData,function()
+        {
+            pCallback();
+        });
     }
      //#endregion "PUBLIC"
 });

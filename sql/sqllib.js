@@ -185,27 +185,19 @@ sqllib.prototype.QueryStream = function(pQuery,pResult)
                 {
                     for(i = 0;i < pQuery.param.length;i++)
                     {
-                        let pType = null;
-                        if(pQuery.param[i].split(":").length > 1)
-                        {
-                            pType = pQuery.param[i].split(":")[1].split("|");
-                        }
-                        else
-                        {
-                            pType = pQuery.type[i].split("|");   
-                        }
+                        var pType = pQuery.type[i].split("|");
                         
                         if(pType[0] == "string")
                         {
-                            request.input(pQuery.param[i].split(":")[0],sql.NVarChar(pType[1]),pQuery.value[i]);    
+                            request.input(pQuery.param[i],sql.NVarChar(pType[1]),pQuery.value[i]);    
                         }
                         else if(pType[0] == "int")
                         {
-                            request.input(pQuery.param[i].split(":")[0],sql.Int,pQuery.value[i]);    
+                            request.input(pQuery.param[i],sql.Int,pQuery.value[i]);    
                         }
                         else if(pType[0] == "float")
                         {
-                            request.input(pQuery.param[i].split(":")[0],sql.Float,pQuery.value[i]);    
+                            request.input(pQuery.param[i],sql.Float,pQuery.value[i]);    
                         }
                         else if(pType[0] == "date")
                         {
@@ -213,12 +205,13 @@ sqllib.prototype.QueryStream = function(pQuery,pResult)
                             var numbers = from.match(/\d+/g); 
                             var date = new Date(numbers[2] + "-" +numbers[1] + "-" + numbers[0]);
 
-                            request.input(pQuery.param[i].split(":")[0],sql.Date,date);    
+                            request.input(pQuery.param[i],sql.DateTime,date);    
                         }
                         else if(pType[0] == "bit")
                         {
-                            request.input(pQuery.param[i].split(":")[0],sql.Bit,pQuery.value[i]);    
+                            request.input(pQuery.param[i],sql.Bit,pQuery.value[i]);    
                         }
+                        request.input(pQuery.param[i],sql.NVarChar(15),pQuery.value[i]);
                     }
                 }
     

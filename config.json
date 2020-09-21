@@ -1,8 +1,11 @@
 {
-    "port":"8092",
+    "port":"8095",
     "server":"192.168.100.12",
-    "database":"MikroDB_V16",
+    "database":"NITROGENPOS",
     "uid":"beka",
     "pwd":"1122334455",
-    "trustedConnection" : false
+    "trustedConnection" : false,
+    "EpsonUSB" : {"Vid:" : "04B8","Pid" : "0E15"},
+    "LineDisplay" : "COM3",
+    "BarkodSerial" : "COM1" 
 }

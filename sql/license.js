@@ -1,11 +1,36 @@
-let MacId = require('node-machine-id');
+var MacId = require('node-machine-id');
 let fs = require('fs');
 
-let LicIo = require('socket.io-client');
-let LicSoc = LicIo.connect('http://licence.teknoticari.com:8090',{'timeout':2000, 'connect timeout': 2000});
-//let LicSoc = LicIo.connect('http://localhost:8090',{'timeout':2000, 'connect timeout': 2000});
-let AppId = "02";
+var LicIo = require('socket.io-client');
+var LicSoc = LicIo.connect('http://licence.teknoticari.com:8090',{'timeout':2000, 'connect timeout': 2000});
+let AppId = "03";
 
+// function LicenseCheck(callback)
+// {
+//     if(typeof callback != 'undefined')
+//     {
+//         LicSoc.on('connect', function () 
+//         {   
+//             console.log('MacId : ' + MacId.machineIdSync());
+            
+//             LicSoc.emit('licensecheck',{MacId:MacId.machineIdSync()},function(data)
+//             {
+//                 if(data.result.length > 0)
+//                 {
+//                     callback(data);
+//                 }
+//                 else
+//                 {
+//                     callback(data);
+//                 }
+//             });            
+//         });
+//         LicSoc.on('connect_error', function (socket) 
+//         {
+//             callback("");            
+//         });
+//     }
+// }
 function LicenseCheck(callback)
 {
     if(typeof callback != 'undefined')

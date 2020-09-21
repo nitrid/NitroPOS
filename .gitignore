@@ -1,3 +1,7 @@
-lic.json
 node_modules/
 log/
+/config.json
+.prettierrc
+daemon/
+pc/release-builds/
+/package-lock.json
