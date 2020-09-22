@@ -49,7 +49,7 @@ function Pos($scope,$window,$rootScope,db)
         })
         FocusKartOdeme = false;
     });
-    $('#MdlIadeGetir').on('hide.bs.modal', function () 
+    $('#MdlIadeAl').on('hide.bs.modal', function () 
     {
         FocusBarkod = true;
         FocusAraToplam = false;
@@ -57,6 +57,8 @@ function Pos($scope,$window,$rootScope,db)
         FocusStok = false;
         FocusMiktarGuncelle = false;
         FocusKartOdeme = false;
+        FocusYetkiliSifre = false;
+        FocusAvans = false;
     });
     $('#MdlMiktarGuncelle').on('hide.bs.modal', function () 
     {
@@ -167,7 +169,7 @@ function Pos($scope,$window,$rootScope,db)
     function Init()
     {
         UserParam = Param[$window.sessionStorage.getItem('User')];                
-
+        $scope.Firma = 'NITROGENPOS'
         $scope.Seri = "";
         $scope.TahSeri = "";
         $scope.Sira = 0;
@@ -656,7 +658,7 @@ function Pos($scope,$window,$rootScope,db)
             },
             {
                 name: "NAME",
-                title: "NAME",
+                title: "STOK ADI",
                 type: "TEXT",
                 align: "center",
                 width: 150
@@ -711,24 +713,30 @@ function Pos($scope,$window,$rootScope,db)
             [
             {
                 name: "TYPE",
-                title: "TIP",
+                title: "TİP",
                 align: "center",
-                width: 75
+                width: 50
+            },
+            {
+                name: "DOC_TYPE",
+                title: "EVRAK TİP",
+                align: "center",
+                width: 50
             },
             {
                 name: "AMOUNT",
-                title: "AMOUNT",
+                title: "TUTAR",
                 type: "decimal",
                 align: "center",
                 width: 35
             },
             {
                 name: "CHANGE",
-                title: "CHANGE",
+                title: "PARA USTU",
                 align: "center",
                 width: 35
             },
-            { type: "control", modeSwitchButton: true, editButton: false,deleteButton:false }
+            // { type: "control", modeSwitchButton: true, editButton: false,deleteButton:false }
             ],
             onItemUpdated: function(args)
             {
@@ -1063,12 +1071,12 @@ function Pos($scope,$window,$rootScope,db)
 
         let SonSatisDetay = pItem;
         
-        db.GetData($scope.Firma,'PosSonSatisDetayGetir',[$scope.Sube,SonSatisDetay.REF,SonSatisDetay.REF_NO],function(PosSonSatisDetay)
+        db.GetData($scope.Firma,'PosSonSatisDetayGetir',[$scope.Sube,SonSatisDetay.REF,SonSatisDetay.REF_NO,$scope.Kullanici],function(PosSonSatisDetay)
         {  
             $scope.SonSatisDetayList = PosSonSatisDetay;
             $("#TblSonSatisDetay").jsGrid({data : $scope.SonSatisDetayList});
         });
-        db.GetData($scope.Firma,'PosSonSatisTahDetayGetir',[$scope.Sube,SonSatisDetay.REF,SonSatisDetay.REF_NO],function(PosSonSatisTahDetay)
+        db.GetData($scope.Firma,'PosSonSatisTahDetayGetir',[$scope.Sube,SonSatisDetay.REF,SonSatisDetay.REF_NO,$scope.Kullanici],function(PosSonSatisTahDetay)
         {  
             $scope.SonSatisTahDetayList = PosSonSatisTahDetay;
             $("#TblSonSatisTahDetay").jsGrid({data : $scope.SonSatisTahDetayList});
@@ -1101,7 +1109,7 @@ function Pos($scope,$window,$rootScope,db)
             $scope.EvrakTip = UserParam.PosSatis.EvrakTip;
             $scope.CariKodu = UserParam.PosSatis.Cari;
             $scope.Sube = UserParam.PosSatis.Sube;
-            $scope.Kullanici = UserParam.Kullanici
+            $scope.Kullanici = UserParam.Kullanici;
             $scope.Miktar = 1;
 
             $scope.Stok = 
@@ -1950,11 +1958,11 @@ function Pos($scope,$window,$rootScope,db)
     {
         if(pTip == 0)
         {
-            $('#MdlIadeTip').modal('show');
+            $('#MdlIadeAl').modal('show');
         }
         else
         {    
-            $('#MdlIadeTip').modal('hide'); 
+            $('#MdlIadeAl').modal('hide'); 
             alertify.okBtn('Evet');
             alertify.cancelBtn('Hayır');
 
@@ -1963,7 +1971,6 @@ function Pos($scope,$window,$rootScope,db)
             { 
                 if($scope.SatisList.length > 0)
                 {
-                    let IadeTip = "";
                     //POS SATIS UPDATE
                     var TmpQuery = 
                     {
@@ -1974,14 +1981,6 @@ function Pos($scope,$window,$rootScope,db)
                         value:  [$scope.Sube,1,$scope.Seri,$scope.Sira]
                     }
 
-                    if($scope.CmbIadeTip == "0")
-                    {
-                        IadeTip = 0; //Nakit
-                    }
-                    else
-                    {
-                        IadeTip = 1; //Kredi Kartı
-                    }
                     db.ExecuteQuery(TmpQuery,function(UpdateResult)
                     {
                         if(typeof(UpdateResult.result.err) == 'undefined')
@@ -2049,7 +2048,7 @@ function Pos($scope,$window,$rootScope,db)
         $("#TbSonSatisListesi").addClass('active');
         $("#TbMain").removeClass('active');
 
-        db.GetData($scope.Firma,'PosSonSatisGetir',[$scope.Sube],function(PosSonSatis)
+        db.GetData($scope.Firma,'PosSonSatisGetir',[$scope.Sube,$scope.Tarih,$scope.Kullanici],function(PosSonSatis)
         {  
             $scope.SonSatisList = PosSonSatis;
             $("#TblSonSatis").jsGrid({data : $scope.SonSatisList});
@@ -2355,34 +2354,71 @@ function Pos($scope,$window,$rootScope,db)
         var r = confirm("Avans Çekme İstediğinize Eminmisiniz ?");
         if (r == true) 
         {
-            var InsertData = 
-            [
-                $scope.YetkiliKullanici,
-                $scope.YetkiliKullanici,
-                $scope.Sube,
-                0, //SATIŞ TİPİ(NAKİT-KREDİ KARTI)
-                $scope.AvansTip, //EVRAKTIP
-                $scope.Tarih,
-                $scope.AvansSeri,
-                $scope.AvansSira,
-                1, //CUSTOMER CODE
-                UserParam.PosSatis.NakitKasaKodu,
-                $scope.TxtAvans,
-                0, //CHANGE
-                2 //STATUS
-            ];
-            
-            db.ExecuteTag($scope.Firma,'PosTahInsert',InsertData,function(InsertResult)
-            {   
-                if(typeof(InsertResult.result.err) == 'undefined')
-                {                
-                    $scope.TxtAvans = 0;
-                    alert("Avans Çekme İşlemi Başarıyla Gerçekleşti.")
-                    $("#MdlAvans").modal("hide");
+            let TmpQuery = 
+            {
+                db : $scope.Firma,
+                query:  "SELECT ISNULL(SUM(AMOUNT),0) - " +
+                        "(SELECT ISNULL(SUM(AMOUNT),0) AS TOPLAM FROM POS_PAYMENT WHERE " +
+                        "TYPE = 0 AND DOC_TYPE IN(1,3) AND DEPARTMENT = @DEPARTMENT AND CUSER = @CUSER AND DOC_DATE = @DOC_DATE) AS TOPLAM " +
+                        "FROM POS_PAYMENT " +
+                        "WHERE TYPE = 0 AND DOC_TYPE IN(0,2,4) AND DEPARTMENT = @DEPARTMENT AND CUSER = @CUSER AND DOC_DATE = @DOC_DATE " ,
+                param:  ['DEPARTMENT','CUSER','DOC_DATE'],
+                type:   ['int','string|25','date'],
+                value:  [$scope.Sube,$scope.Kullanici,$scope.Tarih]
+            }
+            db.GetDataQuery(TmpQuery,function(pData)
+            {
+                let InsertData = 
+                [
+                    $scope.YetkiliKullanici,
+                    $scope.YetkiliKullanici,
+                    $scope.Sube,
+                    0, //SATIŞ TİPİ(NAKİT-KREDİ KARTI)
+                    $scope.AvansTip, //EVRAKTIP
+                    $scope.Tarih,
+                    $scope.AvansSeri,
+                    $scope.AvansSira,
+                    1, //CUSTOMER CODE
+                    UserParam.PosSatis.NakitKasaKodu,
+                    $scope.TxtAvans,
+                    0, //CHANGE
+                    2 //STATUS
+                ];
+                if($scope.TxtAvans < pData[0].TOPLAM && $scope.AvansTip == 3)
+                {
+                    db.ExecuteTag($scope.Firma,'PosTahInsert',InsertData,function(InsertResult)
+                    {   
+                        if(typeof(InsertResult.result.err) == 'undefined')
+                        {                
+                            $scope.TxtAvans = 0;
+                            alert("Avans Çekme İşlemi Başarıyla Gerçekleşti.")
+                            $("#MdlAvans").modal("hide");
+                        }
+                        else
+                        {
+                            alert("Avans Çekme İşleminde Hata.")
+                        }
+                    });
+                }
+                else if($scope.AvansTip == 4)
+                {
+                    db.ExecuteTag($scope.Firma,'PosTahInsert',InsertData,function(InsertResult)
+                    {   
+                        if(typeof(InsertResult.result.err) == 'undefined')
+                        {                
+                            $scope.TxtAvans = 0;
+                            alert("Avans Verme İşlemi Başarıyla Gerçekleşti.")
+                            $("#MdlAvans").modal("hide");
+                        }
+                        else
+                        {
+                            alert("Avans Verme İşleminde Hata.")
+                        }
+                    });
                 }
                 else
                 {
-                    alert("Avans Çekme İşleminde Hata.")
+                    alert("Kasanızda " + pData[0].TOPLAM + " TL Bulunmakta Avans Çekme İşlemi Reddedildi.")
                 }
             });
         } 

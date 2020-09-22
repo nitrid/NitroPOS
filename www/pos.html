@@ -127,11 +127,11 @@
             <!-- End Navbar Toolbar -->
             <!-- Navbar Toolbar Right -->
             <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
-                <li class="nav-item" style="width: 80px;">
+                <!-- <li class="nav-item" style="width: 80px;">
                     <a class="nav-link">
                     <i class="icon wb-signal" aria-hidden="true"><div class="row" style="font-family: 'Roboto', sans-serif;">Online</div></i>                    
                     </a>
-                </li>
+                </li> -->
                 <li class="nav-item" style="width: 80px;" ng-click = "BtnEdit()">
                     <a class="nav-link">
                     <i ng-class="Class.BtnEdit" aria-hidden="true"><div class="row" style="font-family: 'Roboto', sans-serif;"></div></i>                    
@@ -166,17 +166,6 @@
                     <div class="col-6 pr-1 pt-10">
                         <div class="panel">
                             <div class="panel-body px-1 py-1">
-                                <!-- <div class="row">
-                                    <div class="col-5">
-                                        <h5 class="text-left"><span style="color:dodgerblue;">Kullanıcı : </span>{{Kullanici}}</h5>
-                                    </div>
-                                    <div class="col-2 pr-0">
-                                        <h5 class="text-right"><span style="color:dodgerblue;">Cari :</span></h5>
-                                    </div>
-                                    <div class="col-5 pl-2">
-                                        <h5 class="text-left">{{CariAdi}}</h5>
-                                    </div>
-                                </div> -->
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="input-group">
@@ -254,9 +243,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-2 px-1">
-                                        <!-- <button class="form-group btn btn-block btn-info my-1" ng-click="BtnKasaAc()" style="height:70px;">
-                                            <i class="icon wb-inbox" aria-hidden="true" style="font-size: 24px;"></i>
-                                        </button> -->
+                       
                                     </div> 
                                     <div class="col-2 px-1">
                                         <button class="form-group btn btn-block btn-primary my-1" ng-click="BtnTusClick('4')" style="height:70px;font-size:10pt;">4</button>
@@ -331,174 +318,167 @@
                                 <!-- Plular -->
                                 <div class="row pt-5">
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="BtnUpClick()" style="height:70px;"><i class="fas fa-arrow-up fa-lg"></i></button>
+                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="BtnUpClick()" style="height:70px; font-size: 16px;"><i class="fas fa-arrow-up fa-lg"></i></button>
                                     </div> 
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="PluGetir(PluList[0].ITEMS_CODE,0,1)">{{PluList[0].NAME}}</button>
+                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="PluGetir(PluList[0].ITEMS_CODE,0,1)" style="font-size: 14px;">{{PluList[0].NAME}}</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="PluGetir(PluList[1].ITEMS_CODE,1,1)">{{PluList[1].NAME}}</button>
+                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="PluGetir(PluList[1].ITEMS_CODE,1,1)" style="font-size: 14px;">{{PluList[1].NAME}}</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="PluGetir(PluList[2].ITEMS_CODE,2,1)">{{PluList[2].NAME}}</button>
+                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="PluGetir(PluList[2].ITEMS_CODE,2,1)" style="font-size: 14px;">{{PluList[2].NAME}}</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="PluGetir(PluList[3].ITEMS_CODE,3,1)">{{PluList[3].NAME}}</button>
+                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="PluGetir(PluList[3].ITEMS_CODE,3,1)" style="font-size: 14px;">{{PluList[3].NAME}}</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="PluGetir(PluList[4].ITEMS_CODE,4,1)">{{PluList[4].NAME}}</button>
+                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="PluGetir(PluList[4].ITEMS_CODE,4,1)" style="font-size: 14px;">{{PluList[4].NAME}}</button>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="BtnDownClick()" style="height:70px;"><i class="fas fa-arrow-down fa-lg"></i></button>
+                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="BtnDownClick()" style="height:70px;" style="font-size: 14px;"><i class="fas fa-arrow-down fa-lg"></i></button>
                                     </div> 
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="PluGetir(PluList[5].ITEMS_CODE,5,1)">{{PluList[5].NAME}}</button>
+                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="PluGetir(PluList[5].ITEMS_CODE,5,1)" style="font-size: 14px;">{{PluList[5].NAME}}</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="PluGetir(PluList[6].ITEMS_CODE,6,1)">{{PluList[6].NAME}}</button>
+                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="PluGetir(PluList[6].ITEMS_CODE,6,1)" style="font-size: 14px;">{{PluList[6].NAME}}</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="PluGetir(PluList[7].ITEMS_CODE,7,1)">{{PluList[7].NAME}}</button>
+                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="PluGetir(PluList[7].ITEMS_CODE,7,1)" style="font-size: 14px;">{{PluList[7].NAME}}</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="PluGetir(PluList[8].ITEMS_CODE,8,1)">{{PluList[8].NAME}}</button>
+                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="PluGetir(PluList[8].ITEMS_CODE,8,1)" style="font-size: 14px;">{{PluList[8].NAME}}</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="PluGetir(PluList[9].ITEMS_CODE,9,1)">{{PluList[9].NAME}}</button>
+                                        <button class="form-group btn btn-block btn-success my-1 h-80" ng-click="PluGetir(PluList[9].ITEMS_CODE,9,1)" style="font-size: 14px;">{{PluList[9].NAME}}</button>
                                     </div>
                                 </div>
                                 <!-- Gruplar -->
                                 <div class="row">
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-info my-2" style="height:70px;" ng-click="PluGetir('',0,0)">{{PluGrpList[0].NAME}}</button>
+                                        <button class="form-group btn btn-block btn-info my-2" style="height:70px; font-size: 14px;" ng-click="PluGetir('',0,0)">{{PluGrpList[0].NAME}}</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-info my-2" style="height:70px;" ng-click="PluGetir('',0,0)">{{PluGrpList[0].NAME}}</button>
+                                        <button class="form-group btn btn-block btn-info my-2" style="height:70px; font-size: 14px;" ng-click="PluGetir('',0,0)">{{PluGrpList[1].NAME}}</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-info my-2" style="height:70px;" ng-click="PluGetir('',1,0)">{{PluGrpList[1].NAME}}</button>
+                                        <button class="form-group btn btn-block btn-info my-2" style="height:70px; font-size: 14px;" ng-click="PluGetir('',1,0)">{{PluGrpList[2].NAME}}</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-info my-2" style="height:70px;" ng-click="PluGetir('',2,0)">{{PluGrpList[2].NAME}}</button>
+                                        <button class="form-group btn btn-block btn-info my-2" style="height:70px; font-size: 14px;" ng-click="PluGetir('',2,0)">{{PluGrpList[3].NAME}}</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-info my-2" style="height:70px;" ng-click="PluGetir('',3,0)">{{PluGrpList[3].NAME}}</button>
+                                        <button class="form-group btn btn-block btn-info my-2" style="height:70px; font-size: 14px;" ng-click="PluGetir('',3,0)">{{PluGrpList[4].NAME}}</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-info my-2" style="height:70px;" ng-click="PluGetir('',4,0)">{{PluGrpList[4].NAME}}</button>
+                                        <button class="form-group btn btn-block btn-info my-2" style="height:70px; font-size: 14px;" ng-click="PluGetir('',4,0)">{{PluGrpList[5].NAME}}</button>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-danger my-1" ng-click="BtnSatirIptal()" style="height:70px;">Satır İptal</button>
+                                        <button class="form-group btn btn-block btn-danger my-1" ng-click="BtnSatirIptal()" style="height:70px;  font-size: 16px;">Satır İptal</button>
                                     </div> 
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-danger my-1" style="height:70px;" ng-click="BtnBelgeIptal()" style="height:70px;">Belge İptal</button>
+                                        <button class="form-group btn btn-block btn-danger my-1" style="height:70px;  font-size: 16px;" ng-click="BtnBelgeIptal()" style="height:70px;">Belge İptal</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button ng-class="Class.BtnFiyatGor" style="height:70px;" ng-click="BtnFiyatGor()">Fiyat Gör</button>
+                                        <button ng-class="Class.BtnFiyatGor" style="height:70px; font-size: 16px;" ng-click="BtnFiyatGor()">Fiyat Gör</button>
                                     </div>                   
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-warning btn-block my-1" style="height:70px;">X Raporu</button>
+                                        <button class="form-group btn btn-warning btn-block my-1" style="height:70px;  font-size: 16px;">X Raporu</button>
                                     </div> 
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px;"></button>
+                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px;  font-size: 16px;"></button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px;"></button>
+                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px;  font-size: 16px;"></button>
                                     </div>                               
                                 </div>
                                 <div class="row">
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-danger my-1" style="height:70px;" ng-click="BtnIadeAl(0)">İade Al</button>
+                                        <button class="form-group btn btn-block btn-danger my-1" style="height:70px; font-size: 16px;" ng-click="BtnIadeAl(0)">İade Al</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button role="menu-item" class="form-group btn btn-block btn-danger my-1" style="height:70px;">Kasa Kilitle</button>
+                                        <button role="menu-item" class="form-group btn btn-block btn-danger my-1" style="height:70px; font-size: 16px;">Kasa Kilitle</button>
                                     </div>            
-                                    <!-- <div class="col-2 px-1">
-                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px;"></button>
-                                    </div> -->
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-info btn-block my-1" style="height:70px;" ng-click="BtnSonSatis()">Son Satışlar</button>
+                                        <button class="form-group btn btn-info btn-block my-1" style="height:70px; font-size: 16px;" ng-click="BtnSonSatis()">Son Satışlar</button>
                                     </div>                   
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-warning btn-block my-1" style="height:70px;">Z Raporu</button>
+                                        <button class="form-group btn btn-warning btn-block my-1" style="height:70px; font-size: 16px;">Z Raporu</button>
                                     </div> 
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px;"></button>
+                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px; font-size: 16px;"></button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px;"></button>
+                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px; font-size: 16px;"></button>
                                     </div>                                
                                 </div>
                                 <div class="row">
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-warning my-1" ng-click="BtnParkdakiIslem()" style="height:70px;">
+                                        <button class="form-group btn btn-block btn-warning my-1" ng-click="BtnParkdakiIslem()" style="height:70px; font-size: 14px;">
                                             <div class="row">
                                                 <div class="col-12">
                                                     <span class="badge badge-pill badge-info"><div class="text-succes">{{ParkIslemSayisi}}</div></span> 
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-12">Parkdaki İşlemler</div>
+                                                <div class="col-12" style="font-size: 14px;">Parkdaki İşlemler</div>
                                             </div>
                                         </button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-info my-1" ng-click="BtnKasaAc()" style="height:70px;">Kasa Aç</button>
+                                        <button class="form-group btn btn-block btn-info my-1" ng-click="BtnKasaAc()" style="height:70px; font-size: 16px;">Kasa Aç</button>
                                     </div> 
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-info btn-block my-1" ng-click="BtnMusteriListesi()" style="height:70px;">Cariler</button>
+                                        <button class="form-group btn btn-info btn-block my-1" ng-click="BtnMusteriListesi()" style="height:70px; font-size: 16px;">Cariler</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-warning btn-block my-1" style="height:70px;">Kasiyer Çıkış Raporu</button>
+                                        <button class="form-group btn btn-warning btn-block my-1" style="height:70px; font-size: 14px;">Kasiyer Çıkış Raporu</button>
                                     </div> 
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px;"></button>
+                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px; font-size: 16px;"></button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px;"></button>                                    
+                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px; font-size: 16px;"></button>                                    
                                     </div>                                
                                 </div>
                                 <div class="row">
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-warning my-1" ng-click="BtnParkaAl()" style="height:70px;">Parka Al</button>
+                                        <button class="form-group btn btn-block btn-warning my-1" ng-click="BtnParkaAl()" style="height:70px; font-size: 16px;">Parka Al</button>
                                     </div>
                                     <div class="col-2 px-1">
                                         <button class="form-group btn btn-block btn-info my-1" ng-click="BtnHesapMakinesi()" data-toggle="modal" style="height:70px;">
                                             <i class="icon fa-calculator" aria-hidden="true" style="font-size: 24px;"></i>
                                         </button>
                                     </div>                                  
-                                    <!-- <div class="col-2 px-1">
-                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px;"></button>
-                                    </div>  -->
                                     <div class="col-2 px-1">
                                         <button class="form-group btn btn-info btn-block my-1" style="height:70px;" ng-click="BtnKartOdeme()">
                                             <i class="icon fa-credit-card row" aria-hidden="true" style="font-size: 24px;"></i>
-                                            <span><h6 class="text-center" style="color: white;">Debit</h6></span>
+                                            <span><h6 class="text-center" style="color: white;">Kart</h6></span>
                                         </button>
                                     </div> 
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-warning btn-block my-1" style="height:70px;">Kasa Ara Toplam</button>
-                                        <!-- <button role="menu-item" class="form-group btn btn-block btn-danger my-1" style="height:70px;">Kasa Kilitle</button> -->
+                                        <button class="form-group btn btn-warning btn-block my-1" style="height:70px; font-size: 14px;">Kasa Ara Toplam</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-default my-1" data-toggle="modal" style="height:70px;"></button>
+                                        <button class="form-group btn btn-block btn-default my-1" data-toggle="modal" style="height:70px; font-size: 16px;"></button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px;"></button>
+                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px; font-size: 16px;"></button>
                                     </div>                                
                                 </div>
                                 <div class="row">
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-warning my-1" style="height:70px;" ng-click = "BtnAvans(0)">
+                                        <button class="form-group btn btn-block btn-warning my-1" style="height:70px; font-size: 16px;" ng-click = "BtnAvans(0)">
                                             Avans
                                         </button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button ng-class="Class.BtnPersonelSatis" style="height:70px;" ng-click = "BtnPersonelSatis()">Personel Satış</button>
+                                        <button ng-class="Class.BtnPersonelSatis" style="height:70px; font-size: 14px;" ng-click = "BtnPersonelSatis()">Personel Satış</button>
                                     </div> 
                                     <div class="col-2 px-1">
                                         <button class="form-group btn btn-info btn-block my-1" ng-click = "BtnAraToplam()" style="height:70px;" title="Tahsilat">

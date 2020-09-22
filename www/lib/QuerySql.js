@@ -963,7 +963,7 @@ var QuerySql =
     PosSonSatisGetir : 
     {
         query:  "SELECT " +
-                "TOP 100 MAX(GUID) AS GUID, " +
+                "MAX(GUID) AS GUID, " +
                 "REF AS REF, " +
                 "REF_NO AS REF_NO, " +
                 "COUNT(LINE_NO) AS LINE_NO, " +
@@ -971,10 +971,10 @@ var QuerySql =
                 "CAST((SUM(QUANTITY * PRICE)) AS DECIMAL(10,2)) AS AMOUNT, " +
                 "CONVERT(VARCHAR(10), MAX(CDATE), 108) AS CHOUR, " +
                 "CONVERT(VARCHAR(10), MAX(CDATE), 104) AS CDATE " +
-                "FROM POS_SALES AS PS WHERE DEPARTMENT = @DEPARTMENT AND STATUS <> 0 " +
+                "FROM POS_SALES AS PS WHERE DEPARTMENT = @DEPARTMENT AND STATUS <> 0 AND DOC_DATE = @DOC_DATE AND CUSER = @CUSER " +
                 "GROUP BY REF,REF_NO ORDER BY LINE_NO DESC " ,
-        param: ['DEPARTMENT'],
-        type: ['int']
+        param: ['DEPARTMENT','DOC_DATE','CUSER'],
+        type: ['int','date','string|25']
     },
     PosSonSatisDetayGetir : 
     {
@@ -984,20 +984,21 @@ var QuerySql =
                 "CAST(QUANTITY AS decimal(10,2)) AS QUANTITY, " +
                 "CAST(PRICE AS decimal(10,2))  AS PRICE, " +
                 "CAST((QUANTITY * PRICE) AS decimal(10,2)) AS AMOUNT " +
-                "FROM POS_SALES AS PS WHERE DEPARTMENT = @DEPARTMENT AND REF = @REF AND REF_NO = @REF_NO AND STATUS <> 0 " ,
-        param: ['DEPARTMENT','REF','REF_NO'],
-        type: ['int','string|25','int']
+                "FROM POS_SALES AS PS WHERE DEPARTMENT = @DEPARTMENT AND REF = @REF AND REF_NO = @REF_NO AND STATUS <> 0 AND CUSER = @CUSER " ,
+        param: ['DEPARTMENT','REF','REF_NO','CUSER'],
+        type: ['int','string|25','int','string|25']
     },
     PosSonSatisTahDetayGetir : 
     {
         query:  "SELECT " +
                 "GUID AS GUID, " +
-                "CASE WHEN TYPE = 0 THEN 'ESC' WHEN TYPE = 1 THEN 'CB' WHEN TYPE = 2 THEN 'CHQ' WHEN TYPE = 3 THEN 'T.R.' END AS TYPE, " +
+                "CASE WHEN TYPE = 0 THEN 'NAKİT' WHEN TYPE = 1 THEN 'KART' END AS TYPE, " +
+                "CASE WHEN DOC_TYPE = 0 THEN 'TAHSİLAT' WHEN DOC_TYPE = 1 THEN 'İADE' WHEN DOC_TYPE = 2 THEN 'PERSONEL' WHEN DOC_TYPE = 3 THEN 'AVANS ALMA' WHEN DOC_TYPE = 4 THEN 'AVANS VERME' END AS DOC_TYPE, " +
                 "AMOUNT AS AMOUNT, " +
                 "CHANGE AS CHANGE " +
-                "FROM POS_PAYMENT AS PS WHERE DEPARTMENT = @DEPARTMENT AND REF = @REF AND REF_NO = @REF_NO AND STATUS <> 0 " ,
-        param: ['DEPARTMENT','REF','REF_NO'],
-        type: ['int','string|25','int']
+                "FROM POS_PAYMENT AS PS WHERE DEPARTMENT = @DEPARTMENT AND REF = @REF AND REF_NO = @REF_NO AND STATUS <> 0 AND CUSER = @CUSER " ,
+        param: ['DEPARTMENT','REF','REF_NO','CUSER'],
+        type: ['int','string|25','int','string|25']
     },
     PosSatisFiyatGetir : 
     {
