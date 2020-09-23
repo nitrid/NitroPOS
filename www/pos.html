@@ -377,6 +377,7 @@
                                         <button class="form-group btn btn-block btn-info my-2" style="height:70px; font-size: 14px;" ng-click="PluGetir('',4,0)">{{PluGrpList[5].NAME}}</button>
                                     </div>
                                 </div>
+                                <!-- ------------ -->
                                 <div class="row">
                                     <div class="col-2 px-1">
                                         <button class="form-group btn btn-block btn-danger my-1" ng-click="BtnSatirIptal()" style="height:70px;  font-size: 16px;">Satır İptal</button>
@@ -399,7 +400,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-danger my-1" style="height:70px; font-size: 16px;" ng-click="BtnIadeAl(0)">İade Al</button>
+                                        <button ng-class="Class.BtnIadeAl" style="height:70px; font-size: 16px;" ng-click="BtnIadeAl()">İade Al</button>
                                     </div>
                                     <div class="col-2 px-1">
                                         <button role="menu-item" class="form-group btn btn-block btn-danger my-1" style="height:70px; font-size: 16px;">Kasa Kilitle</button>
@@ -481,7 +482,7 @@
                                         <button ng-class="Class.BtnPersonelSatis" style="height:70px; font-size: 14px;" ng-click = "BtnPersonelSatis()">Personel Satış</button>
                                     </div> 
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-info btn-block my-1" ng-click = "BtnAraToplam()" style="height:70px;" title="Tahsilat">
+                                        <button class="form-group btn btn-info btn-block my-1" ng-click = "BtnAraToplam()" style="height:70px;">
                                             <i class="icon fa-money" aria-hidden="true" style="font-size: 24px;"></i>
                                             <span><h6 class="text-center" style="color: white;">Nakit</h6></span>
                                         </button>
@@ -1126,83 +1127,6 @@
                 </div>
             </div>
         </div>
-        <!-- İade Tip Modal -->
-        <div class="modal fade" id="MdlIadeAl" aria-hidden="true" aria-labelledby="examplePositionCenter" role="dialog" tabindex="-1">
-            <div class="modal-dialog modal-simple modal-primary modal-center">
-                <div class="modal-content">
-                    <div class="modal-header py-2">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">X</span>
-                        </button>
-                        <h4 class="modal-title">İade Al</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-2">
-                                <label><h3><div class="float-right">Tutar:</div></h3></label>
-                            </div>
-                            <div class="col-10">
-                                <div class="form-group my-5">
-                                    <div class="input-group">
-                                        <input type="password" class="form-control h-50" id="TxtYetkiliSifre" ng-model="TxtYetkiliSifre" 
-                                        style="font-size: 20pt;font-weight: bold; border-width: 3px;border-color: #428bca;" ng-click="TxtYetkiliSifrePress($event)">
-                                    </div>
-                                </div>
-                            </div>                                                     
-                        </div>
-                        <div class="row py-1">
-                            <div class="col-4">
-                                <button type="text" class="form-control btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('7')">7</button>
-                            </div>
-                            <div class="col-4">
-                                <button type="text" class="form-control btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('8')">8</button>
-                            </div>
-                            <div class="col-4">
-                                <button type="text" class="form-control btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('9')">9</button>
-                            </div>
-                        </div>
-                        <div class="row py-1">
-                            <div class="col-lg-4">
-                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('4')">4</button>
-                            </div>
-                            <div class="col-lg-4">
-                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('5')">5</button>
-                            </div>
-                            <div class="col-lg-4">
-                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('6')">6</button>
-                            </div>
-                        </div>
-                        <div class="row py-1">
-                            <div class="col-lg-4">
-                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('1')">1</button>
-                            </div>
-                            <div class="col-lg-4">
-                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('2')">2</button>
-                            </div>
-                            <div class="col-lg-4">
-                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('3')">3</button>
-                            </div>
-                        </div>
-                        <div class="row py-1">
-                            <div class="col-lg-4">
-                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('0')">0</button>
-                            </div>
-                            <div class="col-lg-4">
-                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('.')">.</button>
-                            </div>
-                            <div class="col-lg-4">
-                                <button type="text" class="form-control-lg  btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnSilClick()"><i class="fas fa-backspace fa-lg" aria-hidden="true"></i></button>
-                            </div>
-                        </div>
-                        <div class="row py-1">
-                            <div class="col-12">
-                                <button type="text" class="form-control btn-danger btn btn-block font-size-15" style="height:60px;" ng-click="BtnIadeAl()"><h4 style="color: #fff;">İade Al</h4></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <!-- Miktar Güncelle-->
         <div class="modal fade " id="MdlMiktarGuncelle" aria-hidden="true" aria-labelledby="examplePositionCenter" role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple modal-sm modal-primary modal-center">
@@ -1274,6 +1198,83 @@
                             </div>
                             <div class="col-12">
                                 <button type="text" class="form-control-lg btn-raised btn btn-success btn-block font-size-20" style="height:60px;" ng-click="TxtMiktarGuncellePress()"><i class="fas fa-check fa-lg"></i></button>
+                            </div>                                    
+                        </div>
+                    </div>
+                </div>      
+            </div>              
+        </div>
+        <!-- Fiyat Güncelle-->
+        <div class="modal fade " id="MdlFiyatGuncelle" aria-hidden="true" aria-labelledby="examplePositionCenter" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple modal-sm modal-primary modal-center">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">X</span>
+                        </button>
+                        <h4 class="modal-title">Fiyat</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12 py-10">
+                                <input class="form-control" ng-model="TxtFiyatGuncelle" id="TxtFiyatGuncelle" ng-keypress="TxtFiyatGuncellePress($event)" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row py-1">
+                                    <div class="col-lg-4">
+                                        <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('7')">7</button>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('8')">8</button>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('9')">9</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="row py-1">
+                                    <div class="col-lg-4">
+                                        <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('4')">4</button>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('5')">5</button>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('6')">6</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="row py-1">
+                                    <div class="col-lg-4">
+                                        <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('1')">1</button>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('2')">2</button>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('3')">3</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="row py-1">
+                                    <div class="col-lg-4">
+                                        <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('0')">0</button>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('.')">.</button>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <button type="text" class="form-control-lg  btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnSilClick()"><i class="fas fa-backspace fa-lg" aria-hidden="true"></i></button>
+                                    </div>                                            
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button type="text" class="form-control-lg btn-raised btn btn-success btn-block font-size-20" style="height:60px;" ng-click="TxtFiyatGuncellePress()"><i class="fas fa-check fa-lg"></i></button>
                             </div>                                    
                         </div>
                     </div>

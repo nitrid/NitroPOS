@@ -25,7 +25,8 @@ var ParamTemp =
 			"EvrakTip" : {"Title" : "Evrak Tipi","DefaultValue" : "0"},
 			"Seri" : {"Title" : "Seri","DefaultValue" : "IRS"},
 			"TahSeri" : {"Title" : "TahSeri","DefaultValue" : "TIRS"},
-			"AvansSeri" : {"Title" : "AvansSeri Seri","DefaultValue" : "AVNS"},			
+			"AvansSeri" : {"Title" : "Avans Seri","DefaultValue" : "AVNS"},	
+			"IadeSeri" : {"Title" : "Iade Seri","DefaultValue" : "IADE"},		
 			"NakitKasaKodu" : {"Title" : "Nakit Kasa Kodu","DefaultValue" : ""},
 			"KrediKartKasa" : {"Title" : "Kredi Kartı Kasa Kodu","DefaultValue" : ""},
 			"AcikHesapKodu" : {"Title" : "Açık Hesap Kodu","DefaultValue" : ""},
@@ -38,7 +39,6 @@ var ParamTemp =
 		"Menu" :
 		{
 			"POS Satış Ekranı" : {"Title" : "POS Satış Ekranı","DefaultValue" : "1"},
-			"POS İade Ekranı" : {"Title" : "POS İade Ekranı","DefaultValue" : "1"},
 			"Günlük Satış Raporu" : {"Title" : "Günlük Satış Raporu","DefaultValue" : "1"},
 			"Günlük Evrak Raporu" : {"Title" : "Günlük Evrak Raporu","DefaultValue" : "1"},
 			"Günlük Kasa Raporu" : {"Title" : "Günlük Kasa Raporu","DefaultValue" : "1"},

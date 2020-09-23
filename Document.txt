@@ -22,6 +22,12 @@ npm i serialport
 npm i electron-rebuild
 .\node_modules\.bin\electron-rebuild.cmd
 
+
+PAS_SALE
+TYPE = 0 - TAHSİLAT
+TYPE = 1 - ÖDEME
+TYPE = 2 - PERSONEL SATIŞ
+
 POS_PAYMENT 
 TYPE = 0 - NAKİT
 TYPE = 1 - K.KARTI
@@ -31,7 +37,3 @@ DOCUMENT_TYPE = 2 - PERSONEL
 DOCUMENT_TYPE = 3 - AVANS ALMA
 DOCUMENT_TYPE = 4 - AVANS VERME
 
-PAS_SALE
-TYPE = 0 - TAHSİLAT
-TYPE = 1 - ÖDEME
-TYPE = 2 - PERSONEL SATIŞ

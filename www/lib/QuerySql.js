@@ -718,6 +718,13 @@ var QuerySql =
         param : ['DEPARTMENT','REF','TYPE'],
         type : ['int','string|25','int']
     },
+    MaxPosIadeSira : 
+    {
+        query: "SELECT ISNULL(MAX(REF_NO),0) + 1 AS MAXREFNO FROM POS_SALES " +
+                "WHERE DEPARTMENT = @DEPARTMENT AND REF = @REF AND [TYPE] = @TYPE " ,
+        param : ['DEPARTMENT','REF','TYPE'],
+        type : ['int','string|25','int']
+    },
     MaxPosTahSira : 
     {
         query: "SELECT ISNULL(MAX(REF_NO),0) + 1 AS MAXREFNO FROM POS_PAYMENT " +
