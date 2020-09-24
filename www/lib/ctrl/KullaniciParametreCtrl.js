@@ -2,11 +2,90 @@ function KullaniciParametreCtrl($scope,$window,db)
 {
     let KullaniciSelectedRow = null;
     let DGetir = false;
-    let File = "./www/_pos/lib/Param.js";
+    //let File = "./www/_pos/lib/Param.js";
 
-    $scope.Init = function()
+    
+    function InitKullaniciGrid()
+    {   
+        $("#TblKullanici").jsGrid({
+            responsive: true,
+            width: "100%",
+            height: "500px",
+            updateOnResize: true,
+            heading: true,
+            selecting: true,
+            data : $scope.KullaniciListe,
+            
+            fields: 
+            [
+            {
+                name: "NAME",
+                title: "NAME",
+                type: "text",
+                align: "center",
+                width: 75
+            },
+            {
+                name: "Soyadi",
+                title: "SOYADI",
+                type: "text",
+                align: "center",
+                width: 75
+            },
+            {
+                name: "Kullanici",
+                title: "KULLANICI",
+                type: "text",
+                align: "center",
+                width: 75
+            }, 
+            {
+                name: "Sifre",
+                title: "ŞİFRE",
+                type: "text",
+                align: "center",
+                width: 75
+            },
+            {
+                name: "Telefon",
+                title: "TELEFON",
+                type: "number",
+                align: "center",
+                width: 75
+            },
+            {
+                name: "Email",
+                title: "EMAİL",
+                type: "text",
+                align: "center",
+                width: 75
+            },
+            {
+                name: "MikroId",
+                title: "MIKROID",
+                type: "number",
+                align: "center",
+                width: 75
+            }],
+            rowClick: function(args)
+            {
+                $scope.KullaniciListeRowClick(args.itemIndex,args.item,this);
+                $scope.$apply();
+            }
+        });
+    }
+    function KullaniciGetir()
     {
-        $scope.KullaniciListe = Param;
+        db.GetData($scope.Firma,'KullaniciGetir',[],function(data)
+        {   
+            $scope.KullaniciListe = data;
+            console.log($scope.KullaniciListe)
+            $("#TblKullanici").jsGrid({data : $scope.KullaniciListe}); 
+        });
+    }
+    $scope.Init = async function()
+    {
+        //$scope.KullaniciListe = Param;
         $scope.KullaniciListeSelectedIndex = 0;
         $scope.CmbParamList = [];
         $scope.ParamName = "Sistem";
@@ -19,12 +98,13 @@ function KullaniciParametreCtrl($scope,$window,db)
         $scope.Email = "";
         $scope.MikroId = "";
 
+        $scope.KullaniciListe = [];
+
         $scope.Yetkili = false;
 
         InitKullaniciGrid();
-
+        KullaniciGetir()
         $("#Grup2").hide();
-
         $scope.CmbParamChange();
 
     }
@@ -303,73 +383,5 @@ function KullaniciParametreCtrl($scope,$window,db)
         }
         return TmpParam;
     }
-    function InitKullaniciGrid()
-    {   
-        $("#TblKullanici").jsGrid({
-            responsive: true,
-            width: "100%",
-            height: "500px",
-            updateOnResize: true,
-            heading: true,
-            selecting: true,
-            data : $scope.KullaniciListe,
-            
-            fields: 
-            [
-            {
-                name: "Adi",
-                title: "Adi",
-                type: "text",
-                align: "center",
-                width: 75
-            },
-            {
-                name: "Soyadi",
-                title: "SOYADI",
-                type: "text",
-                align: "center",
-                width: 75
-            },
-            {
-                name: "Kullanici",
-                title: "KULLANICI",
-                type: "text",
-                align: "center",
-                width: 75
-            }, 
-            {
-                name: "Sifre",
-                title: "ŞİFRE",
-                type: "text",
-                align: "center",
-                width: 75
-            },
-            {
-                name: "Telefon",
-                title: "TELEFON",
-                type: "number",
-                align: "center",
-                width: 75
-            },
-            {
-                name: "Email",
-                title: "EMAİL",
-                type: "text",
-                align: "center",
-                width: 75
-            },
-            {
-                name: "MikroId",
-                title: "MIKROID",
-                type: "number",
-                align: "center",
-                width: 75
-            }],
-            rowClick: function(args)
-            {
-                $scope.KullaniciListeRowClick(args.itemIndex,args.item,this);
-                $scope.$apply();
-            }
-        });
-    }
+    
 }

@@ -15,6 +15,7 @@ function Pos($scope,$window,$rootScope,db)
     let FocusFiyatGuncelle = false;
     let FocusKartOdeme = false;
     let FocusYetkiliSifre = false;
+    let FocusKasaSifre = false;
     let FocusAvans = false;
     let FirstKey = false;
     let UserParam = null;
@@ -29,6 +30,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusFiyatGuncelle = false;
         FocusAvans = false;
         FocusYetkiliSifre = false;
+        FocusKasaSifre = false;
         FocusKartOdeme = false;
     });
     $('#MdlMusteriListele').on('hide.bs.modal', function () 
@@ -40,6 +42,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusMiktarGuncelle = false;
         FocusFiyatGuncelle = false;
         FocusYetkiliSifre = false;
+        FocusKasaSifre = false;
         FocusAvans = false;
         FocusKartOdeme = false;
     });
@@ -52,6 +55,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusMiktarGuncelle = false;
         FocusFiyatGuncelle = false;
         FocusYetkiliSifre = false;
+        FocusKasaSifre = false;
         FocusAvans = false;
         db.SafeApply($scope,function()
         {
@@ -68,6 +72,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusMiktarGuncelle = false;
         FocusKartOdeme = false;
         FocusYetkiliSifre = false;
+        FocusKasaSifre = false;
         FocusAvans = false;
         FocusFiyatGuncelle = false;
     });
@@ -79,6 +84,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusStok = false;
         FocusMiktarGuncelle = false;
         FocusYetkiliSifre = false;
+        FocusKasaSifre = false;
         FocusKartOdeme = false;
         FocusAvans = false;
         FocusFiyatGuncelle = false;
@@ -92,6 +98,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusMiktarGuncelle = false;
         FocusFiyatGuncelle = false;
         FocusYetkiliSifre = false;
+        FocusKasaSifre = false;
         FocusAvans = false;
         FocusKartOdeme = false;
     });
@@ -104,6 +111,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusMiktarGuncelle = false;
         FocusFiyatGuncelle = false;
         FocusYetkiliSifre = false;
+        FocusKasaSifre = false;
         FocusAvans = false;
         FocusKartOdeme = false;
     });
@@ -118,6 +126,20 @@ function Pos($scope,$window,$rootScope,db)
         FocusAvans = false;
         FocusKartOdeme = false;
         FocusYetkiliSifre = false;
+        FocusKasaSifre = false;
+    });
+    $('#MdlKasaSifre').on('hide.bs.modal', function () 
+    {
+        FocusBarkod = true;
+        FocusAraToplam = false;
+        FocusMusteri = false;
+        FocusStok = false;
+        FocusMiktarGuncelle = false;
+        FocusFiyatGuncelle = false;
+        FocusAvans = false;
+        FocusKartOdeme = false;
+        FocusYetkiliSifre = false;
+        FocusKasaSifre = false;
     });
     $('#MdlAvans').on('hide.bs.modal', function () 
     {
@@ -128,8 +150,10 @@ function Pos($scope,$window,$rootScope,db)
         FocusMiktarGuncelle = false;
         FocusKartOdeme = false;
         FocusYetkiliSifre = false;
+        FocusKasaSifre = false;
         FocusFiyatGuncelle = false;
         FocusAvans = false;
+        $scope.TxtYetkiliSifre = "";
     });
     $('#MdlPluEdit').on('hide.bs.modal', function () 
     {
@@ -142,6 +166,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusYetkiliSifre = false;
         FocusFiyatGuncelle = false;
         FocusAvans = false;
+        FocusKasaSifre = false;
         $scope.DivPlu = false;
         $scope.PluGrupAdi = "";
         $scope.PluStokKod = "";
@@ -216,7 +241,6 @@ function Pos($scope,$window,$rootScope,db)
         $scope.CiktiTip = 1;
         $scope.TxtYetkiliSifre = "";
         $scope.TxtAvans = 0;
-        $scope.YetkiliKullanici = "";
         $scope.AvansTip = 0;
         $scope.AvansSeri = "";
         $scope.AvansSira = 0;
@@ -230,6 +254,7 @@ function Pos($scope,$window,$rootScope,db)
         $scope.IadeSira = "";
         $scope.TxtMiktarGuncelle = 0;
         $scope.TxtFiyatGuncelle = 0;
+        $scope.TxtKasaSifre = "";
 
         $scope.Kullanici = UserParam.Kullanici;
         $scope.KasaNo = 1;
@@ -265,7 +290,9 @@ function Pos($scope,$window,$rootScope,db)
         $scope.ParkList =[];     
         $scope.SonSatisList = [];
         $scope.SonSatisDetayList = [];   
-        $scope.SonSatisTahDetayList = [];  
+        $scope.SonSatisTahDetayList = [];
+        $scope.AraToplamRaporList = [];
+        $scope.KasaAraToplamRaporList = [];
 
         setTimeout(function()
         { 
@@ -297,6 +324,14 @@ function Pos($scope,$window,$rootScope,db)
                 $scope.Saat = moment(new Date(),"HH:mm:ss").format("HH:mm:ss");
             })
         },1000);
+
+        setInterval(()=>
+        {
+            db.SafeApply($scope,function()
+            {
+                $scope.Tarih = new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' });
+            })
+        },21600000);
 
         InitClass();
     }
@@ -797,6 +832,108 @@ function Pos($scope,$window,$rootScope,db)
             }
         });
     }
+    function InitAraToplamGrid()
+    {
+        $("#TblAraToplam").jsGrid({
+            responsive: true,
+            width: "100%",
+            height: "250px",
+            updateOnResize: true,
+            heading: true,
+            selecting: true,
+            data : $scope.RprAraToplam,
+            rowClass: function (item, itemIndex)
+            {
+                return "rowheight";
+            },
+            fields: 
+            [
+                {
+                    name: "DOC_TYPE",
+                    title: "EVRAK TİP",
+                    type: "text",
+                    align: "center",
+                    width: 100
+                },
+                {
+                    name: "DEPARTMENT",
+                    title: "ŞUBE",
+                    type: "date",
+                    align: "center",
+                    width: 50
+                },
+                {
+                    name: "CUSER",
+                    title: "KULLANICI",
+                    type: "TEXT",
+                    align: "center",
+                    width: 50
+                },
+                {
+                    name: "AMOUNT",
+                    title: "TOPLAM",
+                    type: "number",
+                    align: "center",
+                    width: 100
+                },
+            ],
+            rowClick: function(args)
+            {
+                $scope.$apply();
+            }
+        });
+    }
+    function InitKasaAraToplamGrid()
+    {
+        $("#TblKasaAraToplam").jsGrid({
+            responsive: true,
+            width: "100%",
+            height: "250px",
+            updateOnResize: true,
+            heading: true,
+            selecting: true,
+            data : $scope.KasaAraToplamRaporList,
+            rowClass: function (item, itemIndex)
+            {
+                return "rowheight";
+            },
+            fields: 
+            [
+                {
+                    name: "TYPE",
+                    title: "SATIŞ TİP",
+                    type: "text",
+                    align: "center",
+                    width: 100
+                },
+                {
+                    name: "DEPARTMENT",
+                    title: "ŞUBE",
+                    type: "date",
+                    align: "center",
+                    width: 50
+                },
+                {
+                    name: "CUSER",
+                    title: "KULLANICI",
+                    type: "TEXT",
+                    align: "center",
+                    width: 50
+                },
+                {
+                    name: "AMOUNT",
+                    title: "TOPLAM",
+                    type: "number",
+                    align: "center",
+                    width: 100
+                },
+            ],
+            rowClick: function(args)
+            {
+                $scope.$apply();
+            }
+        });
+    }
     function InsertSonYenile(pData)
     {    
         $scope.SatisList = pData;
@@ -1072,8 +1209,11 @@ function Pos($scope,$window,$rootScope,db)
         }
         else if(FocusFiyatGuncelle)
         {
-            console.log(1)
             $window.document.getElementById("TxtFiyatGuncelle").focus();
+        }
+        else if(FocusKasaSifre)
+        {
+            $window.document.getElementById("TxtKasaSifre").focus();
         }
     }
     $scope.IslemListeRowClick = function(pIndex,pItem)
@@ -1171,6 +1311,8 @@ function Pos($scope,$window,$rootScope,db)
             InitSonSatisGrid();
             InitSonSatisDetayGrid();
             InitSonSatisTahDetayGrid();
+            InitAraToplamGrid();
+            InitKasaAraToplamGrid();
 
             $scope.Seri = UserParam.PosSatis.Seri;
             $scope.TahSeri = UserParam.PosSatis.TahSeri;
@@ -1673,6 +1815,10 @@ function Pos($scope,$window,$rootScope,db)
         {
             $scope.TxtYetkiliSifre = $scope.TxtYetkiliSifre.substring(0,$scope.TxtYetkiliSifre.length-1);
         }
+        else if(FocusKasaSifre)
+        {
+            $scope.TxtKasaSifre = $scope.TxtKasaSifre.substring(0,$scope.TxtKasaSifre.length-1);
+        }
         else if(FocusAvans)
         {
             $scope.TxtAvans = $scope.TxtAvans.substring(0,$scope.TxtAvans.length-1);
@@ -1684,9 +1830,9 @@ function Pos($scope,$window,$rootScope,db)
         $scope.TxtBarkod = "";
     }
     $scope.BtnTusClick = function(Key)
-    {   
+    {  
         if(FocusBarkod)
-        {            
+        {   
             $scope.TxtBarkod = $scope.TxtBarkod + Key; 
         }
         else if(FocusAraToplam)
@@ -1742,6 +1888,18 @@ function Pos($scope,$window,$rootScope,db)
             else
             {
                 $scope.TxtYetkiliSifre = Key; 
+                FirstKey = true;
+            }
+        }
+        else if(FocusKasaSifre)
+        {
+            if(FirstKey)
+            {
+                $scope.TxtKasaSifre = $scope.TxtKasaSifre + Key; 
+            }
+            else
+            {
+                $scope.TxtKasaSifre = Key; 
                 FirstKey = true;
             }
         }
@@ -2316,27 +2474,6 @@ function Pos($scope,$window,$rootScope,db)
         });
     }
     //2020.09.08
-    $scope.BtnKullaniciDegistir = function()
-    {
-        alertify.confirm("Kullanıcı değiştirmek istediğinize eminmisiniz ?",
-
-        function()
-        {
-            if($scope.SatisList.length == 0)
-            {
-                alertify.okBtn('Evet');
-                var url = "index.html";
-                $window.location.href = url;
-            }
-            else
-            {
-                alertify.alert("Satış Listesi Doluyken Kullanıcı Değiştirilemez.");
-            }
-        },
-        function(){
-            alertify.cancelBtn('Vazgeç');
-        });
-    }
     $scope.BtnProgramiKapat = function()
     {
         alertify.confirm("Programı Kapatmak İstediğinize Emin Misiniz ?",
@@ -2364,14 +2501,6 @@ function Pos($scope,$window,$rootScope,db)
         {
             if(Param[i].Yetkili && Param[i].PosSatis.Sube == $scope.Sube)
             {
-                FocusBarkod = false;
-                FocusAraToplam = false;
-                FocusMusteri = false;
-                FocusStok = false;
-                FocusKartOdeme = false;
-                FirstKey = false;
-                FocusYetkiliSifre = true;
-
                 if(pTip == 1)
                 {
                     if(Param[i].Sifre == $scope.TxtYetkiliSifre)
@@ -2379,16 +2508,17 @@ function Pos($scope,$window,$rootScope,db)
                         alert("Yetkili Şifre Doğru.");
                         $("#MdlYetkiliGiris").modal("hide");
                         angular.element('#ChkAlma').trigger('click');
-                        $scope.YetkiliKullanici = Param[i].Kullanici;
                         $scope.TxtYetkiliSifre = "";
                         FocusBarkod = false;
                         FocusAraToplam = false;
                         FocusMusteri = false;
                         FocusStok = false;
                         FocusKartOdeme = false;
-                        FirstKey = false;
                         FocusYetkiliSifre = false;
+                        FocusKasaSifre = false;
+                        FirstKey = false;
                         FocusAvans = true;
+                        
                         $("#MdlAvans").modal("show");
                     }
                     else
@@ -2399,6 +2529,13 @@ function Pos($scope,$window,$rootScope,db)
                 else
                 {
                     $("#MdlYetkiliGiris").modal("show");
+                    FocusBarkod = false;
+                    FocusAraToplam = false;
+                    FocusMusteri = false;
+                    FocusStok = false;
+                    FocusKartOdeme = false;
+                    FirstKey = false;
+                    FocusYetkiliSifre = true;
                 }
             }
         }
@@ -2424,8 +2561,8 @@ function Pos($scope,$window,$rootScope,db)
             {
                 let InsertData = 
                 [
-                    $scope.YetkiliKullanici,
-                    $scope.YetkiliKullanici,
+                    $scope.Kullanici,
+                    $scope.Kullanici,
                     $scope.Sube,
                     0, //SATIŞ TİPİ(NAKİT-KREDİ KARTI)
                     $scope.AvansTip, //EVRAKTIP
@@ -2602,6 +2739,7 @@ function Pos($scope,$window,$rootScope,db)
                         $scope.PluGrupAdi = "";
                         $scope.Index = "";
                         $scope.PluStokKod = "";
+                        $scope.YeniEvrak();
                     }
                     else
                     {
@@ -2620,6 +2758,7 @@ function Pos($scope,$window,$rootScope,db)
                         $scope.PluGrupAdi = "";
                         $scope.Index = "";
                         $scope.PluStokKod = "";
+                        $scope.YeniEvrak();
                     }
                     else
                     {
@@ -2654,6 +2793,7 @@ function Pos($scope,$window,$rootScope,db)
                         $("#MdlPluEdit").modal("hide");
                         $scope.PluGrupAdi = "";
                         $scope.Index = "";
+                        $scope.YeniEvrak();
                     }
                     else
                     {
@@ -2671,6 +2811,7 @@ function Pos($scope,$window,$rootScope,db)
                         $("#MdlPluEdit").modal("hide");
                         $scope.PluGrupAdi = "";
                         $scope.Index = "";
+                        $scope.YeniEvrak();
                     }
                     else
                     {
@@ -2685,6 +2826,7 @@ function Pos($scope,$window,$rootScope,db)
         if($scope.SatisList.length == 0)
         {
             $scope.Class.BtnIadeAl = "form-group btn btn-primary btn-block my-1";
+            alertify.alert("İade İşlemi İçin Fiyat Güncelleme Aktifleştirildi.")
         }
         else
         {
@@ -2744,5 +2886,75 @@ function Pos($scope,$window,$rootScope,db)
             }
             ,function(){});
         }
+    }
+    $scope.BtnKasaKilitle = function(pTip)
+    {
+        if(pTip == 0)
+        {
+            alertify.okBtn('Evet');
+            alertify.cancelBtn('Hayır');
+            alertify.confirm('Kasayı Kilitlemek İstediğinize Emin Misiniz ?', 
+            function()
+            { 
+                $('#MdlKasaSifre').modal({backdrop: 'static', keyboard: false})
+                FocusBarkod = false;
+                FocusAraToplam = false;
+                FocusMusteri = false;
+                FocusStok = false;
+                FocusKartOdeme = false;
+                FirstKey = false;
+                FocusYetkiliSifre = false;
+                FocusKasaSifre = true;
+            }
+            ,function(){});
+        }
+        else
+        {
+            for (let i = 0; i < Param.length; i++) 
+            {
+                if(Param[i].PosSatis.Sube == $scope.Sube)
+                {
+                    if(Param[i].Sifre == $scope.TxtKasaSifre && Param[i].Kullanici == $scope.Kullanici)
+                    {
+                        $scope.TxtKasaSifre = "";
+                        $("#MdlKasaSifre").modal("hide");
+                        alert("Şifre Kabul Edildi.")
+                        return;
+                    }
+                    else if(Param[i].Yetkili && Param[i].Sifre == $scope.TxtKasaSifre)
+                    {
+                        $scope.TxtKasaSifre = "";
+                        $("#MdlKasaSifre").modal("hide");
+                        alert("Yetkili Girişi Kabul Edildi.")
+                        return;
+                    }
+                    else
+                    {
+                        if(Param[i].Kullanici == $scope.Kullanici)
+                        {
+                            alert("Şifre Reddedildi.")
+                        }
+                    }
+                }
+            }
+        }
+    }
+    $scope.BtnKasaRapor = function()
+    {
+        db.GetData($scope.Firma,'PosAraToplamRapor',[$scope.Sube,$scope.Tarih,$scope.Kullanici],function(AraToplamRapor)
+        {  
+            $scope.AraToplamRaporList = AraToplamRapor;
+            $("#TblAraToplam").jsGrid({data : $scope.AraToplamRaporList});
+            $scope.TxtBarkod = "";
+        });
+        db.GetData($scope.Firma,'PosAraToplamKasaRapor',[$scope.Sube,$scope.Tarih,$scope.Kullanici],function(KasaAraToplamRapor)
+        {  
+            $scope.KasaAraToplamRaporList = KasaAraToplamRapor;
+            $("#TblKasaAraToplam").jsGrid({data : $scope.KasaAraToplamRaporList});
+            $scope.TxtBarkod = "";
+        });
+
+        $("#TbKasaRapor").addClass('active');
+        $("#TbMain").removeClass('active');
     }
 }

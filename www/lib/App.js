@@ -23,4 +23,8 @@ angular.module("app",
     {
         templateUrl : "html/kartlar/CariListesi.html"
     })
+    .when("/KullaniciParametre",
+    {
+        templateUrl : "html/ayarlar/KullaniciParametre.html"
+    })
 });

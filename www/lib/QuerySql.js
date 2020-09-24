@@ -1048,6 +1048,46 @@ var QuerySql =
     {
         query : "SELECT * FROM TICKET WHERE CODE = @CODE ",
         param :['CODE:string']
+    },
+    PosAraToplamRapor : 
+    {
+        query : "SELECT " +
+                "CASE WHEN DOC_TYPE = 0 THEN 'SATIŞ' " +
+                "WHEN DOC_TYPE = 1 THEN 'İADE' " +
+                "WHEN DOC_TYPE = 2 THEN 'PERSONEL SATIŞ' " +
+                "WHEN DOC_TYPE = 3 THEN 'AVANS ALMA' " +
+                "WHEN DOC_TYPE = 4 THEN 'AVANS VERME'" +
+                "END AS DOC_TYPE, " +
+                "DEPARTMENT AS DEPARTMENT, " +
+                "CUSER AS CUSER, " +
+                "SUM(AMOUNT) AS AMOUNT " +
+                "FROM POS_PAYMENT  " +
+                "WHERE DEPARTMENT = @DEPARTMENT AND CUSER = @CUSER AND DOC_DATE = @DOC_DATE " +
+                "GROUP BY " +
+                "DOC_TYPE,CUSER,DEPARTMENT " ,
+        param : ['DEPARTMENT','DOC_DATE','CUSER'],
+        type : ['int','date','string|25']
+    },
+    PosAraToplamKasaRapor : 
+    {
+        query : "SELECT " +
+                "CASE WHEN TYPE = 0 THEN 'NAKİT' " +
+                "WHEN TYPE = 1 THEN 'KREDİ KARTI' " +
+                "END AS TYPE, " + 
+                "DEPARTMENT AS DEPARTMENT, " +
+                "CUSER AS CUSER, " +
+                "SUM(AMOUNT) AS AMOUNT " +
+                "FROM POS_PAYMENT " +
+                "WHERE DEPARTMENT = @DEPARTMENT AND CUSER = @CUSER AND DOC_DATE = @DOC_DATE AND DOC_TYPE IN(0,2)" +
+                "GROUP BY " +
+                "TYPE,CUSER,DEPARTMENT " ,
+        param : ['DEPARTMENT','DOC_DATE','CUSER'],
+        type : ['int','date','string|25']
+    },
+    //KULLANICI PARAMETRE
+    KullaniciGetir :
+    {
+        query : "SELECT * FROM USERS"
     }
 };
 

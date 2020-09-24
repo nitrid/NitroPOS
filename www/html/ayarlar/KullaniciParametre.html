@@ -22,23 +22,24 @@
                         <div id="TblKullanici"></div>
                     </div>
                 </div>
+                <button ng-click="Getir()">getir</button>
                 <div class="panel panel-bordered" id="Grup2">
                     <div class="panel-body">
-                            <h4 class="text-primary">Parametre Ayarları</h4>
-                            <div class="form-group row">
-                                <select class="form-control form-control-sm col-4" ng-model="ParamName" ng-change="CmbParamChange()">
-                                    <option ng-repeat="option in CmbParamList" value="{{option.Name}}">{{option.Name}}</option>
-                                </select>
-                                <div class="col-4">
-                                    <button type="submit" class="btn btn-primary form-control-sm btn-block" ng-click="ParamKaydet()">Kaydet</button>
-                                </div>
-                                <div class="col-4">
-                                    <button type="submit" class="btn btn-primary form-control-sm btn-block" ng-click="ParamCikis()">Çıkış</button>
-                                </div>
+                        <h4 class="text-primary">Parametre Ayarları</h4>
+                        <div class="form-group row">
+                            <select class="form-control form-control-sm col-4" ng-model="ParamName" ng-change="CmbParamChange()">
+                                <option ng-repeat="option in CmbParamList" value="{{option.Name}}">{{option.Name}}</option>
+                            </select>
+                            <div class="col-4">
+                                <button type="submit" class="btn btn-primary form-control-sm btn-block" ng-click="ParamKaydet()">Kaydet</button>
                             </div>
-                            <div id="ParamView">
-                                
+                            <div class="col-4">
+                                <button type="submit" class="btn btn-primary form-control-sm btn-block" ng-click="ParamCikis()">Çıkış</button>
                             </div>
+                        </div>
+                        <div id="ParamView">
+                            
+                        </div>
                     </div>
                 </div>
             </div>
