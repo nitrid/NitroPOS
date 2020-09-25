@@ -1088,6 +1088,27 @@ var QuerySql =
     KullaniciGetir :
     {
         query : "SELECT * FROM USERS"
+    },
+    KullaniciInsert : 
+    {
+        query : "INSERT INTO [dbo].[USERS] " +
+                "([CDATE] " +
+                ",[LDATE] " +
+                ",[CODE] " +
+                ",[NAME] " +
+                ",[PASSWORD] " +
+                ",[TAG] " +
+                ",[STATUS]) " +
+                "VALUES " +
+                "(GETDATE()						--<CDATE, datetime,>  \n" + 
+                ",GETDATE()						--<LDATE, datetime,>  \n" + 
+                ",@CODE							--<CODE, nvarchar(25),>  \n" + 
+                ",@NAME							--<NAME, nvarchar(50),>  \n" + 
+                ",@PASSWORD						--<PASSWORD, nvarchar(25),>  \n" + 
+                ",@TAG							--<TAG, nvarchar(25),>  \n" + 
+                ",@STATUS							--<STATUS, int,>  \n" + 
+                ")",
+        param : ['CODE:string|25','NAME:string|50','PASSWORD:string|25','TAG:string|25','STATUS:int']
     }
 };
 

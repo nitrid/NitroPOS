@@ -3,7 +3,6 @@ function KullaniciParametreCtrl($scope,$window,db)
     let KullaniciSelectedRow = null;
     let DGetir = false;
     //let File = "./www/_pos/lib/Param.js";
-
     
     function InitKullaniciGrid()
     {   
@@ -19,54 +18,41 @@ function KullaniciParametreCtrl($scope,$window,db)
             fields: 
             [
             {
+                name: "CODE",
+                title: "KODU",
+                type: "text",
+                align: "center",
+                width: 100
+            },
+            {
                 name: "NAME",
-                title: "NAME",
-                type: "text",
-                align: "center",
-                width: 75
-            },
-            {
-                name: "Soyadi",
-                title: "SOYADI",
-                type: "text",
-                align: "center",
-                width: 75
-            },
-            {
-                name: "Kullanici",
                 title: "KULLANICI",
                 type: "text",
                 align: "center",
-                width: 75
-            }, 
+                width: 100
+            },
             {
-                name: "Sifre",
+                name: "PASSWORD",
                 title: "ŞİFRE",
                 type: "text",
                 align: "center",
-                width: 75
-            },
+                width: 100
+            }, 
             {
-                name: "Telefon",
-                title: "TELEFON",
-                type: "number",
-                align: "center",
-                width: 75
-            },
-            {
-                name: "Email",
-                title: "EMAİL",
+                name: "TAG",
+                title: "TAG",
                 type: "text",
                 align: "center",
-                width: 75
+                width: 25
             },
             {
-                name: "MikroId",
-                title: "MIKROID",
+                name: "STATUS",
+                title: "STATUS",
                 type: "number",
                 align: "center",
-                width: 75
-            }],
+                width: 25
+            },
+            ],
             rowClick: function(args)
             {
                 $scope.KullaniciListeRowClick(args.itemIndex,args.item,this);
@@ -79,34 +65,50 @@ function KullaniciParametreCtrl($scope,$window,db)
         db.GetData($scope.Firma,'KullaniciGetir',[],function(data)
         {   
             $scope.KullaniciListe = data;
-            console.log($scope.KullaniciListe)
             $("#TblKullanici").jsGrid({data : $scope.KullaniciListe}); 
+        });
+    }
+    function KullaniciInsert()
+    {
+        var InsertData = 
+        [
+            $scope.Kodu,
+            $scope.Kullanici,
+            $scope.Sifre,
+            $scope.Yetki,
+            $scope.AktifPasif
+        ];
+
+        db.ExecuteTag($scope.Firma,'KullaniciInsert',InsertData,async function(InsertResult)
+        {               
+            if(typeof(InsertResult.result.err) == 'undefined')
+            {   
+                
+            }   
+            else
+            {
+                console.log(InsertResult.result.err);
+            }
         });
     }
     $scope.Init = async function()
     {
-        //$scope.KullaniciListe = Param;
         $scope.KullaniciListeSelectedIndex = 0;
         $scope.CmbParamList = [];
         $scope.ParamName = "Sistem";
 
         $scope.Kullanici = "";
-        $scope.Sifre = "123456";
-        $scope.Adi = "";
-        $scope.Soyadi = "";
-        $scope.Telefon = "";
-        $scope.Email = "";
-        $scope.MikroId = "";
+        $scope.Kodu = "";
+        $scope.Sifre = "";
+        $scope.Yetki = "0";
+        $scope.AktifPasif = true;
 
         $scope.KullaniciListe = [];
-
-        $scope.Yetkili = false;
 
         InitKullaniciGrid();
         KullaniciGetir()
         $("#Grup2").hide();
         $scope.CmbParamChange();
-
     }
     $scope.KullaniciListeRowClick = function(pIndex,pItem,pObj)
     {
@@ -120,33 +122,7 @@ function KullaniciParametreCtrl($scope,$window,db)
     }
     $scope.Kaydet = function()
     {
-        if (DGetir)
-        {   
-            Param[$scope.KullaniciListeSelectedIndex].Kullanici = $scope.Kullanici;
-            Param[$scope.KullaniciListeSelectedIndex].Sifre = $scope.Sifre;
-            Param[$scope.KullaniciListeSelectedIndex].Adi = $scope.Adi;
-            Param[$scope.KullaniciListeSelectedIndex].Soyadi = $scope.Soyadi;
-            Param[$scope.KullaniciListeSelectedIndex].Telefon = $scope.Telefon;
-            Param[$scope.KullaniciListeSelectedIndex].Email = $scope.Email;
-            Param[$scope.KullaniciListeSelectedIndex].MikroId = $scope.MikroId;
-            Param[$scope.KullaniciListeSelectedIndex].Yetkili = $scope.Yetkili;
-        }
-        else
-        {
-            Param.push(JSON.parse(JSON.stringify(CreateParam())));
-            Param[Param.length-1].Kullanici = $scope.Kullanici;
-            Param[Param.length-1].Sifre = $scope.Sifre;
-            Param[Param.length-1].Adi = $scope.Adi;
-            Param[Param.length-1].Soyadi = $scope.Soyadi;
-            Param[Param.length-1].Telefon = $scope.Telefon;
-            Param[Param.length-1].Email = $scope.Email;
-            Param[Param.length-1].MikroId = $scope.MikroId;
-            Param[Param.length-1].Yetkili = $scope.Yetkili;
-        }
-        
-        db.Emit('ParamSave',[Param,File]);
-        
-        $window.location.reload();
+        KullaniciInsert();
     }
     $scope.BtnYeni = function ()
     {
@@ -383,5 +359,4 @@ function KullaniciParametreCtrl($scope,$window,db)
         }
         return TmpParam;
     }
-    
 }

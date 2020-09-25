@@ -22,7 +22,6 @@
                         <div id="TblKullanici"></div>
                     </div>
                 </div>
-                <button ng-click="Getir()">getir</button>
                 <div class="panel panel-bordered" id="Grup2">
                     <div class="panel-body">
                         <h4 class="text-primary">Parametre Ayarları</h4>
@@ -55,43 +54,33 @@
                     </div>
                     <div class="modal-body py-10">
                         <div class="form-group row my-10">
-                            <label class="form-control-label col-lg-2 col-md-2 col-sm-4 offset-0 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Kullanıcı :</b></span></div></label>
-                            <input type="text" class="form-control col-lg-10 col-md-10 col-sm-8 offset-0" ng-model="Kullanici">
+                            <label class="form-control-label col-3 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Kodu :</b></span></div></label>
+                            <input type="text" class="form-control col-9" ng-model="Kodu">
                         </div>
                         <div class="form-group row my-10">
-                            <label class="form-control-label col-lg-2 col-md-2 col-sm-4 offset-0 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Şifre :</b></span></div></label>
-                            <input type="text" class="form-control col-lg-10 col-md-10 col-sm-8 offset-0" ng-model="Sifre">
+                            <label class="form-control-label col-3 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Kullanıcı :</b></span></div></label>
+                            <input type="text" class="form-control col-9" ng-model="Kullanici">
                         </div>
                         <div class="form-group row my-10">
-                            <label class="form-control-label col-lg-2 col-md-2 col-sm-4 offset-0 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Adı :</b></span></div></label>
-                            <input type="text" class="form-control col-lg-10 col-md-10 col-sm-8 offset-0" ng-model="Adi">
+                            <label class="form-control-label col-3 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Şifre :</b></span></div></label>
+                            <input type="text" class="form-control col-9" ng-model="Sifre">
                         </div>
                         <div class="form-group row my-10">
-                            <label class="form-control-label col-lg-2 col-md-2 col-sm-4 offset-0 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Soyadı :</b></span></div></label>
-                            <input type="text" class="form-control col-lg-10 col-md-10 col-sm-8 offset-0" ng-model="Soyadi">
+                            <label class="form-control-label col-3 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Yetki :</b></span></div></label>
+                            <select class="form-control col-9 ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="Yetki">
+                                <option value="0" selected="selected">Kullanıcı</option>
+                                <!-- <option value="1">Admin</option> -->
+                            </select>
                         </div>
                         <div class="form-group row my-10">
-                            <label class="form-control-label col-lg-2 col-md-2 col-sm-4 offset-0 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Telefon :</b></span></div></label>
-                            <input type="text" class="form-control col-lg-10 col-md-10 col-sm-8 offset-0" ng-model="Telefon">
-                        </div>
-                        <div class="form-group row my-10">
-                            <label class="form-control-label col-lg-2 col-md-2 col-sm-4 offset-0 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Email :</b></span></div></label>
-                            <input type="text" class="form-control col-lg-10 col-md-10 col-sm-8 offset-0" ng-model="Email">
-                        </div>
-                        <div class="form-group row mt-10 mb-0">
-                            <label class="form-control-label col-lg-2 col-md-2 col-sm-4 offset-0 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Mikro Id :</b></span></div></label>
-                            <input type="text" class="form-control col-lg-10 col-md-10 col-sm-8 offset-0" ng-model="MikroId">
-                        </div>
-                        <div class="row">
-                            <div class="col-2 offset-5">
-                                <div class="checkbox-custom checkbox-primary">
-                                    <input type="checkbox" ng-model="Yetkili">
-                                    <label for="inputUnchecked"><span style="color:dodgerblue;"><b>Yetkili</b></label>
-                                </div>
+                            <label class="form-control-label col-3 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Aktif / Pasif :</b></span></div></label>
+                            <div class="checkbox-custom checkbox-primary">
+                                <input type="checkbox" ng-model="AktifPasif">
+                                <label for="inputUnchecked"></label>
                             </div>
                         </div>
                         <div class="row my-5">
-                            <button type="submit" class="btn btn-primary form-control-sm btn-block col-lg-12 col-sm-12 col-sm-12" ng-click="Kaydet()">Kaydet</button>
+                            <button type="submit" class="btn btn-primary form-control-sm btn-block col-12" ng-click="Kaydet()">Kaydet</button>
                         </div>
                     </div>
                 </div>
