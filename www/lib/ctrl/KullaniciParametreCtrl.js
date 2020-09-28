@@ -76,17 +76,20 @@ function KullaniciParametreCtrl($scope,$window,db)
             $scope.Kullanici,
             $scope.Sifre,
             $scope.Yetki,
-            $scope.AktifPasif
+            $scope.AktifPasif == true ? 1 : 0
         ];
 
         db.ExecuteTag($scope.Firma,'KullaniciInsert',InsertData,async function(InsertResult)
-        {               
+        {              
             if(typeof(InsertResult.result.err) == 'undefined')
             {   
-                
+                alert("Kayıt İşlemi Gerçekleşti.");
+                $('#MdlKullanici').modal('hide');
+                KullaniciGetir();
             }   
             else
             {
+                alert("Kayıt İşleminde Hata.");
                 console.log(InsertResult.result.err);
             }
         });
@@ -122,7 +125,14 @@ function KullaniciParametreCtrl($scope,$window,db)
     }
     $scope.Kaydet = function()
     {
-        KullaniciInsert();
+        if($scope.Kullanici != '' && $scope.Kodu != '' && $scope.Sifre != '')
+        {
+            KullaniciInsert();
+        }
+        else
+        {
+            alertify.alert("Lütfen Boş Alanları Doldurun.")
+        }
     }
     $scope.BtnYeni = function ()
     {

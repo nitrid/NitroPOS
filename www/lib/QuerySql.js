@@ -1087,7 +1087,7 @@ var QuerySql =
     //KULLANICI PARAMETRE
     KullaniciGetir :
     {
-        query : "SELECT * FROM USERS"
+        query : "SELECT * FROM USERS "
     },
     KullaniciInsert : 
     {
