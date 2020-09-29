@@ -282,4 +282,11 @@ function KullaniciParametreCtrl($route,$scope,$window,db)
     {
         KullaniciGetir();
     }
+    $scope.BtnGeri = function()
+    {
+        $("#TbMain").addClass('active');
+        $("#TbPosSatis").removeClass('active');
+        $("#TbSistem").removeClass('active');
+        $("#TbMenu").removeClass('active');
+    }
 }
