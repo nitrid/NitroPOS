@@ -1053,7 +1053,7 @@ namespace GmpSampleSim
             stItem.countPrecition = 0;
             stItem.name = "";
             stItem.barcode = m_txtPluBarcode.Text;
-
+            MessageBox.Show(stItem.count.ToString());
             if (PromotionModel.Instance.Amount > 0)
             {
                 stItem.promotion.amount = (int)PromotionModel.Instance.Amount;

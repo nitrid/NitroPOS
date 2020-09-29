@@ -201,7 +201,12 @@ function Pos($scope,$window,$rootScope,db)
                     });
                 }
             }
-        })
+        });
+
+        db.Ingenico.On("IngenicoEvent",function(pData)
+        {
+           console.log(pData)
+        });
     }
     $rootScope.LoadingShow = function() 
     {
@@ -334,6 +339,11 @@ function Pos($scope,$window,$rootScope,db)
         },21600000);
 
         InitClass();
+
+        if(typeof require != 'undefined')
+        {
+            db.Ingenico.Init();
+        }
     }
     function InitClass()
     {
@@ -1099,6 +1109,36 @@ function Pos($scope,$window,$rootScope,db)
     {
         if($scope.TahKalan <= 0)
         {
+            if(typeof require != 'undefined')
+            {
+                let TmpData = 
+                {
+                    SALES : [],
+                    PAYMENT : [] 
+                }
+
+                for(let i = 0;i < $scope.SatisList.length;i++)
+                {
+                    let TmpSale = {};
+                    TmpSale.NAME = $scope.SatisList[i].ITEM_NAME;
+                    TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY;
+                    TmpSale.AMOUNT = $scope.SatisList[i].PRICE * 100;
+                    TmpSale.TAX = 1;
+
+                    TmpData.SALES.push(TmpSale);
+                }
+
+                for(let i = 0;i < $scope.TahList.length;i++)
+                {
+                    let TmpPayment = {};
+                    TmpPayment.TYPE = 0;
+                    TmpPayment.AMOUNT = $scope.TahList[i].AMOUNT * 100;
+
+                    TmpData.PAYMENT.push(TmpPayment);
+                }
+                db.Ingenico.SendData(TmpData);
+            } 
+
             db.ExecuteTag($scope.Firma,'PosSatisKapatUpdate',[$scope.Sube,$scope.Seri,$scope.Sira,$scope.EvrakTip],function(data)
             {   
                 let TmpQuery = 
@@ -1661,24 +1701,10 @@ function Pos($scope,$window,$rootScope,db)
                 {                
                     db.GetData($scope.Firma,'PosTahGetir',[$scope.Sube,$scope.EvrakTip,$scope.TahSeri,$scope.TahSira],function(PosTahData)
                     {   
-                        // db.LCDPrint
-                        // (
-                        //     {
-                        //         blink : 0,
-                        //         text :  db.PrintText(PosTahData[PosTahData.length - 1].TYPE_NAME,9) + " " + 
-                        //                 db.PrintText(PosTahData[PosTahData.length - 1].AMOUNT.toString() + "EUR" ,10,"Start") +
-                        //                 "Rendu : " + db.PrintText(db.SumColumn(PosTahData,"CHANGE").toString() + "EUR",12,"Start")
-                        //     }                        
-                        // );
                         $scope.TahList = PosTahData;
-                        TahSonYenile();                           
+                        TahSonYenile();                                                                          
                         SatisKapat();                   
-                        $scope.TahPanelKontrol = false;                        
-                        
-                        // if(typeof(pCallBack) != 'undefined')
-                        // {
-                        //     pCallBack();
-                        // }
+                        $scope.TahPanelKontrol = false;
                     });
                 }
                 else

@@ -24,8 +24,7 @@ namespace Ingenico
             {
                 string line = Console.ReadLine();
                 string tag = line.Split('|')[0];
-                
-                
+                 
                 if (tag == "PING")
                 {
                     line = Ping();
@@ -528,7 +527,7 @@ namespace Ingenico
             stItem.countPrecition = 0;
             stItem.name = pName;
             stItem.barcode = "";
-
+            Console.WriteLine(itemCount);
             if (PromotionModel.Instance.Amount > 0)
             {
                 stItem.promotion.amount = (int)PromotionModel.Instance.Amount;
