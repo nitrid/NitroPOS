@@ -1,5 +1,6 @@
-function KullaniciParametreCtrl($scope,$window,db)
+function KullaniciParametreCtrl($route,$scope,$window,db)
 {
+    let KullaniciListeRow = null;
     $('#MdlKullanici').on('hide.bs.modal', function () 
     {
         $scope.Kullanici = "";
@@ -38,7 +39,7 @@ function KullaniciParametreCtrl($scope,$window,db)
             heading: true,
             selecting: true,
             data : $scope.KullaniciListe,
-            
+            autoload: true,
             fields: 
             [
                 {
@@ -80,19 +81,6 @@ function KullaniciParametreCtrl($scope,$window,db)
                     { 
                         itemTemplate: function(_, item) 
                         {
-                            return $("<button class='btn btn-primary dropdown-toggle btn-block' style='height:40px; font-size: 12px;' data-toggle='dropdown' aria-expanded='false'>Ayarlar</button><div class='dropdown-menu' aria-labelledby='exampleSplitDropdown1' role='menu'><a class='dropdown-item' role='menuitem'>Sistem Ayarları</a></div><div class='dropdown-menu' aria-labelledby='exampleSplitDropdown2' role='menu'><a class='dropdown-item' role='menuitem'>Pos Ayarları</a></div>")
-                                .on("click", function() 
-                                {
-
-                                });
-                        },
-                        width: 25
-                    }
-                ],
-                [
-                    { 
-                        itemTemplate: function(_, item) 
-                        {
                             return $("<button type='submit' style='height:40px; font-size: 12px;' class='btn btn-info btn-block'></button>").text("Güncelle")
                                 .on("click", function() 
                                 {
@@ -115,12 +103,46 @@ function KullaniciParametreCtrl($scope,$window,db)
                         width: 25
                     }
                 ],
+                [
+                    { 
+                        itemTemplate: function(_, item) 
+                        {
+                            return $("<div class='btn-group'><button type='button' style='height:40px; font-size: 12px;' class='btn btn-primary dropdown-toggle' data-toggle='dropdown' aria-expanded='false'>Ayarlar</button><div class='dropdown-menu' aria-labelledby='exampleSizingDropdown1' role='menu'><a class='dropdown-item' role='menuitem' ng-click='Deneme()'>Sistem Ayarları</a><a class='dropdown-item' role='menuitem'>Pos Ayarları</a><a class='dropdown-item' role='menuitem'>Menü Ayarları</a></div></div>")
+                                .on("click", function() 
+                                {
+                                    
+                                });
+                        },
+                        width: 25
+                    }
+                ],
                 
             ],
             rowClick: function(args)
             {
+                if(args.event.target.outerText == 'Sistem Ayarları')
+                {
+                    $("#TbSistem").addClass('active');
+                    $("#TbMain").removeClass('active');
+                    $("#TbPosSatis").removeClass('active');
+                    $("#TbMenu").removeClass('active');
+                }
+                else if(args.event.target.outerText == 'Pos Ayarları')
+                {
+                    $("#TbPosSatis").addClass('active');
+                    $("#TbMain").removeClass('active');
+                    $("#TbSistem").removeClass('active');
+                    $("#TbMenu").removeClass('active');
+                }
+                else if(args.event.target.outerText == 'Menü Ayarları')
+                {
+                    $("#TbMenu").addClass('active');
+                    $("#TbPosSatis").removeClass('active');
+                    $("#TbSistem").removeClass('active');
+                    $("#TbMain").removeClass('active');
+                }
                 $scope.$apply();
-            }
+            },
         });
     }
     function KullaniciGetir()
@@ -190,6 +212,13 @@ function KullaniciParametreCtrl($scope,$window,db)
             }
         });
     }
+    $scope.KullaniciRowClick = function(pIndex,pItem,pObj)
+    {
+        if ( KullaniciListeRow ) { KullaniciListeRow.children('.jsgrid-cell').css('background-color', '').css('color',''); }
+        var $row = $("#TblKullanici").jsGrid("rowByItem", pItem);
+        $row.children('.jsgrid-cell').css('background-color','#2979FF').css('color','white');
+        KullaniciListeRow = $row;
+    }
     $scope.BtnKullaniciInsert = function(pTip)
     {
         if(pTip == 0)
@@ -248,37 +277,6 @@ function KullaniciParametreCtrl($scope,$window,db)
         {   
             $scope.DepoListe = data;
         });
-    }
-    $scope.BtnNav = function(pTip)
-    {
-        if(pTip == 0)
-        {
-            $("#TbMain").addClass('active');
-            $("#TbSistem").removeClass('active');
-            $("#TbPosSatis").removeClass('active');
-            $("#TbMenu").removeClass('active');
-        }
-        else if(pTip == 1)
-        {
-            $("#TbSistem").addClass('active');
-            $("#TbMain").removeClass('active');
-            $("#TbPosSatis").removeClass('active');
-            $("#TbMenu").removeClass('active');
-        }
-        else if(pTip == 2)
-        {
-            $("#TbPosSatis").addClass('active');
-            $("#TbMain").removeClass('active');
-            $("#TbSistem").removeClass('active');
-            $("#TbMenu").removeClass('active');
-        }
-        else if(pTip == 3)
-        {
-            $("#TbMenu").addClass('active');
-            $("#TbPosSatis").removeClass('active');
-            $("#TbSistem").removeClass('active');
-            $("#TbMain").removeClass('active');
-        }
     }
     $scope.KullaniciDepoChange = function()
     {
