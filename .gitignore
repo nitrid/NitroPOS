@@ -5,3 +5,6 @@ log/
 daemon/
 pc/release-builds/
 /package-lock.json
+/lic.json
+pc/package-lock.json
+lic.json

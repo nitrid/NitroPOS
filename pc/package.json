@@ -10,18 +10,15 @@
   "author": "Ali Kemal KARACA",
   "license": "ISC",
   "dependencies": {
-    "electron": "^10.1.1",
+    "electron": "^10.1.2",
     "escpos": "^3.0.0-alpha.6",
     "escpos-screen": "^3.0.0-alpha.6",
     "escpos-serialport": "^3.0.0-alpha.4",
     "escpos-usb": "^3.0.0-alpha.4",
-    "g": "^2.0.1",
-    "node-modules": "^1.0.1",
-    "serialport": "^9.0.1",
-    "windows-build-tools": "^5.2.2"
+    "serialport": "^9.0.1"
   },
   "devDependencies": {
     "electron-packager": "^15.1.0",
-    "electron-rebuild": "^2.0.2"
+    "electron-rebuild": "^2.0.3"
   }
 }
