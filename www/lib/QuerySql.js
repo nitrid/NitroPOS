@@ -341,6 +341,11 @@ var QuerySql =
         query : "UPDATE ITEM_BARCODE SET BARCODE = @BARCODE WHERE GUID = CONVERT(NVARCHAR(50),@GUID)",
         param : ['BARCODE:string|50','GUID:string|50']
     },
+    CmbDepoGetir : 
+    {
+        query : "SELECT CODE AS KODU,NAME AS ADI FROM DEPOT WHERE ((CODE = @CODE) OR (@CODE = 'TÜMÜ')) ",
+        param : ['CODE:string|25']
+    },
     StokTedarikciKaydet : 
     {
         query : "INSERT INTO [dbo].[ITEM_CUSTOMER] " +
@@ -1087,7 +1092,38 @@ var QuerySql =
     //KULLANICI PARAMETRE
     KullaniciGetir :
     {
-        query : "SELECT * FROM USERS"
+        query : "SELECT * FROM USERS "
+    },
+    KullaniciInsert : 
+    {
+        query : "INSERT INTO [dbo].[USERS] " +
+                "([CDATE] " +
+                ",[LDATE] " +
+                ",[CODE] " +
+                ",[NAME] " +
+                ",[PASSWORD] " +
+                ",[TAG] " +
+                ",[STATUS]) " +
+                "VALUES " +
+                "(GETDATE()						--<CDATE, datetime,>  \n" + 
+                ",GETDATE()						--<LDATE, datetime,>  \n" + 
+                ",@CODE							--<CODE, nvarchar(25),>  \n" + 
+                ",@NAME							--<NAME, nvarchar(50),>  \n" + 
+                ",@PASSWORD						--<PASSWORD, nvarchar(25),>  \n" + 
+                ",@TAG							--<TAG, nvarchar(25),>  \n" + 
+                ",@STATUS							--<STATUS, int,>  \n" + 
+                ")",
+        param : ['CODE:string|25','NAME:string|50','PASSWORD:string|25','TAG:string|25','STATUS:int']
+    },
+    KullaniciUpdate : 
+    {
+        query : "UPDATE USERS SET CODE = @CODE,NAME = @NAME, PASSWORD = @PASSWORD, STATUS = @STATUS WHERE GUID = @GUID " ,
+        param : ['CODE:string|25','NAME:string|50','PASSWORD:string|25','STATUS:int','GUID:string|150']
+    },
+    KullaniciDelete : 
+    {
+        query : "DELETE FROM USERS WHERE GUID = @GUID " ,
+        param : ['GUID:string|150']
     }
 };
 
