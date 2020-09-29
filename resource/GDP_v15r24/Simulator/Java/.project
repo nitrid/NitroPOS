@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>GmpSimEclipse</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>Windows</name>
+			<type>2</type>
+			<locationURI>DLL_PATH/DLL_DEBUG/Windows/</locationURI>
+		</link>
+		<link>
+			<name>x86</name>
+			<type>2</type>
+			<locationURI>DLL_PATH/DLL_DEBUG/Windows/x86</locationURI>
+		</link>
+	</linkedResources>
+	<variableList>
+		<variable>
+			<name>DLL_PATH</name>
+			<value>$%7BPARENT-2-PROJECT_LOC%7D</value>
+		</variable>
+	</variableList>
+</projectDescription>

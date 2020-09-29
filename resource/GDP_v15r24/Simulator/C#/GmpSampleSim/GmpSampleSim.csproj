@@ -1,0 +1,487 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{91668117-0E7B-42A3-9B56-0F499AA88EEE}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GmpSampleSim</RootNamespace>
+    <AssemblyName>GmpSampleSim</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\DLL_DEBUG\Windows\x86\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\DLL\Windows\x86\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\..\DLL_DEBUG\Windows\x64\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+    <Optimize>false</Optimize>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>..\..\..\DLL\Windows\x64\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>false</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Data.SQLite, Version=1.0.111.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.111.0\lib\net40\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.111.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.111.0\lib\net40\System.Data.SQLite.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.111.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.111.0\lib\net40\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BankAppParams.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BankAppParams.Designer.cs">
+      <DependentUpon>BankAppParams.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BankRefundParameters.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BankRefundParameters.Designer.cs">
+      <DependentUpon>BankRefundParameters.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CashierForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CashierForm.Designer.cs">
+      <DependentUpon>CashierForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CurrencyProfileForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CurrencyProfileForm.Designer.cs">
+      <DependentUpon>CurrencyProfileForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DBForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DBForm.Designer.cs">
+      <DependentUpon>DBForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DisplayClass.cs" />
+    <Compile Include="DrawerStateForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DrawerStateForm.Designer.cs">
+      <DependentUpon>DrawerStateForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ErrorClass.cs" />
+    <Compile Include="FormBankaSlip.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormBankaSlip.Designer.cs">
+      <DependentUpon>FormBankaSlip.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GetInputDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GetInputDialog.Designer.cs">
+      <DependentUpon>GetInputDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GetInputForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GetInputForm.Designer.cs">
+      <DependentUpon>GetInputForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GMPForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GMPForm.Designer.cs">
+      <DependentUpon>GMPForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\..\CSharpClass\GMPSmartDLL.cs" />
+    <Compile Include="Localization.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Localization.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Localization.en-GB.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Localization.en-GB.resx</DependentUpon>
+    </Compile>
+    <Compile Include="LocalizationClass.cs" />
+    <Compile Include="Models\SlipLine.cs" />
+    <Compile Include="Models\UniqueIdData.cs" />
+    <Compile Include="ParserClass.cs" />
+    <Compile Include="PassForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PassForm.Designer.cs">
+      <DependentUpon>PassForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentAppForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PaymentAppForm.Designer.cs">
+      <DependentUpon>PaymentAppForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PaymentForm.Designer.cs">
+      <DependentUpon>PaymentForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentRefundForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PaymentRefundForm.Designer.cs">
+      <DependentUpon>PaymentRefundForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentTypeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PaymentTypeForm.Designer.cs">
+      <DependentUpon>PaymentTypeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PLUDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PLUDialog.Designer.cs">
+      <DependentUpon>PLUDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Promotion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Promotion.Designer.cs">
+      <DependentUpon>Promotion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PromotionModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource1.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\ServiceReference1\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="SlipYazmaAyariForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SlipYazmaAyariForm.Designer.cs">
+      <DependentUpon>SlipYazmaAyariForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ST_Gider_Pusulasi.cs" />
+    <Compile Include="ST_SMMData.cs" />
+    <Compile Include="Test.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Test.Designer.cs">
+      <DependentUpon>Test.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TimeChangerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TimeChangerForm.Designer.cs">
+      <DependentUpon>TimeChangerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserDataForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserDataForm.Designer.cs">
+      <DependentUpon>UserDataForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserProfilesSelectionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserProfilesSelectionForm.Designer.cs">
+      <DependentUpon>UserProfilesSelectionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utility.cs" />
+    <EmbeddedResource Include="BankAppParams.resx">
+      <DependentUpon>BankAppParams.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BankRefundParameters.resx">
+      <DependentUpon>BankRefundParameters.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CashierForm.resx">
+      <DependentUpon>CashierForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CurrencyProfileForm.resx">
+      <DependentUpon>CurrencyProfileForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DBForm.resx">
+      <DependentUpon>DBForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DrawerStateForm.resx">
+      <DependentUpon>DrawerStateForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormBankaSlip.resx">
+      <DependentUpon>FormBankaSlip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GetInputDialog.resx">
+      <DependentUpon>GetInputDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GetInputForm.resx">
+      <DependentUpon>GetInputForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GMPForm.resx">
+      <DependentUpon>GMPForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Localization.en-GB.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Localization.en-GB.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Localization.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Localization.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PassForm.resx">
+      <DependentUpon>PassForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PaymentAppForm.resx">
+      <DependentUpon>PaymentAppForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PaymentForm.resx">
+      <DependentUpon>PaymentForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PaymentRefundForm.resx">
+      <DependentUpon>PaymentRefundForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PaymentTypeForm.resx">
+      <DependentUpon>PaymentTypeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PLUDialog.resx">
+      <DependentUpon>PLUDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Promotion.resx">
+      <DependentUpon>Promotion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="Resource1.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SlipYazmaAyariForm.resx">
+      <DependentUpon>SlipYazmaAyariForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Test.resx">
+      <DependentUpon>Test.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TimeChangerForm.resx">
+      <DependentUpon>TimeChangerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserDataForm.resx">
+      <DependentUpon>UserDataForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserProfilesSelectionForm.resx">
+      <DependentUpon>UserProfilesSelectionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="Service References\ServiceReference1\GmpSampleSim.ServiceReference1.TSM_GetUniqueIdOut.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\ServiceReference1\TsmUniqueIDClntWs.wsdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\" />
+    <Folder Include="Infrastructure\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1418827090_agt_reload.png" />
+    <None Include="Resources\barcode.png" />
+    <None Include="Resources\connect_creating.png" />
+    <None Include="Resources\connect_established.png" />
+    <None Include="Resources\connect_no.png" />
+    <None Include="Resources\1421698682_editor_trash_delete_recycle_bin-32.png" />
+    <None Include="Resources\1420569259_24-device-installed-512x512.png" />
+    <None Include="Resources\device-not-installed.png" />
+    <None Include="Resources\ingenicogroup.png" />
+    <None Include="Resources\left_shift.png" />
+    <None Include="Resources\1421680621_ic_exposure_minus_1_48px-32.png" />
+    <None Include="Resources\1421680600_ic_exposure_plus_1_48px-32.png" />
+    <None Include="Resources\pos.png" />
+    <None Include="Resources\qr_code.png" />
+    <None Include="Resources\receipt.png" />
+    <None Include="Resources\right_shift.png" />
+    <None Include="Resources\1441123101_connect_no.png" />
+    <None Include="Resources\1441123105_connect_creating.png" />
+    <None Include="Resources\1441123170_connect_no.png" />
+    <None Include="Resources\1441123460_list-remove.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\ServiceReference1\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ServiceReference1\TsmUniqueIDClntWs.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ServiceReference1\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ServiceReference1\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ServiceReference1\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.111.0\build\net40\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.111.0\build\net40\System.Data.SQLite.Core.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.111.0\build\net40\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.111.0\build\net40\System.Data.SQLite.Core.targets'))" />
+  </Target>
+  <PropertyGroup>
+    <PreBuildEvent>echo PWD = %25CD%25
+echo PlatformName = "$(PlatformName)"
+if "$(PlatformName)"=="AnyCPU" (
+	copy ..\..\..\Simulator\C#\packages\System.Data.SQLite.Core.1.0.111.0\build\net20\x86\*.* .\*.*
+)
+if "$(PlatformName)"=="x64" (
+	copy ..\..\..\Simulator\C#\packages\System.Data.SQLite.Core.1.0.111.0\build\net20\x64\*.* .\*.*
+)
+
+</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

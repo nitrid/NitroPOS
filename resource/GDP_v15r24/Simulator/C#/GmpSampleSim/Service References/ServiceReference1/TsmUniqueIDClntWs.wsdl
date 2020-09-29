@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="TSM_GetUniqueId">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="input" type="tns:TSM_GetUniqueIdIn" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="TSM_GetUniqueIdIn">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Header_Info" type="tns:Header" />
+          <s:element minOccurs="0" maxOccurs="1" name="BranchCode" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Header">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FirmCode" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="TSM_GetUniqueIdResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="TSM_GetUniqueIdResult" type="tns:TSM_GetUniqueIdOut" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="TSM_GetUniqueIdOut">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ResultCode" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ResultMessage" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UniqueID" type="tns:UniqueId" />
+          <s:element minOccurs="0" maxOccurs="1" name="TsmSign" type="tns:TsmSign" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="UniqueId">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Base64" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HexStr" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Bin" type="s:base64Binary" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TsmSign">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Base64" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HexStr" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Bin" type="s:base64Binary" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="TSM_GetUniqueIdSoapIn">
+    <wsdl:part name="parameters" element="tns:TSM_GetUniqueId" />
+  </wsdl:message>
+  <wsdl:message name="TSM_GetUniqueIdSoapOut">
+    <wsdl:part name="parameters" element="tns:TSM_GetUniqueIdResponse" />
+  </wsdl:message>
+  <wsdl:portType name="TsmUniqueIDClntWsSoap">
+    <wsdl:operation name="TSM_GetUniqueId">
+      <wsdl:input message="tns:TSM_GetUniqueIdSoapIn" />
+      <wsdl:output message="tns:TSM_GetUniqueIdSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="TsmUniqueIDClntWsSoap" type="tns:TsmUniqueIDClntWsSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="TSM_GetUniqueId">
+      <soap:operation soapAction="http://tempuri.org/TSM_GetUniqueId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="TsmUniqueIDClntWsSoap12" type="tns:TsmUniqueIDClntWsSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="TSM_GetUniqueId">
+      <soap12:operation soapAction="http://tempuri.org/TSM_GetUniqueId" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TsmUniqueIDClntWs">
+    <wsdl:port name="TsmUniqueIDClntWsSoap" binding="tns:TsmUniqueIDClntWsSoap">
+      <soap:address location="https://192.168.28.13:91/Tsm_UniqueID_WS/TsmUniqueIDClntWs.asmx" />
+    </wsdl:port>
+    <wsdl:port name="TsmUniqueIDClntWsSoap12" binding="tns:TsmUniqueIDClntWsSoap12">
+      <soap12:address location="https://192.168.28.13:91/Tsm_UniqueID_WS/TsmUniqueIDClntWs.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
