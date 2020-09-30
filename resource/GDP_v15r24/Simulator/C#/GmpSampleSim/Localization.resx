@@ -1,0 +1,690 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AllTicket" xml:space="preserve">
+    <value>Tum Fis</value>
+  </data>
+  <data name="Amount" xml:space="preserve">
+    <value>Tutar</value>
+  </data>
+  <data name="AmountIncrease" xml:space="preserve">
+    <value>Tutar Attirim</value>
+  </data>
+  <data name="Balance" xml:space="preserve">
+    <value>Kalan</value>
+  </data>
+  <data name="Barcode" xml:space="preserve">
+    <value>Barkod</value>
+  </data>
+  <data name="CashierFlag" xml:space="preserve">
+    <value>Kasiyer Flag</value>
+  </data>
+  <data name="CashierIndex" xml:space="preserve">
+    <value>Kasiyer Index</value>
+  </data>
+  <data name="CashierName" xml:space="preserve">
+    <value>Kasiyer Isim</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>Para Ustu</value>
+  </data>
+  <data name="Changing" xml:space="preserve">
+    <value>Degistirme</value>
+  </data>
+  <data name="checkBox1" xml:space="preserve">
+    <value>Tarihle Islem Yap</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Urun sayisi</value>
+  </data>
+  <data name="DepartmentIndex" xml:space="preserve">
+    <value>Kisim Index</value>
+  </data>
+  <data name="DeviceBrand" xml:space="preserve">
+    <value>Cihaz Markasi</value>
+  </data>
+  <data name="DeviceModel" xml:space="preserve">
+    <value>Cihaz Modeli</value>
+  </data>
+  <data name="DeviceSerialNum" xml:space="preserve">
+    <value>Cihaz Seri No</value>
+  </data>
+  <data name="Discount" xml:space="preserve">
+    <value>Indirim</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Hata</value>
+  </data>
+  <data name="ErrorRespCode" xml:space="preserve">
+    <value>Hata Cevap Kodu</value>
+  </data>
+  <data name="FileCouldntRead" xml:space="preserve">
+    <value>Dosya Okunamadi :</value>
+  </data>
+  <data name="groupBox3" xml:space="preserve">
+    <value>Mesaj Tipi</value>
+  </data>
+  <data name="groupBox4" xml:space="preserve">
+    <value>Font Buyuklugu</value>
+  </data>
+  <data name="groupBox5" xml:space="preserve">
+    <value>Konum</value>
+  </data>
+  <data name="groupBox6" xml:space="preserve">
+    <value>Secenekler</value>
+  </data>
+  <data name="groupBox8" xml:space="preserve">
+    <value>Fonksiyonlar</value>
+  </data>
+  <data name="handleToolStripMenuItem" xml:space="preserve">
+    <value>Akış</value>
+  </data>
+  <data name="HexFileNotFound" xml:space="preserve">
+    <value>Log alınması için .INI dosyasındaki HEXLOG 1 olmalıdır.</value>
+  </data>
+  <data name="IncompleteTransaction" xml:space="preserve">
+    <value>Tamamlanmamis Islem</value>
+  </data>
+  <data name="IncompleteTransactionDesc" xml:space="preserve">
+    <value>ÖKC'de Tamamlanmamis Islem Var. Islemi IPTAL Etmek için CANCEL, Tekrar Yüklemek için OK'e basin</value>
+  </data>
+  <data name="InstalmentCount" xml:space="preserve">
+    <value>Taksit Sayisi</value>
+  </data>
+  <data name="Invoice" xml:space="preserve">
+    <value>Fatura</value>
+  </data>
+  <data name="Item" xml:space="preserve">
+    <value>-Urun</value>
+  </data>
+  <data name="ItemTable" xml:space="preserve">
+    <value>Urun Tablosu</value>
+  </data>
+  <data name="label10" xml:space="preserve">
+    <value>Fatura Tutarı :</value>
+  </data>
+  <data name="label100" xml:space="preserve">
+    <value>Bilet Tipi : </value>
+  </data>
+  <data name="label11" xml:space="preserve">
+    <value>Urun Index :</value>
+  </data>
+  <data name="label12" xml:space="preserve">
+    <value>Film Tipi :</value>
+  </data>
+  <data name="label13" xml:space="preserve">
+    <value>Kisim :</value>
+  </data>
+  <data name="label14" xml:space="preserve">
+    <value>TC Kimlik No : </value>
+  </data>
+  <data name="label15" xml:space="preserve">
+    <value>Tarih 2 : </value>
+  </data>
+  <data name="label16" xml:space="preserve">
+    <value>Tarih 1 : </value>
+  </data>
+  <data name="label17" xml:space="preserve">
+    <value>Eku No :</value>
+  </data>
+  <data name="label18" xml:space="preserve">
+    <value>Fis No 2 :</value>
+  </data>
+  <data name="label19" xml:space="preserve">
+    <value>Fis No 1 : </value>
+  </data>
+  <data name="label2" xml:space="preserve">
+    <value>Fatura Tipi :</value>
+  </data>
+  <data name="label3" xml:space="preserve">
+    <value>TC Kimlik No :</value>
+  </data>
+  <data name="label4" xml:space="preserve">
+    <value>Vergi Kimlik No : </value>
+  </data>
+  <data name="label5" xml:space="preserve">
+    <value>Fatura No : </value>
+  </data>
+  <data name="label6" xml:space="preserve">
+    <value>Islem Sira No : </value>
+  </data>
+  <data name="label7" xml:space="preserve">
+    <value>Islem Tarihi :</value>
+  </data>
+  <data name="label8" xml:space="preserve">
+    <value>Fatura Tarihi :</value>
+  </data>
+  <data name="label9" xml:space="preserve">
+    <value>Islem Saati :</value>
+  </data>
+  <data name="MessageField" xml:space="preserve">
+    <value>Mesaj Alani 48 karakterden fazla olamaz</value>
+  </data>
+  <data name="m_btnAddUserMessage" xml:space="preserve">
+    <value>Ekle</value>
+  </data>
+  <data name="m_btnAllTicket" xml:space="preserve">
+    <value>Tüm Fis</value>
+  </data>
+  <data name="m_btnCompleteUserMessage" xml:space="preserve">
+    <value>Gonder</value>
+  </data>
+  <data name="m_btnJustOneItem" xml:space="preserve">
+    <value>Tek Urun</value>
+  </data>
+  <data name="m_btnK_029" xml:space="preserve">
+    <value>Yeniden Yükle</value>
+  </data>
+  <data name="m_btnK_030" xml:space="preserve">
+    <value>Fonksiyon Mesaji</value>
+  </data>
+  <data name="m_btnMatrahsız" xml:space="preserve">
+    <value>Gonder</value>
+  </data>
+  <data name="m_btnSendFunctionMessage" xml:space="preserve">
+    <value>Gonder</value>
+  </data>
+  <data name="m_btnSendInvoice" xml:space="preserve">
+    <value>Gonder</value>
+  </data>
+  <data name="m_btn_031" xml:space="preserve">
+    <value>Fis Kapat</value>
+  </data>
+  <data name="m_btn_032" xml:space="preserve">
+    <value>Ara Toplam</value>
+  </data>
+  <data name="m_btn_033" xml:space="preserve">
+    <value>Set Unique ID</value>
+  </data>
+  <data name="m_btn_034" xml:space="preserve">
+    <value>Kart Oku</value>
+  </data>
+  <data name="m_btn_035" xml:space="preserve">
+    <value>Kasa Odeme</value>
+  </data>
+  <data name="m_btn_036" xml:space="preserve">
+    <value>Kasa Avans</value>
+  </data>
+  <data name="m_btn_039" xml:space="preserve">
+    <value>Vergi Ve Kisim</value>
+  </data>
+  <data name="m_btn_040" xml:space="preserve">
+    <value>Kasiyer Tablosu</value>
+  </data>
+  <data name="m_btn_041" xml:space="preserve">
+    <value>Islemler</value>
+  </data>
+  <data name="m_btn_042" xml:space="preserve">
+    <value>Nakit</value>
+  </data>
+  <data name="m_btn_043" xml:space="preserve">
+    <value>Kredi</value>
+  </data>
+  <data name="m_btn_044" xml:space="preserve">
+    <value>Doviz Tablosu</value>
+  </data>
+  <data name="m_btn_046" xml:space="preserve">
+    <value>Odeme Iptal</value>
+  </data>
+  <data name="m_btn_047" xml:space="preserve">
+    <value>Islem Iptal</value>
+  </data>
+  <data name="m_btn_048" xml:space="preserve">
+    <value>Iade</value>
+  </data>
+  <data name="m_btn_049" xml:space="preserve">
+    <value>Fatura</value>
+  </data>
+  <data name="m_btn_050" xml:space="preserve">
+    <value>Get Unique ID List</value>
+  </data>
+  <data name="m_btn_051" xml:space="preserve">
+    <value>Bilet Satis</value>
+  </data>
+  <data name="m_btn_052" xml:space="preserve">
+    <value>Tutar Arttirim</value>
+  </data>
+  <data name="m_btn_053" xml:space="preserve">
+    <value>Tutar Indirim</value>
+  </data>
+  <data name="m_btn_054" xml:space="preserve">
+    <value>Yuzde Arttirim</value>
+  </data>
+  <data name="m_btn_055" xml:space="preserve">
+    <value>Yuzde Indirim</value>
+  </data>
+  <data name="m_btn_056" xml:space="preserve">
+    <value>Kullanici Mesaji</value>
+  </data>
+  <data name="m_btn_TicketSale" xml:space="preserve">
+    <value>Gönder</value>
+  </data>
+  <data name="m_closeHandleMenuItem" xml:space="preserve">
+    <value>Handle Kapat</value>
+  </data>
+  <data name="m_cmbInvoiceType_1" xml:space="preserve">
+    <value>KAGIT FATURA</value>
+  </data>
+  <data name="m_cmbInvoiceType_2" xml:space="preserve">
+    <value>E FATURA</value>
+  </data>
+  <data name="m_cmbInvoiceType_3" xml:space="preserve">
+    <value>E ARSIV</value>
+  </data>
+  <data name="m_cmbMovieType_1" xml:space="preserve">
+    <value>Yerli Film</value>
+  </data>
+  <data name="m_cmbMovieType_2" xml:space="preserve">
+    <value>Yabanci Film</value>
+  </data>
+  <data name="m_cmbTicketType_1" xml:space="preserve">
+    <value>Tam Bilet</value>
+  </data>
+  <data name="m_cmbTicketType_2" xml:space="preserve">
+    <value>Ogrenci Bilet</value>
+  </data>
+  <data name="m_cmbTicketType_3" xml:space="preserve">
+    <value>Indirimli Bilet</value>
+  </data>
+  <data name="m_cmbTicketType_4" xml:space="preserve">
+    <value>Davetli Bileti</value>
+  </data>
+  <data name="m_langOptMenuItem" xml:space="preserve">
+    <value>Dil Secenekleri</value>
+  </data>
+  <data name="m_openHandleMenuItem" xml:space="preserve">
+    <value>Handle Aç</value>
+  </data>
+  <data name="m_printBeforeMfMenuItem" xml:space="preserve">
+    <value>MF den önce Yazdır</value>
+  </data>
+  <data name="m_printMfMenuItem" xml:space="preserve">
+    <value>MF Yazdır</value>
+  </data>
+  <data name="m_printTicketHeaderMenuItem" xml:space="preserve">
+    <value>Fis Baslik Yazdir</value>
+  </data>
+  <data name="m_printTotalMenuItem" xml:space="preserve">
+    <value>Toplam Yazdir</value>
+  </data>
+  <data name="m_settingsMenuItem" xml:space="preserve">
+    <value>Ayarlar</value>
+  </data>
+  <data name="m_startPairingMenuItem" xml:space="preserve">
+    <value>Eslesme Baslat</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Isim</value>
+  </data>
+  <data name="OkCode" xml:space="preserve">
+    <value>Onay Kodu</value>
+  </data>
+  <data name="OriginalAmount" xml:space="preserve">
+    <value>Orjinal Tutar</value>
+  </data>
+  <data name="Paid" xml:space="preserve">
+    <value>Odenen</value>
+  </data>
+  <data name="PaymentAppNotFound" xml:space="preserve">
+    <value>ÖKC Üzerinde Ödeme Uygulanaması Bulunamadı</value>
+  </data>
+  <data name="PaymentTable" xml:space="preserve">
+    <value>Odeme Tablosu</value>
+  </data>
+  <data name="PluItemSearch" xml:space="preserve">
+    <value>Plu Urun Arama</value>
+  </data>
+  <data name="ProcDate" xml:space="preserve">
+    <value>Islem Tarihi</value>
+  </data>
+  <data name="ProcOrderNum" xml:space="preserve">
+    <value>Islem Sira Numarasi</value>
+  </data>
+  <data name="ProcTime" xml:space="preserve">
+    <value>Islem Saati</value>
+  </data>
+  <data name="radioButton01" xml:space="preserve">
+    <value>Parametre Yukle</value>
+  </data>
+  <data name="radioButton02" xml:space="preserve">
+    <value>Z Raporu</value>
+  </data>
+  <data name="radioButton03" xml:space="preserve">
+    <value>X Raporu</value>
+  </data>
+  <data name="radioButton04" xml:space="preserve">
+    <value>Mali Rapor</value>
+  </data>
+  <data name="radioButton05" xml:space="preserve">
+    <value>Eku Rapor</value>
+  </data>
+  <data name="radioButton06" xml:space="preserve">
+    <value>Mali Kumulatif Rapor</value>
+  </data>
+  <data name="radioButton07" xml:space="preserve">
+    <value>Z Raporu Gonder</value>
+  </data>
+  <data name="radioButton11" xml:space="preserve">
+    <value>Sag</value>
+  </data>
+  <data name="radioButton12" xml:space="preserve">
+    <value>Orta</value>
+  </data>
+  <data name="radioButton13" xml:space="preserve">
+    <value>Sol</value>
+  </data>
+  <data name="radioButton14" xml:space="preserve">
+    <value>Cekmece Ac</value>
+  </data>
+  <data name="radioButton15" xml:space="preserve">
+    <value>Banka Gunsonu</value>
+  </data>
+  <data name="radioButton16" xml:space="preserve">
+    <value>Banka Parametresi Yukle</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Arttirim</value>
+  </data>
+  <data name="StatusBits" xml:space="preserve">
+    <value>Status Bitleri</value>
+  </data>
+  <data name="SubTotal" xml:space="preserve">
+    <value>Ara Toplam</value>
+  </data>
+  <data name="tabPage1" xml:space="preserve">
+    <value>Islem Sonuclari</value>
+  </data>
+  <data name="tabPage3" xml:space="preserve">
+    <value>Fatura</value>
+  </data>
+  <data name="tabPage5" xml:space="preserve">
+    <value>Sinema Bileti</value>
+  </data>
+  <data name="tabPage6" xml:space="preserve">
+    <value>Urun No</value>
+  </data>
+  <data name="tabPage8" xml:space="preserve">
+    <value>Kullanici Mes</value>
+  </data>
+  <data name="tabPage9" xml:space="preserve">
+    <value>Fonksiyonlar</value>
+  </data>
+  <data name="ThankYou" xml:space="preserve">
+    <value>Teşekkur Ederiz</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Toplam</value>
+  </data>
+  <data name="TotalDecriment" xml:space="preserve">
+    <value>Toplam Indirim</value>
+  </data>
+  <data name="TotalIncrement" xml:space="preserve">
+    <value>Toplam Arttirim</value>
+  </data>
+  <data name="TotalTax" xml:space="preserve">
+    <value>Toplam Vergi</value>
+  </data>
+  <data name="TotalVoid" xml:space="preserve">
+    <value>Toplam Iptal</value>
+  </data>
+  <data name="UnitType" xml:space="preserve">
+    <value>Birim Tipi</value>
+  </data>
+  <data name="JustOneItem" xml:space="preserve">
+    <value>Tek Urun</value>
+  </data>
+  <data name="m_btnVoidAllTicket" xml:space="preserve">
+    <value>Fis Iptal</value>
+  </data>
+  <data name="groupBox9" xml:space="preserve">
+    <value>Haberlesme Ayarlari</value>
+  </data>
+  <data name="m_functionsMenuItem" xml:space="preserve">
+    <value>Fonksiyonlar</value>
+  </data>
+  <data name="m_pluReadMenuItem" xml:space="preserve">
+    <value>PLU Oku</value>
+  </data>
+  <data name="m_rbSerialConn" xml:space="preserve">
+    <value>Seri Haberlesme</value>
+  </data>
+  <data name="m_SalePluToolStripMenuItem" xml:space="preserve">
+    <value>PLU Satis</value>
+  </data>
+  <data name="VoidCompleted" xml:space="preserve">
+    <value>Iadeniz Gerceklesti</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+    <value>Tamamla</value>
+  </data>
+  <data name="groupBox1" xml:space="preserve">
+    <value>TSM Unique ID Bilgisi</value>
+  </data>
+  <data name="label22" xml:space="preserve">
+    <value>Sifre :</value>
+  </data>
+  <data name="label23" xml:space="preserve">
+    <value>Kullanıcı Adi :</value>
+  </data>
+  <data name="label24" xml:space="preserve">
+    <value>Sube Kodu : </value>
+  </data>
+  <data name="label25" xml:space="preserve">
+    <value>Firma Kodu :</value>
+  </data>
+  <data name="m_btnCashPaymentMenuItem" xml:space="preserve">
+    <value>Nakit Odeme</value>
+  </data>
+  <data name="m_btnOtherPayment_034" xml:space="preserve">
+    <value>Diger Odeme</value>
+  </data>
+  <data name="m_btnReversePayment_033" xml:space="preserve">
+    <value>Ters(Reverse) Odeme</value>
+  </data>
+  <data name="m_chcTaxFreeActive" xml:space="preserve">
+    <value>Diplomatic Sale</value>
+  </data>
+  <data name="m_CustomerAdvantageMenuItem" xml:space="preserve">
+    <value>Musteri Avans</value>
+  </data>
+  <data name="m_getSetTicketHeaderMenuItem" xml:space="preserve">
+    <value>Fiş Başlığı Değiştir</value>
+  </data>
+  <data name="m_jumpToECRSinglePaymentMenuItem" xml:space="preserve">
+    <value>Jump To ECR (Tekil Odeme)</value>
+  </data>
+  <data name="m_ParkingEntryMenuItem" xml:space="preserve">
+    <value>Otopark Fis</value>
+  </data>
+  <data name="m_pluDataBaseMenuItem" xml:space="preserve">
+    <value>PLU Veritabanı</value>
+  </data>
+  <data name="m_rbBatchMode" xml:space="preserve">
+    <value>Coklu Mod</value>
+  </data>
+  <data name="m_rbSingleMode" xml:space="preserve">
+    <value>Tekil Mod</value>
+  </data>
+  <data name="m_TaxFreeRefundMenuItem" xml:space="preserve">
+    <value>Set Vergisiz(TaxFree) Iade </value>
+  </data>
+  <data name="m_taxFreeTicketMenuItem" xml:space="preserve">
+    <value>Diplomatic Sale</value>
+  </data>
+  <data name="m_btnClearList" xml:space="preserve">
+    <value>Listeyi Temizle</value>
+  </data>
+  <data name="m_btnDownloadBitmapFiles" xml:space="preserve">
+    <value>Bitmap Dosyası Indir</value>
+  </data>
+  <data name="m_btnGetBitmapFiles" xml:space="preserve">
+    <value>Bitmap Dosyalarını Al</value>
+  </data>
+  <data name="m_btnRemoveBitmapFiles" xml:space="preserve">
+    <value>Bitmap Dosyayı Sil</value>
+  </data>
+  <data name="m_btnSendOnCable" xml:space="preserve">
+    <value>Gönder</value>
+  </data>
+  <data name="m_chcIrsaliye" xml:space="preserve">
+    <value>Irsaliye</value>
+  </data>
+  <data name="m_getTSMUniqueIDMenuItem" xml:space="preserve">
+    <value>TSM Unique ID Al</value>
+  </data>
+  <data name="m_getUniqueIDMenuItem" xml:space="preserve">
+    <value>Unique ID Set Et</value>
+  </data>
+  <data name="m_setUniqueIDMenuItem" xml:space="preserve">
+    <value>Cihazdaki Unique ID leri Al</value>
+  </data>
+  <data name="tabPage10" xml:space="preserve">
+    <value>Vergi &amp; Kısım</value>
+  </data>
+  <data name="tabPage3_Payment" xml:space="preserve">
+    <value>Ödeme</value>
+  </data>
+  <data name="tabPage5_General" xml:space="preserve">
+    <value>Genel</value>
+  </data>
+  <data name="tabPage6_Batch" xml:space="preserve">
+    <value>Toplu Mesaj Modu</value>
+  </data>
+  <data name="tabPage7" xml:space="preserve">
+    <value>JumpToECR Opsiyon</value>
+  </data>
+  <data name="radioButton022" xml:space="preserve">
+    <value>Iki Tarih Arası Eku Raporu</value>
+  </data>
+  <data name="radioButton017" xml:space="preserve">
+    <value>Banka Iade</value>
+  </data>
+  <data name="radioButton028" xml:space="preserve">
+    <value>Banka Iptal</value>
+  </data>
+  <data name="BonusAmount" xml:space="preserve">
+    <value>Bonus Tutarı</value>
+  </data>
+  <data name="LoyaltyAmountToRefund" xml:space="preserve">
+    <value>İade edilecek Bonus miktarı</value>
+  </data>
+  <data name="FlightMode" xml:space="preserve">
+    <value>Uçuş Modu</value>
+  </data>
+</root>

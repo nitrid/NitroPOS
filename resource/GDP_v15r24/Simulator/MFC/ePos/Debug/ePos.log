@@ -1,0 +1,31 @@
+﻿D:\Program Files\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v150\Platforms\Win32\PlatformToolsets\v141_xp\Toolset.targets(39,5): warning MSB8051: Support for targeting Windows XP is deprecated and will not be present in future releases of Visual Studio. Please see https://go.microsoft.com/fwlink/?linkid=2023588 for more information.
+  stdafx.cpp
+  ButtonCustom.cpp
+  CashierDlg.cpp
+  DatabaseConsole.cpp
+  DBTranDlg.cpp
+  DepartmentDlg.cpp
+  DoPayment.cpp
+  EkuDlg.cpp
+  ePos.cpp
+  ePosDlg.cpp
+  FileSystemDlg.cpp
+  FunctionDlg.cpp
+  GetInputDlg.cpp
+  InvoiceDlg.cpp
+  ItemNo.cpp
+  MatrahsizDlg.cpp
+  PasswordDlg.cpp
+  PaymentApplication.cpp
+  PaymentDlg.cpp
+  PluConsoleDlg.cpp
+  SelectUniqueId.cpp
+  Generating Code...
+  Compiling...
+  OnlineInvoiceDlg.cpp
+  TaxFreeDlg.cpp
+  TicketDlg.cpp
+  UserMessageDlg.cpp
+  Generating Code...
+  sqlite3.c
+LINK : fatal error LNK1104: cannot open file 'GMPSmartDLL.lib'

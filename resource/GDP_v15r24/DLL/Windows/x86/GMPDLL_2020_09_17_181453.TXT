@@ -1,0 +1,21 @@
+[            ] [            ] [2007081437] [18:14:53:646] [GENERAL ] XML Path : 
+[            ] [            ] [2007081437] [18:14:53:653] [GENERAL ] IsCheckStructVersion : TRUE
+[            ] [            ] [2007081437] [18:14:53:658] [GENERAL ] LogFileSize : 5000000
+[            ] [            ] [2007081437] [18:14:53:664] [GENERAL ] LogPath : 
+[            ] [            ] [2007081437] [18:14:53:669] [GENERAL ] Debug Flags = LogPrintToFileOpen:TRUE, LogGeneralOpen:TRUE, LogFunctionOpen:TRUE, LogSecurityOpen:FALSE, LogCommOpen:TRUE, LogExtDevOpen:TRUE, LogJsonOpen:TRUE, LogJsonDataOpen:FALSE, LogGmp3TagsOpen:FALSE, LogThreadOpen:FALSE, LogPrintSerialNumOpen:FALSE, LogPrintDateOpen:FALSE, LogPrintTimeOpen:TRUE, LogPrintTypeOpen:TRUE, LogPrintVersionOpen:TRUE, LogPrintSourceFileOpen:FALSE, LogPrintSourceLineOpen:FALSE, 
+[            ] [            ] [2007081437] [18:14:53:675] [GENERAL ] Interface : ID=COM1 (Default=TRUE)
+[            ] [            ] [2007081437] [18:14:53:681] [GENERAL ] Interface Data = RetryCounter:3, IpRetryCount:3, AckTimeOut:3000, CommTimeOut:90000, InterCharacterTimeOut:100, PortName:\\.\COM1, BaudRate:115200, ByteSize:8, fParity:0, Parity:0, StopBit:0, IsTcpConnection:TRUE, IP:93.182.79.26, Port:7500, 
+[            ] [            ] [2007081437] [18:14:53:687] [GENERAL ] Interface Debug Flags = LogPrintToFileOpen:TRUE, LogGeneralOpen:TRUE, LogFunctionOpen:TRUE, LogSecurityOpen:FALSE, LogCommOpen:TRUE, LogExtDevOpen:TRUE, LogJsonOpen:TRUE, LogJsonDataOpen:FALSE, LogGmp3TagsOpen:FALSE, LogThreadOpen:FALSE, LogPrintSerialNumOpen:FALSE, LogPrintDateOpen:FALSE, LogPrintTimeOpen:TRUE, LogPrintTypeOpen:TRUE, LogPrintVersionOpen:TRUE, LogPrintSourceFileOpen:FALSE, LogPrintSourceLineOpen:FALSE, 
+[            ] [            ] [2007081437] [18:14:53:693] [FUNCTION] Version = 2007081437
+[            ] [            ] [2007081437] [18:14:53:701] [FUNCTION] >>>>> FP3_GetInterfaceHandleList(TO : 0)
+[            ] [            ] [2007081437] [18:14:53:707] [FUNCTION] <<<<< FP3_GetInterfaceHandleList (return:1-0x00000001:TRAN_RESULT_NOT_ALLOWED [1]:Ýþleme Ýzin Verilmedi. [1])
+[        COM1] [            ] [2007081437] [18:14:53:713] [FUNCTION] >>>>> FP3_GetInterfaceID(TO : 0) (hInt:016llX)
+[        COM1] [            ] [2007081437] [18:14:53:725] [FUNCTION] <<<<< FP3_GetInterfaceID (return:0-0x00000000:TRAN_RESULT_OK [0]:Ýþlem Baþarýlý sonuçlandý. [0])
+[            ] [            ] [2007081437] [18:14:53:804] [FUNCTION] >>>>> Json_FP3_GetInterfaceXmlDataByHandle(TO : 0) (hInt:016llX)
+[        COM1] [            ] [2007081437] [18:14:53:812] [FUNCTION] >>>>> FP3_GetInterfaceXmlDataByHandle(TO : 0) (hInt:016llX)
+[        COM1] [            ] [2007081437] [18:14:53:820] [FUNCTION] <<<<< FP3_GetInterfaceXmlDataByHandle (return:0-0x00000000:TRAN_RESULT_OK [0]:Ýþlem Baþarýlý sonuçlandý. [0])
+[            ] [            ] [2007081437] [18:14:53:827] [JSon    ] ST_INTERFACE_XML_DATA TO JSON START >>>> Max=50000
+[            ] [            ] [2007081437] [18:14:53:835] [JSon    ] ST_INTERFACE_XML_DATA TO JSON END <<<<<<
+[            ] [            ] [2007081437] [18:14:53:844] [FUNCTION] <<<<< Json_FP3_GetInterfaceXmlDataByHandle (return:0-0x00000000:TRAN_RESULT_OK [0]:Ýþlem Baþarýlý sonuçlandý. [0])
+[        COM1] [            ] [2007081437] [18:14:54:000] [FUNCTION] >>>>> FP3_GetInterfaceID(TO : 0) (hInt:016llX)
+[        COM1] [            ] [2007081437] [18:14:54:009] [FUNCTION] <<<<< FP3_GetInterfaceID (return:0-0x00000000:TRAN_RESULT_OK [0]:Ýþlem Baþarýlý sonuçlandý. [0])
