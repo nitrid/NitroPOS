@@ -24,18 +24,18 @@ namespace Ingenico
             {
                 string line = Console.ReadLine();
                 string tag = line.Split('|')[0];
-                 
+
                 if (tag == "PING")
                 {
                     line = Ping();
                     Console.WriteLine(line);
                 }
-                else if(tag == "PAIRING")
+                else if (tag == "PAIRING")
                 {
                     line = StartPairing();
                     Console.WriteLine(line);
                 }
-                else if(tag == "ITEM_SALE")
+                else if (tag == "ITEM_SALE")
                 {
 
                     if (line.Split('|').Length > 0)
@@ -70,32 +70,36 @@ namespace Ingenico
                         MFPrintBefore();
                         MFPrint();
                         CloseHandle();
-                        ProcessBatchCommand();
+
+                        if (ProcessBatchCommand())
+                        {
+                            Console.WriteLine("ITEM_SALE|SUCCES");
+                        }
+                        else
+                        {
+                            Console.WriteLine("ITEM_SALE|FAULT");
+                        }
+
                         ClearProcessBatchCommand();
-                        Console.WriteLine("TRAN_RESULT_OK");
                     }
-
-                    //Console.WriteLine(a.Property("Name").Value);
-
-                    //OpenHandle();
-                    //TicketHeader();
-                    //OptionFlag();
-                    //AddItem("KALEM", 1, 5000, 0);
-                    //AddItem("SILGI", 1, 1500, 0);
-                    //CashPayment(0, 6500);
-                    //TotalPrint();
-                    //MFPrintBefore();
-                    //MFPrint();
-                    //CloseHandle();
-                    //ProcessBatchCommand();
-                    //ClearProcessBatchCommand();
-                    //Console.WriteLine("TRAN_RESULT_OK");
+                }
+                else if (tag == "TICKET_CLOSE")
+                {
+                    line = TicketClose();
+                    Console.WriteLine(line);
                 }
                 if (tag == "exit") // Check string
                 { 
                     break;
                 }
             }
+        }
+        private static string GenerateUniqueId()
+        {
+            byte[] szUniqueID = new byte[17];
+            GMPSmartDLL.GenerateUniqueID(szUniqueID);
+            string uniqueId = GMP_Tools.GetStringFromBytes(szUniqueID);
+            return uniqueId;
         }
         private static UInt64 ACTIVE_TRX_HANDLE
         {
@@ -309,7 +313,7 @@ namespace Ingenico
 
             return sendBufferLen;
         }
-        private static void ProcessBatchCommand()
+        private static bool ProcessBatchCommand()
         {
             UInt32 retcode = Defines.TRAN_RESULT_OK;
             byte[] sendBuffer = new byte[1024 * 16];
@@ -325,7 +329,7 @@ namespace Ingenico
             sendBufferLen = (UInt16)GetBatchCommand(sendBuffer);
             if (sendBufferLen == 0)
                 // Nothing to send...
-                return;
+                return false;
 
             UInt16 Len = 0;
             UInt64 TransactionHandle = 0;
@@ -361,29 +365,38 @@ namespace Ingenico
             
             if (retcode == Defines.TRAN_RESULT_OK)
             {
-                //int indexOnListCtrl = 0;
-                numberOfreturnCodes = (ushort)CommandList.Count;
-                
-                for (int t = 0; t < numberOfreturnCodes; t++)
+                try
                 {
-                    byte[] returnCodeString = new byte[256];
+                    //int indexOnListCtrl = 0;
+                    numberOfreturnCodes = (ushort)CommandList.Count;
 
-                    if (stReturnCodes[t] != null)
+                    for (int t = 0; t < numberOfreturnCodes; t++)
                     {
-                        // This is not a result of subCommand (it is a tag value in Get Response )
-                        if (stReturnCodes[t].indexOfSubCommand == 0)
-                            continue;
+                        byte[] returnCodeString = new byte[256];
 
-                        // This is not a result of subCommand (it is a tag value in Get Response )
-                        if (stReturnCodes[t].subCommand == 0)
-                            continue;
+                        if (stReturnCodes[t] != null)
+                        {
+                            // This is not a result of subCommand (it is a tag value in Get Response )
+                            if (stReturnCodes[t].indexOfSubCommand == 0)
+                                continue;
 
-                        GMPSmartDLL.GetErrorMessage(stReturnCodes[t].retcode, returnCodeString);
+                            // This is not a result of subCommand (it is a tag value in Get Response )
+                            if (stReturnCodes[t].subCommand == 0)
+                                continue;
+
+                            GMPSmartDLL.GetErrorMessage(stReturnCodes[t].retcode, returnCodeString);
+                        }
+
+                        CommandList[t].Buffer = GMP_Tools.SetEncoding(returnCodeString);
                     }
-
-                    CommandList[t].Buffer = GMP_Tools.SetEncoding(returnCodeString);
                 }
+                catch(Exception ex)
+                {
+                    return false;
+                }                
             }
+
+            return true;
         }
         private static void ClearProcessBatchCommand()
         {
@@ -399,13 +412,13 @@ namespace Ingenico
             switch (retcode)
             {
                 case Defines.TRAN_RESULT_OK:
-                    return "CONNECTED";
+                    return "PING|CONNECTED";
                 case Defines.DLL_RETCODE_RECV_BUSY:
-                    return "BUSY";
+                    return "PING|BUSY";
                 case Defines.DLL_RETCODE_TIMEOUT:
-                    return "TIMEOUT";
+                    return "PING|TIMEOUT";
                 default:
-                    return "ERROR";
+                    return "PING|ERROR";
             }
         }
         static string StartPairing()
@@ -427,9 +440,9 @@ namespace Ingenico
             pairing.szExternalDeviceSerialNumber = "12344567";
             pairing.szEcrSerialNumber = "JHWE20000079";
             pairing.szProcOrderNumber = "000001";
-            pairing.szProcDate = "280920";
-            pairing.szProcTime = "182700";
-
+            pairing.szProcDate = DateTime.Now.Day.ToString().PadLeft(2,'0') + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Year.ToString().Substring(2,2);
+            pairing.szProcTime = DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0');
+            
             RetCode = Json_GMPSmartDLL.FP3_StartPairingInit(CurrentInterface, ref pairing, ref pairingResp);
 
             if (RetCode != Defines.TRAN_RESULT_OK)
@@ -553,9 +566,25 @@ namespace Ingenico
             {
                 stPaymentRequest[i] = new ST_PAYMENT_REQUEST();
             }
+            //NAKİT OR KREDİ KARTI TİPLERİ İÇİN
+            if(pType == 0)
+            {
+                stPaymentRequest[0].typeOfPayment = (uint)EPaymentTypes.PAYMENT_CASH_TL;
+                stPaymentRequest[0].subtypeOfPayment = 0;
+            }
+            else if(pType == 1)
+            {
+                stPaymentRequest[0].BankPaymentUniqueId = GenerateUniqueId();
+                stPaymentRequest[0].typeOfPayment = (uint)EPaymentTypes.PAYMENT_BANK_CARD;
+                stPaymentRequest[0].subtypeOfPayment = Defines.PAYMENT_SUBTYPE_SALE;
+                stPaymentRequest[0].bankBkmId = 0;
+                stPaymentRequest[0].transactionFlag = 0x00000000;
+                stPaymentRequest[0].numberOfinstallments = 0;
+                stPaymentRequest[0].rawData = Encoding.Default.GetBytes("RawData from external application for the payment application");
+                stPaymentRequest[0].rawDataLen = (ushort)stPaymentRequest[0].rawData.Length;
+            }
 
-            stPaymentRequest[0].typeOfPayment = (uint)EPaymentTypes.PAYMENT_CASH_TL;
-            stPaymentRequest[0].subtypeOfPayment = 0;
+            
             stPaymentRequest[0].payAmount = pAmount;
             stPaymentRequest[0].payAmountCurrencyCode = currencyOfPayment;
 
@@ -595,6 +624,29 @@ namespace Ingenico
             AddIntoCommandBatch("prepare_PrintMF", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen);
 
             return "MF PRINT";
-        }        
+        }
+        static string TicketClose()
+        {
+            UInt32 RetCode = 0;
+            ST_TICKET m_stTicket = new ST_TICKET();
+
+            RetCode = Json_GMPSmartDLL.FP3_VoidAll(CurrentInterface, GetTransactionHandle(CurrentInterface), ref m_stTicket, Defines.TIMEOUT_DEFAULT);
+            if (RetCode != 0)
+            {
+                return "TICKET CLOSE|FAULT";
+            }
+
+            uint resp = GMPSmartDLL.FP3_Close(CurrentInterface, GetTransactionHandle(CurrentInterface), Defines.TIMEOUT_DEFAULT);
+            if (RetCode != 0)
+            {
+                return "TICKET CLOSE|FAULT";
+            }
+
+            DeleteTrxHandles(CurrentInterface, GetTransactionHandle(CurrentInterface));
+            ClearTransactionUniqueId(CurrentInterface);
+
+            return "TICKET CLOSE|SUCCES";
+        }
+
     }
 }

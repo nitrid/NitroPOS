@@ -175,6 +175,9 @@ function Pos($scope,$window,$rootScope,db)
 
     if(typeof require != 'undefined')
     {
+        $("#MdlIngenicoEslesme").modal("show");  
+        db.Ingenico.Init();
+
         //BURAYA TEKRAR BAKILACAK (CALLBACK DESTROY)
         db.CardPayment.On("PaymentEvent",function(pData)
         {
@@ -205,6 +208,26 @@ function Pos($scope,$window,$rootScope,db)
 
         db.Ingenico.On("IngenicoEvent",function(pData)
         {
+            if(pData.tag == "PING")
+            {
+                if(pData.msg != "CONNECTED")
+                {
+                    $scope.TxtOkcMesaj = "Bağlantı Başarısız.";
+                    $scope.BtnTxtOkcEslesme = "Tekrar";
+                }
+            }
+            else if(pData.tag == "PAIRING")
+            {
+                if(pData.msg == "SUCCES")
+                {
+                    $("#MdlIngenicoEslesme").modal("hide");  
+                }
+                else
+                {
+                    $scope.TxtOkcMesaj = "Eşleşme Başarısız.";
+                    $scope.BtnTxtOkcEslesme = "Tekrar";
+                }
+            }
            console.log(pData)
         });
     }
@@ -260,6 +283,8 @@ function Pos($scope,$window,$rootScope,db)
         $scope.TxtMiktarGuncelle = 0;
         $scope.TxtFiyatGuncelle = 0;
         $scope.TxtKasaSifre = "";
+        $scope.TxtOkcMesaj = "OKC Cihazıyla Eşleşme Yapılıyor.";
+        $scope.BtnTxtOkcEslesme = "İptal";
 
         $scope.Kullanici = UserParam.Kullanici;
         $scope.KasaNo = 1;
@@ -338,12 +363,7 @@ function Pos($scope,$window,$rootScope,db)
             })
         },21600000);
 
-        InitClass();
-
-        if(typeof require != 'undefined')
-        {
-            db.Ingenico.Init();
-        }
+        InitClass();        
     }
     function InitClass()
     {
@@ -1131,7 +1151,7 @@ function Pos($scope,$window,$rootScope,db)
                 for(let i = 0;i < $scope.TahList.length;i++)
                 {
                     let TmpPayment = {};
-                    TmpPayment.TYPE = 0;
+                    TmpPayment.TYPE = $scope.TahList[i].TYPE;
                     TmpPayment.AMOUNT = $scope.TahList[i].AMOUNT * 100;
 
                     TmpData.PAYMENT.push(TmpPayment);
@@ -2982,5 +3002,22 @@ function Pos($scope,$window,$rootScope,db)
 
         $("#TbKasaRapor").addClass('active');
         $("#TbMain").removeClass('active');
+    }
+    $scope.BtnOkcEslesme = function()
+    {
+        if($scope.BtnTxtOkcEslesme == "İptal")
+        {
+            $('#MdlIngenicoEslesme').modal('hide');
+        }
+        else
+        {
+            if(typeof require != 'undefined')
+            {
+                $scope.TxtOkcMesaj = "OKC Cihazıyla Eşleşme Yapılıyor.";
+                $scope.BtnTxtOkcEslesme = "İptal"
+                $("#MdlIngenicoEslesme").modal("show");  
+                db.Ingenico.Init();
+            }
+        }
     }
 }

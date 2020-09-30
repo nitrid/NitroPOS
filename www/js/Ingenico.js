@@ -28,20 +28,25 @@ var Ingenico =
             //console.log("PING")
             Terminal.stdout.on('data', function (data) 
             {
-                if(data.toString().trim() == "CONNECTED")
+                if(data.toString().trim().split('|')[0] == "PING")
                 {
-                    LocalEvent({tag:"PING",msg:"CONNECTED"});
+                    LocalEvent({tag:"PING",msg:data.toString().trim().split('|')[1]});
                     console.log(data.toString().trim());
-                    Terminal.stdin.write('PAIRING\n');
+
+                    if(data.toString().trim().split('|')[1] == "CONNECTED")
+                    {
+                        Terminal.stdin.write('PAIRING\n');
+                    }
                 }
                 else if(data.toString().trim().split('|')[0] == "PAIRING")
                 {
                     Pairing = true;
-
                     LocalEvent({tag:"PAIRING",msg:data.toString().trim().split('|')[1]});                    
                     console.log(data.toString().trim().split('|')[1]);
+                }
+                else if(data.toString().trim().split('|')[0] == "TICKET_CLOSE")
+                {
 
-                    Terminal.stdin.write('ITEM_SALE|{SALES:[{NAME:"KALEM",QUANTITY:1,AMOUNT:1000,TAX:1}],PAYMENT:[{TYPE:0,AMOUNT:1000}]}\n');
                 }
             });
         }
@@ -70,7 +75,6 @@ var Ingenico =
                 console.log("No listeners found for " + evt);
             }
         }
-        
         Ingenico.prototype.On = function(evt, callback) 
         {
             if (!Listeners.hasOwnProperty(evt))
@@ -83,11 +87,3 @@ var Ingenico =
         return Ingenico;
     }
 )();
-class inc
-{
-    inc()
-    {
-
-    }
-
-}
