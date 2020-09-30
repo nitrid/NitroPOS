@@ -228,6 +228,21 @@ function Pos($scope,$window,$rootScope,db)
                     $scope.BtnTxtOkcEslesme = "Tekrar";
                 }
             }
+            else if(pData.tag == "ITEM_SALE")
+            {
+                if(pData.msg == "SUCCES")
+                {
+                    SatisKapat();
+                }
+                else
+                {
+                    db.Ingenico.TicketClose();
+                    $("#MdlAraToplam").modal("hide");
+                    $("#MdlIngenicoEslesme").modal("show");
+                    $scope.TxtOkcMesaj = "Ödeme İşlemi Başarısız.";
+                    $scope.BtnTxtOkcEslesme = "İptal";  
+                }
+            }
            console.log(pData)
         });
     }
@@ -1128,37 +1143,7 @@ function Pos($scope,$window,$rootScope,db)
     function SatisKapat()
     {
         if($scope.TahKalan <= 0)
-        {
-            if(typeof require != 'undefined')
-            {
-                let TmpData = 
-                {
-                    SALES : [],
-                    PAYMENT : [] 
-                }
-
-                for(let i = 0;i < $scope.SatisList.length;i++)
-                {
-                    let TmpSale = {};
-                    TmpSale.NAME = $scope.SatisList[i].ITEM_NAME;
-                    TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY;
-                    TmpSale.AMOUNT = $scope.SatisList[i].PRICE * 100;
-                    TmpSale.TAX = 1;
-
-                    TmpData.SALES.push(TmpSale);
-                }
-
-                for(let i = 0;i < $scope.TahList.length;i++)
-                {
-                    let TmpPayment = {};
-                    TmpPayment.TYPE = $scope.TahList[i].TYPE;
-                    TmpPayment.AMOUNT = $scope.TahList[i].AMOUNT * 100;
-
-                    TmpData.PAYMENT.push(TmpPayment);
-                }
-                db.Ingenico.SendData(TmpData);
-            } 
-
+        {            
             db.ExecuteTag($scope.Firma,'PosSatisKapatUpdate',[$scope.Sube,$scope.Seri,$scope.Sira,$scope.EvrakTip],function(data)
             {   
                 let TmpQuery = 
@@ -1186,22 +1171,12 @@ function Pos($scope,$window,$rootScope,db)
                 db.GetDataQuery(TmpQuery,function(pData)
                 {
                     //SATIŞ SONUNDA PARA ÜSTÜ MODAL EKRANI AÇILIYOR. TMPPARAUSTU DEĞİŞKENİ EKRAN YENİLENDİĞİ İÇİN KULLANILDI. 
-                    //$scope.TmpParaUstu = $scope.TahParaUstu;
                     if($scope.TahParaUstu > 0)
                     {
                         $("#MdlParaUstu").modal("show");                    
                         setTimeout(()=>{$("#MdlParaUstu").modal("hide")},5000);
                     }
                                         
-                    // db.EscposPrint($scope.SatisList,$scope.TahList,pData,function()
-                    // {
-                    //     //EĞER TAHSİLAT İÇERİSİNDE NAKİT VARSA KASAYI AÇ YOKSA KASAYI AÇMA BUNUN İÇİN TAHSİLAT TABLOSUNDAKİ TYPE ALANININ TOPLAM DEĞERİNE BAKIYORUM.
-                    //     if(db.SumColumn($scope.TahList,"TYPE") == 0)
-                    //     {
-                    //         db.EscposCaseOpen();
-                    //     }
-                    // });
-    
                     setTimeout(()=>
                     {
                         $('#MdlAraToplam').modal('hide');
@@ -1722,8 +1697,42 @@ function Pos($scope,$window,$rootScope,db)
                     db.GetData($scope.Firma,'PosTahGetir',[$scope.Sube,$scope.EvrakTip,$scope.TahSeri,$scope.TahSira],function(PosTahData)
                     {   
                         $scope.TahList = PosTahData;
-                        TahSonYenile();                                                                          
-                        SatisKapat();                   
+                        TahSonYenile();  
+
+                        if(typeof require != 'undefined' && $scope.TahKalan <= 0)
+                        {
+                            let TmpData = 
+                            {
+                                SALES : [],
+                                PAYMENT : [] 
+                            }
+
+                            for(let i = 0;i < $scope.SatisList.length;i++)
+                            {
+                                let TmpSale = {};
+                                TmpSale.NAME = $scope.SatisList[i].ITEM_NAME;
+                                TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY;
+                                TmpSale.AMOUNT = $scope.SatisList[i].PRICE * 100;
+                                TmpSale.TAX = 1;
+
+                                TmpData.SALES.push(TmpSale);
+                            }
+
+                            for(let i = 0;i < $scope.TahList.length;i++)
+                            {
+                                let TmpPayment = {};
+                                TmpPayment.TYPE = $scope.TahList[i].TYPE;
+                                TmpPayment.AMOUNT = $scope.TahList[i].AMOUNT * 100;
+
+                                TmpData.PAYMENT.push(TmpPayment);
+                            }
+                            db.Ingenico.SendData(TmpData);                         
+                        } 
+                        else
+                        {
+                            SatisKapat();
+                        }                                                
+                                           
                         $scope.TahPanelKontrol = false;
                     });
                 }
@@ -2408,35 +2417,13 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.BtnKartOdemeGonder = function()
     {
-        $scope.TahTip = 1;
-
         $("#MdlKartOdeme").modal("hide");
-        $("#MdlKartYukleniyor").modal("show");        
-
-        db.PaymentSend($scope.TxtAraToplamTutar);        
-    }    
-    $scope.BtnKartVazgec = function()
-    {
-        $("#MdlKartYukleniyor").modal("hide");
-    } 
-    $scope.BtnKartZorla = function()
-    {
         $scope.TahTip = 1;
-
-        $("#MdlKartYukleniyor").modal("hide");
-        $scope.PosTahInsert(0);
-    }   
+        $scope.PosTahInsert();     
+    }    
     $scope.BtnTahOnay = function()
     {
-        if($scope.TahTip == 0)
-        {
-            $scope.PosTahInsert();
-        }
-        else if($scope.TahTip == 1)
-        {
-            $('#MdlAraToplam').modal('hide');
-            $scope.BtnKartOdemeGonder();
-        }
+        $scope.PosTahInsert();
     }
     $scope.BtnPara = function(pTutar)
     {

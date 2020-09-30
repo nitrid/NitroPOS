@@ -52,7 +52,6 @@ namespace Ingenico
                                 JArray TmpSales = JArray.Parse(MasterItem.Value.ToString());
                                 foreach (JObject SalesItem in TmpSales.Children<JObject>())
                                 {
-                                    Console.WriteLine(SalesItem.Property("NAME").Value.ToString());
                                     AddItem(SalesItem.Property("NAME").Value.ToString(), (UInt32)SalesItem.Property("QUANTITY").Value, (uint)SalesItem.Property("AMOUNT").Value, (int)SalesItem.Property("TAX").Value);
                                 }
                             }
@@ -395,6 +394,10 @@ namespace Ingenico
                     return false;
                 }                
             }
+            else
+            {
+                return false;
+            }
 
             return true;
         }
@@ -540,7 +543,7 @@ namespace Ingenico
             stItem.countPrecition = 0;
             stItem.name = pName;
             stItem.barcode = "";
-            Console.WriteLine(itemCount);
+            
             if (PromotionModel.Instance.Amount > 0)
             {
                 stItem.promotion.amount = (int)PromotionModel.Instance.Amount;

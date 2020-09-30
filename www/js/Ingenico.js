@@ -44,9 +44,10 @@ var Ingenico =
                     LocalEvent({tag:"PAIRING",msg:data.toString().trim().split('|')[1]});                    
                     console.log(data.toString().trim().split('|')[1]);
                 }
-                else if(data.toString().trim().split('|')[0] == "TICKET_CLOSE")
+                else if(data.toString().trim().split('|')[0] == "ITEM_SALE")
                 {
-
+                    LocalEvent({tag:"ITEM_SALE",msg:data.toString().trim().split('|')[1]});
+                    console.log(data.toString().trim().split('|')[1]);
                 }
             });
         }
@@ -54,6 +55,10 @@ var Ingenico =
         {
             console.log(JSON.stringify(pData));
             Terminal.stdin.write('ITEM_SALE|' + JSON.stringify(pData) +'\n');
+        }
+        Ingenico.prototype.TicketClose = function()
+        {
+            Terminal.stdin.write('TICKET_CLOSE\n');
         }
         //#region "EVENT TRIGGER"        
         function LocalEvent(pData)
