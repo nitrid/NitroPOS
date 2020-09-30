@@ -1,9 +1,8 @@
 {
-    "port":"8095",
-    "server":"192.168.100.12",
+    "server":"172.16.122.250",
     "database":"NITROGENPOS",
-    "uid":"beka",
-    "pwd":"1122334455",
+    "uid":"nitrogen",
+    "pwd":"lp8462+",
     "trustedConnection" : false,
     "EpsonUSB" : {"Vid:" : "04B8","Pid" : "0E15"},
     "LineDisplay" : "COM3",

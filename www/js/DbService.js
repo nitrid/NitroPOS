@@ -1,6 +1,7 @@
 angular.module('app.db', []).service('db',function($rootScope)
 {
-    let _Host = 'http://localhost:8092';
+    //let _Host = 'http://172.16.122.250:90';
+    let _Host = 'http://176.236.120.222:90';
     let _Socket = null;
     let _MenuData = {};
     let _CardPayment = new CardPayment();
@@ -422,7 +423,7 @@ angular.module('app.db', []).service('db',function($rootScope)
     };     
     this.SetHost = function(host,port)
     {
-        _Host = 'http://' + host + ':8092';
+        _Host = 'http://' + host + ':90';
         //_Socket.io.uri = _Host;
     }
     this.On = function(eventName,callback)
@@ -561,6 +562,7 @@ angular.module('app.db', []).service('db',function($rootScope)
         {
             if(pCallback)
             {
+                
                 if(data.result.recordset.length > 0)
                 {
                     pCallback(data.result.recordset);
