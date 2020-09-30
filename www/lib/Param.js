@@ -1,7 +1,7 @@
 var Param = [
 	{
 		"Kullanici": "Admin",
-		"Sifre": "1453",
+		"Sifre": "1",
 		"Adi": "Mahir",
 		"Soyadi": "Yönetici",
 		"Telefon": "0549 525 0675",

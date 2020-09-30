@@ -1,4 +1,4 @@
-function KullaniciParametreCtrl($route,$scope,$window,db)
+function KullaniciParametreCtrl($route,$scope,$window,$rootScope,db)
 {
     let KullaniciListeRow = null;
     $('#MdlKullanici').on('hide.bs.modal', function () 
@@ -13,7 +13,18 @@ function KullaniciParametreCtrl($route,$scope,$window,db)
         $scope.Sifre = "";
         $scope.Kodu = "";
     });
-    
+    $rootScope.LoadingShow = function() 
+    {
+        $("#loading").show();
+    }
+    $rootScope.LoadingHide = function() 
+    {
+        $("#loading").hide();
+    }
+    $rootScope.MessageBox = function(pMsg)
+    {
+        alertify.alert(pMsg);
+    }
     function Init()
     {
         UserParam = Param[$window.sessionStorage.getItem('User')];                

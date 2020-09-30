@@ -245,7 +245,7 @@ function Pos($scope,$window,$rootScope,db)
     }
     function Init()
     {
-        UserParam = Param[$window.sessionStorage.getItem('User')];                
+        UserParam = Param[$window.sessionStorage.getItem('User')];
         $scope.Firma = 'NITROGENPOS'
         $scope.Seri = "";
         $scope.TahSeri = "";
