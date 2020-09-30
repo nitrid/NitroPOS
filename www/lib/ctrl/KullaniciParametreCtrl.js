@@ -1,9 +1,71 @@
-function KullaniciParametreCtrl($scope,$window,db)
+function KullaniciParametreCtrl($route,$scope,$window,$rootScope,db)
 {
-    let KullaniciSelectedRow = null;
-    let DGetir = false;
-    //let File = "./www/_pos/lib/Param.js";
-    
+    let KullaniciListeRow = null;
+    $('#MdlKullanici').on('hide.bs.modal', function () 
+    {
+        $scope.Kullanici = "";
+        $scope.Sifre = "";
+        $scope.Kodu = "";
+    });
+    $('#MdlKullaniciGuncelle').on('hide.bs.modal', function () 
+    {
+        $scope.Kullanici = "";
+        $scope.Sifre = "";
+        $scope.Kodu = "";
+    });
+    $rootScope.LoadingShow = function() 
+    {
+        $("#loading").show();
+    }
+    $rootScope.LoadingHide = function() 
+    {
+        $("#loading").hide();
+    }
+    $rootScope.MessageBox = function(pMsg)
+    {
+        alertify.alert(pMsg);
+    }
+    function Init()
+    {
+        UserParam = Param[$window.sessionStorage.getItem('User')];                
+        $scope.Firma = 'NITROGENPOS'
+        //KULLANICI
+        $scope.Kodu = "";
+        $scope.Kullanici = "";
+        $scope.Sifre = "";
+        $scope.Yetki = "0";
+        $scope.KullaniciGuid = "";
+        $scope.AktifPasif = true;
+        //SİSTEM
+        $scope.KiloBarkod = "";
+        $scope.KiloFlag = "";
+        $scope.KiloBaslangic = "";
+        $scope.KiloUzunluk = "";
+        $scope.SatirBirlestir = 0;
+        //POSSATIŞ
+        $scope.SatisSeri = "IRS";
+        $scope.TahsilatSeri = "THS";
+        $scope.IadeSeri = "IADE";
+        $scope.CariKodu = "1";
+        $scope.NKasaKodu = "1";
+        $scope.KKasaKodu = "1";
+        $scope.DepoNo = "1";
+        $scope.FiyatListeNo = 1;
+        $scope.PersonelKodu = 1;
+        $scope.SorumlulukKodu = 1;
+        $scope.EvrakTip = 1;
+        //MENÜ
+        $scope.PosSatis = true;
+        $scope.StokListe = true;
+        $scope.StokTanitim = true;
+        $scope.CariListe = true;
+        $scope.CariTanitim = true;
+
+        $scope.PersonelListe = [];
+        $scope.SorumlulukListe = [];
+        $scope.KullaniciListe = [];
+        $scope.DepoListe = [];
+    }
     function InitKullaniciGrid()
     {   
         $("#TblKullanici").jsGrid({
@@ -14,54 +76,123 @@ function KullaniciParametreCtrl($scope,$window,db)
             heading: true,
             selecting: true,
             data : $scope.KullaniciListe,
-            
+            autoload: true,
             fields: 
             [
-            {
-                name: "CODE",
-                title: "KODU",
-                type: "text",
-                align: "center",
-                width: 100
-            },
-            {
-                name: "NAME",
-                title: "KULLANICI",
-                type: "text",
-                align: "center",
-                width: 100
-            },
-            {
-                name: "PASSWORD",
-                title: "ŞİFRE",
-                type: "text",
-                align: "center",
-                width: 100
-            }, 
-            {
-                name: "TAG",
-                title: "TAG",
-                type: "text",
-                align: "center",
-                width: 25
-            },
-            {
-                name: "STATUS",
-                title: "STATUS",
-                type: "number",
-                align: "center",
-                width: 25
-            },
+                {
+                    name: "CODE",
+                    title: "KODU",
+                    type: "text",
+                    align: "center",
+                    width: 80
+                },
+                {
+                    name: "NAME",
+                    title: "KULLANICI",
+                    type: "text",
+                    align: "center",
+                    width: 120
+                },
+                {
+                    name: "PASSWORD",
+                    title: "ŞİFRE",
+                    type: "text",
+                    align: "center",
+                    width: 100
+                }, 
+                {
+                    name: "YETKI",
+                    title: "TAG",
+                    type: "text",
+                    align: "center",
+                    width: 25
+                },
+                {
+                    name: "DURUM",
+                    title: "DURUM",
+                    type: "number",
+                    align: "center",
+                    width: 25
+                },
+                [
+                    { 
+                        itemTemplate: function(_, item) 
+                        {
+                            return $("<button type='submit' style='height:30px; font-size: 12px;' class='btn btn-info btn-block'></button>").text("Güncelle")
+                                .on("click", function() 
+                                {
+                                    $scope.BtnKullaniciGuncelle(0,item);
+                                });
+                        },
+                        width: 25
+                    }
+                ],
+                [
+                    { 
+                        itemTemplate: function(_, item) 
+                        {
+                            return $("<button type='submit' style='height:30px; font-size: 12px;' class='btn btn-danger btn-block'></button>").text("Sil")
+                                .on("click", function() 
+                                {
+                                    alertify.okBtn('Evet');
+                                    alertify.cancelBtn('Hayır');
+
+                                    alertify.confirm('Kullanıcı Silmek İstediğinize Emin Misiniz ?', 
+                                    function()
+                                    { 
+                                        KullaniciDelete(item);
+                                    }
+                                    ,function(){});
+                                });
+                        },
+                        width: 25
+                    }
+                ],
+                [
+                    { 
+                        itemTemplate: function(_, item) 
+                        {
+                            return $("<div class='btn-group'><button type='button' style='height:30px; font-size: 12px;' class='btn btn-primary dropdown-toggle' data-toggle='dropdown' aria-expanded='false'>Ayarlar</button><div class='dropdown-menu' aria-labelledby='exampleSizingDropdown1' role='menu'><a class='dropdown-item' role='menuitem' ng-click='Deneme()'>Sistem Ayarları</a><a class='dropdown-item' role='menuitem'>Pos Ayarları</a><a class='dropdown-item' role='menuitem'>Menü Ayarları</a></div></div>")
+                                .on("click", function() 
+                                {
+                                    $scope.Kodu = item.CODE
+                                });
+                        },
+                        width: 25
+                    }
+                ],
             ],
             rowClick: function(args)
-            {
-                $scope.KullaniciListeRowClick(args.itemIndex,args.item,this);
+            {   
+                ParamGetir();
+                if(args.event.target.outerText == 'Sistem Ayarları')
+                {
+                    $("#TbSistem").addClass('active');
+                    $("#TbMain").removeClass('active');
+                    $("#TbPosSatis").removeClass('active');
+                    $("#TbMenu").removeClass('active');
+                }
+                else if(args.event.target.outerText == 'Pos Ayarları')
+                {
+                    $("#TbPosSatis").addClass('active');
+                    $("#TbMain").removeClass('active');
+                    $("#TbSistem").removeClass('active');
+                    $("#TbMenu").removeClass('active');
+                }
+                else if(args.event.target.outerText == 'Menü Ayarları')
+                {
+                    $("#TbMenu").addClass('active');
+                    $("#TbPosSatis").removeClass('active');
+                    $("#TbSistem").removeClass('active');
+                    $("#TbMain").removeClass('active');
+                }
                 $scope.$apply();
-            }
+            },
         });
     }
     function KullaniciGetir()
     {
+        Init();
         db.GetData($scope.Firma,'KullaniciGetir',[],function(data)
         {   
             $scope.KullaniciListe = data;
@@ -84,6 +215,90 @@ function KullaniciParametreCtrl($scope,$window,db)
             if(typeof(InsertResult.result.err) == 'undefined')
             {   
                 alert("Kayıt İşlemi Gerçekleşti.");
+                //PARAM INSERT
+                let Param =
+                [
+                    {
+                        KiloBarkod : $scope.KiloBarkod,
+                    },
+                    {
+                        KiloFlag : $scope.KiloFlag,
+                    },
+                    {
+                        KiloBaslangic : $scope.KiloBaslangic,
+                    },
+                    {
+                        KiloUzunluk : $scope.KiloUzunluk,
+                    },
+                    {
+                        SatirBirlestir : $scope.SatirBirlestir,
+                    },
+                    {
+                        SatisSeri : $scope.SatisSeri,
+                    },
+                    {
+                        TahsilatSeri : $scope.TahsilatSeri,
+                    },
+                    {
+                        IadeSeri : $scope.IadeSeri,
+                    },
+                    {
+                        CariKodu : $scope.CariKodu,
+                    },
+                    {
+                        NKasaKodu : $scope.NKasaKodu,
+                    },
+                    {
+                        KKasaKodu : $scope.KKasaKodu,
+                    },
+                    {
+                        DepoNo : $scope.DepoNo,
+                    },
+                    {
+                        FiyatListeNo : $scope.FiyatListeNo,
+                    },
+                    {
+                        PersonelKodu : $scope.PersonelKodu,
+                    },
+                    {
+                        SorumlulukKodu : $scope.SorumlulukKodu,
+                    },
+                    {
+                        EvrakTip : $scope.EvrakTip,
+                    },
+                    {
+                        PosSatis : $scope.PosSatis == true ? 1 : 0,
+                    },
+                    {
+                        StokListe : $scope.StokListe == true ? 1 : 0,
+                    },
+                    {
+                        StokTanitim : $scope.StokTanitim == true ? 1 : 0,
+                    },
+                    {
+                        CariListe : $scope.CariListe == true ? 1 : 0,
+                    },
+                    {
+                        CariTanitim : $scope.CariTanitim == true ? 1 : 0
+                    },
+                ]
+                for (let i = 0; i < Param.length; i++) 
+                {
+                    let Tag = 0;
+                    if(i <= 4)
+                    {
+                        Tag = 0;
+                    }
+                    else if(i <= 15)
+                    {
+                        Tag = 1;
+                    }
+                    else
+                    {
+                        Tag = 2;
+                    }
+                    ParamInsert(Object.keys(Param[i]),Object.values(Param[i]),Tag,$scope.Kodu)
+                }
                 $('#MdlKullanici').modal('hide');
                 KullaniciGetir();
             }   
@@ -94,279 +309,352 @@ function KullaniciParametreCtrl($scope,$window,db)
             }
         });
     }
-    $scope.Init = async function()
+    function KullaniciUpdate(pData)
     {
-        $scope.KullaniciListeSelectedIndex = 0;
-        $scope.CmbParamList = [];
-        $scope.ParamName = "Sistem";
-
-        $scope.Kullanici = "";
-        $scope.Kodu = "";
-        $scope.Sifre = "";
-        $scope.Yetki = "0";
-        $scope.AktifPasif = true;
-
-        $scope.KullaniciListe = [];
-
-        InitKullaniciGrid();
-        KullaniciGetir()
-        $("#Grup2").hide();
-        $scope.CmbParamChange();
-    }
-    $scope.KullaniciListeRowClick = function(pIndex,pItem,pObj)
-    {
-        if ( KullaniciSelectedRow ) { KullaniciSelectedRow.children('.jsgrid-cell').css('background-color', '').css('color',''); }
-        var $row = pObj.rowByItem(pItem);
-        $row.children('.jsgrid-cell').css('background-color','#2979FF').css('color','white');
-        KullaniciSelectedRow = $row;
-        $scope.KullaniciListeSelectedIndex = pIndex;
-
-        $scope.Yetkili = pItem.Yetkili;
-    }
-    $scope.Kaydet = function()
-    {
-        if($scope.Kullanici != '' && $scope.Kodu != '' && $scope.Sifre != '')
-        {
-            KullaniciInsert();
-        }
-        else
-        {
-            alertify.alert("Lütfen Boş Alanları Doldurun.")
-        }
-    }
-    $scope.BtnYeni = function ()
-    {
-        DGetir = false;
-
-        $scope.Kullanici = "";
-        $scope.Sifre = "";
-        $scope.Adi = "";
-        $scope.Soyadi = "";
-        $scope.Telefon = "";
-        $scope.Email = "";
-        $scope.MikroId = "";
-        $scope.Yetkili = false;
-    }
-    $scope.BtnDuzenle = function()
-    {
-        DGetir = true;
-
-        $scope.Kullanici = $scope.KullaniciListe[$scope.KullaniciListeSelectedIndex].Kullanici;
-        $scope.Sifre = $scope.KullaniciListe[$scope.KullaniciListeSelectedIndex].Sifre;
-        $scope.Adi = $scope.KullaniciListe[$scope.KullaniciListeSelectedIndex].Adi;
-        $scope.Soyadi = $scope.KullaniciListe[$scope.KullaniciListeSelectedIndex].Soyadi;
-        $scope.Telefon = $scope.KullaniciListe[$scope.KullaniciListeSelectedIndex].Telefon;
-        $scope.Email = $scope.KullaniciListe[$scope.KullaniciListeSelectedIndex].Email;
-        $scope.MikroId = $scope.KullaniciListe[$scope.KullaniciListeSelectedIndex].MikroId;
-        $scope.Yetkili = $scope.KullaniciListe[$scope.KullaniciListeSelectedIndex].Yetkili;
-    }
-    $scope.BtnSil = function()
-    {
-        if($scope.KullaniciListeSelectedIndex != 0)
-        {
-            alertify.okBtn('Evet');
-            alertify.cancelBtn('Hayır');
-
-            alertify.confirm('Kullanıcıyı silmek istediğinize eminmisiniz ?', 
-            function()
-            { 
-                Param.splice($scope.KullaniciListeSelectedIndex,1);                
-                db.Emit('ParamSave',[Param,File]);
-                $window.location.reload();
-            }
-            ,function(){});
-            
-        }
-        else
-        {
-            alertify.okBtn('Tamam');
-            alertify.alert('Admin kullanıcısını silemezsiniz !');
-        }                
-    }
-    $scope.BtnParametre = function()
-    {
-        $("#Grup1").hide();
-        $("#Grup2").show();
-
-        for(i = 0; i < Object.keys(Param[$scope.KullaniciListeSelectedIndex]).length;i++)
-        {
-            if(typeof Object.values(Param[$scope.KullaniciListeSelectedIndex])[i] == "object")
+        db.ExecuteTag($scope.Firma,'KullaniciUpdate',pData,async function(InsertResult)
+        {         
+            if(typeof(InsertResult.result.err) == 'undefined')
+            {   
+                alert("Kullanıcı Güncellendi.");
+                $('#MdlKullaniciGuncelle').modal('hide');
+                KullaniciGetir();
+            }   
+            else
             {
-                $scope.CmbParamList.push({Name : Object.keys(Param[$scope.KullaniciListeSelectedIndex])[i]});
+                alert("Kullanıcı Güncelleme İşleminde Hata.");
+                console.log(InsertResult.result.err);
             }
-        }
+        });
     }
-    $scope.CmbParamChange = function()
+    function KullaniciDelete(pData)
     {
-        let ParamData = GetParamObject($scope.ParamName);
-        let HtmlData = "";
-        for(i = 0; i < Object.keys(ParamData).length;i++)
-        {
-            if (i % 2 == 0)
+        db.ExecuteTag($scope.Firma,'KullaniciDelete',[pData.GUID],async function(InsertResult)
+        {              
+            if(typeof(InsertResult.result.err) == 'undefined')
+            {   
+                ParamDelete(pData);
+                alert("Kullanıcı Silme İşlemi Gerçekleşti");
+                KullaniciGetir();
+            }   
+            else
             {
-                HtmlData = HtmlData + "<div class='form-group row my-1'>";
-                HtmlData = HtmlData + "<div class='col-6'>";
-                HtmlData = HtmlData + "<div class='row'>";
-                HtmlData = HtmlData + "<label class='form-control-label col-lg-4 col-md-4 col-sm-6 offset-0 pr-20 form-control-sm'><div class='float-right'><span style='color:dodgerblue;'><b>" + GetParamTitle($scope.ParamName,Object.keys(ParamData)[i]) + " : </b></span></div></label>";
-                HtmlData = HtmlData + "<input type='text' id = '" + Object.keys(ParamData)[i] + "' class='form-control col-lg-8 col-md-8 col-sm-6 offset-0 form-control-sm' value = '" + Object.values(ParamData)[i] + "'>";
-                HtmlData = HtmlData + "</div>";
-                HtmlData = HtmlData + "</div>";
-
-                if(Object.keys(ParamData).length == i)
+                alert("Kullanıcı Silme İşleminde Hata.");
+                console.log(InsertResult.result.err);
+            }
+        });
+    }
+    function ParamGetir()
+    {
+        db.GetData($scope.Firma,'ParamGetir',[$scope.Kodu],function(data)
+        {   
+            for (let i = 0; i < data.length; i++) 
+            {
+                //SİSTEM
+                if(data[i].NAME == "KiloBarkod")
                 {
-                    HtmlData = HtmlData + "</div>";
+                    $scope.KiloBarkod = data[i].VALUE;
                 }
+                else if(data[i].NAME == "KiloFlag")
+                {
+                    $scope.KiloFlag = data[i].VALUE;
+                }
+                else if(data[i].NAME == "KiloBaslangic")
+                {
+                    $scope.KiloBaslangic = data[i].VALUE;
+                }
+                else if(data[i].NAME == "KiloUzunluk")
+                {
+                    $scope.KiloUzunluk = data[i].VALUE;
+                }
+                else if(data[i].NAME == "SatirBirlestir")
+                {
+                    $scope.SatirBirlestir = data[i].VALUE;
+                }
+                //POSSATIŞ
+                else if(data[i].NAME == "SatisSeri")
+                {
+                    $scope.SatisSeri = data[i].VALUE;
+                }
+                else if(data[i].NAME == "TahsilatSeri")
+                {
+                    $scope.TahsilatSeri = data[i].VALUE;
+                }
+                else if(data[i].NAME == "IadeSeri")
+                {
+                    $scope.IadeSeri = data[i].VALUE;
+                }
+                else if(data[i].NAME == "CariKodu")
+                {
+                    $scope.CariKodu = data[i].VALUE;
+                }
+                else if(data[i].NAME == "NKasaKodu")
+                {
+                    $scope.NKasaKodu = data[i].VALUE;
+                }
+                else if(data[i].NAME == "KKasaKodu")
+                {
+                    $scope.KKasaKodu = data[i].VALUE;
+                }
+                else if(data[i].NAME == "DepoNo")
+                {
+                    $scope.DepoNo = data[i].VALUE;
+                }
+                else if(data[i].NAME == "FiyatListeNo")
+                {
+                    $scope.FiyatListeNo = data[i].VALUE;
+                }
+                else if(data[i].NAME == "PersonelKodu")
+                {
+                    $scope.PersonelKodu = data[i].VALUE;
+                }
+                else if(data[i].NAME == "SorumlulukKodu")
+                {
+                    $scope.SorumlulukKodu = data[i].VALUE;
+                }
+                else if(data[i].NAME == "EvrakTip")
+                {
+                    $scope.EvrakTip = data[i].VALUE;
+                }
+                //MENÜ
+                else if(data[i].NAME == "PosSatis")
+                {
+                    $scope.PosSatis = data[i].VALUE == 0 ? false : true;
+                }
+                else if(data[i].NAME == "StokListe")
+                {
+                    $scope.StokListe = data[i].VALUE == 0 ? false : true;
+                }
+                else if(data[i].NAME == "StokTanitim")
+                {
+                    $scope.StokTanitim = data[i].VALUE == 0 ? false : true;
+                }
+                else if(data[i].NAME == "CariListe")
+                {
+                    $scope.CariListe = data[i].VALUE == 0 ? false : true;
+                }
+                else if(data[i].NAME == "CariTanitim")
+                {
+                    $scope.CariTanitim = data[i].VALUE == 0 ? false : true;
+                }
+            }
+            db.GetData($scope.Firma,'CmbDepoGetir',['TÜMÜ'],function(data)
+            {   
+                $scope.DepoListe = data;
+            });
+        });
+    }
+    function ParamDelete(pData)
+    {
+        db.ExecuteTag($scope.Firma,'ParamDelete',[pData.CODE],async function(InsertResult)
+        {              
+            if(typeof(InsertResult.result.err) == 'undefined')
+            {   
+             
+            }   
+            else
+            {
+                console.log(InsertResult.result.err);
+            }
+        });
+    }
+    function ParamInsert(pKeys,pValues,pTag,pKullanici)
+    {
+        let InsertData = 
+        [
+            pKullanici,
+            pKullanici,
+            pKeys[0],
+            pValues[0],
+            pTag,
+            pKullanici
+        ];
+
+        db.ExecuteTag($scope.Firma,'ParamInsert',InsertData,async function(InsertResult)
+        {              
+            if(typeof(InsertResult.result.err) == 'undefined')
+            {   
+            }   
+            else
+            {
+                console.log(InsertResult.result.err);
+            }
+        });
+    }
+    function ParamUpdate(pKeys,pValues,pKodu)
+    {
+        var UpdateData = 
+        [
+            pValues[0],
+            pKeys[0],
+            pKodu
+        ];
+
+        db.ExecuteTag($scope.Firma,'ParamUpdate',UpdateData,async function(UpdateResult)
+        {              
+            if(typeof(UpdateResult.result.err) == 'undefined')
+            {   
+                //alert("Parametre Güncellendi.");
+            }   
+            else
+            {
+                alert("Parametre Güncelleme İşleminde Hata.");
+                console.log(UpdateResult.result.err);
+            }
+        });
+    }
+    $scope.KullaniciRowClick = function(pIndex,pItem,pObj)
+    {
+        if ( KullaniciListeRow ) { KullaniciListeRow.children('.jsgrid-cell').css('background-color', '').css('color',''); }
+        var $row = $("#TblKullanici").jsGrid("rowByItem", pItem);
+        $row.children('.jsgrid-cell').css('background-color','#2979FF').css('color','white');
+        KullaniciListeRow = $row;
+    }
+    $scope.BtnKullaniciInsert = function(pTip)
+    {
+        if(pTip == 0)
+        {
+            $("#MdlKullanici").modal("show");
+            Init();
+        }
+        else
+        {
+            if($scope.Kodu != '' && $scope.Kullanici != '' && $scope.Sifre != '')
+            {
+                KullaniciInsert();
             }
             else
             {
-                HtmlData = HtmlData + "<div class='col-6'>";
-                HtmlData = HtmlData + "<div class='row'>";
-                HtmlData = HtmlData + "<label class='form-control-label col-lg-4 col-md-4 col-sm-6 offset-0 pr-20 form-control-sm'><div class='float-right'><span style='color:dodgerblue;'><b>" + GetParamTitle($scope.ParamName,Object.keys(ParamData)[i]) + " : </b></span></div></label>";
-                HtmlData = HtmlData + "<input type='text' id = '" + Object.keys(ParamData)[i] + "' class='form-control col-lg-8 col-md-8 col-sm-6 offset-0 form-control-sm' value = '" + Object.values(ParamData)[i] + "'>";
-                HtmlData = HtmlData + "</div>";
-                HtmlData = HtmlData + "</div>";
-                HtmlData = HtmlData + "</div>";
+                alertify.alert("Lütfen Boş Alanları Doldurun.");
             }
         }
-        document.getElementById('ParamView').innerHTML = HtmlData;
     }
-    $scope.ParamKaydet = function()
+    $scope.BtnKullaniciGuncelle = function(pTip,pData)
     {
-        let ParamData = GetParamObject($scope.ParamName);
-        for(i = 0; i < Object.keys(ParamData).length;i++)
+        if(pTip == 0)
         {
-            Param[$scope.KullaniciListeSelectedIndex][$scope.ParamName][Object.keys(ParamData)[i]] = document.getElementById(Object.keys(ParamData)[i]).value;
+            $scope.Kodu = pData.CODE;
+            $scope.Kullanici = pData.NAME;
+            $scope.Sifre = pData.PASSWORD;
+            $scope.AktifPasif = pData.STATUS == 0 ? false : true;
+            $scope.KullaniciGuid = pData.GUID;
+            $('#MdlKullaniciGuncelle').modal('show');
         }
+        else
+        {
+            let UpdateData = 
+            [
+                $scope.Kodu,
+                $scope.Kullanici,
+                $scope.Sifre,
+                $scope.AktifPasif == true ? 1 : 0,
+                $scope.KullaniciGuid 
+            ]
 
-        alertify.okBtn('Evet');
-        alertify.cancelBtn('Hayır');
-
-        alertify.confirm('Parametreleri kayıt etmek istediğinize eminmisiniz ?', 
-        function()
-        { 
-            db.Emit('ParamSave',[Param,File]);
-            $window.location.reload();
+            KullaniciUpdate(UpdateData);
         }
-        ,function(){});
-    }
-    $scope.ParamCikis = function()
-    {
-        $("#Grup1").show();
-        $("#Grup2").hide();
     }
     $scope.BtnParamGuncelle = function()
     {
-        alertify.okBtn('Evet');
-        alertify.cancelBtn('Hayır');
+        if($scope.Kodu != "")
+        {
+            let Param =
+            [
+                {
+                    KiloBarkod : $scope.KiloBarkod,
+                },
+                {
+                    KiloFlag : $scope.KiloFlag,
+                },
+                {
+                    KiloBaslangic : $scope.KiloBaslangic,
+                },
+                {
+                    KiloUzunluk : $scope.KiloUzunluk,
+                },
+                {
+                    SatirBirlestir : $scope.SatirBirlestir,
+                },
+                {
+                    SatisSeri : $scope.SatisSeri,
+                },
+                {
+                    TahsilatSeri : $scope.TahsilatSeri,
+                },
+                {
+                    IadeSeri : $scope.IadeSeri,
+                },
+                {
+                    CariKodu : $scope.CariKodu,
+                },
+                {
+                    NKasaKodu : $scope.NKasaKodu,
+                },
+                {
+                    KKasaKodu : $scope.KKasaKodu,
+                },
+                {
+                    DepoNo : $scope.DepoNo,
+                },
+                {
+                    FiyatListeNo : $scope.FiyatListeNo,
+                },
+                {
+                    PersonelKodu : $scope.PersonelKodu,
+                },
+                {
+                    SorumlulukKodu : $scope.SorumlulukKodu,
+                },
+                {
+                    EvrakTip : $scope.EvrakTip,
+                },
+                {
+                    PosSatis : $scope.PosSatis == true ? 1 : 0,
+                },
+                {
+                    StokListe : $scope.StokListe == true ? 1 : 0,
+                },
+                {
+                    StokTanitim : $scope.StokTanitim == true ? 1 : 0,
+                },
+                {
+                    CariListe : $scope.CariListe == true ? 1 : 0,
+                },
+                {
+                    CariTanitim : $scope.CariTanitim == true ? 1 : 0
+                },
+            ]
+            for (let i = 0; i < Param.length; i++) 
+            {
+                ParamUpdate(Object.keys(Param[i]),Object.values(Param[i]),$scope.Kodu)
+            }
+        }
+        else
+        {
+            alert("Parametre Güncellemesi İçin Kullanıcı Seçmelisiniz.")
+        }
 
-        alertify.confirm('Parametreleri güncellemek istediğinize eminmisiniz ?', 
-        function()
+        alert("Parametreler Güncellendi.");
+    }
+    $scope.YeniEvrak = function()
+    {
+        Init();
+        InitKullaniciGrid();
+        KullaniciGetir();
+
+        db.GetData($scope.Firma,'CmbDepoGetir',['TÜMÜ'],function(data)
         {   
-            for(i = 0;i < Param.length;i++)
-            {
-                for(let MasterItem in ParamTemp)
-                {
-                    if(!Param[i].hasOwnProperty(MasterItem))
-                    {
-                        if(typeof Object.values(Object.values(ParamTemp[MasterItem]))[0] == "object")
-                        {
-                            Param[i][MasterItem] = {};
-                            for(let SubItem in ParamTemp[MasterItem])
-                            {
-                                if(!Param[i][MasterItem].hasOwnProperty(SubItem))
-                                {
-                                    Param[i][MasterItem][SubItem] = ParamTemp[MasterItem][SubItem].DefaultValue;
-                                }                            
-                            }
-                        }
-                        else
-                        {
-                            Param[i][MasterItem] = ParamTemp[MasterItem].DefaultValue;
-                        }
-                    }  
-                    else
-                    {
-                        if(typeof Object.values(Object.values(ParamTemp[MasterItem]))[0] == "object")
-                        {
-                            Param[i][MasterItem] = {};
-                            for(let SubItem in ParamTemp[MasterItem])
-                            {
-                                if(!Param[i][MasterItem].hasOwnProperty(SubItem))
-                                {
-                                    Param[i][MasterItem][SubItem] = ParamTemp[MasterItem][SubItem].DefaultValue;
-                                }                            
-                            }
-                        } 
-                    }              
-                }    
-            }
-            
-            db.Emit('ParamSave',[Param,File]);
-            $window.location.reload();
-        }
-        ,function(){});
+            $scope.DepoListe = data;
+        });
     }
-    function GetParamObject(pName)
+    $scope.KullaniciDepoChange = function()
     {
-        for(i = 0; i < Object.keys(Param[$scope.KullaniciListeSelectedIndex]).length;i++)
-        {
-            if(typeof Object.values(Param[$scope.KullaniciListeSelectedIndex])[i] == "object")
-            {
-                if(Object.keys(Param[$scope.KullaniciListeSelectedIndex])[i] == pName)
-                {
-                    //ParamTemp objesi döndürülüyor.
-                    for(let MasterItem in ParamTemp[pName])
-                    {
-                        //Param objesinde ParamTemp item karşılaştırlıyor.
-                        if(!Param[$scope.KullaniciListeSelectedIndex][pName].hasOwnProperty(MasterItem))
-                        {
-                            //Eğer Param objesinde o item yoksa param objesine default değeri ekleniyor.
-                            Param[$scope.KullaniciListeSelectedIndex][pName][MasterItem] = ParamTemp[pName][MasterItem].DefaultValue;
-                        }
-                    }
-                    return Object.values(Param[$scope.KullaniciListeSelectedIndex])[i];
-                }
-            }
-        }
-
-        // for(i = 0; i < Object.keys(Param[$scope.KullaniciListeSelectedIndex]).length;i++)
-        // {
-        //     if(typeof Object.values(Param[$scope.KullaniciListeSelectedIndex])[i] == "object")
-        //     {
-        //         if(Object.keys(Param[$scope.KullaniciListeSelectedIndex])[i] == pName)
-        //         {
-        //              return Object.values(Param[$scope.KullaniciListeSelectedIndex])[i];
-        //         }
-        //     }
-        // }
+        KullaniciGetir();
     }
-    function GetParamTitle(pName,pKey)
+    $scope.BtnGeri = function()
     {
-        if(ParamTemp[pName].hasOwnProperty(pKey))
-        {
-            return ParamTemp[$scope.ParamName][pKey].Title;
-        }
-        return pKey;
-    }
-    function CreateParam()
-    {
-        let TmpParam = {};
-
-        for(let MasterItem in ParamTemp)
-        {
-            if(typeof Object.values(Object.values(ParamTemp[MasterItem]))[0] == "object")
-            {
-                TmpParam[MasterItem] = {};
-                for(let SubItem in ParamTemp[MasterItem])
-                {
-                    TmpParam[MasterItem][SubItem] = ParamTemp[MasterItem][SubItem].DefaultValue;
-                }
-            }
-            else
-            {
-                TmpParam[MasterItem] = ParamTemp[MasterItem].DefaultValue;
-            }
-        }
-        return TmpParam;
+        $("#TbMain").addClass('active');
+        $("#TbPosSatis").removeClass('active');
+        $("#TbSistem").removeClass('active');
+        $("#TbMenu").removeClass('active');
     }
 }

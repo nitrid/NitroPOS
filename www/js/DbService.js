@@ -5,6 +5,7 @@ angular.module('app.db', []).service('db',function($rootScope)
     let _Socket = null;
     let _MenuData = {};
     let _CardPayment = new CardPayment();
+    let _Ingenico = new Ingenico();
     moment.locale('tr');
     let PosNo = "1"
 
@@ -403,6 +404,7 @@ angular.module('app.db', []).service('db',function($rootScope)
     this.LCDPrint = _LCDPrint;
     this.LCDClear = _LCDClear;
     this.PaymentSend = _PaymentSend;
+    this.Ingenico = _Ingenico;
     
     // $APPLY YERİNE YAPILDI.
     this.SafeApply = function(pScope,pFn) 

@@ -4,13 +4,34 @@ function Login ($scope,$rootScope,$window,db)
 
     $scope.server_adress = localStorage.host;
  
+    $rootScope.LoadingShow = function() 
+    {
+        $("#loading").show();
+    }
+    $rootScope.LoadingHide = function() 
+    {
+        $("#loading").hide();
+    }
+    $rootScope.MessageBox = function(pMsg)
+    {
+        alertify.alert(pMsg);
+    }
     $scope.Init = function()
     {
         $scope.Kullanici = "Admin";
         $scope.Password = 1;
+        $scope.Firma = "NITROGENPOS";
+        $scope.KullaniciListe = [];
 
         db.Connection(function(data)
-        {                
+        {     
+            if(data == true)
+            {
+                db.GetData($scope.Firma,'KullaniciGetir',[],function(data)
+                {   
+                    $scope.KullaniciListe = data;
+                });
+            }
             // if(data == true)
             // {
             //     $('#alert').alert('close');
@@ -38,9 +59,9 @@ function Login ($scope,$rootScope,$window,db)
     }
     $scope.BtnEntry = function()
     {
-        for(i = 0;i < Param.length;i++)
+        for(i = 0;i < $scope.KullaniciListe.length;i++)
         {
-            if(Param[i].Kullanici == $scope.Kullanici && Param[i].Sifre == $scope.Password)
+            if($scope.KullaniciListe[i].CODE == $scope.Kullanici && $scope.KullaniciListe[i].PASSWORD == $scope.Password)
             {
                 console.log("Kullanıcı adı ve şifre doğru");
                 

@@ -341,6 +341,11 @@ var QuerySql =
         query : "UPDATE ITEM_BARCODE SET BARCODE = @BARCODE WHERE GUID = CONVERT(NVARCHAR(50),@GUID)",
         param : ['BARCODE:string|50','GUID:string|50']
     },
+    CmbDepoGetir : 
+    {
+        query : "SELECT CODE AS KODU,NAME AS ADI FROM DEPOT WHERE ((CODE = @CODE) OR (@CODE = 'TÜMÜ')) ",
+        param : ['CODE:string|25']
+    },
     StokTedarikciKaydet : 
     {
         query : "INSERT INTO [dbo].[ITEM_CUSTOMER] " +
@@ -1087,7 +1092,7 @@ var QuerySql =
     //KULLANICI PARAMETRE
     KullaniciGetir :
     {
-        query : "SELECT * FROM USERS "
+        query : "SELECT *,CASE WHEN TAG = 0 THEN 'Kullanıcı' WHEN TAG = 1 THEN 'Yetkili' END AS YETKI,CASE WHEN STATUS = 1 THEN 'Aktif' ELSE 'Pasif' END AS DURUM FROM USERS ORDER BY CODE ASC  "
     },
     KullaniciInsert : 
     {
@@ -1109,6 +1114,55 @@ var QuerySql =
                 ",@STATUS							--<STATUS, int,>  \n" + 
                 ")",
         param : ['CODE:string|25','NAME:string|50','PASSWORD:string|25','TAG:string|25','STATUS:int']
+    },
+    KullaniciUpdate : 
+    {
+        query : "UPDATE USERS SET CODE = @CODE,NAME = @NAME, PASSWORD = @PASSWORD, STATUS = @STATUS,LDATE = GETDATE() WHERE GUID = @GUID " ,
+        param : ['CODE:string|25','NAME:string|50','PASSWORD:string|25','STATUS:int','GUID:string|150']
+    },
+    KullaniciDelete : 
+    {
+        query : "DELETE FROM USERS WHERE GUID = @GUID " ,
+        param : ['GUID:string|150']
+    },
+    //PARAM
+    ParamInsert : 
+    {
+        query : "INSERT INTO [dbo].[PARAMS] " +
+                "([CUSER] " +
+                ",[CDATE] " +
+                ",[LUSER] " +
+                ",[LDATE] " +
+                ",[NAME] " +
+                ",[VALUE] " +
+                ",[TAG] " +
+                ",[USER]) " +
+                "VALUES " +
+                "(@CUSER						--<CUSER, nvarchar(25),> \n " +
+                ",GETDATE()					--<CDATE, datetime,> \n " +
+                ",@LUSER						--<LUSER, nvarchar(25),> \n " +
+                ",GETDATE()					--<LDATE, datetime,> \n " +
+                ",@NAME						--<NAME, nvarchar(25),> \n " +
+                ",@VALUE						--<VALUE, nvarchar(50),> \n " +
+                ",@TAG						--<TAG, nvarchar(25),> \n " +
+                ",@USER						--<USER, nvarchar(25),> \n " +
+                ")",
+        param : ['CUSER:string|25','LUSER:string|25','NAME:string|25','VALUE:string|50','TAG:string|25','USER:string|25']
+    },
+    ParamGetir : 
+    {
+        query : "SELECT * FROM PARAMS WHERE [USER] = @USER " ,
+        param : ['USER:string|25']
+    },
+    ParamDelete : 
+    {
+        query : "DELETE FROM PARAMS WHERE [USER] = @USER " ,
+        param : ['USER:string|150']
+    },
+    ParamUpdate : 
+    {
+        query : "UPDATE PARAMS SET VALUE = @VALUE,LDATE = GETDATE() WHERE NAME = @NAME AND [USER] = @USER ",
+        param : ['VALUE:string|25','NAME:string|25','USER:string|25']
     }
 };
 
