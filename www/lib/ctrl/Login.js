@@ -8,9 +8,12 @@ function Login ($scope,$rootScope,$window,db)
     {
         $scope.Kullanici = "Admin";
         $scope.Password = 1;
+        $scope.Firma = "NITROGENPOS";
+
+        $scope.KullaniciListe = [];
 
         db.Connection(function(data)
-        {                
+        {     
             // if(data == true)
             // {
             //     $('#alert').alert('close');
@@ -28,6 +31,10 @@ function Login ($scope,$rootScope,$window,db)
             //     db.Disconnect();
             // }
         });
+        db.GetData($scope.Firma,'KullaniciGetir',[],function(data)
+        {   
+            $scope.KullaniciListe = data;
+        });   
     }
     $scope.HostSettingSave = function()
     {
