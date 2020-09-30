@@ -3,8 +3,8 @@ const path = require('path');
 
 var svc = new Service
 ({
-    name:'XPOS',
-    description: 'XPOS',
+    name:'NitrogenPOS',
+    description: 'NitrogenPOS',
     script: path.join(process.cwd(), '..\\server.js'),
     env: 
     [
