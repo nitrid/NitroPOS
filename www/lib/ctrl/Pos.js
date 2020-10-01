@@ -18,7 +18,6 @@ function Pos($scope,$window,$rootScope,db)
     let FocusKasaSifre = false;
     let FocusAvans = false;
     let FirstKey = false;
-    let UserParam = null;
 
     $('#MdlAraToplam').on('hide.bs.modal', function () 
     {
@@ -260,7 +259,7 @@ function Pos($scope,$window,$rootScope,db)
     }
     function Init()
     {
-        UserParam = Param[$window.sessionStorage.getItem('User')];
+        $scope.Kullanici = $window.sessionStorage.getItem('User');
         $scope.Firma = 'NITROGENPOS'
         $scope.Seri = "";
         $scope.TahSeri = "";
@@ -301,7 +300,6 @@ function Pos($scope,$window,$rootScope,db)
         $scope.TxtOkcMesaj = "OKC Cihazıyla Eşleşme Yapılıyor.";
         $scope.BtnTxtOkcEslesme = "İptal";
 
-        $scope.Kullanici = UserParam.Kullanici;
         $scope.KasaNo = 1;
         $scope.Saat = moment(new Date(),"HH:mm:ss").format("HH:mm:ss");
 
@@ -1335,7 +1333,6 @@ function Pos($scope,$window,$rootScope,db)
                 $scope.TxtBarkod = data.result.substring(1,data.result.length).toString().trim();
                 TxtBarkodKeyPress();
             })
-
             Init();
             InitIslemGrid();
             InitParkIslemGrid();
@@ -1349,14 +1346,42 @@ function Pos($scope,$window,$rootScope,db)
             InitAraToplamGrid();
             InitKasaAraToplamGrid();
 
-            $scope.Seri = UserParam.PosSatis.Seri;
-            $scope.TahSeri = UserParam.PosSatis.TahSeri;
-            $scope.AvansSeri = UserParam.PosSatis.AvansSeri;
-            $scope.EvrakTip = UserParam.PosSatis.EvrakTip;
-            $scope.CariKodu = UserParam.PosSatis.Cari;
-            $scope.Sube = UserParam.PosSatis.Sube;
-            $scope.Kullanici = UserParam.Kullanici;
-            $scope.IadeSeri = UserParam.PosSatis.IadeSeri;
+            $scope.ParamListe = await db.GetPromiseTag($scope.Firma,'ParamGetir',[$scope.Kullanici]);
+
+            if($scope.ParamListe.length > 0)
+            {
+                for (let i = 0; i < $scope.ParamListe.length; i++) 
+                {
+                    if($scope.ParamListe[i].NAME == 'SatisSeri')
+                    {
+                        $scope.Seri = $scope.ParamListe[i].VALUE;
+                    }
+                    else if($scope.ParamListe[i].NAME == 'TahsilatSeri')
+                    {
+                        $scope.TahSeri = $scope.ParamListe[i].VALUE;
+                    }
+                    else if($scope.ParamListe[i].NAME == 'IadeSeri')
+                    {
+                        $scope.IadeSeri = $scope.ParamListe[i].VALUE;
+                    }
+                    else if($scope.ParamListe[i].NAME == 'AvansSeri')
+                    {
+                        $scope.AvansSeri = $scope.ParamListe[i].VALUE;
+                    }
+                    else if($scope.ParamListe[i].NAME == 'CariKodu')
+                    {
+                        $scope.CariKodu = $scope.ParamListe[i].VALUE;
+                    }
+                    else if($scope.ParamListe[i].NAME == 'DepoNo')
+                    {
+                        $scope.Sube = $scope.ParamListe[i].VALUE;
+                    }
+                    else if($scope.ParamListe[i].NAME == 'NKasaKodu')
+                    {
+                        $scope.Kasa = $scope.ParamListe[i].VALUE;
+                    }
+                }
+            }
             $scope.Miktar = 1;
 
             $scope.Stok = 
@@ -1448,7 +1473,7 @@ function Pos($scope,$window,$rootScope,db)
             });
         }
 
-        if($scope.CariKodu != UserParam.PosSatis.Cari && $scope.SatisList.length > 0)
+        if($scope.CariKodu && $scope.SatisList.length > 0)
         {
             if($scope.TxtAraToplamTutar.length > 0)
             {   
@@ -1513,7 +1538,7 @@ function Pos($scope,$window,$rootScope,db)
                         $scope.TahTip = 3;
                         $scope.TxtAraToplamTutar = parseFloat(TmpTicket / 100).toFixed(2);
 
-                        db.ExecuteTag($scope.Firma,'TicketInsert',[UserParam.Kullanici,UserParam.Kullanici,pBarkod],function(InsertResult)
+                        db.ExecuteTag($scope.Firma,'TicketInsert',[$scope.Kullanici,$scope.Kullanici,pBarkod],function(InsertResult)
                         {
                             $scope.PosTahInsert(function()
                             {   
@@ -1589,8 +1614,8 @@ function Pos($scope,$window,$rootScope,db)
     {    
         var InsertData = 
         [
-            UserParam.Kullanici,
-            UserParam.Kullanici,
+            $scope.Kullanici,
+            $scope.Kullanici,
             $scope.Sube,
             $scope.EvrakTip,
             $scope.Tarih,
@@ -1674,8 +1699,8 @@ function Pos($scope,$window,$rootScope,db)
 
         var InsertData = 
         [
-            UserParam.Kullanici,
-            UserParam.Kullanici,
+            $scope.Kullanici,
+            $scope.Kullanici,
             $scope.Sube,
             $scope.TahTip,
             $scope.EvrakTip, //EVRAKTIP
@@ -2341,7 +2366,7 @@ function Pos($scope,$window,$rootScope,db)
   
         if($scope.TahTip == 0)
         {
-            $scope.Kasa = UserParam.PosSatis.NakitKasaKodu;
+            $scope.Kasa;
             $scope.KasaSecim = false;
         }
     }
@@ -2603,7 +2628,7 @@ function Pos($scope,$window,$rootScope,db)
                     $scope.AvansSeri,
                     $scope.AvansSira,
                     1, //CUSTOMER CODE
-                    UserParam.PosSatis.NakitKasaKodu,
+                    $scope.Kasa,
                     $scope.TxtAvans,
                     0, //CHANGE
                     2 //STATUS
@@ -2752,8 +2777,8 @@ function Pos($scope,$window,$rootScope,db)
             {
                 let InsertData = 
                 [
-                    UserParam.Kullanici,
-                    UserParam.Kullanici,
+                    $scope.Kullanici,
+                    $scope.Kullanici,
                     $scope.Tarih,
                     $scope.Tarih,
                     $scope.PluGrupAdi,
@@ -2807,8 +2832,8 @@ function Pos($scope,$window,$rootScope,db)
             {
                 let InsertData = 
                 [
-                    UserParam.Kullanici,
-                    UserParam.Kullanici,
+                    $scope.Kullanici,
+                    $scope.Kullanici,
                     $scope.Tarih,
                     $scope.Tarih,
                     $scope.PluGrupAdi,
@@ -2883,8 +2908,8 @@ function Pos($scope,$window,$rootScope,db)
                     {                       
                         var InsertData = 
                         [
-                            UserParam.Kullanici,
-                            UserParam.Kullanici,
+                            $scope.Kullanici,
+                            $scope.Kullanici,
                             $scope.Sube,
                             0, //TYPE
                             1, //DOC_TYPE
@@ -2892,7 +2917,7 @@ function Pos($scope,$window,$rootScope,db)
                             $scope.IadeSeri,
                             $scope.IadeSira,
                             $scope.CariKodu,
-                            UserParam.PosSatis.NakitKasaKodu,
+                            $scope.Kasa,
                             $scope.GenelToplam,
                             0, //PARA USTU
                             1
