@@ -1634,10 +1634,13 @@ function Pos($scope,$window,$rootScope,db)
         
         db.ExecuteTag($scope.Firma,'PosSatisInsert',InsertData,async function(InsertResult)
         {               
+            console.log(InsertResult)
             if(typeof(InsertResult.result.err) == 'undefined')
             {   
+                console.log($scope.EvrakTip)
                 //*********** BİRDEN FAZLA MİKTARLI FİYAT GÜNCELLEME İÇİN YAPILDI. */
                 let TmpSatisData = await db.GetPromiseTag($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira]);
+                console.log(TmpSatisData)
                 $scope.SatisList = TmpSatisData;
 
                 for (let i = 0; i < $scope.SatisList.length; i++) 
@@ -1647,15 +1650,15 @@ function Pos($scope,$window,$rootScope,db)
                 /***************************************************************** */
                 db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosSatisData)
                 {   
-                    db.LCDPrint
-                    (
-                        {
-                            blink : 0,
-                            text :  db.PrintText(PosSatisData[PosSatisData.length - 1].ITEM_NAME,11) + " " + 
-                                    db.PrintText(PosSatisData[PosSatisData.length - 1].PRICE.toString() + "EUR" ,8,"Start") +
-                                    "TOTAL : " + db.PrintText(db.SumColumn(PosSatisData,"AMOUNT").toString() + "EUR",12,"Start")
-                        }                        
-                    );
+                    // db.LCDPrint
+                    // (
+                    //     {
+                    //         blink : 0,
+                    //         text :  db.PrintText(PosSatisData[PosSatisData.length - 1].ITEM_NAME,11) + " " + 
+                    //                 db.PrintText(PosSatisData[PosSatisData.length - 1].PRICE.toString() + "EUR" ,8,"Start") +
+                    //                 "TOTAL : " + db.PrintText(db.SumColumn(PosSatisData,"AMOUNT").toString() + "EUR",12,"Start")
+                    //     }                        
+                    // );
 
                     InsertSonYenile(PosSatisData);      
                     $scope.TxtBarkod = ""; 
@@ -1669,10 +1672,10 @@ function Pos($scope,$window,$rootScope,db)
                 console.log(InsertResult.result.err);
             }
         });
-        db.GetData($scope.Firma,'PosFisSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosFisData)
-        {   
-            InsertFisYenile(PosFisData);   
-        });
+        // db.GetData($scope.Firma,'PosFisSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosFisData)
+        // {   
+        //     InsertFisYenile(PosFisData);   
+        // });
     }
     $scope.PosTahInsert = function(pCallBack)
     {   
