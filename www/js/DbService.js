@@ -563,7 +563,6 @@ angular.module('app.db', []).service('db',function($rootScope)
         {
             if(pCallback)
             {
-                
                 if(data.result.recordset.length > 0)
                 {
                     pCallback(data.result.recordset);
