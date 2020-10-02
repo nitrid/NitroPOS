@@ -46,6 +46,7 @@ function KullaniciParametreCtrl($route,$scope,$window,$rootScope,db)
         $scope.SatisSeri = "IRS";
         $scope.TahsilatSeri = "THS";
         $scope.IadeSeri = "IADE";
+        $scope.AvansSeri = "AVNS";
         $scope.CariKodu = "1";
         $scope.NKasaKodu = "1";
         $scope.KKasaKodu = "1";
@@ -193,7 +194,7 @@ function KullaniciParametreCtrl($route,$scope,$window,$rootScope,db)
     function KullaniciGetir()
     {
         Init();
-        db.GetData($scope.Firma,'KullaniciGetir',[],function(data)
+        db.GetData($scope.Firma,'KullaniciGetir',[''],function(data)
         {   
             $scope.KullaniciListe = data;
             $("#TblKullanici").jsGrid({data : $scope.KullaniciListe}); 
@@ -241,6 +242,9 @@ function KullaniciParametreCtrl($route,$scope,$window,$rootScope,db)
                     },
                     {
                         IadeSeri : $scope.IadeSeri,
+                    },
+                    {
+                        AvansSeri : $scope.AvansSeri,
                     },
                     {
                         CariKodu : $scope.CariKodu,
@@ -582,6 +586,9 @@ function KullaniciParametreCtrl($route,$scope,$window,$rootScope,db)
                 },
                 {
                     IadeSeri : $scope.IadeSeri,
+                },
+                {
+                    AvansSeri : $scope.AvansSeri,
                 },
                 {
                     CariKodu : $scope.CariKodu,

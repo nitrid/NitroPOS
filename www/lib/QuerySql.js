@@ -747,13 +747,14 @@ var QuerySql =
     StokGetir : 
     {
         query:  "SELECT ITEMS.CODE AS CODE, " +
+                "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE AS BAR WHERE BAR.ITEM_CODE = ITEMS.CODE),'') AS BARCODE, " +
                 "ISNULL((SELECT TOP 1 PRICE FROM ITEM_PRICE WHERE [TYPE] = 0 AND (QUANTITY = 1 OR QUANTITY = 0) AND ITEM_CODE = ITEMS.CODE),0) AS PRICE, " +
                 "ITEMS.[NAME] AS [NAME], " +
                 "ITEMS.SNAME AS SNAME, " +
                 "ITEMS.VAT AS VAT, " +
-                "'' AS BARKOD, " +
                 "ISNULL(UNIT.FACTOR,1) AS FACTOR, " + 
-                "ISNULL(CONVERT(NVARCHAR(50),UNIT.[GUID]),'') AS UNIT " +
+               // "ISNULL(CONVERT(NVARCHAR(50),UNIT.[GUID]),'') AS UNIT " +
+                "UNIT.CODE AS UNIT " +
                 "FROM ITEMS AS ITEMS " +
                 "LEFT OUTER JOIN ITEM_UNIT AS UNIT ON " +
                 "UNIT.ITEM_CODE = ITEMS.CODE AND UNIT.TYPE = 0" +
@@ -1065,7 +1066,7 @@ var QuerySql =
                 "END AS DOC_TYPE, " +
                 "DEPARTMENT AS DEPARTMENT, " +
                 "CUSER AS CUSER, " +
-                "SUM(AMOUNT) AS AMOUNT " +
+                "CONVERT(VARCHAR,CAST(SUM(AMOUNT) as MONEY), 1) AS AMOUNT " +
                 "FROM POS_PAYMENT  " +
                 "WHERE DEPARTMENT = @DEPARTMENT AND CUSER = @CUSER AND DOC_DATE = @DOC_DATE " +
                 "GROUP BY " +
@@ -1081,7 +1082,7 @@ var QuerySql =
                 "END AS TYPE, " + 
                 "DEPARTMENT AS DEPARTMENT, " +
                 "CUSER AS CUSER, " +
-                "SUM(AMOUNT) AS AMOUNT " +
+                "CONVERT(VARCHAR,CAST(SUM(AMOUNT) AS MONEY), 1) AS AMOUNT " +
                 "FROM POS_PAYMENT " +
                 "WHERE DEPARTMENT = @DEPARTMENT AND CUSER = @CUSER AND DOC_DATE = @DOC_DATE AND DOC_TYPE IN(0,2)" +
                 "GROUP BY " +
@@ -1092,7 +1093,8 @@ var QuerySql =
     //KULLANICI PARAMETRE
     KullaniciGetir :
     {
-        query : "SELECT *,CASE WHEN TAG = 0 THEN 'Kullanıcı' WHEN TAG = 1 THEN 'Yetkili' END AS YETKI,CASE WHEN STATUS = 1 THEN 'Aktif' ELSE 'Pasif' END AS DURUM FROM USERS ORDER BY CODE ASC  "
+        query : "SELECT *,CASE WHEN TAG = 0 THEN 'Kullanıcı' WHEN TAG = 1 THEN 'Yetkili' END AS YETKI,CASE WHEN STATUS = 1 THEN 'Aktif' ELSE 'Pasif' END AS DURUM FROM USERS WHERE ((CODE IN (@CODE)) OR (@CODE = '')) ORDER BY CODE ASC  ",
+        param : ['CODE:string|25']
     },
     KullaniciInsert : 
     {

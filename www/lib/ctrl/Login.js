@@ -27,7 +27,7 @@ function Login ($scope,$rootScope,$window,db)
         {     
             if(data == true)
             {
-                db.GetData($scope.Firma,'KullaniciGetir',[],function(data)
+                db.GetData($scope.Firma,'KullaniciGetir',[''],function(data)
                 {   
                     $scope.KullaniciListe = data;
                 });
@@ -64,8 +64,7 @@ function Login ($scope,$rootScope,$window,db)
             if($scope.KullaniciListe[i].CODE == $scope.Kullanici && $scope.KullaniciListe[i].PASSWORD == $scope.Password)
             {
                 console.log("Kullanıcı adı ve şifre doğru");
-                
-                $window.sessionStorage.setItem('User', i);
+                $window.sessionStorage.setItem('User', $scope.Kullanici);
                 
                 var url = "pos.html";
                 $window.location.href = url;
