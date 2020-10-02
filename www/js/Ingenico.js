@@ -28,6 +28,7 @@ var Ingenico =
             //console.log("PING")
             Terminal.stdout.on('data', function (data) 
             {
+                console.log(data.toString().trim())
                 if(data.toString().trim().split('|')[0] == "PING")
                 {
                     LocalEvent({tag:"PING",msg:data.toString().trim().split('|')[1]});
@@ -54,6 +55,7 @@ var Ingenico =
         Ingenico.prototype.SendData = function(pData)
         {
             console.log(JSON.stringify(pData));
+            //Terminal.stdin.write('ITEM_SALE|{"SALES":[{"NAME":"ÜLKER 100 GRM","QUANTITY":2,"AMOUNT":450,"TAX":1}],"PAYMENT":[{"TYPE":0,"AMOUNT":900}]}\n')
             Terminal.stdin.write('ITEM_SALE|' + JSON.stringify(pData) +'\n');
         }
         Ingenico.prototype.TicketClose = function()

@@ -234,7 +234,7 @@ function Pos($scope,$window,$rootScope,db)
                 {
                     SatisKapat();
                 }
-                else
+                else if(pData.msg == "FAULT")
                 {
                     db.Ingenico.TicketClose();
                     $("#MdlAraToplam").modal("hide");
@@ -1535,11 +1535,11 @@ function Pos($scope,$window,$rootScope,db)
 
             let TmpFiyat = 0;
 
-            if(pBarkod.length >= 12 && pBarkod.length <= 14 && (pBarkod.substring(0,2) == "20" || pBarkod.substring(0,2) == "02"))
-            {
-                TmpFiyat = parseFloat((parseFloat(pBarkod.substring(6,pBarkod.length)) / 1000) * 0.1524).toFixed(2);
-                pBarkod = pBarkod.substring(0,6) + "MMMCCF";
-            }
+            // if(pBarkod.length >= 12 && pBarkod.length <= 14 && (pBarkod.substring(0,2) == "20" || pBarkod.substring(0,2) == "02"))
+            // {
+            //     TmpFiyat = parseFloat((parseFloat(pBarkod.substring(6,pBarkod.length)) / 1000) * 0.1524).toFixed(2);
+            //     pBarkod = pBarkod.substring(0,6) + "MMMCCF";
+            // }
 
             db.StokBarkodGetir($scope.Firma,pBarkod,function(BarkodData)
             {
@@ -1710,9 +1710,9 @@ function Pos($scope,$window,$rootScope,db)
                             for(let i = 0;i < $scope.SatisList.length;i++)
                             {
                                 let TmpSale = {};
-                                TmpSale.NAME = $scope.SatisList[i].ITEM_NAME;
-                                TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY;
-                                TmpSale.AMOUNT = $scope.SatisList[i].PRICE * 100;
+                                TmpSale.NAME = $scope.SatisList[i].ITEM_NAME.split("İ").join("I").split("ı").join("i").split("Ç").join("C").split("ç").join("c").split("Ğ").join("G").split("ğ").join("g").split("Ş").join("S").split("ş").join("s").split("Ö").join("O").split("ö").join("o").split("Ü").join("U").split("ü").join("u");;
+                                TmpSale.QUANTITY = parseInt($scope.SatisList[i].QUANTITY);
+                                TmpSale.AMOUNT = parseInt(parseFloat($scope.SatisList[i].PRICE).toFixed(2) * 100);
                                 TmpSale.TAX = 1;
 
                                 TmpData.SALES.push(TmpSale);
@@ -1722,7 +1722,7 @@ function Pos($scope,$window,$rootScope,db)
                             {
                                 let TmpPayment = {};
                                 TmpPayment.TYPE = $scope.TahList[i].TYPE;
-                                TmpPayment.AMOUNT = $scope.TahList[i].AMOUNT * 100;
+                                TmpPayment.AMOUNT = parseInt(Math.round($scope.TahList[i].AMOUNT * 100));
 
                                 TmpData.PAYMENT.push(TmpPayment);
                             }

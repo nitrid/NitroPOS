@@ -770,12 +770,12 @@ var QuerySql =
                 "ITEMS.VAT AS VAT, " +
                 "ISNULL(BARCODE.BARCODE,'') AS BARCODE, " + 
                 "ISNULL(UNIT.FACTOR,1) AS FACTOR, " +
-                "ISNULL(CONVERT(NVARCHAR(50),UNIT.[GUID]),'') AS UNIT " +
+                "UNIT.CODE AS UNIT " +
                 "FROM ITEMS AS ITEMS " +
                 "LEFT OUTER JOIN ITEM_UNIT AS UNIT ON " +
                 "UNIT.ITEM_CODE = ITEMS.CODE " +
                 "LEFT OUTER JOIN ITEM_BARCODE AS BARCODE ON " +
-                "BARCODE.ITEM_CODE = ITEMS.CODE AND BARCODE.UNIT = UNIT.[GUID] " + 
+                "BARCODE.ITEM_CODE = ITEMS.CODE AND BARCODE.UNIT = UNIT.CODE " + 
                 "WHERE BARCODE.BARCODE = @BARCODE" ,
         param : ['BARCODE'],
         type : ['string|50']
