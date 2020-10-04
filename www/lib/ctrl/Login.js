@@ -27,7 +27,7 @@ function Login ($scope,$rootScope,$window,db)
         {     
             if(data == true)
             {
-                db.GetData($scope.Firma,'KullaniciGetir',[],function(data)
+                db.GetData($scope.Firma,'KullaniciGetir',[''],function(data)
                 {   
                     $scope.KullaniciListe = data;
                 });

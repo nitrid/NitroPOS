@@ -1,8 +1,7 @@
 angular.module('app.db', []).service('db',function($rootScope)
 {
-    //let _Host = 'http://172.16.122.250:90';
+    let _Host = 'http://172.16.122.250:90';
     //let _Host = 'http://176.236.120.222:90';
-    let _Host = 'http://localhost:90';
     let _Socket = null;
     let _MenuData = {};
     let _CardPayment = new CardPayment();
@@ -563,7 +562,6 @@ angular.module('app.db', []).service('db',function($rootScope)
         {
             if(pCallback)
             {
-                
                 if(data.result.recordset.length > 0)
                 {
                     pCallback(data.result.recordset);

@@ -194,7 +194,7 @@ function KullaniciParametreCtrl($route,$scope,$window,$rootScope,db)
     function KullaniciGetir()
     {
         Init();
-        db.GetData($scope.Firma,'KullaniciGetir',[],function(data)
+        db.GetData($scope.Firma,'KullaniciGetir',[''],function(data)
         {   
             $scope.KullaniciListe = data;
             $("#TblKullanici").jsGrid({data : $scope.KullaniciListe}); 
