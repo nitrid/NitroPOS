@@ -22,7 +22,7 @@ function Login ($scope,$rootScope,$window,db)
         $scope.Password = 1;
         $scope.Firma = "NITROGENPOS";
         $scope.KullaniciListe = [];
-
+        
         db.Connection(function(data)
         {     
             if(data == true)
