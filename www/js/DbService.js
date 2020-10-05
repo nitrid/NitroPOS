@@ -267,16 +267,6 @@ angular.module('app.db', []).service('db',function($rootScope)
         
         return Sum;
     }
-    function _SearchKeyObject(pKeyName, pArray)
-    {
-        for (let i = 0; i < pArray.length; i++) 
-        {
-            if (pArray[i].name === pKeyName) 
-            {
-                return pArray[i];
-            }
-        }
-    }
     function _EscposPrint(pData,fn)
     {
         if(typeof require == 'undefined')
@@ -409,7 +399,6 @@ angular.module('app.db', []).service('db',function($rootScope)
     this.ExecutePromiseTag = _ExecutePromiseTag;
     this.ExecutePromiseQuery = _ExecutePromiseQuery;
     this.SumColumn = _SumColumn;
-    this.SearchKeyObject = _SearchKeyObject;
     this.PrintText = _PrintText;
     this.SocketConnected = false;
     this.EscposCaseOpen = _EscposCaseOpen;
@@ -417,7 +406,7 @@ angular.module('app.db', []).service('db',function($rootScope)
     this.LCDClear = _LCDClear;
     this.PaymentSend = _PaymentSend;
     this.Ingenico = _Ingenico;
-    
+    this.Scale = _Scale;
     // $APPLY YERİNE YAPILDI.
     this.SafeApply = function(pScope,pFn) 
     {
