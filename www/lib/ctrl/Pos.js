@@ -1363,7 +1363,7 @@ function Pos($scope,$window,$rootScope,db)
 
             $scope.ParamListe = await db.GetPromiseTag($scope.Firma,'ParamGetir',[$scope.Kullanici]);
             $scope.KullaniciListe = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',[$scope.Kullanici]);
-
+            console.log(db.SearchKeyObject("DepoNo",$scope.ParamListe))
             if($scope.ParamListe.length > 0)
             {
                 for (let i = 0; i < $scope.ParamListe.length; i++) 

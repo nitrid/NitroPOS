@@ -20,7 +20,10 @@ var Scale =
             port.write('$');
             port.on('data',line =>
             {
-                console.log(line.toString());  
+                if(typeof pCallback != 'undefined')
+                {
+                    pCallback(line.toString())
+                }
             });
 
             return new Promise(function(resolve)

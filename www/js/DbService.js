@@ -9,7 +9,7 @@ angular.module('app.db', []).service('db',function($rootScope)
     let _Ingenico = new Ingenico();
     moment.locale('tr');
     let PosNo = "1"
-    _Scale.Send();
+
     if (typeof(localStorage.mode) !== "undefined")
     {
         if(localStorage.mode == 'true')
@@ -267,6 +267,16 @@ angular.module('app.db', []).service('db',function($rootScope)
         
         return Sum;
     }
+    function _SearchKeyObject(pKeyName, pArray)
+    {
+        for (let i = 0; i < pArray.length; i++) 
+        {
+            if (pArray[i].name === pKeyName) 
+            {
+                return pArray[i];
+            }
+        }
+    }
     function _EscposPrint(pData,fn)
     {
         if(typeof require == 'undefined')
@@ -385,7 +395,7 @@ angular.module('app.db', []).service('db',function($rootScope)
     function _PaymentSend(pTutar)
     {
         _CardPayment.transaction_start(pTutar);
-    }
+    }    
     //#region "PUBLIC"
     this.Socket = _Socket;
     this.CardPayment = _CardPayment;
@@ -399,6 +409,7 @@ angular.module('app.db', []).service('db',function($rootScope)
     this.ExecutePromiseTag = _ExecutePromiseTag;
     this.ExecutePromiseQuery = _ExecutePromiseQuery;
     this.SumColumn = _SumColumn;
+    this.SearchKeyObject = _SearchKeyObject;
     this.PrintText = _PrintText;
     this.SocketConnected = false;
     this.EscposCaseOpen = _EscposCaseOpen;
