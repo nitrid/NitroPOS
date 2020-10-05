@@ -9,7 +9,7 @@ angular.module('app.db', []).service('db',function($rootScope)
     let _Ingenico = new Ingenico();
     moment.locale('tr');
     let PosNo = "1"
-
+    _Scale.Send();
     if (typeof(localStorage.mode) !== "undefined")
     {
         if(localStorage.mode == 'true')
