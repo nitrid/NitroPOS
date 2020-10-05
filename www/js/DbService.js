@@ -5,6 +5,7 @@ angular.module('app.db', []).service('db',function($rootScope)
     let _Socket = null;
     let _MenuData = {};
     let _CardPayment = new CardPayment();
+    let _Scale = new Scale();
     let _Ingenico = new Ingenico();
     moment.locale('tr');
     let PosNo = "1"
