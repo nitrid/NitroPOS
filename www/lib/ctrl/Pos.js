@@ -1343,11 +1343,6 @@ function Pos($scope,$window,$rootScope,db)
     {
         db.Connection(async function(data)
         {
-            db.On("SerialBarcode",function(data)
-            {
-                $scope.TxtBarkod = data.result.substring(1,data.result.length).toString().trim();
-                TxtBarkodKeyPress();
-            })
             Init();
             InitIslemGrid();
             InitParkIslemGrid();
@@ -1363,7 +1358,7 @@ function Pos($scope,$window,$rootScope,db)
 
             $scope.ParamListe = await db.GetPromiseTag($scope.Firma,'ParamGetir',[$scope.Kullanici]);
             $scope.KullaniciListe = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',[$scope.Kullanici]);
-
+            console.log($scope.ParamListe)
             if($scope.ParamListe.length > 0)
             {
                 for (let i = 0; i < $scope.ParamListe.length; i++) 
