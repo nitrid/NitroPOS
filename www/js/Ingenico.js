@@ -62,6 +62,10 @@ var Ingenico =
         {
             Terminal.stdin.write('TICKET_CLOSE\n');
         }
+        Ingenico.prototype.ZReport = function()
+        {
+            Terminal.stdin.write('Z_REPORT\n');
+        }
         //#region "EVENT TRIGGER"        
         function LocalEvent(pData)
         {

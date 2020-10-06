@@ -3013,4 +3013,8 @@ function Pos($scope,$window,$rootScope,db)
             }
         }
     }
+    $scope.BtnZReport = function()
+    {
+        db.Ingenico.ZReport();
+    }
 }
