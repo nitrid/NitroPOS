@@ -840,7 +840,7 @@ var QuerySql =
                 "ITEM_CODE AS ITEM_CODE, " +
                 "ISNULL((SELECT TOP 1 [NAME] FROM ITEMS WHERE CODE = ITEM_CODE),'') AS ITEM_NAME, " +
                 "BARCODE AS BARCODE, " +
-                "QUANTITY AS QUANTITY, " +
+                "ROUND(QUANTITY,2) AS QUANTITY, " +
                 "UNIT AS UNIT_ID, " +
                 "(SELECT UNIT.[NAME] FROM ITEM_UNIT AS UNIT WHERE CONVERT(NVARCHAR(50),UNIT.GUID) = POS.UNIT) AS UNIT, " +
                 "PRICE AS PRICE, " +

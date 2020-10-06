@@ -18,6 +18,8 @@ function Pos($scope,$window,$rootScope,db)
     let FocusKasaSifre = false;
     let FocusAvans = false;
     let FirstKey = false;
+    let FocusZSifre = false;
+    let FocusXSifre = false;
 
     $('#MdlAraToplam').on('hide.bs.modal', function () 
     {
@@ -31,6 +33,8 @@ function Pos($scope,$window,$rootScope,db)
         FocusYetkiliSifre = false;
         FocusKasaSifre = false;
         FocusKartOdeme = false;
+        FocusXSifre = false;
+        FocusZSifre = false;
     });
     $('#MdlMusteriListele').on('hide.bs.modal', function () 
     {
@@ -44,6 +48,8 @@ function Pos($scope,$window,$rootScope,db)
         FocusKasaSifre = false;
         FocusAvans = false;
         FocusKartOdeme = false;
+        FocusXSifre = false;
+        FocusZSifre = false;
     });
     $('#MdlStokListele').on('hide.bs.modal', function () 
     {
@@ -56,6 +62,8 @@ function Pos($scope,$window,$rootScope,db)
         FocusYetkiliSifre = false;
         FocusKasaSifre = false;
         FocusAvans = false;
+        FocusXSifre = false;
+        FocusZSifre = false;
         db.SafeApply($scope,function()
         {
             $scope.TxtBarkod = "";
@@ -74,6 +82,8 @@ function Pos($scope,$window,$rootScope,db)
         FocusKasaSifre = false;
         FocusAvans = false;
         FocusFiyatGuncelle = false;
+        FocusXSifre = false;
+        FocusZSifre = false;
     });
     $('#MdlFiyatGuncelle').on('hide.bs.modal', function () 
     {
@@ -87,6 +97,8 @@ function Pos($scope,$window,$rootScope,db)
         FocusKartOdeme = false;
         FocusAvans = false;
         FocusFiyatGuncelle = false;
+        FocusXSifre = false;
+        FocusZSifre = false;
     });
     $('#MdlKartOdeme').on('hide.bs.modal', function () 
     {
@@ -100,6 +112,8 @@ function Pos($scope,$window,$rootScope,db)
         FocusKasaSifre = false;
         FocusAvans = false;
         FocusKartOdeme = false;
+        FocusXSifre = false;
+        FocusZSifre = false;
     });
     $('#MdlParaUstu').on('hide.bs.modal', function () 
     {
@@ -113,6 +127,8 @@ function Pos($scope,$window,$rootScope,db)
         FocusKasaSifre = false;
         FocusAvans = false;
         FocusKartOdeme = false;
+        FocusXSifre = false;
+        FocusZSifre = false;
     });
     $('#MdlYetkiliGiris').on('hide.bs.modal', function () 
     {
@@ -126,6 +142,8 @@ function Pos($scope,$window,$rootScope,db)
         FocusKartOdeme = false;
         FocusYetkiliSifre = false;
         FocusKasaSifre = false;
+        FocusXSifre = false;
+        FocusZSifre = false;
     });
     $('#MdlKasaSifre').on('hide.bs.modal', function () 
     {
@@ -139,6 +157,38 @@ function Pos($scope,$window,$rootScope,db)
         FocusKartOdeme = false;
         FocusYetkiliSifre = false;
         FocusKasaSifre = false;
+        FocusXSifre = false;
+        FocusZSifre = false;
+    });
+    $('#MdlZSifre').on('hide.bs.modal', function () 
+    {
+        FocusBarkod = true;
+        FocusAraToplam = false;
+        FocusMusteri = false;
+        FocusStok = false;
+        FocusMiktarGuncelle = false;
+        FocusFiyatGuncelle = false;
+        FocusAvans = false;
+        FocusKartOdeme = false;
+        FocusYetkiliSifre = false;
+        FocusKasaSifre = false;
+        FocusXSifre = false;
+        FocusZSifre = false;
+    });
+    $('#MdlXSifre').on('hide.bs.modal', function () 
+    {
+        FocusBarkod = true;
+        FocusAraToplam = false;
+        FocusMusteri = false;
+        FocusStok = false;
+        FocusMiktarGuncelle = false;
+        FocusFiyatGuncelle = false;
+        FocusAvans = false;
+        FocusKartOdeme = false;
+        FocusYetkiliSifre = false;
+        FocusKasaSifre = false;
+        FocusXSifre = false;
+        FocusZSifre = false;
     });
     $('#MdlAvans').on('hide.bs.modal', function () 
     {
@@ -150,6 +200,8 @@ function Pos($scope,$window,$rootScope,db)
         FocusKartOdeme = false;
         FocusYetkiliSifre = false;
         FocusKasaSifre = false;
+        FocusXSifre = false;
+        FocusZSifre = false;
         FocusFiyatGuncelle = false;
         FocusAvans = false;
         $scope.TxtYetkiliSifre = "";
@@ -163,6 +215,8 @@ function Pos($scope,$window,$rootScope,db)
         FocusMiktarGuncelle = false;
         FocusKartOdeme = false;
         FocusYetkiliSifre = false;
+        FocusXSifre = false;
+        FocusZSifre = false;
         FocusFiyatGuncelle = false;
         FocusAvans = false;
         FocusKasaSifre = false;
@@ -297,6 +351,8 @@ function Pos($scope,$window,$rootScope,db)
         $scope.TxtMiktarGuncelle = 0;
         $scope.TxtFiyatGuncelle = 0;
         $scope.TxtKasaSifre = "";
+        $scope.TxtZSifre = "";
+        $scope.TxtXSifre = "";
         $scope.TxtOkcMesaj = "OKC Cihazıyla Eşleşme Yapılıyor.";
         $scope.BtnTxtOkcEslesme = "İptal";
 
@@ -1263,6 +1319,14 @@ function Pos($scope,$window,$rootScope,db)
         {
             $window.document.getElementById("TxtKasaSifre").focus();
         }
+        else if(FocusZSifre)
+        {
+            $window.document.getElementById("TxtZSifre").focus();
+        }
+        else if(FocusXSifre)
+        {
+            $window.document.getElementById("TxtXSifre").focus();
+        }
     }
     $scope.IslemListeRowClick = function(pIndex,pItem)
     {
@@ -1882,6 +1946,14 @@ function Pos($scope,$window,$rootScope,db)
         {
             $scope.TxtAvans = $scope.TxtAvans.substring(0,$scope.TxtAvans.length-1);
         }
+        else if(FocusZSifre)
+        {
+            $scope.TxtZSifre = $scope.TxtZSifre.substring(0,$scope.TxtZSifre.length-1);
+        }
+        else if(FocusXSifre)
+        {
+            $scope.TxtXSifre = $scope.TxtXSifre.substring(0,$scope.TxtXSifre.length-1);
+        }
     }
     $scope.BtnOnayClick = function()
     {
@@ -1983,6 +2055,30 @@ function Pos($scope,$window,$rootScope,db)
             else
             {
                 $scope.TxtFiyatGuncelle = Key; 
+                FirstKey = true;
+            }
+        }
+        else if(FocusZSifre)
+        {
+            if(FirstKey)
+            {
+                $scope.TxtZSifre = $scope.TxtZSifre + Key; 
+            }
+            else
+            {
+                $scope.TxtZSifre = Key; 
+                FirstKey = true;
+            }
+        }
+        else if(FocusXSifre)
+        {
+            if(FirstKey)
+            {
+                $scope.TxtXSifre = $scope.TxtXSifre + Key; 
+            }
+            else
+            {
+                $scope.TxtXSifre = Key; 
                 FirstKey = true;
             }
         }
@@ -2560,7 +2656,6 @@ function Pos($scope,$window,$rootScope,db)
                         {
                             if(YetkiliList[i].PASSWORD == $scope.TxtYetkiliSifre)
                             {
-                                alert("Yetkili Şifre Doğru.");
                                 $("#MdlYetkiliGiris").modal("hide");
                                 angular.element('#ChkAlma').trigger('click');
                                 $scope.TxtYetkiliSifre = "";
@@ -2578,7 +2673,8 @@ function Pos($scope,$window,$rootScope,db)
                             }
                             else
                             {
-                                alert("Yetkili Şifre Yanlış.");
+                                $("#MdlYetkiliGiris").modal("hide");
+                                alertify.alert("Yetkili Şifre Yanlış.");
                             }
                         }
                     }
@@ -2588,9 +2684,12 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.BtnAvansKaydet = function()
     {
-        var r = confirm("Avans Çekme İstediğinize Eminmisiniz ?");
-        if (r == true) 
-        {
+        $("#MdlAvans").modal("hide");
+        alertify.okBtn('Evet');
+        alertify.cancelBtn('Hayır');
+        alertify.confirm('Avans Çekme İstediğinize Eminmisiniz ?', 
+        function()
+        { 
             let TmpQuery = 
             {
                 db : $scope.Firma,
@@ -2628,12 +2727,13 @@ function Pos($scope,$window,$rootScope,db)
                         if(typeof(InsertResult.result.err) == 'undefined')
                         {                
                             $scope.TxtAvans = 0;
-                            alert("Avans Çekme İşlemi Başarıyla Gerçekleşti.")
+                            alertify.alert("Avans Çekme İşlemi Başarıyla Gerçekleşti.")
                             $("#MdlAvans").modal("hide");
                         }
                         else
                         {
-                            alert("Avans Çekme İşleminde Hata.")
+                            $("#MdlAvans").modal("hide");
+                            alertify.alert("Avans Çekme İşleminde Hata.")
                         }
                     });
                 }
@@ -2644,25 +2744,28 @@ function Pos($scope,$window,$rootScope,db)
                         if(typeof(InsertResult.result.err) == 'undefined')
                         {                
                             $scope.TxtAvans = 0;
-                            alert("Avans Verme İşlemi Başarıyla Gerçekleşti.")
+                            alertify.alert("Avans Verme İşlemi Başarıyla Gerçekleşti.")
                             $("#MdlAvans").modal("hide");
                         }
                         else
                         {
-                            alert("Avans Verme İşleminde Hata.")
+                            $("#MdlAvans").modal("hide");
+                            alertify.alert("Avans Verme İşleminde Hata.")
                         }
                     });
                 }
                 else
                 {
-                    alert("Kasanızda " + pData[0].TOPLAM.toFixed(2) + " TL Bulunmakta Avans Çekme İşlemi Reddedildi.")
+                    $("#MdlAvans").modal("hide");
+                    alertify.alert("Kasanızda " + pData[0].TOPLAM.toFixed(2) + " TL Bulunmakta Avans Çekme İşlemi Reddedildi.")
                 }
             });
-        } 
-        else 
-        {
-            alert("Avans Çekme İşlemi Reddedildi.")
         }
+        ,function()
+        {
+            $("#MdlAvans").modal("hide");
+            alertify.alert("Avans Çekme İşlemi Reddedildi.")
+        });
     }
     $scope.BtnAvansTip = function(pTip)
     {
@@ -2780,7 +2883,7 @@ function Pos($scope,$window,$rootScope,db)
                 {
                     if(typeof(InsertResult.result.err) == 'undefined')
                     {   
-                        alert("Kayıt İşlemi Başarıyla Gerçekleşti.")
+                        alertify.alert("Kayıt İşlemi Başarıyla Gerçekleşti.")
                         $("#MdlPluEdit").modal("hide");
                         $scope.PluGrupAdi = "";
                         $scope.Index = "";
@@ -2799,7 +2902,7 @@ function Pos($scope,$window,$rootScope,db)
                 {
                     if(typeof(InsertResult.result.err) == 'undefined')
                     {   
-                        alert("Güncelleme İşlemi Başarıyla Gerçekleşti.")
+                        alertify.alert("Güncelleme İşlemi Başarıyla Gerçekleşti.")
                         $("#MdlPluEdit").modal("hide");
                         $scope.PluGrupAdi = "";
                         $scope.Index = "";
@@ -2835,7 +2938,7 @@ function Pos($scope,$window,$rootScope,db)
                 {
                     if(typeof(InsertResult.result.err) == 'undefined')
                     {   
-                        alert("Kayıt İşlemi Başarıyla Gerçekleşti.")
+                        alertify.alert("Kayıt İşlemi Başarıyla Gerçekleşti.")
                         $("#MdlPluEdit").modal("hide");
                         $scope.PluGrupAdi = "";
                         $scope.Index = "";
@@ -2853,7 +2956,7 @@ function Pos($scope,$window,$rootScope,db)
                 {
                     if(typeof(InsertResult.result.err) == 'undefined')
                     {   
-                        alert("Güncelleme İşlemi Başarıyla Gerçekleşti.")
+                        alertify.alert("Güncelleme İşlemi Başarıyla Gerçekleşti.")
                         $("#MdlPluEdit").modal("hide");
                         $scope.PluGrupAdi = "";
                         $scope.Index = "";
@@ -2964,14 +3067,14 @@ function Pos($scope,$window,$rootScope,db)
                     {
                         $scope.TxtKasaSifre = "";
                         $("#MdlKasaSifre").modal("hide");
-                        alert("Şifre Kabul Edildi.")
+                        alertify.alert("Şifre Kabul Edildi.")
                         return;
                     }
                     else
                     {
                         if($scope.KullaniciListe[0].CODE == $scope.Kullanici)
                         {
-                            alert("Şifre Reddedildi.")
+                            //alertify.alert("Şifre Reddedildi.")
                         }
                     }
                 }
@@ -3013,8 +3116,136 @@ function Pos($scope,$window,$rootScope,db)
             }
         }
     }
-    $scope.BtnZReport = function()
+    $scope.BtnZReport = async function(pTip)
     {
-        db.Ingenico.ZReport();
+        if(pTip == 0)
+        {
+            $("#MdlZSifre").modal("show");
+            FocusBarkod = false;
+            FocusAraToplam = false;
+            FocusMusteri = false;
+            FocusStok = false;
+            FocusKartOdeme = false;
+            FirstKey = false;
+            FocusYetkiliSifre = false;
+            FocusXSifre = false;
+            FocusZSifre = true;
+        }
+        else
+        {
+            let YetkiliList = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',['']);
+            for (let i = 0; i < YetkiliList.length; i++) 
+            {
+                if(YetkiliList[i].TAG == 1)
+                {
+                    let ParamList = await db.GetPromiseTag($scope.Firma,'ParamGetir',[YetkiliList[i].CODE]);
+
+                    for (let x = 0; x < ParamList.length; x++) 
+                    {
+                        if(ParamList[x].NAME == 'DepoNo' && ParamList[x].VALUE == $scope.Sube)
+                        {
+                            if(YetkiliList[i].PASSWORD == $scope.TxtZSifre)
+                            {
+                                $("#MdlZSifre").modal("hide");
+                                $scope.TxtZSifre = "";
+                                FocusBarkod = true;
+                                FocusAraToplam = false;
+                                FocusMusteri = false;
+                                FocusStok = false;
+                                FocusKartOdeme = false;
+                                FocusYetkiliSifre = false;
+                                FocusKasaSifre = false;
+                                FirstKey = false;
+                                FocusAvans = false;
+                                FocusZSifre = false;
+
+                                alertify.okBtn('Evet');
+                                alertify.cancelBtn('Hayır');
+
+                                alertify.confirm('Z Raporu Almak İstediğinize Emin Misiniz ?', 
+                                function()
+                                { 
+                                    alertify.alert("Z Raporu Alınıyor Lütfen Bekleyiniz...")
+                                    db.Ingenico.ZReport();
+                                }
+                                ,function(){});
+                            }
+                            else
+                            {
+                                $("#MdlZSifre").modal("hide");
+                                alertify.alert("Yetkili Şifre Yanlış.");
+                            }
+                        }
+                    }
+                }   
+            }
+        }
+    }
+    $scope.BtnXReport = async function(pTip)
+    {
+        if(pTip == 0)
+        {
+            $("#MdlXSifre").modal("show");
+            FocusBarkod = false;
+            FocusAraToplam = false;
+            FocusMusteri = false;
+            FocusStok = false;
+            FocusKartOdeme = false;
+            FirstKey = false;
+            FocusYetkiliSifre = false;
+            FocusZSifre = false;
+            FocusXSifre = true;
+        }
+        else
+        {
+            let YetkiliList = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',['']);
+            for (let i = 0; i < YetkiliList.length; i++) 
+            {
+                if(YetkiliList[i].TAG == 1)
+                {
+                    let ParamList = await db.GetPromiseTag($scope.Firma,'ParamGetir',[YetkiliList[i].CODE]);
+
+                    for (let x = 0; x < ParamList.length; x++) 
+                    {
+                        if(ParamList[x].NAME == 'DepoNo' && ParamList[x].VALUE == $scope.Sube)
+                        {
+                            if(YetkiliList[i].PASSWORD == $scope.TxtXSifre)
+                            {
+                                $("#MdlXSifre").modal("hide");
+                                $scope.TxtXSifre = "";
+                                FocusBarkod = true;
+                                FocusAraToplam = false;
+                                FocusMusteri = false;
+                                FocusStok = false;
+                                FocusKartOdeme = false;
+                                FocusYetkiliSifre = false;
+                                FocusKasaSifre = false;
+                                FirstKey = false;
+                                FocusAvans = false;
+                                FocusZSifre = false;
+                                FocusXSifre = false;
+
+                                alertify.okBtn('Evet');
+                                alertify.cancelBtn('Hayır');
+
+                                alertify.confirm('X Raporu Almak İstediğinize Emin Misiniz ?', 
+                                function()
+                                { 
+                                    alertify.alert("X Raporu Alınıyor Lütfen Bekleyiniz...")
+                                    db.Ingenico.XReport();
+                                    FocusBarkod = true;
+                                }
+                                ,function(){});
+                            }
+                            else
+                            {
+                                $("#MdlXSifre").modal("hide");
+                                alertify.alert("Yetkili Şifre Yanlış.");
+                            }
+                        }
+                    }
+                }   
+            }
+        }
     }
 }
