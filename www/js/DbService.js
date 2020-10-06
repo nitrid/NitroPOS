@@ -228,6 +228,7 @@ angular.module('app.db', []).service('db',function($rootScope)
     }   
     function _PrintText(pData,pLen,pType)
     {
+        pData = pData.split("İ").join("I").split("ı").join("i").split("Ç").join("C").split("ç").join("c").split("Ğ").join("G").split("ğ").join("g").split("Ş").join("S").split("ş").join("s").split("Ö").join("O").split("ö").join("o").split("Ü").join("U").split("ü").join("u");
         if(pData.length > pLen)
         {
             pData = pData.toString().substring(0,pLen);

@@ -172,6 +172,18 @@ function Pos($scope,$window,$rootScope,db)
         $scope.Index = "";
     });
 
+    setTimeout(function()
+    { 
+        db.LCDPrint
+        (
+            {
+                blink : 0,
+                text :  db.PrintText("HOSGELDINIZ",20) + 
+                        db.PrintText(moment(new Date()).format("DD.MM.YYYY"),20)
+            }
+        );
+    }, 1000);
+
     if(typeof require != 'undefined')
     {
         $("#MdlIngenicoEslesme").modal("show");  
@@ -245,6 +257,7 @@ function Pos($scope,$window,$rootScope,db)
            console.log(pData)
         });
     }
+
     $rootScope.LoadingShow = function() 
     {
         $("#loading").show();
@@ -338,29 +351,6 @@ function Pos($scope,$window,$rootScope,db)
         $scope.KasaAraToplamRaporList = [];
         $scope.ParamListe = [];
         $scope.KullaniciListe = [];
-
-        setTimeout(function()
-        { 
-            db.LCDPrint
-            (
-                {
-                    blink : 0,
-                    text :  db.PrintText("A tres bientot",20)
-                }
-            );
-        }, 5000);
-
-        setTimeout(function()
-        { 
-            db.LCDPrint
-            (
-                {
-                    blink : 0,
-                    text :  db.PrintText("Bonjour",20) + 
-                            db.PrintText(moment(new Date()).format("DD.MM.YYYY"),20)
-                }
-            );
-        }, 10000);
         
         setInterval(()=>
         {
@@ -1128,8 +1118,8 @@ function Pos($scope,$window,$rootScope,db)
                     {
                         blink : 0,
                         text :  db.PrintText(PosSatisData[PosSatisData.length - 1].ITEM_NAME,11) + " " + 
-                                db.PrintText(PosSatisData[PosSatisData.length - 1].PRICE.toString() + "EUR" ,8,"Start") +
-                                "TOTAL : " + db.PrintText(db.SumColumn(PosSatisData,"AMOUNT").toString() + "EUR",12,"Start")
+                                db.PrintText(PosSatisData[PosSatisData.length - 1].PRICE.toString() + "TL" ,8,"Start") +
+                                "TOPLAM : " + db.PrintText(db.SumColumn(PosSatisData,"AMOUNT").toString() + "TL",11,"Start")
                     }                        
                 );
             });
@@ -1196,6 +1186,29 @@ function Pos($scope,$window,$rootScope,db)
                         $scope.YeniEvrak();
                         $scope.TxtBarkod = "";
                         $scope.TahPanelKontrol = false;
+
+                        setTimeout(function()
+                        { 
+                            db.LCDPrint
+                            (
+                                {
+                                    blink : 0,
+                                    text :  db.PrintText("IYI GUNLER",20)
+                                }
+                            );
+                        }, 1000); 
+
+                        setTimeout(function()
+                        { 
+                            db.LCDPrint
+                            (
+                                {
+                                    blink : 0,
+                                    text :  db.PrintText("HOSGELDINIZ",20) + 
+                                            db.PrintText(moment(new Date()).format("DD.MM.YYYY"),20)
+                                }
+                            );
+                        }, 3000);
                     },1000)
                     
                 });                                  
@@ -1714,7 +1727,7 @@ function Pos($scope,$window,$rootScope,db)
                             for(let i = 0;i < $scope.SatisList.length;i++)
                             {
                                 let TmpSale = {};
-                                TmpSale.NAME = $scope.SatisList[i].ITEM_NAME.split("İ").join("I").split("ı").join("i").split("Ç").join("C").split("ç").join("c").split("Ğ").join("G").split("ğ").join("g").split("Ş").join("S").split("ş").join("s").split("Ö").join("O").split("ö").join("o").split("Ü").join("U").split("ü").join("u");;
+                                TmpSale.NAME = $scope.SatisList[i].ITEM_NAME.split("İ").join("I").split("ı").join("i").split("Ç").join("C").split("ç").join("c").split("Ğ").join("G").split("ğ").join("g").split("Ş").join("S").split("ş").join("s").split("Ö").join("O").split("ö").join("o").split("Ü").join("U").split("ü").join("u");
                                 TmpSale.QUANTITY = parseInt($scope.SatisList[i].QUANTITY);
                                 TmpSale.AMOUNT = parseInt(parseFloat($scope.SatisList[i].PRICE).toFixed(2) * 100);
                                 TmpSale.TAX = 1;
@@ -1782,8 +1795,8 @@ function Pos($scope,$window,$rootScope,db)
                     {
                         blink : 0,
                         text :  db.PrintText(PosSatisData[PosSatisData.length - 1].ITEM_NAME,11) + " " + 
-                                db.PrintText(PosSatisData[PosSatisData.length - 1].PRICE.toString() + "EUR" ,8,"Start") +
-                                "TOTAL : " + db.PrintText(db.SumColumn(PosSatisData,"AMOUNT").toString() + "EUR",12,"Start")
+                                db.PrintText(PosSatisData[PosSatisData.length - 1].PRICE.toString() + "TL" ,8,"Start") +
+                                "TOPLAM : " + db.PrintText(db.SumColumn(PosSatisData,"AMOUNT").toString() + "TL",11,"Start")
                     }                        
                 );
             });          
