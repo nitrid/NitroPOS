@@ -1,10 +1,11 @@
 angular.module('app.db', []).service('db',function($rootScope)
 {
-    let _Host = 'http://172.16.122.250:90';
-    //let _Host = 'http://176.236.120.222:90';
+    //let _Host = 'http://172.16.122.250:90';
+    let _Host = 'http://176.236.120.222:90';
     let _Socket = null;
     let _MenuData = {};
     let _CardPayment = new CardPayment();
+    let _Scale = new Scale();
     let _Ingenico = new Ingenico();
     moment.locale('tr');
     let PosNo = "1"
@@ -384,7 +385,7 @@ angular.module('app.db', []).service('db',function($rootScope)
     function _PaymentSend(pTutar)
     {
         _CardPayment.transaction_start(pTutar);
-    }
+    }    
     //#region "PUBLIC"
     this.Socket = _Socket;
     this.CardPayment = _CardPayment;
@@ -405,7 +406,7 @@ angular.module('app.db', []).service('db',function($rootScope)
     this.LCDClear = _LCDClear;
     this.PaymentSend = _PaymentSend;
     this.Ingenico = _Ingenico;
-    
+    this.Scale = _Scale;
     // $APPLY YERİNE YAPILDI.
     this.SafeApply = function(pScope,pFn) 
     {

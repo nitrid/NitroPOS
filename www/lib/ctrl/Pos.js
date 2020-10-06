@@ -1343,11 +1343,6 @@ function Pos($scope,$window,$rootScope,db)
     {
         db.Connection(async function(data)
         {
-            db.On("SerialBarcode",function(data)
-            {
-                $scope.TxtBarkod = data.result.substring(1,data.result.length).toString().trim();
-                TxtBarkodKeyPress();
-            })
             Init();
             InitIslemGrid();
             InitParkIslemGrid();
@@ -1363,7 +1358,7 @@ function Pos($scope,$window,$rootScope,db)
 
             $scope.ParamListe = await db.GetPromiseTag($scope.Firma,'ParamGetir',[$scope.Kullanici]);
             $scope.KullaniciListe = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',[$scope.Kullanici]);
-
+            
             if($scope.ParamListe.length > 0)
             {
                 for (let i = 0; i < $scope.ParamListe.length; i++) 
@@ -1535,57 +1530,23 @@ function Pos($scope,$window,$rootScope,db)
                 pBarkod = pBarkod.split("*")[1];
             }
 
-            // if(pBarkod.length >= 16)
-            // {
-            //     let TmpTicket = pBarkod.substring(11,16)
-            //     let TmpYear = pBarkod.substring(pBarkod.length - 1, pBarkod.length);
-                
-            //     if(moment(new Date()).format("M") > 1 && moment(new Date()).format("Y").toString().substring(3,4) != TmpYear)
-            //     {
-            //         alertify.alert("Geçersiz ticket.");
-            //         $scope.TxtBarkod = "";
-            //         return;
-            //     }
-                
-            //     db.GetData($scope.Firma,'TicketControl',[pBarkod],function(data)
-            //     {
-            //         if(data.length <= 0)
-            //         {
-            //             $scope.TahTip = 3;
-            //             $scope.TxtAraToplamTutar = parseFloat(TmpTicket / 100).toFixed(2);
-
-            //             db.ExecuteTag($scope.Firma,'TicketInsert',[$scope.Kullanici,$scope.Kullanici,pBarkod],function(InsertResult)
-            //             {
-            //                 $scope.PosTahInsert(function()
-            //                 {   
-            //                     DipToplamHesapla();
-            //                     $scope.TahTip = 0;
-            //                 });
-            //             })
-            //         }
-            //         else
-            //         {
-            //             alertify.alert("Bu Ticket Daha Önce Okutulmuş!. ");
-            //         }
-
-            //     });
-
-            //     $scope.TxtBarkod = "";
-            //     return;
-            // }
 
             let TmpFiyat = 0;
 
-            // if(pBarkod.length >= 12 && pBarkod.length <= 14 && (pBarkod.substring(0,2) == "20" || pBarkod.substring(0,2) == "02"))
-            // {
-            //     TmpFiyat = parseFloat((parseFloat(pBarkod.substring(6,pBarkod.length)) / 1000) * 0.1524).toFixed(2);
-            //     pBarkod = pBarkod.substring(0,6) + "MMMCCF";
-            // }
-
-            db.StokBarkodGetir($scope.Firma,pBarkod,function(BarkodData)
+            db.StokBarkodGetir($scope.Firma,pBarkod,async function(BarkodData)
             {
                 if(BarkodData.length > 0)
                 { 
+                    let TmpKiloFlag = $scope.ParamListe.find(x => x.NAME === 'KiloFlag').VALUE.split(',');
+
+                    for(let i = 0;i < TmpKiloFlag.length;i++)
+                    {
+                        if(TmpKiloFlag[i] == pBarkod.substring(0,2))
+                        {
+                            $scope.Miktar = await db.Scale.Send();
+                        }
+                    }
+
                     if(BarkodData[0].PRICE == 0)
                     {
                         alertify.alert("Ürünün fiyat bilgisi tanımsız !");
