@@ -122,6 +122,7 @@
             this.m_btnStatus02 = new System.Windows.Forms.ToolStripMenuItem();
             this.m_btnStatus04 = new System.Windows.Forms.ToolStripMenuItem();
             this.m_btnStatus05 = new System.Windows.Forms.ToolStripMenuItem();
+            this.testUserMessageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.m_btnOtherPayment_034 = new System.Windows.Forms.Button();
             this.m_btnReversePayment_033 = new System.Windows.Forms.Button();
@@ -515,7 +516,6 @@
             this.m_CurrentHandleDisplay = new System.Windows.Forms.TextBox();
             this.toolTip2 = new System.Windows.Forms.ToolTip(this.components);
             this.timer2 = new System.Windows.Forms.Timer(this.components);
-            this.testUserMessageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_pbBaseInfo)).BeginInit();
@@ -776,42 +776,42 @@
             // ticketHeader_001
             // 
             this.ticketHeader_001.Name = "ticketHeader_001";
-            this.ticketHeader_001.Size = new System.Drawing.Size(142, 22);
+            this.ticketHeader_001.Size = new System.Drawing.Size(141, 22);
             this.ticketHeader_001.Text = "TProcessSale";
             this.ticketHeader_001.Click += new System.EventHandler(this.m_ticketHeaderOptions);
             // 
             // ticketHeader_013
             // 
             this.ticketHeader_013.Name = "ticketHeader_013";
-            this.ticketHeader_013.Size = new System.Drawing.Size(142, 22);
+            this.ticketHeader_013.Size = new System.Drawing.Size(141, 22);
             this.ticketHeader_013.Text = "TInvoice";
             this.ticketHeader_013.Click += new System.EventHandler(this.m_ticketHeaderOptions);
             // 
             // ticketHeader_015
             // 
             this.ticketHeader_015.Name = "ticketHeader_015";
-            this.ticketHeader_015.Size = new System.Drawing.Size(142, 22);
+            this.ticketHeader_015.Size = new System.Drawing.Size(141, 22);
             this.ticketHeader_015.Text = "TRefund";
             this.ticketHeader_015.Click += new System.EventHandler(this.m_ticketHeaderOptions);
             // 
             // ticketHeader_019
             // 
             this.ticketHeader_019.Name = "ticketHeader_019";
-            this.ticketHeader_019.Size = new System.Drawing.Size(142, 22);
+            this.ticketHeader_019.Size = new System.Drawing.Size(141, 22);
             this.ticketHeader_019.Text = "TInfo";
             this.ticketHeader_019.Click += new System.EventHandler(this.m_ticketHeaderOptions);
             // 
             // ticketHeader_008
             // 
             this.ticketHeader_008.Name = "ticketHeader_008";
-            this.ticketHeader_008.Size = new System.Drawing.Size(142, 22);
+            this.ticketHeader_008.Size = new System.Drawing.Size(141, 22);
             this.ticketHeader_008.Text = "TAvans";
             this.ticketHeader_008.Click += new System.EventHandler(this.m_ticketHeaderOptions);
             // 
             // ticketHeader_009
             // 
             this.ticketHeader_009.Name = "ticketHeader_009";
-            this.ticketHeader_009.Size = new System.Drawing.Size(142, 22);
+            this.ticketHeader_009.Size = new System.Drawing.Size(141, 22);
             this.ticketHeader_009.Text = "TPayment";
             this.ticketHeader_009.Click += new System.EventHandler(this.m_ticketHeaderOptions);
             // 
@@ -1043,91 +1043,91 @@
             // m_ParkingEntryMenuItem
             // 
             this.m_ParkingEntryMenuItem.Name = "m_ParkingEntryMenuItem";
-            this.m_ParkingEntryMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.m_ParkingEntryMenuItem.Size = new System.Drawing.Size(235, 22);
             this.m_ParkingEntryMenuItem.Text = "Otopark Fis";
             this.m_ParkingEntryMenuItem.Click += new System.EventHandler(this.m_ParkingEntryMenuItem_Click);
             // 
             // m_getSetTicketHeaderMenuItem
             // 
             this.m_getSetTicketHeaderMenuItem.Name = "m_getSetTicketHeaderMenuItem";
-            this.m_getSetTicketHeaderMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.m_getSetTicketHeaderMenuItem.Size = new System.Drawing.Size(235, 22);
             this.m_getSetTicketHeaderMenuItem.Text = "Get/Set Ticket Header";
             this.m_getSetTicketHeaderMenuItem.Click += new System.EventHandler(this.m_getSetTicketHeaderMenuItem_Click);
             // 
             // m_jumpToECRSinglePaymentMenuItem
             // 
             this.m_jumpToECRSinglePaymentMenuItem.Name = "m_jumpToECRSinglePaymentMenuItem";
-            this.m_jumpToECRSinglePaymentMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.m_jumpToECRSinglePaymentMenuItem.Size = new System.Drawing.Size(235, 22);
             this.m_jumpToECRSinglePaymentMenuItem.Text = "Jump To ECR (Single Payment)";
             this.m_jumpToECRSinglePaymentMenuItem.Click += new System.EventHandler(this.m_jumpToECRSinglePaymentMenuItem_Click);
             // 
             // m_ekuInfoMenuItem
             // 
             this.m_ekuInfoMenuItem.Name = "m_ekuInfoMenuItem";
-            this.m_ekuInfoMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.m_ekuInfoMenuItem.Size = new System.Drawing.Size(235, 22);
             this.m_ekuInfoMenuItem.Text = "EKU Info";
             this.m_ekuInfoMenuItem.Click += new System.EventHandler(this.m_ekuInfoMenuItem_Click);
             // 
             // eKUKullanımBilgileriToolStripMenuItem
             // 
             this.eKUKullanımBilgileriToolStripMenuItem.Name = "eKUKullanımBilgileriToolStripMenuItem";
-            this.eKUKullanımBilgileriToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.eKUKullanımBilgileriToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.eKUKullanımBilgileriToolStripMenuItem.Text = "EKU Kullanım Bilgileri";
             this.eKUKullanımBilgileriToolStripMenuItem.Click += new System.EventHandler(this.eKUKullanımBilgileriToolStripMenuItem_Click);
             // 
             // fISCALKullanımBilgileriToolStripMenuItem
             // 
             this.fISCALKullanımBilgileriToolStripMenuItem.Name = "fISCALKullanımBilgileriToolStripMenuItem";
-            this.fISCALKullanımBilgileriToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.fISCALKullanımBilgileriToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.fISCALKullanımBilgileriToolStripMenuItem.Text = "FISCAL Kullanım Bilgileri";
             this.fISCALKullanımBilgileriToolStripMenuItem.Click += new System.EventHandler(this.fISCALKullanımBilgileriToolStripMenuItem_Click);
             // 
             // m_getApplicationInfoToolStripMenuItem
             // 
             this.m_getApplicationInfoToolStripMenuItem.Name = "m_getApplicationInfoToolStripMenuItem";
-            this.m_getApplicationInfoToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.m_getApplicationInfoToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.m_getApplicationInfoToolStripMenuItem.Text = "Yemek Ceki";
             this.m_getApplicationInfoToolStripMenuItem.Click += new System.EventHandler(this.m_getApplicationInfoToolStripMenuItem_Click);
             // 
             // promosyonKullanToolStripMenuItem
             // 
             this.promosyonKullanToolStripMenuItem.Name = "promosyonKullanToolStripMenuItem";
-            this.promosyonKullanToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.promosyonKullanToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.promosyonKullanToolStripMenuItem.Text = "Promosyon Kullan";
             this.promosyonKullanToolStripMenuItem.Click += new System.EventHandler(this.promosyonKullanToolStripMenuItem_Click);
             // 
             // flightModeToolStripMenuItem
             // 
             this.flightModeToolStripMenuItem.Name = "flightModeToolStripMenuItem";
-            this.flightModeToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.flightModeToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.flightModeToolStripMenuItem.Text = "Flight Mode";
             this.flightModeToolStripMenuItem.Click += new System.EventHandler(this.flightModeToolStripMenuItem_Click);
             // 
             // checkConnStatusToolStripMenuItem
             // 
             this.checkConnStatusToolStripMenuItem.Name = "checkConnStatusToolStripMenuItem";
-            this.checkConnStatusToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.checkConnStatusToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.checkConnStatusToolStripMenuItem.Text = "Check Conn. Status";
             this.checkConnStatusToolStripMenuItem.Click += new System.EventHandler(this.checkConnStatusToolStripMenuItem_Click);
             // 
             // m_btnCreateUniqueID
             // 
             this.m_btnCreateUniqueID.Name = "m_btnCreateUniqueID";
-            this.m_btnCreateUniqueID.Size = new System.Drawing.Size(236, 22);
+            this.m_btnCreateUniqueID.Size = new System.Drawing.Size(235, 22);
             this.m_btnCreateUniqueID.Text = "Create UniqueID";
             this.m_btnCreateUniqueID.Click += new System.EventHandler(this.m_btnCreateUniqueID_Click);
             // 
             // onlineInvoiceToolStripMenuItem
             // 
             this.onlineInvoiceToolStripMenuItem.Name = "onlineInvoiceToolStripMenuItem";
-            this.onlineInvoiceToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.onlineInvoiceToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.onlineInvoiceToolStripMenuItem.Text = "Online Invoice";
             this.onlineInvoiceToolStripMenuItem.Click += new System.EventHandler(this.onlineInvoiceToolStripMenuItem_Click);
             // 
             // setOnlineTaxFreeToolStripMenuItem
             // 
             this.setOnlineTaxFreeToolStripMenuItem.Name = "setOnlineTaxFreeToolStripMenuItem";
-            this.setOnlineTaxFreeToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.setOnlineTaxFreeToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.setOnlineTaxFreeToolStripMenuItem.Text = "Set Online Tax Free";
             this.setOnlineTaxFreeToolStripMenuItem.Click += new System.EventHandler(this.setOnlineTaxFreeToolStripMenuItem_Click);
             // 
@@ -1137,7 +1137,7 @@
             this.m_btnMusteriSorgu,
             this.m_btnLoyaltyIslem});
             this.m_btnLoyalty.Name = "m_btnLoyalty";
-            this.m_btnLoyalty.Size = new System.Drawing.Size(236, 22);
+            this.m_btnLoyalty.Size = new System.Drawing.Size(235, 22);
             this.m_btnLoyalty.Text = "Loyalty";
             // 
             // m_btnMusteriSorgu
@@ -1157,14 +1157,14 @@
             // cariHesapToolStripMenuItem
             // 
             this.cariHesapToolStripMenuItem.Name = "cariHesapToolStripMenuItem";
-            this.cariHesapToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.cariHesapToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.cariHesapToolStripMenuItem.Text = "Cari Hesap";
             this.cariHesapToolStripMenuItem.Click += new System.EventHandler(this.cariHesapToolStripMenuItem_Click);
             // 
             // transInquiryToolStripMenuItem
             // 
             this.transInquiryToolStripMenuItem.Name = "transInquiryToolStripMenuItem";
-            this.transInquiryToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.transInquiryToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.transInquiryToolStripMenuItem.Text = "Transaction Inquiry";
             this.transInquiryToolStripMenuItem.Click += new System.EventHandler(this.transInquiryToolStripMenuItem_Click);
             // 
@@ -1175,7 +1175,7 @@
             this.starFrontStationToolStripMenuItem,
             this.epsonFrontStationToolStripMenuItem});
             this.printerFrontStationTestToolStripMenuItem.Name = "printerFrontStationTestToolStripMenuItem";
-            this.printerFrontStationTestToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.printerFrontStationTestToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.printerFrontStationTestToolStripMenuItem.Text = "Printer Front Station Test";
             // 
             // wincorFrontStationToolStripMenuItem
@@ -1202,28 +1202,28 @@
             // odemeFişiToolStripMenuItem
             // 
             this.odemeFişiToolStripMenuItem.Name = "odemeFişiToolStripMenuItem";
-            this.odemeFişiToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.odemeFişiToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.odemeFişiToolStripMenuItem.Text = "İşyeri Banka Slip";
             this.odemeFişiToolStripMenuItem.Click += new System.EventHandler(this.odemeFişiToolStripMenuItem_Click);
             // 
             // slipYazmaAyarıToolStripMenuItem
             // 
             this.slipYazmaAyarıToolStripMenuItem.Name = "slipYazmaAyarıToolStripMenuItem";
-            this.slipYazmaAyarıToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.slipYazmaAyarıToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.slipYazmaAyarıToolStripMenuItem.Text = "Slip Yazma Ayarı";
             this.slipYazmaAyarıToolStripMenuItem.Click += new System.EventHandler(this.slipYazmaAyarıToolStripMenuItem_Click);
             // 
             // kullanıcıDatasıToolStripMenuItem
             // 
             this.kullanıcıDatasıToolStripMenuItem.Name = "kullanıcıDatasıToolStripMenuItem";
-            this.kullanıcıDatasıToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.kullanıcıDatasıToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.kullanıcıDatasıToolStripMenuItem.Text = "Kullanıcı Datası";
             this.kullanıcıDatasıToolStripMenuItem.Click += new System.EventHandler(this.kullanıcıDatasıToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(236, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(235, 22);
             this.toolStripMenuItem1.Text = "Çekmece Ayarı";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
@@ -1240,21 +1240,21 @@
             // m_setUniqueIDMenuItem
             // 
             this.m_setUniqueIDMenuItem.Name = "m_setUniqueIDMenuItem";
-            this.m_setUniqueIDMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.m_setUniqueIDMenuItem.Size = new System.Drawing.Size(173, 22);
             this.m_setUniqueIDMenuItem.Text = "Get Unique ID List";
             this.m_setUniqueIDMenuItem.Click += new System.EventHandler(this.m_setUniqueIDMenuItem_Click);
             // 
             // m_getUniqueIDMenuItem
             // 
             this.m_getUniqueIDMenuItem.Name = "m_getUniqueIDMenuItem";
-            this.m_getUniqueIDMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.m_getUniqueIDMenuItem.Size = new System.Drawing.Size(173, 22);
             this.m_getUniqueIDMenuItem.Text = "Set Unique ID";
             this.m_getUniqueIDMenuItem.Click += new System.EventHandler(this.m_getUniqueIDMenuItem_Click);
             // 
             // m_getTSMUniqueIDMenuItem
             // 
             this.m_getTSMUniqueIDMenuItem.Name = "m_getTSMUniqueIDMenuItem";
-            this.m_getTSMUniqueIDMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.m_getTSMUniqueIDMenuItem.Size = new System.Drawing.Size(173, 22);
             this.m_getTSMUniqueIDMenuItem.Text = "Get TSM Unique ID";
             this.m_getTSMUniqueIDMenuItem.Click += new System.EventHandler(this.m_getTSMUniqueIDMenuItem_Click);
             // 
@@ -1343,6 +1343,13 @@
             this.m_btnStatus05.Size = new System.Drawing.Size(168, 22);
             this.m_btnStatus05.Text = "Status Completed";
             this.m_btnStatus05.Click += new System.EventHandler(this.m_btnStatus_Click);
+            // 
+            // testUserMessageToolStripMenuItem
+            // 
+            this.testUserMessageToolStripMenuItem.Name = "testUserMessageToolStripMenuItem";
+            this.testUserMessageToolStripMenuItem.Size = new System.Drawing.Size(114, 20);
+            this.testUserMessageToolStripMenuItem.Text = "Test User Message";
+            this.testUserMessageToolStripMenuItem.Click += new System.EventHandler(this.testUserMessageToolStripMenuItem_Click);
             // 
             // timer1
             // 
@@ -3181,6 +3188,7 @@
             this.groupBox7.Size = new System.Drawing.Size(486, 233);
             this.groupBox7.TabIndex = 4;
             this.groupBox7.TabStop = false;
+            this.groupBox7.Enter += new System.EventHandler(this.groupBox7_Enter);
             // 
             // comboBoxUniquId
             // 
@@ -3627,6 +3635,7 @@
             this.m_listTax.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader12,
             this.columnHeader13});
+            this.m_listTax.HideSelection = false;
             this.m_listTax.Location = new System.Drawing.Point(6, 6);
             this.m_listTax.Name = "m_listTax";
             this.m_listTax.Size = new System.Drawing.Size(489, 209);
@@ -4080,6 +4089,7 @@
             this.columnHeader6,
             this.columnHeader7,
             this.Result});
+            this.m_listBatchCommand.HideSelection = false;
             this.m_listBatchCommand.Location = new System.Drawing.Point(6, 6);
             this.m_listBatchCommand.Name = "m_listBatchCommand";
             this.m_listBatchCommand.Size = new System.Drawing.Size(497, 545);
@@ -6114,13 +6124,6 @@
             this.m_CurrentHandleDisplay.Name = "m_CurrentHandleDisplay";
             this.m_CurrentHandleDisplay.Size = new System.Drawing.Size(221, 195);
             this.m_CurrentHandleDisplay.TabIndex = 0;
-            // 
-            // testUserMessageToolStripMenuItem
-            // 
-            this.testUserMessageToolStripMenuItem.Name = "testUserMessageToolStripMenuItem";
-            this.testUserMessageToolStripMenuItem.Size = new System.Drawing.Size(115, 20);
-            this.testUserMessageToolStripMenuItem.Text = "Test User Message";
-            this.testUserMessageToolStripMenuItem.Click += new System.EventHandler(this.testUserMessageToolStripMenuItem_Click);
             // 
             // GMPForm
             // 

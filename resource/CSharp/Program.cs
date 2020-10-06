@@ -87,6 +87,11 @@ namespace Ingenico
                     line = TicketClose();
                     Console.WriteLine(line);
                 }
+                else if (tag == "Z_REPORT")
+                {
+                    line = ZReports();
+                    Console.WriteLine(line);
+                }
                 if (tag == "exit") // Check string
                 { 
                     break;
@@ -651,5 +656,15 @@ namespace Ingenico
             return "TICKET CLOSE|SUCCES";
         }
 
+        static string ZReports()
+        {
+            ST_FUNCTION_PARAMETERS stFunctionParameters = new ST_FUNCTION_PARAMETERS();
+
+            stFunctionParameters.Password.supervisor = "0000";
+
+            Json_GMPSmartDLL.FP3_FunctionReports(CurrentInterface, 2, ref stFunctionParameters, 120 * 1000);
+
+            return "ZReports";
+        }
     }
 }

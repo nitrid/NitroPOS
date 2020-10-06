@@ -2590,6 +2590,8 @@ namespace GmpSampleSim
             UInt32 retcode = Defines.TRAN_RESULT_OK;
 
             ST_FUNCTION_PARAMETERS stFunctionParameters = new ST_FUNCTION_PARAMETERS();
+
+
             ST_PAYMENT_REQUEST StPaymentRequest = new ST_PAYMENT_REQUEST();
             byte NumberOfTotalRecords = 0;
             byte NumberOfTotalRecordsReceived = 0;
@@ -2624,11 +2626,11 @@ namespace GmpSampleSim
             }
 
             FunctionFlags eFunc = (FunctionFlags)funcFlag;
+            
             switch (eFunc)
             {
-
                 case FunctionFlags.GMP_EXT_DEVICE_FUNC_PAYMENT_VAS_IPTAL:
-
+                    
                     if (m_txtInputData.Text != "")
                     {
                         Amount = Convert.ToUInt32(m_txtInputData.Text);
@@ -3208,6 +3210,8 @@ namespace GmpSampleSim
                     else
                     {
                         if (pf.m_PASS != "")
+                            MessageBox.Show(CurrentInterface.ToString());
+                        MessageBox.Show(stFunctionParameters.ToString());
                             retcode = Json_GMPSmartDLL.FP3_FunctionReports(CurrentInterface, (int)eFunc, ref stFunctionParameters, 120 * 1000);
                     }
                     break;
@@ -8181,6 +8185,11 @@ namespace GmpSampleSim
                 //retcode = GMPSmartDLL.FP3_Close(CurrentInterface, GetTransactionHandle(CurrentInterface), Defines.TIMEOUT_DEFAULT);
                 HandleErrorCode(retcode);
             }
+
+        private void groupBox7_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 

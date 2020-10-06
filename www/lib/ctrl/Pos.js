@@ -2694,7 +2694,7 @@ function Pos($scope,$window,$rootScope,db)
                 }
                 else
                 {
-                    alert("Kasanızda " + pData[0].TOPLAM + " TL Bulunmakta Avans Çekme İşlemi Reddedildi.")
+                    alert("Kasanızda " + pData[0].TOPLAM.toFixed(2) + " TL Bulunmakta Avans Çekme İşlemi Reddedildi.")
                 }
             });
         } 
