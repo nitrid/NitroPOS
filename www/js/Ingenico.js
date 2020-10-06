@@ -50,6 +50,16 @@ var Ingenico =
                     LocalEvent({tag:"ITEM_SALE",msg:data.toString().trim().split('|')[1]});
                     console.log(data.toString().trim().split('|')[1]);
                 }
+                else if(data.toString().trim().split('|')[0] == "ZREPORT")
+                {
+                    LocalEvent({tag:"ZREPORT",msg:data.toString().trim().split('|')[1]});
+                    console.log(data.toString().trim().split('|')[1]);
+                }
+                else if(data.toString().trim().split('|')[0] == "XREPORT")
+                {
+                    LocalEvent({tag:"XREPORT",msg:data.toString().trim().split('|')[1]});
+                    console.log(data.toString().trim().split('|')[1]);
+                }
             });
         }
         Ingenico.prototype.SendData = function(pData)
@@ -61,6 +71,14 @@ var Ingenico =
         Ingenico.prototype.TicketClose = function()
         {
             Terminal.stdin.write('TICKET_CLOSE\n');
+        }
+        Ingenico.prototype.ZReport = function()
+        {
+            Terminal.stdin.write('Z_REPORT\n');
+        }
+        Ingenico.prototype.XReport = function()
+        {
+            Terminal.stdin.write('X_REPORT\n');
         }
         //#region "EVENT TRIGGER"        
         function LocalEvent(pData)
