@@ -12,7 +12,7 @@ let LicMenu = "";
 function dbengine(config)
 {    
     this.config = config;
-    io.listen(90);
+    io.listen(config.socket);
 
     //BELİRLİ ZAMANLARDA LİSANS DURUMU KONTROL EDİLİYOR. 
 
@@ -57,7 +57,7 @@ function dbengine(config)
                     LicMenu = data.result[0].MENUDATA;
                     
                     io.close();
-                    io.listen(90);
+                    io.listen(config.socket);
                 }
                 else
                 {

@@ -2725,7 +2725,8 @@ function Pos($scope,$window,$rootScope,db)
                     db.ExecuteTag($scope.Firma,'PosTahInsert',InsertData,function(InsertResult)
                     {   
                         if(typeof(InsertResult.result.err) == 'undefined')
-                        {                
+                        {   
+                            db.Ingenico.Avans("{AMOUNT:"+ $scope.TxtAvans + "}");      
                             $scope.TxtAvans = 0;
                             alertify.alert("Avans Çekme İşlemi Başarıyla Gerçekleşti.")
                             $("#MdlAvans").modal("hide");

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GmpSampleSim;
 using GmpSampleSim.Models;
 using Newtonsoft.Json.Linq;
+using System.Globalization;
 
 namespace Ingenico
 {
@@ -97,6 +98,16 @@ namespace Ingenico
                     line = XReports();
                     Console.WriteLine(line);
                 }
+                else if (tag == "AVANS")
+                {
+                    if (line.Split('|').Length > 0)
+                    {
+                        JObject TmpMaster = JObject.Parse(line.Split('|')[1]);
+
+                        Avans((UInt32)TmpMaster.Property("AMOUNT").Value);
+                    }
+                    Console.WriteLine(line);
+                }
                 if (tag == "exit") // Check string
                 { 
                     break;
@@ -149,13 +160,13 @@ namespace Ingenico
 
                 byte[] UserData = new byte[] { 0x74, 0x65, 0x73, 0x74, 0x64, 0x61, 0x74, 0x61 };
                 retcode = GMPSmartDLL.FP3_Start(CurrentInterface, ref TranHandle, 0, GetUniqueIdByInterface(CurrentInterface), 24, TsmSign, TsmSign == null ? 0 : TsmSign.Length, UserData, UserData.Length, 10000);
-
+                AddTrxHandles(TranHandle);
                 if (retcode == Defines.APP_ERR_ALREADY_DONE)
                 {
                     goto start_again;
                 }
                 else if (retcode == Defines.TRAN_RESULT_OK)
-                    retcode = GMPSmartDLL.FP3_TicketHeader(CurrentInterface, GetTransactionHandle(CurrentInterface), ticketType, Defines.TIMEOUT_DEFAULT);
+                retcode = GMPSmartDLL.FP3_TicketHeader(CurrentInterface, GetTransactionHandle(CurrentInterface), ticketType, Defines.TIMEOUT_DEFAULT);
 
                 if (retcode == Defines.TRAN_RESULT_OK)
                 {
@@ -173,9 +184,8 @@ namespace Ingenico
                 {
 
                 }
-                    
-            }
 
+            }
             return retcode;
         }
         private static void AddTrxHandles(UInt64 hTrx)
@@ -415,7 +425,6 @@ namespace Ingenico
         {
             CommandList.Clear();
         }
-
         static string Ping()
         {
             UInt32 retcode;
@@ -570,7 +579,7 @@ namespace Ingenico
 
             return "ADD ITEM";
         }
-        static string CashPayment(int pType,UInt32 pAmount)
+        static string CashPayment(int pType, UInt32 pAmount)
         {
             UInt16 currencyOfPayment = (UInt16)ECurrency.CURRENCY_TL;
             ST_PAYMENT_REQUEST[] stPaymentRequest = new ST_PAYMENT_REQUEST[1];
@@ -580,12 +589,12 @@ namespace Ingenico
                 stPaymentRequest[i] = new ST_PAYMENT_REQUEST();
             }
             //NAKİT OR KREDİ KARTI TİPLERİ İÇİN
-            if(pType == 0)
+            if (pType == 0)
             {
                 stPaymentRequest[0].typeOfPayment = (uint)EPaymentTypes.PAYMENT_CASH_TL;
                 stPaymentRequest[0].subtypeOfPayment = 0;
             }
-            else if(pType == 1)
+            else if (pType == 1)
             {
                 stPaymentRequest[0].BankPaymentUniqueId = GenerateUniqueId();
                 stPaymentRequest[0].typeOfPayment = (uint)EPaymentTypes.PAYMENT_BANK_CARD;
@@ -597,7 +606,7 @@ namespace Ingenico
                 stPaymentRequest[0].rawDataLen = (ushort)stPaymentRequest[0].rawData.Length;
             }
 
-            
+
             stPaymentRequest[0].payAmount = pAmount;
             stPaymentRequest[0].payAmountCurrencyCode = currencyOfPayment;
 
@@ -608,6 +617,7 @@ namespace Ingenico
             AddIntoCommandBatch("prepare_Payment", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen);
             return "PAYMENT";
         }
+
         static string TotalPrint()
         {
             byte[] buffer = new byte[1024];
@@ -675,6 +685,73 @@ namespace Ingenico
             Json_GMPSmartDLL.FP3_FunctionReports(CurrentInterface, 3, ref stFunctionParameters, 120 * 1000);
 
             return "XREPORT";
+        }
+        static string Avans(UInt32 pAmount)
+        {
+            UInt32 RetCode = 0;
+            ST_TICKET m_stTicket = new ST_TICKET();
+
+            RetCode = StartTicket(TTicketType.TKasaAvans);
+
+            if (RetCode != 0)
+            {
+                return "AVANS|FAULT-1";
+            }
+
+            RetCode = Json_GMPSmartDLL.FP3_KasaAvans(CurrentInterface, GetTransactionHandle(CurrentInterface), (int)pAmount, ref m_stTicket, Defines.TIMEOUT_DEFAULT);
+
+            if (RetCode != 0)
+            {
+                return "AVANS|FAULT-2";
+            }
+
+            UInt16 currencyOfPayment = (UInt16)ECurrency.CURRENCY_TL;
+            ST_PAYMENT_REQUEST[] stPaymentRequest = new ST_PAYMENT_REQUEST[1];
+
+            for (int i = 0; i < stPaymentRequest.Length; i++)
+            {
+                stPaymentRequest[i] = new ST_PAYMENT_REQUEST();
+            }
+
+            stPaymentRequest[0].typeOfPayment = (uint)EPaymentTypes.PAYMENT_CASH_TL;
+            stPaymentRequest[0].subtypeOfPayment = 0;
+            stPaymentRequest[0].payAmount = pAmount;
+            stPaymentRequest[0].payAmountCurrencyCode = currencyOfPayment;
+
+             m_stTicket = new ST_TICKET();
+            RetCode = Json_GMPSmartDLL.FP3_Payment(CurrentInterface, GetTransactionHandle(CurrentInterface), ref stPaymentRequest[0], ref m_stTicket, 30000);
+
+            RetCode = GMPSmartDLL.FP3_PrintTotalsAndPayments(CurrentInterface, GetTransactionHandle(CurrentInterface), Defines.TIMEOUT_DEFAULT);
+            if (RetCode != Defines.TRAN_RESULT_OK && RetCode != Defines.APP_ERR_ALREADY_DONE)
+                return "AVANS|FAULT-3";
+
+            RetCode = GMPSmartDLL.FP3_PrintBeforeMF(CurrentInterface, GetTransactionHandle(CurrentInterface), Defines.TIMEOUT_DEFAULT);
+            if (RetCode != Defines.TRAN_RESULT_OK && RetCode != Defines.APP_ERR_ALREADY_DONE)
+                return "AVANS|FAULT-5";
+
+            ST_USER_MESSAGE[] stUserMessage = new ST_USER_MESSAGE[1];
+            for (int i = 0; i < stUserMessage.Length; i++)
+            {
+                stUserMessage[i] = new ST_USER_MESSAGE();
+            }
+
+            stUserMessage[0].flag = Defines.PS_38 | Defines.PS_CENTER;
+            stUserMessage[0].message = "AVANS ISLEMI";
+            stUserMessage[0].len = (byte)stUserMessage[0].message.Length;
+
+            RetCode = Json_GMPSmartDLL.FP3_PrintUserMessage(CurrentInterface, GetTransactionHandle(CurrentInterface), ref stUserMessage, (ushort)stUserMessage.Length, ref m_stTicket, Defines.TIMEOUT_DEFAULT);
+
+            RetCode = GMPSmartDLL.FP3_PrintMF(CurrentInterface, GetTransactionHandle(CurrentInterface), Defines.TIMEOUT_CARD_TRANSACTIONS);
+            if (RetCode != Defines.TRAN_RESULT_OK && RetCode != Defines.APP_ERR_ALREADY_DONE)
+                return "AVANS|FAULT-5";
+
+            ClearTransactionUniqueId(CurrentInterface);
+            UInt64 TransHandle = GetTransactionHandle(CurrentInterface);
+            RetCode = GMPSmartDLL.FP3_Close(CurrentInterface, TransHandle, Defines.TIMEOUT_DEFAULT);
+            if (RetCode == Defines.TRAN_RESULT_OK)
+                DeleteTrxHandles(CurrentInterface, TransHandle);
+
+            return "AVANS";
         }
     }
 }

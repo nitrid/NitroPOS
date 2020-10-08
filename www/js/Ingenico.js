@@ -60,6 +60,11 @@ var Ingenico =
                     LocalEvent({tag:"XREPORT",msg:data.toString().trim().split('|')[1]});
                     console.log(data.toString().trim().split('|')[1]);
                 }
+                else if(data.toString().trim().split('|')[0] == "AVANS")
+                {
+                    LocalEvent({tag:"AVANS",msg:data.toString().trim().split('|')[1]});
+                    console.log(data.toString().trim().split('|')[1]);
+                }
             });
         }
         Ingenico.prototype.SendData = function(pData)
@@ -79,6 +84,11 @@ var Ingenico =
         Ingenico.prototype.XReport = function()
         {
             Terminal.stdin.write('X_REPORT\n');
+        }
+        Ingenico.prototype.Avans = function(pData)
+        {
+            Terminal.stdin.write('AVANS|' + JSON.stringify(pData) +'\n');
+            console.log(JSON.stringify(pData))
         }
         //#region "EVENT TRIGGER"        
         function LocalEvent(pData)
