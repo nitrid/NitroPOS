@@ -1,7 +1,8 @@
 angular.module('app.db', []).service('db',function($rootScope)
 {
     //let _Host = 'http://172.16.122.250:90';
-    let _Host = 'http://176.236.120.222:90';
+    // let _Host = 'http://localhost:90';
+    let _Host = '';
     let _Socket = null;
     let _MenuData = {};
     let _CardPayment = new CardPayment();
@@ -10,6 +11,12 @@ angular.module('app.db', []).service('db',function($rootScope)
     moment.locale('tr');
     let PosNo = "1"
 
+    if (typeof(localStorage.host) !== "undefined") 
+    {
+        _Host = 'http://' + localStorage.host + ':' + localStorage.socketport;
+        //_Host = 'http://' + localStorage.host;
+        console.log(_Host)
+    }
     if (typeof(localStorage.mode) !== "undefined")
     {
         if(localStorage.mode == 'true')
@@ -425,7 +432,7 @@ angular.module('app.db', []).service('db',function($rootScope)
     };     
     this.SetHost = function(host,port)
     {
-        _Host = 'http://' + host + ':90';
+        _Host = 'http://' + host + ":" + port;
         //_Socket.io.uri = _Host;
     }
     this.On = function(eventName,callback)

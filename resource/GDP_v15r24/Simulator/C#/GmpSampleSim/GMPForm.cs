@@ -981,12 +981,11 @@ namespace GmpSampleSim
             if (GetTransactionHandle(CurrentInterface) == 0)
             {
                 if (ticketType != TTicketType.TProcessSale)
-                    ClearTransactionUniqueId(CurrentInterface);
-                
+                ClearTransactionUniqueId(CurrentInterface);
+
                 byte[] UserData = new byte[] { 0x74, 0x65, 0x73, 0x74, 0x64, 0x61, 0x74, 0x61 };
                 retcode = GMPSmartDLL.FP3_Start(CurrentInterface, ref TranHandle, isBackground, GetUniqueIdByInterface(CurrentInterface), 24, TsmSign, TsmSign == null ? 0 : TsmSign.Length, UserData, UserData.Length, 10000);
                 AddTrxHandles(CurrentInterface, TranHandle, isBackground);
-
                 if (retcode == Defines.APP_ERR_ALREADY_DONE)
                 {
                     switch (MessageBox.Show(Localization.IncompleteTransactionDesc, Localization.IncompleteTransaction, MessageBoxButtons.OKCancel))
@@ -999,7 +998,7 @@ namespace GmpSampleSim
                     }
                 }
                 else if (retcode == Defines.TRAN_RESULT_OK)
-                    retcode = GMPSmartDLL.FP3_TicketHeader(CurrentInterface, GetTransactionHandle(CurrentInterface), ticketType, Defines.TIMEOUT_DEFAULT);
+                     retcode = GMPSmartDLL.FP3_TicketHeader(CurrentInterface, GetTransactionHandle(CurrentInterface), ticketType, Defines.TIMEOUT_DEFAULT);
 
                 if (retcode == Defines.TRAN_RESULT_OK)
                 {
@@ -1893,6 +1892,7 @@ namespace GmpSampleSim
 
                         if (m_stTicket.KasaAvansAmount != 0)
                         {
+                            MessageBox.Show(formatAmount(m_stTicket.KasaAvansAmount, ECurrency.CURRENCY_TL).ToString());
                             display += String.Format("KASA AVANS TOTAL: {0}", formatAmount(m_stTicket.KasaAvansAmount, ECurrency.CURRENCY_TL));
                             TicketAmount = m_stTicket.KasaAvansAmount;
                         }
@@ -3881,6 +3881,7 @@ namespace GmpSampleSim
         {
             UInt32 retcode;
             ST_TICKET m_stTicket = new ST_TICKET();
+
             if (GetTransactionHandle(CurrentInterface) != 0)
             {
                 MessageBox.Show("A Transaction has already started. Multiple sessions can not be managed", "Error", MessageBoxButtons.OK);
@@ -3906,15 +3907,17 @@ namespace GmpSampleSim
             {
                 retcode = StartTicket(TTicketType.TKasaAvans);
                 if (retcode != Defines.TRAN_RESULT_OK)
+                {
                     return;
+                }
 
                 retcode = Json_GMPSmartDLL.FP3_KasaAvans(CurrentInterface, GetTransactionHandle(CurrentInterface), getAmount(m_txtInputData.Text), ref m_stTicket, Defines.TIMEOUT_DEFAULT);
+
                 if (retcode != 0)
                 {
                     HandleErrorCode(retcode);
                     return;
                 }
-
                 DisplayTransaction(m_stTicket, false);
                 HandleErrorCode(retcode);
             }

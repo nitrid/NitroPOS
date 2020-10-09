@@ -2738,7 +2738,8 @@ function Pos($scope,$window,$rootScope,db)
                     db.ExecuteTag($scope.Firma,'PosTahInsert',InsertData,function(InsertResult)
                     {   
                         if(typeof(InsertResult.result.err) == 'undefined')
-                        {                
+                        {   
+                            db.Ingenico.Avans("{AMOUNT:"+ $scope.TxtAvans * 100 + "}");      
                             $scope.TxtAvans = 0;
                             alertify.alert("Avans Çekme İşlemi Başarıyla Gerçekleşti.")
                             $("#MdlAvans").modal("hide");
@@ -2755,7 +2756,8 @@ function Pos($scope,$window,$rootScope,db)
                     db.ExecuteTag($scope.Firma,'PosTahInsert',InsertData,function(InsertResult)
                     {   
                         if(typeof(InsertResult.result.err) == 'undefined')
-                        {                
+                        {   
+                            db.Ingenico.TPayment("{AMOUNT:" + $scope.TxtAvans * 100 + "}");             
                             $scope.TxtAvans = 0;
                             alertify.alert("Avans Verme İşlemi Başarıyla Gerçekleşti.")
                             $("#MdlAvans").modal("hide");
@@ -3146,52 +3148,19 @@ function Pos($scope,$window,$rootScope,db)
         }
         else
         {
-            let YetkiliList = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',['']);
-            for (let i = 0; i < YetkiliList.length; i++) 
-            {
-                if(YetkiliList[i].TAG == 1)
-                {
-                    let ParamList = await db.GetPromiseTag($scope.Firma,'ParamGetir',[YetkiliList[i].CODE]);
-
-                    for (let x = 0; x < ParamList.length; x++) 
-                    {
-                        if(ParamList[x].NAME == 'DepoNo' && ParamList[x].VALUE == $scope.Sube)
-                        {
-                            if(YetkiliList[i].PASSWORD == $scope.TxtZSifre)
-                            {
-                                $("#MdlZSifre").modal("hide");
-                                $scope.TxtZSifre = "";
-                                FocusBarkod = true;
-                                FocusAraToplam = false;
-                                FocusMusteri = false;
-                                FocusStok = false;
-                                FocusKartOdeme = false;
-                                FocusYetkiliSifre = false;
-                                FocusKasaSifre = false;
-                                FirstKey = false;
-                                FocusAvans = false;
-                                FocusZSifre = false;
-
-                                alertify.okBtn('Evet');
-                                alertify.cancelBtn('Hayır');
-
-                                alertify.confirm('Z Raporu Almak İstediğinize Emin Misiniz ?', 
-                                function()
-                                { 
-                                    alertify.alert("Z Raporu Alınıyor Lütfen Bekleyiniz...")
-                                    db.Ingenico.ZReport();
-                                }
-                                ,function(){});
-                            }
-                            else
-                            {
-                                $("#MdlZSifre").modal("hide");
-                                alertify.alert("Yetkili Şifre Yanlış.");
-                            }
-                        }
-                    }
-                }   
-            }
+            db.Ingenico.ZReport("{PASSWORD:'" + $scope.TxtZSifre + "'}");
+            $("#MdlZSifre").modal("hide");
+            $scope.TxtZSifre = "";
+            FocusBarkod = true;
+            FocusAraToplam = false;
+            FocusMusteri = false;
+            FocusStok = false;
+            FocusKartOdeme = false;
+            FocusYetkiliSifre = false;
+            FocusKasaSifre = false;
+            FirstKey = false;
+            FocusAvans = false;
+            FocusZSifre = false;
         }
     }
     $scope.BtnXReport = async function(pTip)
@@ -3211,54 +3180,20 @@ function Pos($scope,$window,$rootScope,db)
         }
         else
         {
-            let YetkiliList = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',['']);
-            for (let i = 0; i < YetkiliList.length; i++) 
-            {
-                if(YetkiliList[i].TAG == 1)
-                {
-                    let ParamList = await db.GetPromiseTag($scope.Firma,'ParamGetir',[YetkiliList[i].CODE]);
-
-                    for (let x = 0; x < ParamList.length; x++) 
-                    {
-                        if(ParamList[x].NAME == 'DepoNo' && ParamList[x].VALUE == $scope.Sube)
-                        {
-                            if(YetkiliList[i].PASSWORD == $scope.TxtXSifre)
-                            {
-                                $("#MdlXSifre").modal("hide");
-                                $scope.TxtXSifre = "";
-                                FocusBarkod = true;
-                                FocusAraToplam = false;
-                                FocusMusteri = false;
-                                FocusStok = false;
-                                FocusKartOdeme = false;
-                                FocusYetkiliSifre = false;
-                                FocusKasaSifre = false;
-                                FirstKey = false;
-                                FocusAvans = false;
-                                FocusZSifre = false;
-                                FocusXSifre = false;
-
-                                alertify.okBtn('Evet');
-                                alertify.cancelBtn('Hayır');
-
-                                alertify.confirm('X Raporu Almak İstediğinize Emin Misiniz ?', 
-                                function()
-                                { 
-                                    alertify.alert("X Raporu Alınıyor Lütfen Bekleyiniz...")
-                                    db.Ingenico.XReport();
-                                    FocusBarkod = true;
-                                }
-                                ,function(){});
-                            }
-                            else
-                            {
-                                $("#MdlXSifre").modal("hide");
-                                alertify.alert("Yetkili Şifre Yanlış.");
-                            }
-                        }
-                    }
-                }   
-            }
+            db.Ingenico.XReport("{PASSWORD:'" + $scope.TxtXSifre + "'}");
+            $("#MdlXSifre").modal("hide");
+            $scope.TxtXSifre = "";
+            FocusBarkod = true;
+            FocusAraToplam = false;
+            FocusMusteri = false;
+            FocusStok = false;
+            FocusKartOdeme = false;
+            FocusYetkiliSifre = false;
+            FocusKasaSifre = false;
+            FirstKey = false;
+            FocusAvans = false;
+            FocusZSifre = false;
+            FocusXSifre = false;
         }
     }
 }

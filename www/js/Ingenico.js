@@ -60,6 +60,16 @@ var Ingenico =
                     LocalEvent({tag:"XREPORT",msg:data.toString().trim().split('|')[1]});
                     console.log(data.toString().trim().split('|')[1]);
                 }
+                else if(data.toString().trim().split('|')[0] == "AVANS")
+                {
+                    LocalEvent({tag:"AVANS",msg:data.toString().trim().split('|')[1]});
+                    console.log(data.toString().trim().split('|')[1]);
+                }
+                else if(data.toString().trim().split('|')[0] == "TPAYMENT")
+                {
+                    LocalEvent({tag:"TPAYMENT",msg:data.toString().trim().split('|')[1]});
+                    console.log(data.toString().trim().split('|')[1]);
+                }
             });
         }
         Ingenico.prototype.SendData = function(pData)
@@ -72,13 +82,21 @@ var Ingenico =
         {
             Terminal.stdin.write('TICKET_CLOSE\n');
         }
-        Ingenico.prototype.ZReport = function()
+        Ingenico.prototype.ZReport = function(pData)
         {
-            Terminal.stdin.write('Z_REPORT\n');
+            Terminal.stdin.write('Z_REPORT|' + pData + '\n');
         }
-        Ingenico.prototype.XReport = function()
+        Ingenico.prototype.XReport = function(pData)
         {
-            Terminal.stdin.write('X_REPORT\n');
+            Terminal.stdin.write('X_REPORT|' + pData + '\n');
+        }
+        Ingenico.prototype.Avans = function(pData)
+        {
+            Terminal.stdin.write('AVANS|' + pData +'\n');
+        }
+        Ingenico.prototype.TPayment = function(pData)
+        {
+            Terminal.stdin.write('TPAYMENT|' + pData +'\n');
         }
         //#region "EVENT TRIGGER"        
         function LocalEvent(pData)

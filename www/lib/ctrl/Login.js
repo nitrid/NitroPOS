@@ -3,6 +3,7 @@ function Login ($scope,$rootScope,$window,db)
     localStorage.mode = true;
 
     $scope.server_adress = localStorage.host;
+    $scope.socket_port = localStorage.socketport;
  
     $rootScope.LoadingShow = function() 
     {
@@ -22,7 +23,14 @@ function Login ($scope,$rootScope,$window,db)
         $scope.Password = 1;
         $scope.Firma = "NITROGENPOS";
         $scope.KullaniciListe = [];
-        
+
+        if (typeof localStorage.host == 'undefined')
+        {
+            localStorage.mode = "true";
+            $scope.server_adress = window.location.hostname;
+            $scope.socket_port = "";
+            $scope.HostSettingSave();
+        }
         db.Connection(function(data)
         {     
             if(data == true)
@@ -32,6 +40,9 @@ function Login ($scope,$rootScope,$window,db)
                     $scope.KullaniciListe = data;
                 });
             }
+
+
+
             // if(data == true)
             // {
             //     $('#alert').alert('close');
@@ -53,6 +64,7 @@ function Login ($scope,$rootScope,$window,db)
     $scope.HostSettingSave = function()
     {
         localStorage.host = $scope.server_adress;
+        localStorage.socketport = $scope.socket_port;
 
         db.SetHost($scope.server_adress);
         $window.location.reload();
@@ -76,7 +88,7 @@ function Login ($scope,$rootScope,$window,db)
     }
     $scope.BtnTryConnect = function()
     {
-        db.SetHost($scope.server_adress);
+        db.SetHost($scope.server_adress,$scope.socket_port);
 
         if(localStorage.mode == 'true')
         {
