@@ -75,7 +75,7 @@ var Ingenico =
         Ingenico.prototype.SendData = function(pData)
         {
             console.log(JSON.stringify(pData));
-            //Terminal.stdin.write('ITEM_SALE|{"SALES":[{"NAME":"ÜLKER 100 GRM","QUANTITY":2,"AMOUNT":450,"TAX":1}],"PAYMENT":[{"TYPE":0,"AMOUNT":900}]}\n')
+            //Terminal.stdin.write('ITEM_SALE|{"SALES":[{"NAME":"ÜLKER 100 GRM","QUANTITY":2,"AMOUNT":450,"TAX":1,"TYPE":0}],"PAYMENT":[{"TYPE":0,"AMOUNT":900}]}\n')
             Terminal.stdin.write('ITEM_SALE|' + JSON.stringify(pData) +'\n');
         }
         Ingenico.prototype.TicketClose = function()
