@@ -1607,7 +1607,6 @@ function Pos($scope,$window,$rootScope,db)
                 pBarkod = pBarkod.split("*")[1];
             }
 
-
             let TmpFiyat = 0;
 
             db.StokBarkodGetir($scope.Firma,pBarkod,async function(BarkodData)
@@ -1690,10 +1689,8 @@ function Pos($scope,$window,$rootScope,db)
         {               
             if(typeof(InsertResult.result.err) == 'undefined')
             {   
-                console.log($scope.EvrakTip)
                 //*********** BİRDEN FAZLA MİKTARLI FİYAT GÜNCELLEME İÇİN YAPILDI. */
                 let TmpSatisData = await db.GetPromiseTag($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira]);
-                console.log(TmpSatisData)
                 $scope.SatisList = TmpSatisData;
 
                 for (let i = 0; i < $scope.SatisList.length; i++) 
@@ -1792,9 +1789,18 @@ function Pos($scope,$window,$rootScope,db)
                             {
                                 let TmpSale = {};
                                 TmpSale.NAME = $scope.SatisList[i].ITEM_NAME.split("İ").join("I").split("ı").join("i").split("Ç").join("C").split("ç").join("c").split("Ğ").join("G").split("ğ").join("g").split("Ş").join("S").split("ş").join("s").split("Ö").join("O").split("ö").join("o").split("Ü").join("U").split("ü").join("u");
-                                TmpSale.QUANTITY = parseInt($scope.SatisList[i].QUANTITY);
-                                TmpSale.AMOUNT = parseInt(parseFloat($scope.SatisList[i].PRICE).toFixed(2) * 100);
+                                if($scope.SatisList[i].QUANTITY < 1)
+                                {
+                                    TmpSale.AMOUNT = parseInt(parseFloat($scope.SatisList[i].AMOUNT).toFixed(2) * 100);
+                                }
+                                else
+                                {
+                                    TmpSale.AMOUNT = parseInt(parseFloat($scope.SatisList[i].PRICE).toFixed(2) * 100);
+                                }
+
+                                TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY;
                                 TmpSale.TAX = 1;
+                                TmpSale.TYPE = parseInt($scope.SatisList[i].UNIT_ID);
 
                                 TmpData.SALES.push(TmpSale);
                             }
@@ -1802,6 +1808,7 @@ function Pos($scope,$window,$rootScope,db)
                             for(let i = 0;i < $scope.TahList.length;i++)
                             {
                                 let TmpPayment = {};
+                                
                                 TmpPayment.TYPE = $scope.TahList[i].TYPE;
                                 TmpPayment.AMOUNT = parseInt(Math.round($scope.TahList[i].AMOUNT * 100));
 
@@ -2557,7 +2564,15 @@ function Pos($scope,$window,$rootScope,db)
             alertify.alert("Miktar 1 den küçük olamaz.")
             return;
         }
-        $scope.PosSatisMiktarUpdate($scope.SatisList[$scope.IslemListeSelectedIndex],$scope.SatisList[$scope.IslemListeSelectedIndex].QUANTITY -1);
+        if(parseInt($scope.SatisList[$scope.IslemListeSelectedIndex].QUANTITY) > 0)
+        {
+            $scope.PosSatisMiktarUpdate($scope.SatisList[$scope.IslemListeSelectedIndex],$scope.SatisList[$scope.IslemListeSelectedIndex].QUANTITY -1);
+        }
+        else
+        {
+            alertify.alert("Miktar 0 dan küçük olamaz.")
+            return;
+        }
     } 
     $scope.BtnHesapMakinesi = function()
     {
