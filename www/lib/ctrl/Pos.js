@@ -1814,6 +1814,7 @@ function Pos($scope,$window,$rootScope,db)
 
                                 TmpData.PAYMENT.push(TmpPayment);
                             }
+
                             db.Ingenico.SendData(TmpData);                    
                         } 
                         else
@@ -2877,15 +2878,22 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.BtnEdit = function()
     {
-        if($scope.Class.BtnEdit == "icon wb-lock")
+        if($scope.SatisList.length <= 0)
         {
-            alertify.alert("Dikkat Plu Düzenleme Aktifleştirildi.");
-            $scope.Class.BtnEdit = "icon wb-unlock"
+            if($scope.Class.BtnEdit == "icon wb-lock")
+            {
+                alertify.alert("Dikkat Plu Düzenleme Aktifleştirildi.");
+                $scope.Class.BtnEdit = "icon wb-unlock"
+            }
+            else
+            {
+                alertify.alert("Dikkat Plu Düzenleme Devre Dışı Bırakıldı.");
+                $scope.Class.BtnEdit = "icon wb-lock"
+            }
         }
         else
         {
-            alertify.alert("Dikkat Plu Düzenleme Devre Dışı Bırakıldı.");
-            $scope.Class.BtnEdit = "icon wb-lock"
+            alertify.alert("Ekranda Satış İşlemi Mevcutken Plu Ekleme İşlemi Gerçekleştirilemez.")
         }
     }
     $scope.BtnPluKaydet = async function()
@@ -3148,67 +3156,81 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.BtnZReport = async function(pTip)
     {
-        if(pTip == 0)
+        if($scope.ParkList <=0 && $scope.SatisList <=0)
         {
-            $("#MdlZSifre").modal("show");
-            FocusBarkod = false;
-            FocusAraToplam = false;
-            FocusMusteri = false;
-            FocusStok = false;
-            FocusKartOdeme = false;
-            FirstKey = false;
-            FocusYetkiliSifre = false;
-            FocusXSifre = false;
-            FocusZSifre = true;
+            if(pTip == 0)
+            {
+                $("#MdlZSifre").modal("show");
+                FocusBarkod = false;
+                FocusAraToplam = false;
+                FocusMusteri = false;
+                FocusStok = false;
+                FocusKartOdeme = false;
+                FirstKey = false;
+                FocusYetkiliSifre = false;
+                FocusXSifre = false;
+                FocusZSifre = true;
+            }
+            else
+            {
+                db.Ingenico.ZReport("{PASSWORD:'" + $scope.TxtZSifre + "'}");
+                $("#MdlZSifre").modal("hide");
+                $scope.TxtZSifre = "";
+                FocusBarkod = true;
+                FocusAraToplam = false;
+                FocusMusteri = false;
+                FocusStok = false;
+                FocusKartOdeme = false;
+                FocusYetkiliSifre = false;
+                FocusKasaSifre = false;
+                FirstKey = false;
+                FocusAvans = false;
+                FocusZSifre = false;
+            }
         }
         else
         {
-            db.Ingenico.ZReport("{PASSWORD:'" + $scope.TxtZSifre + "'}");
-            $("#MdlZSifre").modal("hide");
-            $scope.TxtZSifre = "";
-            FocusBarkod = true;
-            FocusAraToplam = false;
-            FocusMusteri = false;
-            FocusStok = false;
-            FocusKartOdeme = false;
-            FocusYetkiliSifre = false;
-            FocusKasaSifre = false;
-            FirstKey = false;
-            FocusAvans = false;
-            FocusZSifre = false;
+            alertify.alert("Satış Listesi Ve Park Listesi Doluyken Z Raporu Alınamaz.")
         }
     }
     $scope.BtnXReport = async function(pTip)
     {
-        if(pTip == 0)
+        if($scope.ParkList <=0 && $scope.SatisList <=0)
         {
-            $("#MdlXSifre").modal("show");
-            FocusBarkod = false;
-            FocusAraToplam = false;
-            FocusMusteri = false;
-            FocusStok = false;
-            FocusKartOdeme = false;
-            FirstKey = false;
-            FocusYetkiliSifre = false;
-            FocusZSifre = false;
-            FocusXSifre = true;
-        }
+            if(pTip == 0)
+            {
+                $("#MdlXSifre").modal("show");
+                FocusBarkod = false;
+                FocusAraToplam = false;
+                FocusMusteri = false;
+                FocusStok = false;
+                FocusKartOdeme = false;
+                FirstKey = false;
+                FocusYetkiliSifre = false;
+                FocusZSifre = false;
+                FocusXSifre = true;
+            }
+            else
+            {
+                db.Ingenico.XReport("{PASSWORD:'" + $scope.TxtXSifre + "'}");
+                $("#MdlXSifre").modal("hide");
+                $scope.TxtXSifre = "";
+                FocusBarkod = true;
+                FocusAraToplam = false;
+                FocusMusteri = false;
+                FocusStok = false;
+                FocusKartOdeme = false;
+                FocusYetkiliSifre = false;
+                FocusKasaSifre = false;
+                FirstKey = false;
+                FocusAvans = false;
+                FocusZSifre = false;
+                FocusXSifre = false;
+            }
+            }
         else
         {
-            db.Ingenico.XReport("{PASSWORD:'" + $scope.TxtXSifre + "'}");
-            $("#MdlXSifre").modal("hide");
-            $scope.TxtXSifre = "";
-            FocusBarkod = true;
-            FocusAraToplam = false;
-            FocusMusteri = false;
-            FocusStok = false;
-            FocusKartOdeme = false;
-            FocusYetkiliSifre = false;
-            FocusKasaSifre = false;
-            FirstKey = false;
-            FocusAvans = false;
-            FocusZSifre = false;
-            FocusXSifre = false;
+            alertify.alert("Satış Listesi Ve Park Listesi Doluyken X Raporu Alınamaz.")
         }
     }
 }

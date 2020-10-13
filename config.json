@@ -4,7 +4,6 @@
     "uid":"nitrogen",
     "pwd":"lp8462+",
     "trustedConnection" : false,
-    "EpsonUSB" : {"Vid:" : "04B8","Pid" : "0E15"},
-    "LineDisplay" : "COM3",
-    "BarkodSerial" : "COM1" 
+    "web" : "80",
+    "socket" : "90"
 }
