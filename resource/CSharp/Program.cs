@@ -563,9 +563,19 @@ namespace Ingenico
         {
             UInt16 currency = 949;
             UInt32 itemCount = pQuantity;
+            UInt32 precition = 0;
             byte unitType = 0;//(byte)EItemUnitTypes.ITEM_KILOGRAM; 0 adet, 2 kilogram
             ST_TICKET m_stTicket = new ST_TICKET();
             ST_ITEM stItem = new ST_ITEM();
+
+            if (pType == 1)
+            {
+                precition = 0;
+            }
+            else
+            {
+                precition = 3;
+            }
 
             stItem.type = Defines.ITEM_TYPE_DEPARTMENT;
             stItem.subType = 0;
@@ -575,7 +585,7 @@ namespace Ingenico
             stItem.count = itemCount;
             stItem.unitType = (byte)pType;
             stItem.pluPriceIndex = 0;
-            stItem.countPrecition = 0;
+            stItem.countPrecition = (byte)precition;
             stItem.name = pName;
             stItem.barcode = "";
             

@@ -429,7 +429,7 @@ function Pos($scope,$window,$rootScope,db)
     function InitClass()
     {
         $scope.Class = {};
-        $scope.Class.BtnFiyatGor = "form-group btn btn-info btn-block my-1";
+        $scope.Class.BtnFiyatGor = "form-group btn btn-warning btn-block my-1";
         $scope.Class.BtnPersonelSatis = "form-group btn btn-warning btn-block my-1";
         $scope.Class.BtnIadeAl = "form-group btn btn-danger btn-block my-1";
         $scope.Class.BtnPluEdit = "form-group btn btn-block btn-success my-1 h-80";
@@ -1637,10 +1637,10 @@ function Pos($scope,$window,$rootScope,db)
                     }
                     
                     //EĞER BİLGİ BUTONUNA BASILDIYSA FİYAT GÖR EKRANI ÇIKACAK.
-                    if($scope.Class.BtnFiyatGor == "form-group btn btn-warning btn-block my-1")
+                    if($scope.Class.BtnFiyatGor == "form-group btn btn-info btn-block my-1")
                     {
                         $scope.TxtBarkod = ""; 
-                        $scope.Class.BtnFiyatGor = "form-group btn btn-info btn-block my-1"
+                        $scope.Class.BtnFiyatGor = "form-group btn btn-warning btn-block my-1"
                         $('#MdlFiyatGor').modal('show');
                         return;
                     }
@@ -1789,18 +1789,38 @@ function Pos($scope,$window,$rootScope,db)
                             {
                                 let TmpSale = {};
                                 TmpSale.NAME = $scope.SatisList[i].ITEM_NAME.split("İ").join("I").split("ı").join("i").split("Ç").join("C").split("ç").join("c").split("Ğ").join("G").split("ğ").join("g").split("Ş").join("S").split("ş").join("s").split("Ö").join("O").split("ö").join("o").split("Ü").join("U").split("ü").join("u");
-                                if($scope.SatisList[i].QUANTITY < 1)
+                                if($scope.SatisList[i].UNIT_ID == 1)
                                 {
-                                    TmpSale.AMOUNT = parseInt(parseFloat($scope.SatisList[i].AMOUNT).toFixed(2) * 100);
+                                    TmpSale.TYPE = 1;
+                                    TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY;
                                 }
                                 else
                                 {
-                                    TmpSale.AMOUNT = parseInt(parseFloat($scope.SatisList[i].PRICE).toFixed(2) * 100);
+                                    TmpSale.TYPE = 2;
+                                    TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY.toFixed(2) * 1000
                                 }
-
-                                TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY;
-                                TmpSale.TAX = 1;
-                                TmpSale.TYPE = parseInt($scope.SatisList[i].UNIT_ID);
+                                if($scope.SatisList[i].VAT == 5)
+                                {
+                                    TmpSale.TAX = 2; 
+                                }
+                                else if($scope.SatisList[i].VAT == 10)
+                                {
+                                    TmpSale.TAX = 3;
+                                }
+                                else if($scope.SatisList[i].VAT == 16)
+                                {
+                                    TmpSale.TAX = 4;
+                                }
+                                else if($scope.SatisList[i].VAT == 20)
+                                {
+                                    TmpSale.TAX = 5;
+                                }
+                                else
+                                {
+                                    TmpSale.TAX = 1;
+                                }
+                                TmpSale.AMOUNT = parseInt(parseFloat($scope.SatisList[i].PRICE).toFixed(2) * 100);
+                                
 
                                 TmpData.SALES.push(TmpSale);
                             }
@@ -1815,6 +1835,7 @@ function Pos($scope,$window,$rootScope,db)
                                 TmpData.PAYMENT.push(TmpPayment);
                             }
 
+                            console.log(TmpData)
                             db.Ingenico.SendData(TmpData);                    
                         } 
                         else
@@ -3232,5 +3253,13 @@ function Pos($scope,$window,$rootScope,db)
         {
             alertify.alert("Satış Listesi Ve Park Listesi Doluyken X Raporu Alınamaz.")
         }
+    }
+    $scope.BtnMusteriEkle = async function()
+    {
+        $("#MdlMusteriEkle").modal("show");
+    }
+    $scope.CariEkleFocus = async function(pTip)
+    {
+        console.log("deneme")
     }
 }
