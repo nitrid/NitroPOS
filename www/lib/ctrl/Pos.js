@@ -429,7 +429,7 @@ function Pos($scope,$window,$rootScope,db)
     function InitClass()
     {
         $scope.Class = {};
-        $scope.Class.BtnFiyatGor = "form-group btn btn-info btn-block my-1";
+        $scope.Class.BtnFiyatGor = "form-group btn btn-warning btn-block my-1";
         $scope.Class.BtnPersonelSatis = "form-group btn btn-warning btn-block my-1";
         $scope.Class.BtnIadeAl = "form-group btn btn-danger btn-block my-1";
         $scope.Class.BtnPluEdit = "form-group btn btn-block btn-success my-1 h-80";
@@ -1607,7 +1607,6 @@ function Pos($scope,$window,$rootScope,db)
                 pBarkod = pBarkod.split("*")[1];
             }
 
-
             let TmpFiyat = 0;
 
             db.StokBarkodGetir($scope.Firma,pBarkod,async function(BarkodData)
@@ -1638,10 +1637,10 @@ function Pos($scope,$window,$rootScope,db)
                     }
                     
                     //EĞER BİLGİ BUTONUNA BASILDIYSA FİYAT GÖR EKRANI ÇIKACAK.
-                    if($scope.Class.BtnFiyatGor == "form-group btn btn-warning btn-block my-1")
+                    if($scope.Class.BtnFiyatGor == "form-group btn btn-info btn-block my-1")
                     {
                         $scope.TxtBarkod = ""; 
-                        $scope.Class.BtnFiyatGor = "form-group btn btn-info btn-block my-1"
+                        $scope.Class.BtnFiyatGor = "form-group btn btn-warning btn-block my-1"
                         $('#MdlFiyatGor').modal('show');
                         return;
                     }
@@ -1690,10 +1689,8 @@ function Pos($scope,$window,$rootScope,db)
         {               
             if(typeof(InsertResult.result.err) == 'undefined')
             {   
-                console.log($scope.EvrakTip)
                 //*********** BİRDEN FAZLA MİKTARLI FİYAT GÜNCELLEME İÇİN YAPILDI. */
                 let TmpSatisData = await db.GetPromiseTag($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira]);
-                console.log(TmpSatisData)
                 $scope.SatisList = TmpSatisData;
 
                 for (let i = 0; i < $scope.SatisList.length; i++) 
@@ -1792,9 +1789,38 @@ function Pos($scope,$window,$rootScope,db)
                             {
                                 let TmpSale = {};
                                 TmpSale.NAME = $scope.SatisList[i].ITEM_NAME.split("İ").join("I").split("ı").join("i").split("Ç").join("C").split("ç").join("c").split("Ğ").join("G").split("ğ").join("g").split("Ş").join("S").split("ş").join("s").split("Ö").join("O").split("ö").join("o").split("Ü").join("U").split("ü").join("u");
-                                TmpSale.QUANTITY = parseInt($scope.SatisList[i].QUANTITY);
+                                if($scope.SatisList[i].UNIT_ID == 1)
+                                {
+                                    TmpSale.TYPE = 1;
+                                    TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY;
+                                }
+                                else
+                                {
+                                    TmpSale.TYPE = 2;
+                                    TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY.toFixed(2) * 1000
+                                }
+                                if($scope.SatisList[i].VAT == 5)
+                                {
+                                    TmpSale.TAX = 2; 
+                                }
+                                else if($scope.SatisList[i].VAT == 10)
+                                {
+                                    TmpSale.TAX = 3;
+                                }
+                                else if($scope.SatisList[i].VAT == 16)
+                                {
+                                    TmpSale.TAX = 4;
+                                }
+                                else if($scope.SatisList[i].VAT == 20)
+                                {
+                                    TmpSale.TAX = 5;
+                                }
+                                else
+                                {
+                                    TmpSale.TAX = 1;
+                                }
                                 TmpSale.AMOUNT = parseInt(parseFloat($scope.SatisList[i].PRICE).toFixed(2) * 100);
-                                TmpSale.TAX = 1;
+                                
 
                                 TmpData.SALES.push(TmpSale);
                             }
@@ -1802,11 +1828,14 @@ function Pos($scope,$window,$rootScope,db)
                             for(let i = 0;i < $scope.TahList.length;i++)
                             {
                                 let TmpPayment = {};
+                                
                                 TmpPayment.TYPE = $scope.TahList[i].TYPE;
                                 TmpPayment.AMOUNT = parseInt(Math.round($scope.TahList[i].AMOUNT * 100));
 
                                 TmpData.PAYMENT.push(TmpPayment);
                             }
+
+                            console.log(TmpData)
                             db.Ingenico.SendData(TmpData);                    
                         } 
                         else
@@ -2557,7 +2586,15 @@ function Pos($scope,$window,$rootScope,db)
             alertify.alert("Miktar 1 den küçük olamaz.")
             return;
         }
-        $scope.PosSatisMiktarUpdate($scope.SatisList[$scope.IslemListeSelectedIndex],$scope.SatisList[$scope.IslemListeSelectedIndex].QUANTITY -1);
+        if(parseInt($scope.SatisList[$scope.IslemListeSelectedIndex].QUANTITY) > 0)
+        {
+            $scope.PosSatisMiktarUpdate($scope.SatisList[$scope.IslemListeSelectedIndex],$scope.SatisList[$scope.IslemListeSelectedIndex].QUANTITY -1);
+        }
+        else
+        {
+            alertify.alert("Miktar 0 dan küçük olamaz.")
+            return;
+        }
     } 
     $scope.BtnHesapMakinesi = function()
     {
@@ -2862,15 +2899,22 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.BtnEdit = function()
     {
-        if($scope.Class.BtnEdit == "icon wb-lock")
+        if($scope.SatisList.length <= 0)
         {
-            alertify.alert("Dikkat Plu Düzenleme Aktifleştirildi.");
-            $scope.Class.BtnEdit = "icon wb-unlock"
+            if($scope.Class.BtnEdit == "icon wb-lock")
+            {
+                alertify.alert("Dikkat Plu Düzenleme Aktifleştirildi.");
+                $scope.Class.BtnEdit = "icon wb-unlock"
+            }
+            else
+            {
+                alertify.alert("Dikkat Plu Düzenleme Devre Dışı Bırakıldı.");
+                $scope.Class.BtnEdit = "icon wb-lock"
+            }
         }
         else
         {
-            alertify.alert("Dikkat Plu Düzenleme Devre Dışı Bırakıldı.");
-            $scope.Class.BtnEdit = "icon wb-lock"
+            alertify.alert("Ekranda Satış İşlemi Mevcutken Plu Ekleme İşlemi Gerçekleştirilemez.")
         }
     }
     $scope.BtnPluKaydet = async function()
@@ -3133,67 +3177,89 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.BtnZReport = async function(pTip)
     {
-        if(pTip == 0)
+        if($scope.ParkList <=0 && $scope.SatisList <=0)
         {
-            $("#MdlZSifre").modal("show");
-            FocusBarkod = false;
-            FocusAraToplam = false;
-            FocusMusteri = false;
-            FocusStok = false;
-            FocusKartOdeme = false;
-            FirstKey = false;
-            FocusYetkiliSifre = false;
-            FocusXSifre = false;
-            FocusZSifre = true;
+            if(pTip == 0)
+            {
+                $("#MdlZSifre").modal("show");
+                FocusBarkod = false;
+                FocusAraToplam = false;
+                FocusMusteri = false;
+                FocusStok = false;
+                FocusKartOdeme = false;
+                FirstKey = false;
+                FocusYetkiliSifre = false;
+                FocusXSifre = false;
+                FocusZSifre = true;
+            }
+            else
+            {
+                db.Ingenico.ZReport("{PASSWORD:'" + $scope.TxtZSifre + "'}");
+                $("#MdlZSifre").modal("hide");
+                $scope.TxtZSifre = "";
+                FocusBarkod = true;
+                FocusAraToplam = false;
+                FocusMusteri = false;
+                FocusStok = false;
+                FocusKartOdeme = false;
+                FocusYetkiliSifre = false;
+                FocusKasaSifre = false;
+                FirstKey = false;
+                FocusAvans = false;
+                FocusZSifre = false;
+            }
         }
         else
         {
-            db.Ingenico.ZReport("{PASSWORD:'" + $scope.TxtZSifre + "'}");
-            $("#MdlZSifre").modal("hide");
-            $scope.TxtZSifre = "";
-            FocusBarkod = true;
-            FocusAraToplam = false;
-            FocusMusteri = false;
-            FocusStok = false;
-            FocusKartOdeme = false;
-            FocusYetkiliSifre = false;
-            FocusKasaSifre = false;
-            FirstKey = false;
-            FocusAvans = false;
-            FocusZSifre = false;
+            alertify.alert("Satış Listesi Ve Park Listesi Doluyken Z Raporu Alınamaz.")
         }
     }
     $scope.BtnXReport = async function(pTip)
     {
-        if(pTip == 0)
+        if($scope.ParkList <=0 && $scope.SatisList <=0)
         {
-            $("#MdlXSifre").modal("show");
-            FocusBarkod = false;
-            FocusAraToplam = false;
-            FocusMusteri = false;
-            FocusStok = false;
-            FocusKartOdeme = false;
-            FirstKey = false;
-            FocusYetkiliSifre = false;
-            FocusZSifre = false;
-            FocusXSifre = true;
-        }
+            if(pTip == 0)
+            {
+                $("#MdlXSifre").modal("show");
+                FocusBarkod = false;
+                FocusAraToplam = false;
+                FocusMusteri = false;
+                FocusStok = false;
+                FocusKartOdeme = false;
+                FirstKey = false;
+                FocusYetkiliSifre = false;
+                FocusZSifre = false;
+                FocusXSifre = true;
+            }
+            else
+            {
+                db.Ingenico.XReport("{PASSWORD:'" + $scope.TxtXSifre + "'}");
+                $("#MdlXSifre").modal("hide");
+                $scope.TxtXSifre = "";
+                FocusBarkod = true;
+                FocusAraToplam = false;
+                FocusMusteri = false;
+                FocusStok = false;
+                FocusKartOdeme = false;
+                FocusYetkiliSifre = false;
+                FocusKasaSifre = false;
+                FirstKey = false;
+                FocusAvans = false;
+                FocusZSifre = false;
+                FocusXSifre = false;
+            }
+            }
         else
         {
-            db.Ingenico.XReport("{PASSWORD:'" + $scope.TxtXSifre + "'}");
-            $("#MdlXSifre").modal("hide");
-            $scope.TxtXSifre = "";
-            FocusBarkod = true;
-            FocusAraToplam = false;
-            FocusMusteri = false;
-            FocusStok = false;
-            FocusKartOdeme = false;
-            FocusYetkiliSifre = false;
-            FocusKasaSifre = false;
-            FirstKey = false;
-            FocusAvans = false;
-            FocusZSifre = false;
-            FocusXSifre = false;
+            alertify.alert("Satış Listesi Ve Park Listesi Doluyken X Raporu Alınamaz.")
         }
+    }
+    $scope.BtnMusteriEkle = async function()
+    {
+        $("#MdlMusteriEkle").modal("show");
+    }
+    $scope.CariEkleFocus = async function(pTip)
+    {
+        console.log("deneme")
     }
 }

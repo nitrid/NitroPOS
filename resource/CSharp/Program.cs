@@ -52,7 +52,7 @@ namespace Ingenico
                                 JArray TmpSales = JArray.Parse(MasterItem.Value.ToString());
                                 foreach (JObject SalesItem in TmpSales.Children<JObject>())
                                 {
-                                    AddItem(SalesItem.Property("NAME").Value.ToString(), (UInt32)SalesItem.Property("QUANTITY").Value, (uint)SalesItem.Property("AMOUNT").Value, (int)SalesItem.Property("TAX").Value);
+                                    AddItem(SalesItem.Property("NAME").Value.ToString(), (UInt32)SalesItem.Property("QUANTITY").Value, (uint)SalesItem.Property("AMOUNT").Value, (int)SalesItem.Property("TAX").Value, (int)SalesItem.Property("TYPE").Value);
                                 }
                             }
                             else if (MasterItem.Name == "PAYMENT")
@@ -559,13 +559,23 @@ namespace Ingenico
 
             return "OPTION FLAG";
         }
-        static string AddItem(string pName, UInt32 pQuantity,uint pAmount,int pTax)
+        static string AddItem(string pName, UInt32 pQuantity,uint pAmount,int pTax, int pType)
         {
             UInt16 currency = 949;
             UInt32 itemCount = pQuantity;
+            UInt32 precition = 0;
             byte unitType = 0;//(byte)EItemUnitTypes.ITEM_KILOGRAM; 0 adet, 2 kilogram
             ST_TICKET m_stTicket = new ST_TICKET();
             ST_ITEM stItem = new ST_ITEM();
+
+            if (pType == 1)
+            {
+                precition = 0;
+            }
+            else
+            {
+                precition = 3;
+            }
 
             stItem.type = Defines.ITEM_TYPE_DEPARTMENT;
             stItem.subType = 0;
@@ -573,9 +583,9 @@ namespace Ingenico
             stItem.amount = pAmount;
             stItem.currency = currency;
             stItem.count = itemCount;
-            stItem.unitType = unitType;
+            stItem.unitType = (byte)pType;
             stItem.pluPriceIndex = 0;
-            stItem.countPrecition = 0;
+            stItem.countPrecition = (byte)precition;
             stItem.name = pName;
             stItem.barcode = "";
             
