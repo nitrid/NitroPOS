@@ -1406,7 +1406,7 @@ function Pos($scope,$window,$rootScope,db)
         $row.children('.jsgrid-cell').css('background-color','#2979FF').css('color','white');
         StokSelectedRow = $row;
 
-        $scope.TxtBarkod = $scope.StokListe[pIndex].CODE;
+        $scope.TxtBarkod = $scope.StokListe[pIndex].BARCODE;
     }
     $scope.BarkodListeRowClick = function(pIndex,pItem,pObj)
     {
@@ -1821,31 +1821,31 @@ function Pos($scope,$window,$rootScope,db)
                                 else
                                 {
                                     TmpSale.TYPE = 2;
-                                    TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY.toFixed(2) * 1000
+                                    TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY.toFixed(3) * 1000
                                 }
+
                                 if($scope.SatisList[i].VAT == 5)
                                 {
-                                    TmpSale.TAX = 2; 
+                                    TmpSale.TAX = 1; 
                                 }
                                 else if($scope.SatisList[i].VAT == 10)
                                 {
-                                    TmpSale.TAX = 3;
+                                    TmpSale.TAX = 2;
                                 }
                                 else if($scope.SatisList[i].VAT == 16)
                                 {
-                                    TmpSale.TAX = 4;
+                                    TmpSale.TAX = 3;
                                 }
                                 else if($scope.SatisList[i].VAT == 20)
                                 {
-                                    TmpSale.TAX = 5;
+                                    TmpSale.TAX = 4;
                                 }
                                 else
                                 {
-                                    TmpSale.TAX = 1;
+                                    TmpSale.TAX = 0;
                                 }
                                 TmpSale.AMOUNT = parseInt(parseFloat($scope.SatisList[i].PRICE).toFixed(2) * 100);
                                 
-
                                 TmpData.SALES.push(TmpSale);
                             }
 

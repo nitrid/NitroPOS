@@ -840,14 +840,14 @@ var QuerySql =
                 "ITEM_CODE AS ITEM_CODE, " +
                 "ISNULL((SELECT TOP 1 [NAME] FROM ITEMS WHERE CODE = ITEM_CODE),'') AS ITEM_NAME, " +
                 "BARCODE AS BARCODE, " +
-                "ROUND(QUANTITY,2) AS QUANTITY, " +
+                "ROUND(QUANTITY,3) AS QUANTITY, " +
                 "UNIT AS UNIT_ID, " +
                 "(SELECT UNIT.[NAME] FROM ITEM_UNIT AS UNIT WHERE CONVERT(NVARCHAR(50),UNIT.GUID) = POS.UNIT) AS UNIT, " +
                 "PRICE AS PRICE, " +
                 "DISCOUNT AS DISCOUNT, " +
                 "VAT AS VAT, " +
                 "CASE WHEN VAT = 20 THEN 'B' WHEN VAT = 5.5 THEN 'C' END AS VAT_TYPE, " + 
-                "ROUND(QUANTITY * PRICE,4) AS AMOUNT " +
+                "ROUND(QUANTITY * PRICE,2) AS AMOUNT " +
                 "FROM POS_SALES AS POS WHERE DEPARTMENT = @DEPARTMENT AND TYPE = @TYPE AND REF = @REF AND REF_NO = @REF_NO ORDER BY LDATE DESC" ,
         param:   ['DEPARTMENT','TYPE','REF','REF_NO'],
         type:    ['int','int','string|25','int']
