@@ -403,7 +403,7 @@
                                         <button role="menu-item" class="form-group btn btn-block btn-danger my-1" style="height:70px; font-size: 16px;" ng-click = "BtnKasaKilitle(0)">Kasa Kilitle</button>
                                     </div>            
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-info my-1" ng-click="BtnMusteriEkle()" style="height:70px; font-size: 16px;">Müşteri Ekle</button>
+                                        <button class="form-group btn btn-block btn-info my-1" ng-click="BtnMusteriEkle(0)" style="height:70px; font-size: 16px;">Müşteri Ekle</button>
                                     </div>           
                                     <div class="col-2 px-1">
                                         <button class="form-group btn btn-warning btn-block my-1" style="height:70px; font-size: 16px;" ng-click = "BtnZReport(0)">Z Raporu</button>
@@ -2088,7 +2088,7 @@
                             </div>
                             <div class="col-9">
                                 <div class="input-group">
-                                    <input autofocus="true" type="text" class="form-control" ng-model="CariTcNo" id="CariTcNo" ng-focus="CariEkleFocus(0)">
+                                    <input autofocus="true" type="text" class="form-control" ng-model="TxtCariTcNo" id="TxtCariTcNo" ng-focus="MusteriEkleFocus(0)">
                                 </div>
                             </div>
                         </div>
@@ -2098,7 +2098,7 @@
                             </div>
                             <div class="col-9">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" ng-model="CariAdiSoyadi" id="CariAdiSoyadi">
+                                    <input type="text" class="form-control" ng-model="TxtCariAdiSoyadi" id="TxtCariAdiSoyadi" ng-focus="MusteriEkleFocus(1)">
                                 </div>
                             </div>
                         </div>
@@ -2108,7 +2108,7 @@
                             </div>
                             <div class="col-9">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" ng-model="CariAdres" id="CariAdres">
+                                    <input type="text" class="form-control" ng-model="TxtCariAdres" id="TxtCariAdres" ng-focus="MusteriEkleFocus(2)">
                                 </div>
                             </div>
                         </div>
@@ -2116,14 +2116,11 @@
                             <div id="TblCari"></div>
                         </div> 
                         <div class="row py-1">
-                            <div class="col-lg-3 px-1">
-                                <button type="button" class="btn btn-raised btn-success btn-block btn-lg" ng-click="BtnCariGridSec()">Seç</button>
+                            <div class="col-10 px-1">
+                                <button type="button" class="btn btn-raised btn-success btn-block btn-lg" ng-click="BtnCariGridSec()" style="font-size: 16px;">Kaydet</button>
                             </div>
-                            <div class="col-lg-4 px-1 offset-1">
-                                <button type="button" class="btn btn-raised btn-success btn-block btn-lg" ng-click="BtnCariGridGetir()">Listele</button>
-                            </div>
-                            <div class="col-lg-3 px-1 offset-1">
-                                <button type="button" class="btn btn-raised btn-success btn-block btn-lg" ng-click="BtnSilClick()"><i class="icon wb-arrow-left" aria-hidden="true"></i></button>
+                            <div class="col-2 px-1">
+                                <button type="button" class="btn btn-raised btn-danger btn-block btn-lg" ng-click="BtnSilClick()" style="font-size: 16px;"><i class="fas fa-backspace fa-lg"></i></button>
                             </div>
                         </div>
                         <div class="row py-1">

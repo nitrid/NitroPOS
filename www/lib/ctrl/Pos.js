@@ -20,6 +20,9 @@ function Pos($scope,$window,$rootScope,db)
     let FirstKey = false;
     let FocusZSifre = false;
     let FocusXSifre = false;
+    let FocusCariEkleTcNo = false;
+    let FocusCariEkleAdiSoyadi = false;
+    let FocusCariEkleAdres = false;
 
     $('#MdlAraToplam').on('hide.bs.modal', function () 
     {
@@ -224,6 +227,27 @@ function Pos($scope,$window,$rootScope,db)
         $scope.PluGrupAdi = "";
         $scope.PluStokKod = "";
         $scope.Index = "";
+    });
+    $('#MdlMusteriEkle').on('hide.bs.modal', function () 
+    {
+        FocusBarkod = true;
+        FocusAraToplam = false;
+        FocusMusteri = false;
+        FocusStok = false;
+        FocusMiktarGuncelle = false;
+        FocusKartOdeme = false;
+        FocusYetkiliSifre = false;
+        FocusXSifre = false;
+        FocusZSifre = false;
+        FocusFiyatGuncelle = false;
+        FocusAvans = false;
+        FocusKasaSifre = false;
+        FocusCariEkleAdiSoyadi = false;
+        FocusCariEkleTcNo = false;
+        FocusCariEkleAdres = false;
+        $scope.TxtCariTcNo = "";
+        $scope.TxtCariAdiSoyadi = "";
+        $scope.TxtCariAdres = "";
     });
 
     setTimeout(function()
@@ -1996,6 +2020,18 @@ function Pos($scope,$window,$rootScope,db)
         {
             $scope.TxtXSifre = $scope.TxtXSifre.substring(0,$scope.TxtXSifre.length-1);
         }
+        else if(FocusCariEkleTcNo)
+        {
+            $scope.TxtCariTcNo = $scope.TxtCariTcNo.substring(0,$scope.TxtCariTcNo.length-1);
+        }
+        else if(FocusCariEkleAdiSoyadi)
+        {
+            $scope.TxtCariAdiSoyadi = $scope.TxtCariAdiSoyadi.substring(0,$scope.TxtCariAdiSoyadi.length-1);
+        }
+        else if(FocusCariEkleAdres)
+        {
+            $scope.TxtCariAdres = $scope.TxtCariAdres.substring(0,$scope.TxtCariAdres.length-1);
+        }
     }
     $scope.BtnOnayClick = function()
     {
@@ -2121,6 +2157,42 @@ function Pos($scope,$window,$rootScope,db)
             else
             {
                 $scope.TxtXSifre = Key; 
+                FirstKey = true;
+            }
+        }
+        else if(FocusCariEkleTcNo)
+        {
+            if(FirstKey)
+            {
+                $scope.TxtCariTcNo = $scope.TxtCariTcNo + Key; 
+            }
+            else
+            {
+                $scope.TxtCariTcNo = Key; 
+                FirstKey = true;
+            }
+        }
+        else if(FocusCariEkleAdiSoyadi)
+        {
+            if(FirstKey)
+            {
+                $scope.TxtCariAdiSoyadi = $scope.TxtCariAdiSoyadi + Key; 
+            }
+            else
+            {
+                $scope.TxtCariAdiSoyadi = Key; 
+                FirstKey = true;
+            }
+        }
+        else if(FocusCariEkleAdres)
+        {
+            if(FirstKey)
+            {
+                $scope.TxtCariAdres = $scope.TxtCariAdres + Key; 
+            }
+            else
+            {
+                $scope.TxtCariAdres = Key; 
                 FirstKey = true;
             }
         }
@@ -3254,12 +3326,77 @@ function Pos($scope,$window,$rootScope,db)
             alertify.alert("Satış Listesi Ve Park Listesi Doluyken X Raporu Alınamaz.")
         }
     }
-    $scope.BtnMusteriEkle = async function()
+    $scope.MusteriEkleFocus = async function(pTip)
     {
-        $("#MdlMusteriEkle").modal("show");
+        if(pTip == 0)
+        {
+            document.getElementById("TxtCariTcNo").style.borderBlockEndColor = "red";
+            document.getElementById("TxtCariAdiSoyadi").style.borderBlockEndColor = "#e4eaec";
+            document.getElementById("TxtCariAdres").style.borderBlockEndColor = "#e4eaec";
+            FocusBarkod = false;
+            FocusAraToplam = false;
+            FocusMusteri = false;
+            FocusStok = false;
+            FocusKartOdeme = false;
+            FirstKey = false;
+            FocusYetkiliSifre = false;
+            FocusCariEkleAdiSoyadi = false;
+            FocusCariEkleAdres = false;
+            FocusCariEkleTcNo = true;
+        }
+        else if(pTip == 1)
+        {
+            document.getElementById("TxtCariAdiSoyadi").style.borderBlockEndColor = "red";
+            document.getElementById("TxtCariTcNo").style.borderBlockEndColor = "#e4eaec";
+            document.getElementById("TxtCariAdres").style.borderBlockEndColor = "#e4eaec";
+            FocusBarkod = false;
+            FocusAraToplam = false;
+            FocusMusteri = false;
+            FocusStok = false;
+            FocusKartOdeme = false;
+            FirstKey = false;
+            FocusYetkiliSifre = false;
+            FocusCariEkleAdres = false;
+            FocusCariEkleTcNo = false;
+            FocusCariEkleAdiSoyadi = true;
+        }
+        else if(pTip == 2)
+        {
+            document.getElementById("TxtCariAdres").style.borderBlockEndColor = "red";
+            document.getElementById("TxtCariAdiSoyadi").style.borderBlockEndColor = "#e4eaec";
+            document.getElementById("TxtCariTcNo").style.borderBlockEndColor = "#e4eaec";
+            FocusBarkod = false;
+            FocusAraToplam = false;
+            FocusMusteri = false;
+            FocusStok = false;
+            FocusKartOdeme = false;
+            FirstKey = false;
+            FocusYetkiliSifre = false;
+            FocusCariEkleAdiSoyadi = false;
+            FocusCariEkleTcNo = false;
+            FocusCariEkleAdres = true;
+        }
     }
-    $scope.CariEkleFocus = async function(pTip)
+    $scope.BtnMusteriEkle = async function(pTip)
     {
-        console.log("deneme")
+        if(pTip == 0)
+        {
+            $("#MdlMusteriEkle").modal("show");
+            document.getElementById("TxtCariTcNo").style.borderBlockEndColor = "red";
+            FocusBarkod = false;
+            FocusAraToplam = false;
+            FocusMusteri = false;
+            FocusStok = false;
+            FocusKartOdeme = false;
+            FirstKey = false;
+            FocusYetkiliSifre = false;
+            FocusCariEkleAdiSoyadi = false;
+            FocusCariEkleTcNo = true;
+            FocusCariEkleAdres = false;
+        }
+        else
+        {
+
+        }
     }
 }
