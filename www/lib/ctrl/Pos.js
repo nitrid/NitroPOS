@@ -21,8 +21,10 @@ function Pos($scope,$window,$rootScope,db)
     let FocusZSifre = false;
     let FocusXSifre = false;
     let FocusCariEkleTcNo = false;
-    let FocusCariEkleAdiSoyadi = false;
+    let FocusCariEkleAdi = false;
+    let FocusCariEkleSoyadi = false;
     let FocusCariEkleAdres = false;
+    let FocusCariEkleTel = false;
 
     $('#MdlAraToplam').on('hide.bs.modal', function () 
     {
@@ -246,8 +248,15 @@ function Pos($scope,$window,$rootScope,db)
         FocusCariEkleTcNo = false;
         FocusCariEkleAdres = false;
         $scope.TxtCariTcNo = "";
-        $scope.TxtCariAdiSoyadi = "";
+        $scope.TxtCariAdi = "";
+        $scope.TxtCariSoyadi = "";
         $scope.TxtCariAdres = "";
+        $scope.TxtCariTel = "";
+        document.getElementById("TxtCariTcNo").style.borderBlockEndColor = "red";
+        document.getElementById("TxtCariAdi").style.borderBlockEndColor = "#e4eaec";
+        document.getElementById("TxtCariSoyadi").style.borderBlockEndColor = "#e4eaec";
+        document.getElementById("TxtCariAdres").style.borderBlockEndColor = "#e4eaec";
+        document.getElementById("TxtCariTel").style.borderBlockEndColor = "#e4eaec";
     });
 
     setTimeout(function()
@@ -392,6 +401,11 @@ function Pos($scope,$window,$rootScope,db)
         $scope.TxtXSifre = "";
         $scope.TxtOkcMesaj = "OKC Cihazıyla Eşleşme Yapılıyor.";
         $scope.BtnTxtOkcEslesme = "İptal";
+        $scope.TxtCariTcNo = "";
+        $scope.TxtCariAdi = "";
+        $scope.TxtCariSoyadi = "";
+        $scope.TxtCariAdres = "";
+        $scope.TxtCariTel = "";
 
         $scope.KasaNo = 1;
         $scope.Saat = moment(new Date(),"HH:mm:ss").format("HH:mm:ss");
@@ -2024,13 +2038,21 @@ function Pos($scope,$window,$rootScope,db)
         {
             $scope.TxtCariTcNo = $scope.TxtCariTcNo.substring(0,$scope.TxtCariTcNo.length-1);
         }
-        else if(FocusCariEkleAdiSoyadi)
+        else if(FocusCariEkleSoyadi)
         {
-            $scope.TxtCariAdiSoyadi = $scope.TxtCariAdiSoyadi.substring(0,$scope.TxtCariAdiSoyadi.length-1);
+            $scope.TxtCariSoyadi = $scope.TxtCariSoyadi.substring(0,$scope.TxtCariSoyadi.length-1);
+        }
+        else if(FocusCariEkleAdi)
+        {
+            $scope.TxtCariAdi = $scope.TxtCariAdi.substring(0,$scope.TxtCariAdi.length-1);
         }
         else if(FocusCariEkleAdres)
         {
             $scope.TxtCariAdres = $scope.TxtCariAdres.substring(0,$scope.TxtCariAdres.length-1);
+        }
+        else if(FocusCariEkleTel)
+        {
+            $scope.TxtCariTel = $scope.TxtCariTel.substring(0,$scope.TxtCariTel.length-1);
         }
     }
     $scope.BtnOnayClick = function()
@@ -2172,15 +2194,27 @@ function Pos($scope,$window,$rootScope,db)
                 FirstKey = true;
             }
         }
-        else if(FocusCariEkleAdiSoyadi)
+        else if(FocusCariEkleSoyadi)
         {
             if(FirstKey)
             {
-                $scope.TxtCariAdiSoyadi = $scope.TxtCariAdiSoyadi + Key; 
+                $scope.TxtCariSoyadi = $scope.TxtCariSoyadi + Key; 
             }
             else
             {
-                $scope.TxtCariAdiSoyadi = Key; 
+                $scope.TxtCariSoyadi = Key; 
+                FirstKey = true;
+            }
+        }
+        else if(FocusCariEkleAdi)
+        {
+            if(FirstKey)
+            {
+                $scope.TxtCariAdi = $scope.TxtCariAdi + Key; 
+            }
+            else
+            {
+                $scope.TxtCariAdi = Key; 
                 FirstKey = true;
             }
         }
@@ -2193,6 +2227,18 @@ function Pos($scope,$window,$rootScope,db)
             else
             {
                 $scope.TxtCariAdres = Key; 
+                FirstKey = true;
+            }
+        }
+        else if(FocusCariEkleTel)
+        {
+            if(FirstKey)
+            {
+                $scope.TxtCariTel = $scope.TxtCariTel + Key; 
+            }
+            else
+            {
+                $scope.TxtCariTel = Key; 
                 FirstKey = true;
             }
         }
@@ -3331,8 +3377,10 @@ function Pos($scope,$window,$rootScope,db)
         if(pTip == 0)
         {
             document.getElementById("TxtCariTcNo").style.borderBlockEndColor = "red";
-            document.getElementById("TxtCariAdiSoyadi").style.borderBlockEndColor = "#e4eaec";
+            document.getElementById("TxtCariAdi").style.borderBlockEndColor = "#e4eaec";
+            document.getElementById("TxtCariSoyadi").style.borderBlockEndColor = "#e4eaec";
             document.getElementById("TxtCariAdres").style.borderBlockEndColor = "#e4eaec";
+            document.getElementById("TxtCariTel").style.borderBlockEndColor = "#e4eaec";
             FocusBarkod = false;
             FocusAraToplam = false;
             FocusMusteri = false;
@@ -3340,15 +3388,19 @@ function Pos($scope,$window,$rootScope,db)
             FocusKartOdeme = false;
             FirstKey = false;
             FocusYetkiliSifre = false;
-            FocusCariEkleAdiSoyadi = false;
+            FocusCariEkleAdi = false;
+            FocusCariEkleSoyadi = false;
             FocusCariEkleAdres = false;
+            FocusCariEkleTel = false;
             FocusCariEkleTcNo = true;
         }
         else if(pTip == 1)
         {
-            document.getElementById("TxtCariAdiSoyadi").style.borderBlockEndColor = "red";
+            document.getElementById("TxtCariAdi").style.borderBlockEndColor = "red";
+            document.getElementById("TxtCariSoyadi").style.borderBlockEndColor = "#e4eaec";
             document.getElementById("TxtCariTcNo").style.borderBlockEndColor = "#e4eaec";
             document.getElementById("TxtCariAdres").style.borderBlockEndColor = "#e4eaec";
+            document.getElementById("TxtCariTel").style.borderBlockEndColor = "#e4eaec";
             FocusBarkod = false;
             FocusAraToplam = false;
             FocusMusteri = false;
@@ -3358,13 +3410,17 @@ function Pos($scope,$window,$rootScope,db)
             FocusYetkiliSifre = false;
             FocusCariEkleAdres = false;
             FocusCariEkleTcNo = false;
-            FocusCariEkleAdiSoyadi = true;
+            FocusCariEkleSoyadi = false;
+            FocusCariEkleTel = false;
+            FocusCariEkleAdi = true;
         }
         else if(pTip == 2)
         {
-            document.getElementById("TxtCariAdres").style.borderBlockEndColor = "red";
-            document.getElementById("TxtCariAdiSoyadi").style.borderBlockEndColor = "#e4eaec";
+            document.getElementById("TxtCariSoyadi").style.borderBlockEndColor = "red";
+            document.getElementById("TxtCariAdi").style.borderBlockEndColor = "#e4eaec";
             document.getElementById("TxtCariTcNo").style.borderBlockEndColor = "#e4eaec";
+            document.getElementById("TxtCariAdres").style.borderBlockEndColor = "#e4eaec";
+            document.getElementById("TxtCariTel").style.borderBlockEndColor = "#e4eaec";
             FocusBarkod = false;
             FocusAraToplam = false;
             FocusMusteri = false;
@@ -3372,8 +3428,50 @@ function Pos($scope,$window,$rootScope,db)
             FocusKartOdeme = false;
             FirstKey = false;
             FocusYetkiliSifre = false;
-            FocusCariEkleAdiSoyadi = false;
+            FocusCariEkleAdres = false;
             FocusCariEkleTcNo = false;
+            FocusCariEkleAdi = false;
+            FocusCariEkleTel = false;
+            FocusCariEkleSoyadi = true;
+        }
+        else if(pTip == 3)
+        {
+            document.getElementById("TxtCariTel").style.borderBlockEndColor = "red";
+            document.getElementById("TxtCariAdi").style.borderBlockEndColor = "#e4eaec";
+            document.getElementById("TxtCariSoyadi").style.borderBlockEndColor = "#e4eaec";
+            document.getElementById("TxtCariTcNo").style.borderBlockEndColor = "#e4eaec";
+            document.getElementById("TxtCariAdres").style.borderBlockEndColor = "#e4eaec";
+            FocusBarkod = false;
+            FocusAraToplam = false;
+            FocusMusteri = false;
+            FocusStok = false;
+            FocusKartOdeme = false;
+            FirstKey = false;
+            FocusYetkiliSifre = false;
+            FocusCariEkleAdi = false;
+            FocusCariEkleSoyadi = false;
+            FocusCariEkleTcNo = false;
+            FocusCariEkleAdres = false;
+            FocusCariEkleTel = true;
+        }
+        else if(pTip == 4)
+        {
+            document.getElementById("TxtCariAdres").style.borderBlockEndColor = "red";
+            document.getElementById("TxtCariAdi").style.borderBlockEndColor = "#e4eaec";
+            document.getElementById("TxtCariSoyadi").style.borderBlockEndColor = "#e4eaec";
+            document.getElementById("TxtCariTcNo").style.borderBlockEndColor = "#e4eaec";
+            document.getElementById("TxtCariTel").style.borderBlockEndColor = "#e4eaec";
+            FocusBarkod = false;
+            FocusAraToplam = false;
+            FocusMusteri = false;
+            FocusStok = false;
+            FocusKartOdeme = false;
+            FirstKey = false;
+            FocusYetkiliSifre = false;
+            FocusCariEkleAdi = false;
+            FocusCariEkleSoyadi = false;
+            FocusCariEkleTcNo = false;
+            FocusCariEkleTel = false;
             FocusCariEkleAdres = true;
         }
     }
@@ -3390,13 +3488,103 @@ function Pos($scope,$window,$rootScope,db)
             FocusKartOdeme = false;
             FirstKey = false;
             FocusYetkiliSifre = false;
-            FocusCariEkleAdiSoyadi = false;
-            FocusCariEkleTcNo = true;
+            FocusCariEkleAdi = false;
+            FocusCariEkleSoyadi = false;
+            FocusCariEkleTel = false;
             FocusCariEkleAdres = false;
+            FocusCariEkleTcNo = true;
         }
         else
         {
+            if($scope.TxtCariTcNo != "" && $scope.TxtCariAdi != "" && $scope.TxtCariSoyadi != "")
+            {
+                let Kodu = "";
+                let CariHarf = "P";
 
+                var TmpQuery = 
+                {
+                    db : $scope.Firma,
+                    query:  "SELECT REPLACE(STR(ISNULL(MAX(CONVERT(int,SUBSTRING(CODE,3,LEN(CODE)))),0) + 1, 5), SPACE(1), '0') AS MAXCARIKOD FROM CUSTOMERS WHERE CODE LIKE  @CARIHARF +  '%' ",
+                    param:  ['CARIHARF'], 
+                    type:   ['string|25'], 
+                    value:  [CariHarf]
+                }
+                db.GetDataQuery(TmpQuery,async function(Data)
+                {
+                    Kodu = CariHarf + Data[0].MAXCARIKOD;
+                    if(Kodu != "" || typeof(data) != "undefined")
+                    {
+                        var InsertData = 
+                        [
+                            $scope.Kullanici,
+                            $scope.Kullanici,
+                            Kodu,               //CARİKODU
+                            1,                  //TYPE
+                            1,                  //GENUS
+                            $scope.TxtCariAdi,  
+                            $scope.TxtCariSoyadi, 
+                            1,                  //CUSTUMER_GRP
+                            $scope.TxtCariTel,  //PHONE 1    
+                            '',                 //PHONE 2
+                            '',                 //GSM_PHONE
+                            '',                 //OTHER_PHONE
+                            '',                 //EMAIL
+                            '',                 //WEB
+                            '',                 //NOTE
+                            '',                 //SIRET_ID
+                            '',                 //APE_CODE
+                            '',                 //TAX_OFFICE
+                            '',                 //TAX_NO
+                            '',                 //INT_VAT_NO
+                            1                   //TAX_TYPE
+                        ];
+                        db.ExecuteTag($scope.Firma,'CariKartKaydet',InsertData,function(InsertResult)
+                        {   
+                            if(typeof(InsertResult.result.err) == 'undefined')
+                            {
+                                if($scope.TxtCariAdres != "")
+                                {
+                                    var InsertData = 
+                                    [
+                                        $scope.Kullanici,
+                                        $scope.Kullanici,
+                                        1,                  //TYPE
+                                        Kodu,               //CUSTOMER
+                                        $scope.TxtCariAdres,//ADRESS
+                                        '',                 //ZIPCODE
+                                        '',                 //CITY
+                                        ''                  //COUNTRY    
+                                    ];
+                                    db.ExecuteTag($scope.Firma,'AdresKaydet',InsertData,function(InsertResult)
+                                    { 
+                                        if(typeof(InsertResult.result.err) == 'undefined')
+                                        {
+                                            console.log(InsertResult.result.err);
+                                        }
+                                    });
+                                }
+                                $("#MdlMusteriEkle").modal("hide");
+                                alertify.alert("Müşteri Ekleme İşlemi Başarıyla Gerçekleşti.")
+                            }
+                            else
+                            {
+                                alertify.alert("Müşteri Ekleme İşleminde Hata.")
+                                console.log(InsertResult.result.err);
+                            }
+                        });
+                    }
+                    else
+                    {
+                        $("#MdlMusteriEkle").modal("hide");
+                        alertify.alert("Müşteri Kodu Oluşturma İşleminde Hata.")
+                    }
+                });
+            }
+            else
+            {
+                $("#MdlMusteriEkle").modal("hide");
+                alertify.alert("Lütfen Zorunlu Alanları Doldurun.")
+            }
         }
     }
 }

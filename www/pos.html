@@ -2084,7 +2084,7 @@
                     <div class="modal-body">
                         <div class="row pt-10">
                             <div class="col-3">
-                                <label><h5><span style="color:dodgerblue;">TC/VKN :</span></h5></label>
+                                <label><h5><span style="color:dodgerblue;">TC/VKN* :</span></h5></label>
                             </div>
                             <div class="col-9">
                                 <div class="input-group">
@@ -2094,11 +2094,31 @@
                         </div>
                         <div class="row">
                             <div class="col-3">
-                                <label><h5><span style="color:dodgerblue;">ADI-SOYADI :</span></h5></label>
+                                <label><h5><span style="color:dodgerblue;">ADI* :</span></h5></label>
                             </div>
                             <div class="col-9">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" ng-model="TxtCariAdiSoyadi" id="TxtCariAdiSoyadi" ng-focus="MusteriEkleFocus(1)">
+                                    <input type="text" class="form-control" ng-model="TxtCariAdi" id="TxtCariAdi" ng-focus="MusteriEkleFocus(1)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <label><h5><span style="color:dodgerblue;">SOYADI* :</span></h5></label>
+                            </div>
+                            <div class="col-9">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" ng-model="TxtCariSoyadi" id="TxtCariSoyadi" ng-focus="MusteriEkleFocus(2)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <label><h5><span style="color:dodgerblue;">TELEFON :</span></h5></label>
+                            </div>
+                            <div class="col-9">
+                                <div class="input-group">
+                                    <input type="phone" class="form-control" ng-model="TxtCariTel" id="TxtCariTel" ng-focus="MusteriEkleFocus(3)">
                                 </div>
                             </div>
                         </div>
@@ -2108,7 +2128,7 @@
                             </div>
                             <div class="col-9">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" ng-model="TxtCariAdres" id="TxtCariAdres" ng-focus="MusteriEkleFocus(2)">
+                                    <input type="text" class="form-control" ng-model="TxtCariAdres" id="TxtCariAdres" ng-focus="MusteriEkleFocus(4)">
                                 </div>
                             </div>
                         </div>
@@ -2117,7 +2137,7 @@
                         </div> 
                         <div class="row py-1">
                             <div class="col-10 px-1">
-                                <button type="button" class="btn btn-raised btn-success btn-block btn-lg" ng-click="BtnCariGridSec()" style="font-size: 16px;">Kaydet</button>
+                                <button type="button" class="btn btn-raised btn-success btn-block btn-lg" ng-click="BtnMusteriEkle(1)" style="font-size: 16px;">Kaydet</button>
                             </div>
                             <div class="col-2 px-1">
                                 <button type="button" class="btn btn-raised btn-danger btn-block btn-lg" ng-click="BtnSilClick()" style="font-size: 16px;"><i class="fas fa-backspace fa-lg"></i></button>
