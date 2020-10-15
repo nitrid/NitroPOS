@@ -1382,7 +1382,7 @@ function Pos($scope,$window,$rootScope,db)
         $row.children('.jsgrid-cell').css('background-color','#2979FF').css('color','white');
         StokSelectedRow = $row;
 
-        $scope.TxtBarkod = $scope.StokListe[pIndex].CODE;
+        $scope.TxtBarkod = $scope.StokListe[pIndex].BARCODE;
     }
     $scope.BarkodListeRowClick = function(pIndex,pItem,pObj)
     {
@@ -1789,19 +1789,39 @@ function Pos($scope,$window,$rootScope,db)
                             {
                                 let TmpSale = {};
                                 TmpSale.NAME = $scope.SatisList[i].ITEM_NAME.split("İ").join("I").split("ı").join("i").split("Ç").join("C").split("ç").join("c").split("Ğ").join("G").split("ğ").join("g").split("Ş").join("S").split("ş").join("s").split("Ö").join("O").split("ö").join("o").split("Ü").join("U").split("ü").join("u");
-                                if($scope.SatisList[i].QUANTITY < 1)
+                                if($scope.SatisList[i].UNIT_ID == 1)
                                 {
-                                    TmpSale.AMOUNT = parseInt(parseFloat($scope.SatisList[i].AMOUNT).toFixed(2) * 100);
+                                    TmpSale.TYPE = 1;
+                                    TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY;
                                 }
                                 else
                                 {
-                                    TmpSale.AMOUNT = parseInt(parseFloat($scope.SatisList[i].PRICE).toFixed(2) * 100);
+                                    TmpSale.TYPE = 2;
+                                    TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY.toFixed(3) * 1000
                                 }
 
-                                TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY;
-                                TmpSale.TAX = 1;
-                                TmpSale.TYPE = parseInt($scope.SatisList[i].UNIT_ID);
-
+                                if($scope.SatisList[i].VAT == 5)
+                                {
+                                    TmpSale.TAX = 1; 
+                                }
+                                else if($scope.SatisList[i].VAT == 10)
+                                {
+                                    TmpSale.TAX = 2;
+                                }
+                                else if($scope.SatisList[i].VAT == 16)
+                                {
+                                    TmpSale.TAX = 3;
+                                }
+                                else if($scope.SatisList[i].VAT == 20)
+                                {
+                                    TmpSale.TAX = 4;
+                                }
+                                else
+                                {
+                                    TmpSale.TAX = 0;
+                                }
+                                TmpSale.AMOUNT = parseInt(parseFloat($scope.SatisList[i].PRICE).toFixed(2) * 100);
+                                
                                 TmpData.SALES.push(TmpSale);
                             }
 
