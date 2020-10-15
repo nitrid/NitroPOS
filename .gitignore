@@ -8,3 +8,4 @@ pc/release-builds/
 /lic.json
 pc/package-lock.json
 *.TXT
+lic.json
