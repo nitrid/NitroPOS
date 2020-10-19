@@ -3552,7 +3552,7 @@ function Pos($scope,$window,$rootScope,db)
                                     [
                                         $scope.Kullanici,
                                         $scope.Kullanici,
-                                        1,                  //TYPE
+                                        0,                  //TYPE
                                         Kodu,               //CUSTOMER
                                         $scope.TxtCariAdres,//ADRESS
                                         '',                 //ZIPCODE
