@@ -1658,6 +1658,13 @@ function Pos($scope,$window,$rootScope,db)
                         if(TmpKiloFlag[i] == pBarkod.substring(0,2))
                         {
                             $scope.Miktar = await db.Scale.Send();
+                            
+                            if(parseInt($scope.Miktar) <= 0)
+                            {
+                                alertify.alert("Lütfen Tartım Alınız.");
+                                $scope.TxtBarkod = "";
+                                return;
+                            }
                         }
                     }
 
@@ -2820,30 +2827,27 @@ function Pos($scope,$window,$rootScope,db)
 
                     for (let x = 0; x < ParamList.length; x++) 
                     {
-                        if(ParamList[x].NAME == 'DepoNo' && ParamList[x].VALUE == $scope.Sube)
+                        if(YetkiliList[i].PASSWORD == $scope.TxtYetkiliSifre)
                         {
-                            if(YetkiliList[i].PASSWORD == $scope.TxtYetkiliSifre)
-                            {
-                                $("#MdlYetkiliGiris").modal("hide");
-                                angular.element('#ChkAlma').trigger('click');
-                                $scope.TxtYetkiliSifre = "";
-                                FocusBarkod = false;
-                                FocusAraToplam = false;
-                                FocusMusteri = false;
-                                FocusStok = false;
-                                FocusKartOdeme = false;
-                                FocusYetkiliSifre = false;
-                                FocusKasaSifre = false;
-                                FirstKey = false;
-                                FocusAvans = true;
+                            $("#MdlYetkiliGiris").modal("hide");
+                            angular.element('#ChkAlma').trigger('click');
+                            $scope.TxtYetkiliSifre = "";
+                            FocusBarkod = false;
+                            FocusAraToplam = false;
+                            FocusMusteri = false;
+                            FocusStok = false;
+                            FocusKartOdeme = false;
+                            FocusYetkiliSifre = false;
+                            FocusKasaSifre = false;
+                            FirstKey = false;
+                            FocusAvans = true;
 
-                                $("#MdlAvans").modal("show");
-                            }
-                            else
-                            {
-                                $("#MdlYetkiliGiris").modal("hide");
-                                alertify.alert("Yetkili Şifre Yanlış.");
-                            }
+                            $("#MdlAvans").modal("show");
+                        }
+                        else
+                        {
+                            $("#MdlYetkiliGiris").modal("hide");
+                            //alertify.alert("Yetkili Şifre Yanlış.");
                         }
                     }
                 }   

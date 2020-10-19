@@ -758,7 +758,7 @@ var QuerySql =
                 "FROM ITEMS AS ITEMS " +
                 "LEFT OUTER JOIN ITEM_UNIT AS UNIT ON " +
                 "UNIT.ITEM_CODE = ITEMS.CODE " +
-                "WHERE ((UPPER(ITEMS.CODE) LIKE UPPER(@CODE)) OR (UPPER(@CODE) = '')) AND ((UPPER(ITEMS.[NAME]) LIKE UPPER(@NAME)) OR (UPPER(@NAME) = '')) " ,
+                "WHERE ((UPPER(ITEMS.CODE) LIKE UPPER(@CODE)) OR (UPPER(@CODE) = '')) AND ((UPPER(ITEMS.[NAME]) LIKE UPPER(@NAME)) OR (UPPER(@NAME) = '')) AND UNIT.CODE = 1 " ,
         param : ['CODE','NAME'],
         type : ['string|25','string|250']
     },
