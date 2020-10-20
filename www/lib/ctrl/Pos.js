@@ -1587,7 +1587,7 @@ function Pos($scope,$window,$rootScope,db)
             //CARİ UPDATE
             var TmpQuery = 
             {
-                db : '{M}.' + $scope.Firma,
+                db : $scope.Firma,
                 query:  "UPDATE POS_SALES SET CUSTOMER_CODE = @CUSTOMER_CODE WHERE REF = @REF AND REF_NO = @REF_NO AND DEPARTMENT = @DEPARTMENT",
                 param:  ['CUSTOMER_CODE','REF','REF_NO','DEPARTMENT'],
                 type:   ['string|25','string|25','int','int'],
@@ -1595,7 +1595,7 @@ function Pos($scope,$window,$rootScope,db)
             }
             db.ExecuteQuery(TmpQuery,function(UpdateResult)
             {
-                
+                console.log(UpdateResult)
             });
         }
 
@@ -1659,7 +1659,7 @@ function Pos($scope,$window,$rootScope,db)
                         {
                             $scope.Miktar = await db.Scale.Send();
                             
-                            if(parseInt($scope.Miktar) <= 0)
+                            if($scope.Miktar <= 0)
                             {
                                 alertify.alert("Lütfen Tartım Alınız.");
                                 $scope.TxtBarkod = "";
