@@ -2857,13 +2857,16 @@ function Pos($scope,$window,$rootScope,db)
     $scope.BtnAvansKaydet = function()
     {
         let Msg = "";
+        let Msg2 = "";
         if($scope.AvansTip == 3)
         {
             Msg = "Avans Çekmek İstediğinize Eminmisiniz ?";
+            Msg2 = "Avans Çekme İşlemi Başarıyla Gerçekleşti.";
         }
         else
         {
             Msg = "Avans Girişi Yapmak İstediğinize Eminmisiniz ?";
+            Msg2 = "Avans Girişi Başarıyla Gerçekleşti.";
         }
 
         $("#MdlAvans").modal("hide");
@@ -2908,7 +2911,7 @@ function Pos($scope,$window,$rootScope,db)
                     {   
                         if(typeof(InsertResult.result.err) == 'undefined')
                         {   
-                            db.Ingenico.Avans("{AMOUNT:"+ $scope.TxtAvans * 100 + "}");      
+                            db.Ingenico.TPayment("{AMOUNT:"+ $scope.TxtAvans * 100 + "}");      //KASAYA PARA VERME
                             $scope.TxtAvans = 0;
                             alertify.alert("Avans Çekme İşlemi Başarıyla Gerçekleşti.")
                             $("#MdlAvans").modal("hide");
@@ -2926,15 +2929,15 @@ function Pos($scope,$window,$rootScope,db)
                     {   
                         if(typeof(InsertResult.result.err) == 'undefined')
                         {   
-                            db.Ingenico.TPayment("{AMOUNT:" + $scope.TxtAvans * 100 + "}");             
+                            db.Ingenico.Avans("{AMOUNT:" + $scope.TxtAvans * 100 + "}");         //KASADAN PARA ALMA
                             $scope.TxtAvans = 0;
-                            alertify.alert("Avans Verme İşlemi Başarıyla Gerçekleşti.")
+                            alertify.alert(Msg2)
                             $("#MdlAvans").modal("hide");
                         }
                         else
                         {
                             $("#MdlAvans").modal("hide");
-                            alertify.alert("Avans Verme İşleminde Hata.")
+                            alertify.alert("Avans İşleminde Hata Oluştu.")
                         }
                     });
                 }
