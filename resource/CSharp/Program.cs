@@ -653,7 +653,6 @@ namespace Ingenico
             AddIntoCommandBatch("prepare_Payment", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen);
             return "PAYMENT";
         }
-
         static string TotalPrint()
         {
             byte[] buffer = new byte[1024];
