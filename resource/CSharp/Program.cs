@@ -110,7 +110,7 @@ namespace Ingenico
                     {
                         JObject TmpMaster = JObject.Parse(line.Split('|')[1]);
 
-                        line = Avans((UInt32)TmpMaster.Property("AMOUNT").Value);
+                        line = CaseIn((UInt32)TmpMaster.Property("AMOUNT").Value);
                         Console.WriteLine(line);
                     }
                 }
@@ -120,7 +120,17 @@ namespace Ingenico
                     {
                         JObject TmpMaster = JObject.Parse(line.Split('|')[1]);
 
-                        line = TPayment((UInt32)TmpMaster.Property("AMOUNT").Value);
+                        line = CaseOut((UInt32)TmpMaster.Property("AMOUNT").Value);
+                        Console.WriteLine(line);
+                    }
+                }
+                else if (tag == "INVOICE")
+                {
+                    if (line.Split('|').Length > 0)
+                    {
+                        JObject TmpMaster = JObject.Parse(line.Split('|')[1]);
+
+                        line = Invoice(TmpMaster.Property("NO").Value.ToString(), TmpMaster.Property("VKN").Value.ToString(), (UInt32)TmpMaster.Property("AMOUNT").Value);
                         Console.WriteLine(line);
                     }
                 }
@@ -451,6 +461,24 @@ namespace Ingenico
         {
             CommandList.Clear();
         }
+        private static void ConvertAscToBcdArray(string str, ref byte[] arr, int arrLen)
+        {
+            arrLen = str.Length;
+            Array.Copy(Encoding.Default.GetBytes(str), 0, arr, 0, str.Length);
+        }
+        private static void ConvertStringToHexArray(string s, ref byte[] Out_byteArr, int byteArrLen)
+        {
+
+            byte[] ba = new byte[s.Length / 2];
+            for (int i = 0; i < ba.Length; i++)
+            {
+                string temp = s.Substring(i * 2, 2);
+                ba[i] = Convert.ToByte(temp, 16);
+            }
+            byteArrLen = ba.Length;
+            Array.Copy(ba, 0, Out_byteArr, 0, ba.Length);
+        }
+
         static string Ping()
         {
             UInt32 retcode;
@@ -752,7 +780,7 @@ namespace Ingenico
 
             return "ENDCOPY|SUCCESS";
         }
-        static string Avans(UInt32 pAmount)
+        static string CaseIn(UInt32 pAmount)
         {
             UInt32 RetCode = 0;
             ST_TICKET m_stTicket = new ST_TICKET();
@@ -819,7 +847,7 @@ namespace Ingenico
 
             return "AVANS";
         }
-        static string TPayment(UInt32 pAmount)
+        static string CaseOut(UInt32 pAmount)
         {
             UInt32 RetCode = 0;
             ST_TICKET m_stTicket = new ST_TICKET();
@@ -833,9 +861,9 @@ namespace Ingenico
 
             RetCode = Json_GMPSmartDLL.FP3_KasaPayment(CurrentInterface, GetTransactionHandle(CurrentInterface), (int)pAmount, ref m_stTicket, Defines.TIMEOUT_DEFAULT);
 
-            return Nakit(pAmount);
+            return CaseOutTotalPrint(pAmount);
         }
-        static string Nakit(UInt32 pAmount)
+        static string CaseOutTotalPrint(UInt32 pAmount)
         {
             UInt32 RetCode = 0;
             UInt16 currencyOfPayment = (UInt16)ECurrency.CURRENCY_TL;
@@ -857,16 +885,10 @@ namespace Ingenico
             
             if(RetCode == 2022)
             {
-                Nakit(0);
+                CaseOutTotalPrint(0);
             }
             
             RetCode = GMPSmartDLL.FP3_PrintTotalsAndPayments(CurrentInterface, GetTransactionHandle(CurrentInterface), Defines.TIMEOUT_DEFAULT);
-            if (RetCode != Defines.TRAN_RESULT_OK && RetCode != Defines.APP_ERR_ALREADY_DONE)
-                return "TPAYMENT|FAULT-3";
-
-            RetCode = GMPSmartDLL.FP3_PrintBeforeMF(CurrentInterface, GetTransactionHandle(CurrentInterface), Defines.TIMEOUT_DEFAULT);
-            if (RetCode != Defines.TRAN_RESULT_OK && RetCode != Defines.APP_ERR_ALREADY_DONE)
-                return "TPAYMENT|FAULT-5";
 
             ST_USER_MESSAGE[] stUserMessage = new ST_USER_MESSAGE[1];
             for (int i = 0; i < stUserMessage.Length; i++)
@@ -881,8 +903,6 @@ namespace Ingenico
             RetCode = Json_GMPSmartDLL.FP3_PrintUserMessage(CurrentInterface, GetTransactionHandle(CurrentInterface), ref stUserMessage, (ushort)stUserMessage.Length, ref m_stTicket, Defines.TIMEOUT_DEFAULT);
 
             RetCode = GMPSmartDLL.FP3_PrintMF(CurrentInterface, GetTransactionHandle(CurrentInterface), Defines.TIMEOUT_CARD_TRANSACTIONS);
-            if (RetCode != Defines.TRAN_RESULT_OK && RetCode != Defines.APP_ERR_ALREADY_DONE)
-                return "TPAYMENT|FAULT-5";
 
             ClearTransactionUniqueId(CurrentInterface);
             UInt64 TransHandle = GetTransactionHandle(CurrentInterface);
@@ -891,6 +911,51 @@ namespace Ingenico
                 DeleteTrxHandles(CurrentInterface, TransHandle);
 
             return "TPAYMENT";
+        }
+        static string Invoice(string pNo,string pVkn,UInt32 pAmount)
+        {
+            OpenHandle();
+            //TicketHeader();
+            //OptionFlag();
+
+            ST_TICKET m_stTicket = new ST_TICKET();
+            ST_INVIOCE_INFO stInvoiceInfo = new ST_INVIOCE_INFO();
+            stInvoiceInfo.source = (byte)0;
+            stInvoiceInfo.amount = pAmount;
+            stInvoiceInfo.currency = 949;
+            stInvoiceInfo.no = new byte[25];
+            ConvertAscToBcdArray(pNo, ref stInvoiceInfo.no, stInvoiceInfo.no.Length);
+            stInvoiceInfo.tck_no = new byte[12];
+            ConvertAscToBcdArray(pVkn, ref stInvoiceInfo.tck_no, stInvoiceInfo.tck_no.Length);
+            stInvoiceInfo.vk_no = new byte[12];
+            ConvertAscToBcdArray(pVkn, ref stInvoiceInfo.vk_no, stInvoiceInfo.vk_no.Length);
+
+            stInvoiceInfo.date = new byte[3];
+            DateTime TmpDate = DateTime.Now;
+            string dateStr = TmpDate.Day.ToString().PadLeft(2, '0') + TmpDate.Month.ToString().PadLeft(2, '0') + TmpDate.Year.ToString().Substring(2, 2).PadLeft(2, '0');
+            Console.WriteLine(dateStr);
+            ConvertStringToHexArray(dateStr, ref stInvoiceInfo.date, 3);
+            Array.Reverse(stInvoiceInfo.date);
+
+            byte[] buffer = new byte[1024];
+            int bufferLen = 0;
+
+            bufferLen = Json_GMPSmartDLL.prepare_SetInvoice(buffer, buffer.Length, ref stInvoiceInfo);
+            AddIntoCommandBatch("prepare_SetInvoice", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen);
+
+            Array.Clear(buffer, 0, buffer.Length);
+            bufferLen = 0;
+            bufferLen = GMPSmartDLL.prepare_TicketHeader(buffer, buffer.Length, TTicketType.TInvoice);
+            AddIntoCommandBatch("prepare_TicketHeader", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen);
+
+            CashPayment(0, pAmount);
+            TotalPrint();
+            MFPrintBefore();
+            MFPrint();
+            CloseHandle();
+
+            ProcessBatchCommand();
+            return "INVOICE|SUCCES";
         }
     }
 }
