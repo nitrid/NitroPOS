@@ -499,7 +499,7 @@ function Pos($scope,$window,$rootScope,db)
     function InitClass()
     {
         $scope.Class = {};
-        $scope.Class.BtnFiyatGor = "form-group btn btn-warning btn-block my-1";
+        $scope.Class.BtnFiyatGor = "form-group btn btn-info btn-block my-1";
         $scope.Class.BtnPersonelSatis = "form-group btn btn-warning btn-block my-1";
         $scope.Class.BtnIadeAl = "form-group btn btn-danger btn-block my-1";
         $scope.Class.BtnPluEdit = "form-group btn btn-block btn-success my-1 h-80";
@@ -1714,10 +1714,10 @@ function Pos($scope,$window,$rootScope,db)
                     }
                     
                     //EĞER BİLGİ BUTONUNA BASILDIYSA FİYAT GÖR EKRANI ÇIKACAK.
-                    if($scope.Class.BtnFiyatGor == "form-group btn btn-info btn-block my-1")
+                    if($scope.Class.BtnFiyatGor == "form-group btn btn-warning btn-block my-1")
                     {
                         $scope.TxtBarkod = ""; 
-                        $scope.Class.BtnFiyatGor = "form-group btn btn-warning btn-block my-1"
+                        $scope.Class.BtnFiyatGor = "form-group btn btn-info btn-block my-1"
                         $('#MdlFiyatGor').modal('show');
                         return;
                     }
