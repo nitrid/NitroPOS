@@ -2329,7 +2329,7 @@ function Pos($scope,$window,$rootScope,db)
             $("#TblIslem").find( ".jsgrid-grid-body").scrollTop(IslemSelectedRow.position().top)
         }
     }
-    $scope.BtnBelgeIptal = function(pTip)
+    $scope.BtnBelgeIptal = async function(pTip)
     {
         if($scope.SatisList.length > 0)
         {
@@ -2356,26 +2356,45 @@ function Pos($scope,$window,$rootScope,db)
             }
             else
             {
-                db.ExecuteTag($scope.Firma,'PosSatisBelgeIptal',[$scope.Seri,$scope.Sira,$scope.EvrakTip],function(data)
+                let YetkiliList = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',['']);
+                let GirisOnay = false;
+                for (let i = 0; i < YetkiliList.length; i++) 
                 {
-                    if(typeof(data.result.err) == 'undefined')
+                    if(YetkiliList[i].TAG == 1)
                     {
-                        db.ExecuteTag($scope.Firma,'PosTahIptal',[$scope.Seri,$scope.Sira,0],function(data)
+                        let ParamList = await db.GetPromiseTag($scope.Firma,'ParamGetir',[YetkiliList[i].CODE]);
+                        for (let x = 0; x < ParamList.length; x++) 
                         {
-                            if(typeof(data.result.err) != 'undefined')
+                            if(YetkiliList[i].PASSWORD == $scope.TxtBelgeIptalSifre)
                             {
-                                console.log(data.result.err);
+                                GirisOnay = true;
                             }
-                        });
-                        $scope.TxtBelgeIptalSifre = "";
-                        $("#MdlBelgeIptalSifre").modal("hide");
-                        $scope.YeniEvrak();
+                        }
                     }
-                    else
+                }
+                if(GirisOnay)
+                {
+                    db.ExecuteTag($scope.Firma,'PosSatisBelgeIptal',[$scope.Seri,$scope.Sira,$scope.EvrakTip],function(data)
                     {
-                        console.log(data.result.err);
-                    }
-                });
+                        if(typeof(data.result.err) == 'undefined')
+                        {
+                            db.ExecuteTag($scope.Firma,'PosTahIptal',[$scope.Seri,$scope.Sira,0],function(data)
+                            {
+                                if(typeof(data.result.err) != 'undefined')
+                                {
+                                    console.log(data.result.err);
+                                }
+                            });
+                            $scope.TxtBelgeIptalSifre = "";
+                            $("#MdlBelgeIptalSifre").modal("hide");
+                            $scope.YeniEvrak();
+                        }
+                        else
+                        {
+                            console.log(data.result.err);
+                        }
+                    });
+                }
             }
         }
         else
@@ -2884,38 +2903,42 @@ function Pos($scope,$window,$rootScope,db)
         else
         {
             let YetkiliList = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',['']);
+            let GirisOnay = false;
             for (let i = 0; i < YetkiliList.length; i++) 
             {
                 if(YetkiliList[i].TAG == 1)
                 {
                     let ParamList = await db.GetPromiseTag($scope.Firma,'ParamGetir',[YetkiliList[i].CODE]);
-
                     for (let x = 0; x < ParamList.length; x++) 
                     {
                         if(YetkiliList[i].PASSWORD == $scope.TxtYetkiliSifre)
                         {
-                            $("#MdlYetkiliGiris").modal("hide");
-                            angular.element('#ChkAlma').trigger('click');
-                            $scope.TxtYetkiliSifre = "";
-                            FocusBarkod = false;
-                            FocusAraToplam = false;
-                            FocusMusteri = false;
-                            FocusStok = false;
-                            FocusKartOdeme = false;
-                            FocusYetkiliSifre = false;
-                            FocusKasaSifre = false;
-                            FirstKey = false;
-                            FocusAvans = true;
-
-                            $("#MdlAvans").modal("show");
-                        }
-                        else
-                        {
-                            $("#MdlYetkiliGiris").modal("hide");
-                            //alertify.alert("Yetkili Şifre Yanlış.");
-                        }
+                            GirisOnay = true;
+                        }   
                     }
                 }   
+            }
+            if(GirisOnay)
+            {
+                $("#MdlYetkiliGiris").modal("hide");
+                angular.element('#ChkAlma').trigger('click');
+                $scope.TxtYetkiliSifre = "";
+                FocusBarkod = false;
+                FocusAraToplam = false;
+                FocusMusteri = false;
+                FocusStok = false;
+                FocusKartOdeme = false;
+                FocusYetkiliSifre = false;
+                FocusKasaSifre = false;
+                FirstKey = false;
+                FocusAvans = true;
+
+                $("#MdlAvans").modal("show");
+            }
+            else
+            {
+                $("#MdlYetkiliGiris").modal("hide");
+                alertify.alert("Yetkili Şifre Yanlış.");
             }
         }
     }
@@ -3320,21 +3343,18 @@ function Pos($scope,$window,$rootScope,db)
         {
             for (let i = 0; i < $scope.ParamListe.length; i++) 
             {
-                if ($scope.ParamListe[i].NAME == "DepoNo" && $scope.ParamListe[i].VALUE == $scope.Sube) 
+                if($scope.KullaniciListe[0].PASSWORD == $scope.TxtKasaSifre && $scope.KullaniciListe[0].CODE == $scope.Kullanici)
                 {
-                    if($scope.KullaniciListe[0].PASSWORD == $scope.TxtKasaSifre && $scope.KullaniciListe[0].CODE == $scope.Kullanici)
+                    $scope.TxtKasaSifre = "";
+                    $("#MdlKasaSifre").modal("hide");
+                    alertify.alert("Şifre Kabul Edildi.")
+                    return;
+                }
+                else
+                {
+                    if($scope.KullaniciListe[0].CODE == $scope.Kullanici)
                     {
-                        $scope.TxtKasaSifre = "";
-                        $("#MdlKasaSifre").modal("hide");
-                        alertify.alert("Şifre Kabul Edildi.")
-                        return;
-                    }
-                    else
-                    {
-                        if($scope.KullaniciListe[0].CODE == $scope.Kullanici)
-                        {
-                            //alertify.alert("Şifre Reddedildi.")
-                        }
+                        //alertify.alert("Şifre Reddedildi.")
                     }
                 }
             }
