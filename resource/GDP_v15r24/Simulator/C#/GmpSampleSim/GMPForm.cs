@@ -3230,8 +3230,6 @@ namespace GmpSampleSim
                     else
                     {
                         if (pf.m_PASS != "")
-                            MessageBox.Show(CurrentInterface.ToString());
-                        MessageBox.Show(stFunctionParameters.ToString());
                             retcode = Json_GMPSmartDLL.FP3_FunctionReports(CurrentInterface, (int)eFunc, ref stFunctionParameters, 120 * 1000);
                     }
                     break;
@@ -7531,9 +7529,8 @@ namespace GmpSampleSim
 
         private void m_btnPaymentCash_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("20");
             UInt32 amount = 0;
-            UInt16 currencyOfPayment = Convert.ToUInt16( m_comboBoxCurrency.Text.Substring(0, 3) );
+            UInt16 currencyOfPayment = Convert.ToUInt16( m_comboBoxCurrency.Text.Substring(0, 3));
             ST_PAYMENT_REQUEST[] stPaymentRequest = new ST_PAYMENT_REQUEST[1];
             
             ST_EXCHANGE_PROFILE[] stExchangeProfile = new ST_EXCHANGE_PROFILE[4];

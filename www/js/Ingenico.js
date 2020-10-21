@@ -70,6 +70,11 @@ var Ingenico =
                     LocalEvent({tag:"TPAYMENT",msg:data.toString().trim().split('|')[1]});
                     console.log(data.toString().trim().split('|')[1]);
                 }
+                else if(data.toString().trim().split('|')[0] == "ENDCOPY")
+                {
+                    LocalEvent({tag:"ENDCOPY",msg:data.toString().trim().split('|')[1]});
+                    console.log(data.toString().trim().split('|')[1]);
+                }
             });
         }
         Ingenico.prototype.SendData = function(pData)
@@ -97,6 +102,10 @@ var Ingenico =
         Ingenico.prototype.TPayment = function(pData)
         {
             Terminal.stdin.write('TPAYMENT|' + pData +'\n');
+        }
+        Ingenico.prototype.EndCopy = function(pData)
+        {
+            Terminal.stdin.write('ENDCOPY|' + pData + '\n');
         }
         //#region "EVENT TRIGGER"        
         function LocalEvent(pData)

@@ -124,6 +124,16 @@ namespace Ingenico
                         Console.WriteLine(line);
                     }
                 }
+                else if (tag == "ENDCOPY")
+                {
+                    if (line.Split('|').Length > 0)
+                    {
+                        JObject TmpMaster = JObject.Parse(line.Split('|')[1]);
+                        line = SonKopya((string)TmpMaster.Property("PASSWORD").Value).ToString();
+
+                        Console.WriteLine(line);
+                    }
+                }
                 if (tag == "exit") // Check string
                 { 
                     break;
@@ -727,6 +737,21 @@ namespace Ingenico
             }
 
             return "XREPORT|SUCCESS";
+        }
+        static string SonKopya(string pPassword)
+        {
+            UInt32 RetCode = 0;
+
+            ST_FUNCTION_PARAMETERS stFunctionParameters = new ST_FUNCTION_PARAMETERS();
+            stFunctionParameters.Password.supervisor = pPassword;
+            Json_GMPSmartDLL.FP3_FunctionReports(CurrentInterface, 20, ref stFunctionParameters, 120 * 1000);
+
+            if (RetCode != 0)
+            {
+                return "ENDCOPY|ERROR";
+            }
+
+            return "ENDCOPY|SUCCESS";
         }
         static string Avans(UInt32 pAmount)
         {

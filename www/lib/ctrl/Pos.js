@@ -26,6 +26,7 @@ function Pos($scope,$window,$rootScope,db)
     let FocusCariEkleAdres = false;
     let FocusCariEkleTel = false;
     let FocusBelgeIptal = false;
+    let FocusSonKopya = false;
 
     $('#MdlAraToplam').on('hide.bs.modal', function () 
     {
@@ -42,6 +43,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSonKopya = false;
     });
     $('#MdlMusteriListele').on('hide.bs.modal', function () 
     {
@@ -58,6 +60,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSonKopya = false;
     });
     $('#MdlStokListele').on('hide.bs.modal', function () 
     {
@@ -78,6 +81,7 @@ function Pos($scope,$window,$rootScope,db)
             $scope.TxtBarkod = "";
         })
         FocusKartOdeme = false;
+        FocusSonKopya = false;
     });
     $('#MdlMiktarGuncelle').on('hide.bs.modal', function () 
     {
@@ -94,6 +98,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSonKopya = false;
     });
     $('#MdlFiyatGuncelle').on('hide.bs.modal', function () 
     {
@@ -110,6 +115,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSonKopya = false;
     });
     $('#MdlKartOdeme').on('hide.bs.modal', function () 
     {
@@ -126,6 +132,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSonKopya = false;
     });
     $('#MdlParaUstu').on('hide.bs.modal', function () 
     {
@@ -142,6 +149,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSonKopya = false;
     });
     $('#MdlYetkiliGiris').on('hide.bs.modal', function () 
     {
@@ -158,6 +166,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSonKopya = false;
     });
     $('#MdlKasaSifre').on('hide.bs.modal', function () 
     {
@@ -174,6 +183,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSonKopya = false;
     });
     $('#MdlZSifre').on('hide.bs.modal', function () 
     {
@@ -190,6 +200,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSonKopya = false;
     });
     $('#MdlXSifre').on('hide.bs.modal', function () 
     {
@@ -206,6 +217,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSonKopya = false;
     });
     $('#MdlAvans').on('hide.bs.modal', function () 
     {
@@ -222,6 +234,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusFiyatGuncelle = false;
         FocusAvans = false;
         FocusBelgeIptal = false;
+        FocusSonKopya = false;
         $scope.TxtYetkiliSifre = "";
     });
     $('#MdlPluEdit').on('hide.bs.modal', function () 
@@ -240,6 +253,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusKasaSifre = false;
         $scope.DivPlu = false;
         FocusBelgeIptal = false;
+        FocusSonKopya = false;
         $scope.PluGrupAdi = "";
         $scope.PluStokKod = "";
         $scope.Index = "";
@@ -262,6 +276,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusCariEkleTcNo = false;
         FocusCariEkleAdres = false;
         FocusBelgeIptal = false;
+        FocusSonKopya = false;
         $scope.TxtCariTcNo = "";
         $scope.TxtCariAdi = "";
         $scope.TxtCariSoyadi = "";
@@ -288,6 +303,24 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSonKopya = false;
+    });
+    $('#MdlSonKopya').on('hide.bs.modal', function () 
+    {
+        FocusBarkod = true;
+        FocusAraToplam = false;
+        FocusMusteri = false;
+        FocusStok = false;
+        FocusMiktarGuncelle = false;
+        FocusFiyatGuncelle = false;
+        FocusAvans = false;
+        FocusKartOdeme = false;
+        FocusYetkiliSifre = false;
+        FocusKasaSifre = false;
+        FocusXSifre = false;
+        FocusZSifre = false;
+        FocusBelgeIptal = false;
+        FocusSonKopya = false;
     });
 
     setTimeout(function()
@@ -431,6 +464,7 @@ function Pos($scope,$window,$rootScope,db)
         $scope.TxtZSifre = "";
         $scope.TxtXSifre = "";
         $scope.TxtBelgeIptalSifre = "";
+        $scope.TxtSonKopyaSifre = "";
         $scope.TxtOkcMesaj = "OKC Cihazıyla Eşleşme Yapılıyor.";
         $scope.BtnTxtOkcEslesme = "İptal";
         $scope.TxtCariTcNo = "";
@@ -2097,6 +2131,10 @@ function Pos($scope,$window,$rootScope,db)
         {
             $scope.TxtBelgeIptalSifre = $scope.TxtBelgeIptalSifre.substring(0,$scope.TxtBelgeIptalSifre.length-1);
         }
+        else if(FocusSonKopya)
+        {
+            $scope.TxtSonKopyaSifre = $scope.TxtSonKopyaSifre.substring(0,$scope.TxtSonKopyaSifre.length-1);
+        }
     }
     $scope.BtnOnayClick = function()
     {
@@ -2294,6 +2332,18 @@ function Pos($scope,$window,$rootScope,db)
             else
             {
                 $scope.TxtBelgeIptalSifre = Key; 
+                FirstKey = true;
+            }
+        }
+        else if(FocusSonKopya)
+        {
+            if(FirstKey)
+            {
+                $scope.TxtSonKopyaSifre = $scope.TxtSonKopyaSifre + Key; 
+            }
+            else
+            {
+                $scope.TxtSonKopyaSifre = Key; 
                 FirstKey = true;
             }
         }
@@ -3689,6 +3739,36 @@ function Pos($scope,$window,$rootScope,db)
                 $("#MdlMusteriEkle").modal("hide");
                 alertify.alert("Lütfen Zorunlu Alanları Doldurun.")
             }
+        }
+    }
+    $scope.BtnSonKopya = async function(pTip)
+    {
+        if($scope.SatisList <=0)
+        {
+            if(pTip == 0)
+            {
+                $("#MdlSonKopya").modal("show");
+                FocusBarkod = false;
+                FocusAraToplam = false;
+                FocusMusteri = false;
+                FocusStok = false;
+                FocusKartOdeme = false;
+                FirstKey = false;
+                FocusYetkiliSifre = false;
+                FocusXSifre = false;
+                FocusZSifre = false;
+                FocusSonKopya = true;
+            }
+            else
+            {
+                db.Ingenico.EndCopy("{PASSWORD:'" + $scope.TxtSonKopyaSifre + "'}");
+                $("#MdlSonKopya").modal("hide");
+                $scope.TxtSonKopyaSifre = "";
+            }
+        }
+        else
+        {
+            alertify.alert("Satış Listesi Ve Park Listesi Doluyken Z Raporu Alınamaz.")
         }
     }
 }
