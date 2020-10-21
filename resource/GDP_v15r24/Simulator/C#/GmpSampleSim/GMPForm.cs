@@ -1892,32 +1892,51 @@ namespace GmpSampleSim
 
                         if (m_stTicket.KasaAvansAmount != 0)
                         {
+                            MessageBox.Show("10");
                             MessageBox.Show(formatAmount(m_stTicket.KasaAvansAmount, ECurrency.CURRENCY_TL).ToString());
                             display += String.Format("KASA AVANS TOTAL: {0}", formatAmount(m_stTicket.KasaAvansAmount, ECurrency.CURRENCY_TL));
                             TicketAmount = m_stTicket.KasaAvansAmount;
                         }
                         else if (m_stTicket.invoiceAmount != 0)
                         {
+                            MessageBox.Show("11");
                             display += String.Format("INVOICE TOTAL : {0}", formatAmount(m_stTicket.invoiceAmount, ECurrency.CURRENCY_TL));
                             TicketAmount = m_stTicket.invoiceAmount;
                         }
                         else if ((TTicketType)m_stTicket.ticketType == TTicketType.TCariHesap)
-                            display += String.Format("TOTAL : {0}", formatAmount(m_stTicket.stPayment[0].payAmount, ECurrency.CURRENCY_TL));                                    
+                        { 
+                            MessageBox.Show("12");
+                            display += String.Format("TOTAL : {0}", formatAmount(m_stTicket.stPayment[0].payAmount, ECurrency.CURRENCY_TL));
+                        }
                         else
+                        { 
+                            MessageBox.Show("13");
                             display += String.Format("TOTAL : {0}", formatAmount(m_stTicket.TotalReceiptAmount, ECurrency.CURRENCY_TL));
+                        }
 
                         if (m_stTicket.CashBackAmount != 0)
+                        { 
                             display += String.Format(Environment.NewLine + "CASHBACK : {0}", formatAmount(m_stTicket.CashBackAmount, ECurrency.CURRENCY_TL));
+                            MessageBox.Show("14");
+                        }
                         else
                         {
+                            MessageBox.Show("15");
                             if ((TTicketType)m_stTicket.ticketType == TTicketType.TCariHesap)
+                            {
+                                MessageBox.Show("16");
                                 display += String.Format(Environment.NewLine + "REMAIN : {0}", formatAmount(m_stTicket.KasaPaymentAmount, ECurrency.CURRENCY_TL));
+                            }
                             else
+                            {
+                                MessageBox.Show("17");
                                 display += String.Format(Environment.NewLine + "REMAIN : {0}", formatAmount(m_stTicket.KasaPaymentAmount != 0 ? m_stTicket.KasaPaymentAmount - m_stTicket.stPayment[0].payAmount : TicketAmount - m_stTicket.TotalReceiptPayment, ECurrency.CURRENCY_TL));
+                            }
                         }
 
                         if ((stPaymentRequest[0].typeOfPayment == (uint)EPaymentTypes.PAYMENT_BANK_CARD) || (stPaymentRequest[0].typeOfPayment == (uint)EPaymentTypes.PAYMENT_MOBILE))
                         {
+                            MessageBox.Show("18");
                             display += String.Format(Environment.NewLine + "{0}", m_stTicket.stPayment[m_stTicket.totalNumberOfPayments - 1].stBankPayment.bankName);
                             display += String.Format(Environment.NewLine + "ONAY KODU : {0}", m_stTicket.stPayment[m_stTicket.totalNumberOfPayments - 1].stBankPayment.authorizeCode);
                             display += String.Format(Environment.NewLine + "{0}", m_stTicket.stPayment[m_stTicket.totalNumberOfPayments - 1].stBankPayment.stCard.pan);
@@ -1925,6 +1944,7 @@ namespace GmpSampleSim
 
                         if (m_stTicket.TotalReceiptPayment >= TicketAmount)
                         {
+                            MessageBox.Show("19");
                             retcode = GMPSmartDLL.FP3_PrintTotalsAndPayments(CurrentInterface, GetTransactionHandle(CurrentInterface), Defines.TIMEOUT_DEFAULT);
                             if (retcode != Defines.TRAN_RESULT_OK && retcode != Defines.APP_ERR_ALREADY_DONE)
                                 break;
@@ -7511,7 +7531,7 @@ namespace GmpSampleSim
 
         private void m_btnPaymentCash_Click(object sender, EventArgs e)
         {
-
+            MessageBox.Show("20");
             UInt32 amount = 0;
             UInt16 currencyOfPayment = Convert.ToUInt16( m_comboBoxCurrency.Text.Substring(0, 3) );
             ST_PAYMENT_REQUEST[] stPaymentRequest = new ST_PAYMENT_REQUEST[1];

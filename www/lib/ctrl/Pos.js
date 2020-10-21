@@ -2856,10 +2856,20 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.BtnAvansKaydet = function()
     {
+        let Msg = "";
+        if($scope.AvansTip == 3)
+        {
+            Msg = "Avans Çekmek İstediğinize Eminmisiniz ?";
+        }
+        else
+        {
+            Msg = "Avans Girişi Yapmak İstediğinize Eminmisiniz ?";
+        }
+
         $("#MdlAvans").modal("hide");
         alertify.okBtn('Evet');
         alertify.cancelBtn('Hayır');
-        alertify.confirm('Avans Çekme İstediğinize Eminmisiniz ?', 
+        alertify.confirm(Msg, 
         function()
         { 
             let TmpQuery = 

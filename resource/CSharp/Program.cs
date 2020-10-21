@@ -809,27 +809,33 @@ namespace Ingenico
 
             RetCode = Json_GMPSmartDLL.FP3_KasaPayment(CurrentInterface, GetTransactionHandle(CurrentInterface), (int)pAmount, ref m_stTicket, Defines.TIMEOUT_DEFAULT);
 
-            if (RetCode != 0)
-            {
-                return "TPAYMENT|FAULT-2";
-            }
-
+            return Nakit(pAmount);
+        }
+        static string Nakit(UInt32 pAmount)
+        {
+            UInt32 RetCode = 0;
             UInt16 currencyOfPayment = (UInt16)ECurrency.CURRENCY_TL;
             ST_PAYMENT_REQUEST[] stPaymentRequest = new ST_PAYMENT_REQUEST[1];
 
             for (int i = 0; i < stPaymentRequest.Length; i++)
             {
                 stPaymentRequest[i] = new ST_PAYMENT_REQUEST();
-            }
+            } 
+
 
             stPaymentRequest[0].typeOfPayment = (uint)EPaymentTypes.PAYMENT_CASH_TL;
             stPaymentRequest[0].subtypeOfPayment = 0;
             stPaymentRequest[0].payAmount = pAmount;
             stPaymentRequest[0].payAmountCurrencyCode = currencyOfPayment;
 
-            m_stTicket = new ST_TICKET();
+            ST_TICKET m_stTicket = new ST_TICKET();
             RetCode = Json_GMPSmartDLL.FP3_Payment(CurrentInterface, GetTransactionHandle(CurrentInterface), ref stPaymentRequest[0], ref m_stTicket, 30000);
-
+            
+            if(RetCode == 2022)
+            {
+                Nakit(0);
+            }
+            
             RetCode = GMPSmartDLL.FP3_PrintTotalsAndPayments(CurrentInterface, GetTransactionHandle(CurrentInterface), Defines.TIMEOUT_DEFAULT);
             if (RetCode != Defines.TRAN_RESULT_OK && RetCode != Defines.APP_ERR_ALREADY_DONE)
                 return "TPAYMENT|FAULT-3";
