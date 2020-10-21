@@ -377,7 +377,7 @@
                                         <button class="form-group btn btn-block btn-danger my-1" ng-click="BtnSatirIptal()" style="height:70px;  font-size: 16px;">Satır İptal</button>
                                     </div> 
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-danger my-1" style="height:70px;  font-size: 16px;" ng-click="BtnBelgeIptal()" style="height:70px;">Belge İptal</button>
+                                        <button class="form-group btn btn-block btn-danger my-1" style="height:70px;  font-size: 16px;" ng-click="BtnBelgeIptal(0)" style="height:70px;">Belge İptal</button>
                                     </div>
                                     <div class="col-2 px-1">
                                         <button class="form-group btn btn-block btn-info my-1" ng-click="BtnKasaAc()" style="height:70px; font-size: 16px;">Kasa Aç</button>
@@ -2137,7 +2137,7 @@
                         </div> 
                         <div class="row py-1">
                             <div class="col-10 px-1">
-                                <button type="button" class="btn btn-raised btn-success btn-block btn-lg" ng-click="BtnMusteriEkle(1)" style="font-size: 16px;">Kaydet</button>
+                                <button type="button" class="btn btn-raised btn-success btn-block btn-lg" ng-click="BtnMusteriEkle(1)" style="font-size: 16px;">Kaydet ve Seç</button>
                             </div>
                             <div class="col-2 px-1">
                                 <button type="button" class="btn btn-raised btn-danger btn-block btn-lg" ng-click="BtnSilClick()" style="font-size: 16px;"><i class="fas fa-backspace fa-lg"></i></button>
@@ -2295,7 +2295,85 @@
                     </div>
                 </div>
             </div>
-        </div> 
+        </div>
+        <!--Belge İptal Yetkili Giriş Modal -->
+        <div class="modal fade" id="MdlBelgeIptalSifre" aria-hidden="true" aria-labelledby="examplePositionCenter" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple modal-primary modal-center modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">X</span>
+                        </button>
+                        <h4 class="modal-title">Şifre Giriş</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group my-5">
+                                            <div class="input-group">
+                                                <input type="password" class="form-control h-50" id="TxtBelgeIptalSifre" ng-model="TxtBelgeIptalSifre" 
+                                                style="font-size: 20pt;font-weight: bold; border-width: 3px;border-color: #428bca;" ng-click="TxtBelgeIptalSifrePress($event)">
+                                            </div>
+                                        </div>
+                                    </div>                                                     
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row py-1">
+                            <div class="col-4">
+                                <button type="text" class="form-control btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('7')">7</button>
+                            </div>
+                            <div class="col-4">
+                                <button type="text" class="form-control btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('8')">8</button>
+                            </div>
+                            <div class="col-4">
+                                <button type="text" class="form-control btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('9')">9</button>
+                            </div>
+                        </div>
+                        <div class="row py-1">
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('4')">4</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('5')">5</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('6')">6</button>
+                            </div>
+                        </div>
+                        <div class="row py-1">
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('1')">1</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('2')">2</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('3')">3</button>
+                            </div>
+                        </div>
+                        <div class="row py-1">
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('0')">0</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('.')">.</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg  btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnSilClick()"><i class="fas fa-backspace fa-lg" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row py-1">
+                            <div class="col-12">
+                                <button type="text" class="form-control btn-danger btn btn-block font-size-15" style="height:60px; font-size: 18px;" ng-click="BtnBelgeIptal(1)">Giriş</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- Sayfa Bitir -->
     

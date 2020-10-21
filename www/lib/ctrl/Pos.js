@@ -25,6 +25,7 @@ function Pos($scope,$window,$rootScope,db)
     let FocusCariEkleSoyadi = false;
     let FocusCariEkleAdres = false;
     let FocusCariEkleTel = false;
+    let FocusBelgeIptal = false;
 
     $('#MdlAraToplam').on('hide.bs.modal', function () 
     {
@@ -40,6 +41,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusKartOdeme = false;
         FocusXSifre = false;
         FocusZSifre = false;
+        FocusBelgeIptal = false;
     });
     $('#MdlMusteriListele').on('hide.bs.modal', function () 
     {
@@ -55,6 +57,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusKartOdeme = false;
         FocusXSifre = false;
         FocusZSifre = false;
+        FocusBelgeIptal = false;
     });
     $('#MdlStokListele').on('hide.bs.modal', function () 
     {
@@ -69,6 +72,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusAvans = false;
         FocusXSifre = false;
         FocusZSifre = false;
+        FocusBelgeIptal = false;
         db.SafeApply($scope,function()
         {
             $scope.TxtBarkod = "";
@@ -89,6 +93,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusFiyatGuncelle = false;
         FocusXSifre = false;
         FocusZSifre = false;
+        FocusBelgeIptal = false;
     });
     $('#MdlFiyatGuncelle').on('hide.bs.modal', function () 
     {
@@ -104,6 +109,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusFiyatGuncelle = false;
         FocusXSifre = false;
         FocusZSifre = false;
+        FocusBelgeIptal = false;
     });
     $('#MdlKartOdeme').on('hide.bs.modal', function () 
     {
@@ -119,6 +125,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusKartOdeme = false;
         FocusXSifre = false;
         FocusZSifre = false;
+        FocusBelgeIptal = false;
     });
     $('#MdlParaUstu').on('hide.bs.modal', function () 
     {
@@ -134,6 +141,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusKartOdeme = false;
         FocusXSifre = false;
         FocusZSifre = false;
+        FocusBelgeIptal = false;
     });
     $('#MdlYetkiliGiris').on('hide.bs.modal', function () 
     {
@@ -149,6 +157,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusKasaSifre = false;
         FocusXSifre = false;
         FocusZSifre = false;
+        FocusBelgeIptal = false;
     });
     $('#MdlKasaSifre').on('hide.bs.modal', function () 
     {
@@ -164,6 +173,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusKasaSifre = false;
         FocusXSifre = false;
         FocusZSifre = false;
+        FocusBelgeIptal = false;
     });
     $('#MdlZSifre').on('hide.bs.modal', function () 
     {
@@ -179,6 +189,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusKasaSifre = false;
         FocusXSifre = false;
         FocusZSifre = false;
+        FocusBelgeIptal = false;
     });
     $('#MdlXSifre').on('hide.bs.modal', function () 
     {
@@ -194,6 +205,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusKasaSifre = false;
         FocusXSifre = false;
         FocusZSifre = false;
+        FocusBelgeIptal = false;
     });
     $('#MdlAvans').on('hide.bs.modal', function () 
     {
@@ -209,6 +221,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusZSifre = false;
         FocusFiyatGuncelle = false;
         FocusAvans = false;
+        FocusBelgeIptal = false;
         $scope.TxtYetkiliSifre = "";
     });
     $('#MdlPluEdit').on('hide.bs.modal', function () 
@@ -226,6 +239,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusAvans = false;
         FocusKasaSifre = false;
         $scope.DivPlu = false;
+        FocusBelgeIptal = false;
         $scope.PluGrupAdi = "";
         $scope.PluStokKod = "";
         $scope.Index = "";
@@ -247,6 +261,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusCariEkleAdiSoyadi = false;
         FocusCariEkleTcNo = false;
         FocusCariEkleAdres = false;
+        FocusBelgeIptal = false;
         $scope.TxtCariTcNo = "";
         $scope.TxtCariAdi = "";
         $scope.TxtCariSoyadi = "";
@@ -257,6 +272,22 @@ function Pos($scope,$window,$rootScope,db)
         document.getElementById("TxtCariSoyadi").style.borderBlockEndColor = "#e4eaec";
         document.getElementById("TxtCariAdres").style.borderBlockEndColor = "#e4eaec";
         document.getElementById("TxtCariTel").style.borderBlockEndColor = "#e4eaec";
+    });
+    $('#MdlBelgeIptalSifre').on('hide.bs.modal', function () 
+    {
+        FocusBarkod = true;
+        FocusAraToplam = false;
+        FocusMusteri = false;
+        FocusStok = false;
+        FocusMiktarGuncelle = false;
+        FocusFiyatGuncelle = false;
+        FocusAvans = false;
+        FocusKartOdeme = false;
+        FocusYetkiliSifre = false;
+        FocusKasaSifre = false;
+        FocusXSifre = false;
+        FocusZSifre = false;
+        FocusBelgeIptal = false;
     });
 
     setTimeout(function()
@@ -399,6 +430,7 @@ function Pos($scope,$window,$rootScope,db)
         $scope.TxtKasaSifre = "";
         $scope.TxtZSifre = "";
         $scope.TxtXSifre = "";
+        $scope.TxtBelgeIptalSifre = "";
         $scope.TxtOkcMesaj = "OKC Cihazıyla Eşleşme Yapılıyor.";
         $scope.BtnTxtOkcEslesme = "İptal";
         $scope.TxtCariTcNo = "";
@@ -2061,6 +2093,10 @@ function Pos($scope,$window,$rootScope,db)
         {
             $scope.TxtCariTel = $scope.TxtCariTel.substring(0,$scope.TxtCariTel.length-1);
         }
+        else if(FocusBelgeIptal)
+        {
+            $scope.TxtBelgeIptalSifre = $scope.TxtBelgeIptalSifre.substring(0,$scope.TxtBelgeIptalSifre.length-1);
+        }
     }
     $scope.BtnOnayClick = function()
     {
@@ -2249,6 +2285,18 @@ function Pos($scope,$window,$rootScope,db)
                 FirstKey = true;
             }
         }
+        else if(FocusBelgeIptal)
+        {
+            if(FirstKey)
+            {
+                $scope.TxtBelgeIptalSifre = $scope.TxtBelgeIptalSifre + Key; 
+            }
+            else
+            {
+                $scope.TxtBelgeIptalSifre = Key; 
+                FirstKey = true;
+            }
+        }
     }
     $scope.TxtSeriSira = function(Data)
     {
@@ -2281,15 +2329,32 @@ function Pos($scope,$window,$rootScope,db)
             $("#TblIslem").find( ".jsgrid-grid-body").scrollTop(IslemSelectedRow.position().top)
         }
     }
-    $scope.BtnBelgeIptal = function()
+    $scope.BtnBelgeIptal = function(pTip)
     {
-        alertify.okBtn('Evet');
-        alertify.cancelBtn('Hayır');
+        if($scope.SatisList.length > 0)
+        {
+            if(pTip == 0)
+            {
+                alertify.okBtn('Evet');
+                alertify.cancelBtn('Hayır');
 
-        alertify.confirm('Evrağı iptal etmek istediğinize eminmisiniz ?', 
-        function()
-        { 
-            if($scope.SatisList.length > 0)
+                alertify.confirm('Evrağı iptal etmek istediğinize eminmisiniz ?', 
+                function()
+                { 
+                    $('#MdlBelgeIptalSifre').modal({backdrop: 'static', keyboard: false});
+                    FocusBarkod = false;
+                    FocusAraToplam = false;
+                    FocusMusteri = false;
+                    FocusStok = false;
+                    FocusKartOdeme = false;
+                    FirstKey = false;
+                    FocusYetkiliSifre = false;
+                    FocusKasaSifre = false;
+                    FocusBelgeIptal = true;
+                }
+                ,function(){});
+            }
+            else
             {
                 db.ExecuteTag($scope.Firma,'PosSatisBelgeIptal',[$scope.Seri,$scope.Sira,$scope.EvrakTip],function(data)
                 {
@@ -2302,7 +2367,8 @@ function Pos($scope,$window,$rootScope,db)
                                 console.log(data.result.err);
                             }
                         });
-
+                        $scope.TxtBelgeIptalSifre = "";
+                        $("#MdlBelgeIptalSifre").modal("hide");
                         $scope.YeniEvrak();
                     }
                     else
@@ -2311,13 +2377,12 @@ function Pos($scope,$window,$rootScope,db)
                     }
                 });
             }
-            else
-            {
-                alertify.okBtn("Tamam");
-                alertify.alert("Kayıtlı evrak olmadan evrak'ı iptal edemezsiniz !");
-            }
         }
-        ,function(){});
+        else
+        {
+            alertify.okBtn("Tamam");
+            alertify.alert("Kayıtlı Evrak Olmadan Belge İptal Yapılamaz.");
+        }
     }
     $scope.BtnSatirIptal = function()
     {
@@ -3559,6 +3624,8 @@ function Pos($scope,$window,$rootScope,db)
                         {   
                             if(typeof(InsertResult.result.err) == 'undefined')
                             {
+                                $scope.CariKodu = Kodu;
+                                $scope.CariAdi = $scope.TxtCariAdi;
                                 if($scope.TxtCariAdres != "")
                                 {
                                     var InsertData = 
@@ -3580,8 +3647,8 @@ function Pos($scope,$window,$rootScope,db)
                                         }
                                     });
                                 }
+                                alertify.alert("Müşteri Ekleme İşlemi Başarıyla Gerçekleşti, " +  $scope.TxtCariAdi + " " + $scope.TxtCariSoyadi + " Müşterine Satış Yapmaktasınız.")
                                 $("#MdlMusteriEkle").modal("hide");
-                                alertify.alert("Müşteri Ekleme İşlemi Başarıyla Gerçekleşti.")
                             }
                             else
                             {
