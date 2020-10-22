@@ -3113,17 +3113,24 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.BtnPersonelSatis = function()
     {
-        if($scope.Class.BtnPersonelSatis == "form-group btn btn-warning btn-block my-1")
+        if($scope.SatisList.length > 0)
         {
-            alertify.alert("Dikkat Personel Satışı Aktifleştirildi.");
-            $scope.Class.BtnPersonelSatis = "form-group btn btn-danger btn-block my-1"
-            $scope.EvrakTip = 2;
+            if($scope.Class.BtnPersonelSatis == "form-group btn btn-warning btn-block my-1")
+            {
+                alertify.alert("Dikkat Personel Satışı Aktifleştirildi.");
+                $scope.Class.BtnPersonelSatis = "form-group btn btn-danger btn-block my-1"
+                $scope.EvrakTip = 2;
+            }
+            else
+            {
+                alertify.alert("Dikkat Personel Satışı Devre Dışı Bırakıldı.");
+                $scope.Class.BtnPersonelSatis = "form-group btn btn-warning btn-block my-1"
+                $scope.EvrakTip = 0;
+            }
         }
         else
         {
-            alertify.alert("Dikkat Personel Satışı Devre Dışı Bırakıldı.");
-            $scope.Class.BtnPersonelSatis = "form-group btn btn-warning btn-block my-1"
-            $scope.EvrakTip = 0;
+            alertify.alert("Satış Listesi Doluyken Personel Satış Aktifleştirilemez.")
         }
     }
     async function PosPluGetir(pIndex,pType)
