@@ -1295,8 +1295,8 @@ function Pos($scope,$window,$rootScope,db)
                     {
                         blink : 0,
                         text :  db.PrintText(PosSatisData[PosSatisData.length - 1].ITEM_NAME,11) + " " + 
-                                db.PrintText(PosSatisData[PosSatisData.length - 1].PRICE.toString() + "TL" ,8,"Start") +
-                                "TOPLAM : " + db.PrintText(db.SumColumn(PosSatisData,"AMOUNT").toString() + "TL",11,"Start")
+                                db.PrintText(PosSatisData[PosSatisData.length - 1].PRICE.toFixed(2).toString() + "TL" ,8,"Start") +
+                                "TOPLAM : " + db.PrintText(db.SumColumn(PosSatisData,"AMOUNT").toFixed(2).toString() + "TL",11,"Start")
                     }                        
                 );
             });
@@ -1828,15 +1828,16 @@ function Pos($scope,$window,$rootScope,db)
                 /***************************************************************** */
                 db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosSatisData)
                 {   
-                    // db.LCDPrint
-                    // (
-                    //     {
-                    //         blink : 0,
-                    //         text :  db.PrintText(PosSatisData[PosSatisData.length - 1].ITEM_NAME,11) + " " + 
-                    //                 db.PrintText(PosSatisData[PosSatisData.length - 1].PRICE.toString() + "EUR" ,8,"Start") +
-                    //                 "TOTAL : " + db.PrintText(db.SumColumn(PosSatisData,"AMOUNT").toString() + "EUR",12,"Start")
-                    //     }                        
-                    // );
+                    db.LCDPrint
+                    (
+                        {
+                            blink : 0,
+                            text :  db.PrintText(PosSatisData[PosSatisData.length - 1].ITEM_NAME,11) + " " + 
+                                    db.PrintText(PosSatisData[PosSatisData.length - 1].PRICE.toFixed(2).toString() + "TL" ,8,"Start") +
+                                    "TOPLAM : " + db.PrintText(db.SumColumn(PosSatisData,"AMOUNT").toFixed(2).toString() + "TL",11,"Start")
+                        }                        
+                    );
+
 
                     InsertSonYenile(PosSatisData);      
                     $scope.TxtBarkod = ""; 
@@ -2025,8 +2026,8 @@ function Pos($scope,$window,$rootScope,db)
                     {
                         blink : 0,
                         text :  db.PrintText(PosSatisData[PosSatisData.length - 1].ITEM_NAME,11) + " " + 
-                                db.PrintText(PosSatisData[PosSatisData.length - 1].PRICE.toString() + "TL" ,8,"Start") +
-                                "TOPLAM : " + db.PrintText(db.SumColumn(PosSatisData,"AMOUNT").toString() + "TL",11,"Start")
+                                db.PrintText(PosSatisData[PosSatisData.length - 1].PRICE.toFixed(2).toString() + "TL" ,8,"Start") +
+                                "TOPLAM : " + db.PrintText(db.SumColumn(PosSatisData,"AMOUNT").toFixed(2).toString() + "TL",11,"Start")
                     }                        
                 );
             });          
