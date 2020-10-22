@@ -2,6 +2,7 @@ var Ingenico =
 (
     function()
     {
+        
         let Terminal;
         let Pairing = false;
         let Listeners = Object();
@@ -18,6 +19,8 @@ var Ingenico =
 
         Ingenico.prototype.Init = function()
         {
+            console.log(1)
+            console.log(Pairing)
             if(Pairing)
             {
                 return;
@@ -60,19 +63,24 @@ var Ingenico =
                     LocalEvent({tag:"XREPORT",msg:data.toString().trim().split('|')[1]});
                     console.log(data.toString().trim().split('|')[1]);
                 }
-                else if(data.toString().trim().split('|')[0] == "AVANS")
+                else if(data.toString().trim().split('|')[0] == "CASEIN")
                 {
-                    LocalEvent({tag:"AVANS",msg:data.toString().trim().split('|')[1]});
+                    LocalEvent({tag:"CASEIN",msg:data.toString().trim().split('|')[1]});
                     console.log(data.toString().trim().split('|')[1]);
                 }
-                else if(data.toString().trim().split('|')[0] == "TPAYMENT")
+                else if(data.toString().trim().split('|')[0] == "CASEOUT")
                 {
-                    LocalEvent({tag:"TPAYMENT",msg:data.toString().trim().split('|')[1]});
+                    LocalEvent({tag:"CASEOUT",msg:data.toString().trim().split('|')[1]});
                     console.log(data.toString().trim().split('|')[1]);
                 }
                 else if(data.toString().trim().split('|')[0] == "ENDCOPY")
                 {
                     LocalEvent({tag:"ENDCOPY",msg:data.toString().trim().split('|')[1]});
+                    console.log(data.toString().trim().split('|')[1]);
+                }
+                else if(data.toString().trim().split('|')[0] == "INVOICE")
+                {
+                    LocalEvent({tag:"INVOICE",msg:data.toString().trim().split('|')[1]});
                     console.log(data.toString().trim().split('|')[1]);
                 }
             });
@@ -95,17 +103,22 @@ var Ingenico =
         {
             Terminal.stdin.write('X_REPORT|' + pData + '\n');
         }
-        Ingenico.prototype.Avans = function(pData)
+        Ingenico.prototype.CaseIn = function(pData)
         {
-            Terminal.stdin.write('AVANS|' + pData +'\n');
+            Terminal.stdin.write('CASEIN|' + pData +'\n');
         }
-        Ingenico.prototype.TPayment = function(pData)
+        Ingenico.prototype.CaseOut = function(pData)
         {
-            Terminal.stdin.write('TPAYMENT|' + pData +'\n');
+            Terminal.stdin.write('CASEOUT|' + pData +'\n');
         }
         Ingenico.prototype.EndCopy = function(pData)
         {
             Terminal.stdin.write('ENDCOPY|' + pData + '\n');
+        }
+        Ingenico.prototype.Invoice = function(pData)
+        {
+            console.log(JSON.stringify(pData))
+            Terminal.stdin.write('INVOICE|' + JSON.stringify(pData) + '\n');
         }
         //#region "EVENT TRIGGER"        
         function LocalEvent(pData)

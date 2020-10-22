@@ -104,7 +104,7 @@ namespace Ingenico
 
                     Console.WriteLine(line);
                 }
-                else if (tag == "AVANS")
+                else if (tag == "CASEIN")
                 {
                     if (line.Split('|').Length > 0)
                     {
@@ -114,7 +114,7 @@ namespace Ingenico
                         Console.WriteLine(line);
                     }
                 }
-                else if (tag == "TPAYMENT")
+                else if (tag == "CASEOUT")
                 {
                     if (line.Split('|').Length > 0)
                     {
@@ -124,13 +124,13 @@ namespace Ingenico
                         Console.WriteLine(line);
                     }
                 }
-                else if (tag == "INVOICE")
+                else if (tag == "INVOICE") 
                 {
                     if (line.Split('|').Length > 0)
                     {
                         JObject TmpMaster = JObject.Parse(line.Split('|')[1]);
 
-                        line = Invoice(TmpMaster.Property("NO").Value.ToString(), TmpMaster.Property("VKN").Value.ToString(), (UInt32)TmpMaster.Property("AMOUNT").Value);
+                        line = Invoice(TmpMaster.Property("NO").Value.ToString(), TmpMaster.Property("VKN").Value.ToString(), (UInt32)TmpMaster.Property("AMOUNT").Value, (int)TmpMaster.Property("TYPE").Value);
                         Console.WriteLine(line);
                     }
                 }
@@ -139,7 +139,7 @@ namespace Ingenico
                     if (line.Split('|').Length > 0)
                     {
                         JObject TmpMaster = JObject.Parse(line.Split('|')[1]);
-                        line = SonKopya((string)TmpMaster.Property("PASSWORD").Value).ToString();
+                        line = EndCopy((string)TmpMaster.Property("PASSWORD").Value).ToString();
 
                         Console.WriteLine(line);
                     }
@@ -765,7 +765,7 @@ namespace Ingenico
 
             return "XREPORT|SUCCESS";
         }
-        static string SonKopya(string pPassword)
+        static string EndCopy(string pPassword)
         {
             UInt32 RetCode = 0;
 
@@ -912,7 +912,7 @@ namespace Ingenico
 
             return "TPAYMENT";
         }
-        static string Invoice(string pNo,string pVkn,UInt32 pAmount)
+        static string Invoice(string pNo,string pVkn,UInt32 pAmount, int pType)
         {
             OpenHandle();
             //TicketHeader();
@@ -948,7 +948,7 @@ namespace Ingenico
             bufferLen = GMPSmartDLL.prepare_TicketHeader(buffer, buffer.Length, TTicketType.TInvoice);
             AddIntoCommandBatch("prepare_TicketHeader", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen);
 
-            CashPayment(0, pAmount);
+            CashPayment(pType, pAmount);
             TotalPrint();
             MFPrintBefore();
             MFPrint();
@@ -957,5 +957,6 @@ namespace Ingenico
             ProcessBatchCommand();
             return "INVOICE|SUCCES";
         }
+        
     }
 }

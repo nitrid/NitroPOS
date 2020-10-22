@@ -1,3 +1,5 @@
+const { command } = require('escpos');
+
 function Pos($scope,$window,$rootScope,db)
 {
     let IslemSelectedRow = null;
@@ -472,13 +474,15 @@ function Pos($scope,$window,$rootScope,db)
         $scope.TxtCariSoyadi = "";
         $scope.TxtCariAdres = "";
         $scope.TxtCariTel = "";
+        $scope.ChkFis = true;
+        $scope.ChkFatura = true;
 
         $scope.KasaNo = 1;
         $scope.Saat = moment(new Date(),"HH:mm:ss").format("HH:mm:ss");
 
         $scope.TahPanelKontrol = false;
         $scope.Klavye = false;
-
+        
         $scope.TahTip = 0;
         $scope.TxtAraToplamTutar = "";
         $scope.TahKalan = 0;
@@ -1539,7 +1543,7 @@ function Pos($scope,$window,$rootScope,db)
 
             $scope.ParamListe = await db.GetPromiseTag($scope.Firma,'ParamGetir',[$scope.Kullanici]);
             $scope.KullaniciListe = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',[$scope.Kullanici]);
-            
+
             if($scope.ParamListe.length > 0)
             {
                 for (let i = 0; i < $scope.ParamListe.length; i++) 
@@ -1945,9 +1949,18 @@ function Pos($scope,$window,$rootScope,db)
 
                                 TmpData.PAYMENT.push(TmpPayment);
                             }
+                     
+                            if($scope.ChkFis)
+                            {
+                                db.Ingenico.SendData(TmpData);
+                            }
+                            else if($scope.ChkFatura)
+                            {   
+                                let Seri = $scope.Seri.split("İ").join("I").split("ı").join("i").split("Ç").join("C").split("ç").join("c").split("Ğ").join("G").split("ğ").join("g").split("Ş").join("S").split("ş").join("s").split("Ö").join("O").split("ö").join("o").split("Ü").join("U").split("ü").join("u");
+                                let FaturaData = { NO : Seri + $scope.Sira,VKN : "11111111111" , AMOUNT : $scope.GenelToplam * 100 , TYPE : $scope.TahTip}
 
-                            console.log(TmpData)
-                            db.Ingenico.SendData(TmpData);                    
+                                db.Ingenico.Invoice(FaturaData); 
+                            }
                         } 
                         else
                         {
@@ -2576,6 +2589,7 @@ function Pos($scope,$window,$rootScope,db)
             {
                 TahTip = 0;
                 angular.element('#ChkNakit').trigger('click');
+                angular.element('#ChkFis').trigger('click');
             }
             TahSonYenile();
         }
@@ -2799,7 +2813,8 @@ function Pos($scope,$window,$rootScope,db)
             }
 
             $("#MdlKartOdeme").modal("show");
-
+            angular.element('#ChkFis1').trigger('click');
+            $scope.BtnIngenicoCiktiTip(0);
             FocusBarkod = false;
             FocusAraToplam = false;
             FocusMusteri = false;
@@ -3049,7 +3064,7 @@ function Pos($scope,$window,$rootScope,db)
                     {   
                         if(typeof(InsertResult.result.err) == 'undefined')
                         {   
-                            db.Ingenico.TPayment("{AMOUNT:"+ $scope.TxtAvans * 100 + "}");      //KASAYA PARA VERME
+                            db.Ingenico.CaseOut("{AMOUNT:"+ $scope.TxtAvans * 100 + "}");      //KASAYA PARA VERME
                             $scope.TxtAvans = 0;
                             alertify.alert("Avans Çekme İşlemi Başarıyla Gerçekleşti.")
                             $("#MdlAvans").modal("hide");
@@ -3067,7 +3082,7 @@ function Pos($scope,$window,$rootScope,db)
                     {   
                         if(typeof(InsertResult.result.err) == 'undefined')
                         {   
-                            db.Ingenico.Avans("{AMOUNT:" + $scope.TxtAvans * 100 + "}");         //KASADAN PARA ALMA
+                            db.Ingenico.CaseIn("{AMOUNT:" + $scope.TxtAvans * 100 + "}");         //KASADAN PARA ALMA
                             $scope.TxtAvans = 0;
                             alertify.alert(Msg2)
                             $("#MdlAvans").modal("hide");
@@ -3428,11 +3443,24 @@ function Pos($scope,$window,$rootScope,db)
         $("#TbKasaRapor").addClass('active');
         $("#TbMain").removeClass('active');
     }
-    $scope.BtnOkcEslesme = function()
+    $scope.BtnOkcEslesme = function(pTip)
     {
-        if($scope.BtnTxtOkcEslesme == "İptal")
+        if(pTip == 0)
         {
-            $('#MdlIngenicoEslesme').modal('hide');
+            if($scope.BtnTxtOkcEslesme == "İptal")
+            {
+                $('#MdlIngenicoEslesme').modal('hide');
+            }
+            else
+            {
+                if(typeof require != 'undefined')
+                {
+                    $scope.TxtOkcMesaj = "OKC Cihazıyla Eşleşme Yapılıyor.";
+                    $scope.BtnTxtOkcEslesme = "İptal"
+                    $("#MdlIngenicoEslesme").modal("show");  
+                    db.Ingenico.Init();
+                }
+            }
         }
         else
         {
@@ -3769,6 +3797,26 @@ function Pos($scope,$window,$rootScope,db)
         else
         {
             alertify.alert("Satış Listesi Ve Park Listesi Doluyken Z Raporu Alınamaz.")
+        }
+    }
+    $scope.BtnFisIptal = async function()
+    {
+        if(typeof require != 'undefined')
+        {
+            db.Ingenico.TicketClose();
+        }
+    }
+    $scope.BtnIngenicoCiktiTip = async function(pTip)
+    {
+        if(pTip == 0)
+        {
+            $scope.ChkFis = true;
+            $scope.ChkFatura = false;
+        }
+        else if(pTip == 1)
+        {
+            $scope.ChkFatura = true;
+            $scope.ChkFis = false;
         }
     }
 }
