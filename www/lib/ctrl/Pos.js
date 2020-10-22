@@ -1,5 +1,3 @@
-const { command } = require('escpos');
-
 function Pos($scope,$window,$rootScope,db)
 {
     let IslemSelectedRow = null;
@@ -393,6 +391,21 @@ function Pos($scope,$window,$rootScope,db)
                 }
             }
             else if(pData.tag == "ITEM_SALE")
+            {
+                if(pData.msg == "SUCCES")
+                {
+                    SatisKapat();
+                }
+                else if(pData.msg == "FAULT")
+                {
+                    db.Ingenico.TicketClose();
+                    $("#MdlAraToplam").modal("hide");
+                    $("#MdlIngenicoEslesme").modal("show");
+                    $scope.TxtOkcMesaj = "Ödeme İşlemi Başarısız.";
+                    $scope.BtnTxtOkcEslesme = "İptal";  
+                }
+            }
+            else if(pData.tag == "INVOICE")
             {
                 if(pData.msg == "SUCCES")
                 {
@@ -3115,6 +3128,10 @@ function Pos($scope,$window,$rootScope,db)
     {
         if($scope.SatisList.length > 0)
         {
+            alertify.alert("Satış Listesi Doluyken Personel Satış Aktifleştirilemez.")
+        }
+        else
+        {
             if($scope.Class.BtnPersonelSatis == "form-group btn btn-warning btn-block my-1")
             {
                 alertify.alert("Dikkat Personel Satışı Aktifleştirildi.");
@@ -3127,10 +3144,6 @@ function Pos($scope,$window,$rootScope,db)
                 $scope.Class.BtnPersonelSatis = "form-group btn btn-warning btn-block my-1"
                 $scope.EvrakTip = 0;
             }
-        }
-        else
-        {
-            alertify.alert("Satış Listesi Doluyken Personel Satış Aktifleştirilemez.")
         }
     }
     async function PosPluGetir(pIndex,pType)

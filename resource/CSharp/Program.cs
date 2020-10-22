@@ -954,8 +954,16 @@ namespace Ingenico
             MFPrint();
             CloseHandle();
 
-            ProcessBatchCommand();
-            return "INVOICE|SUCCES";
+            if (ProcessBatchCommand())
+            {
+                ClearProcessBatchCommand();
+                return "INVOICE|SUCCES";
+            }
+            else
+            {
+                ClearProcessBatchCommand();
+                return "INVOICE|FAULT";
+            }
         }
         
     }
