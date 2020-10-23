@@ -44,6 +44,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusZSifre = false;
         FocusBelgeIptal = false;
         FocusSonKopya = false;
+        $rootScope.LoadingHide();
     });
     $('#MdlMusteriListele').on('hide.bs.modal', function () 
     {
@@ -420,7 +421,6 @@ function Pos($scope,$window,$rootScope,db)
                     $scope.BtnTxtOkcEslesme = "İptal";  
                 }
             }
-           console.log(pData)
         });
     }
 
@@ -1321,7 +1321,7 @@ function Pos($scope,$window,$rootScope,db)
     function SatisKapat()
     {
         if($scope.TahKalan <= 0)
-        {            
+        {         
             db.ExecuteTag($scope.Firma,'PosSatisKapatUpdate',[$scope.Sube,$scope.Seri,$scope.Sira,$scope.EvrakTip],function(data)
             {   
                 let TmpQuery = 
@@ -1905,6 +1905,10 @@ function Pos($scope,$window,$rootScope,db)
                         $scope.TahList = PosTahData;
                         TahSonYenile();  
 
+                        if($scope.TahKalan == 0)
+                        {
+                            $rootScope.LoadingShow();
+                        }
                         if(typeof require != 'undefined' && $scope.TahKalan <= 0)
                         {
                             let TmpData = 
@@ -2407,138 +2411,154 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.BtnBelgeIptal = async function(pTip)
     {
-        if($scope.SatisList.length > 0)
+        if($scope.TahList.length <= 0)
         {
-            if(pTip == 0)
+            if($scope.SatisList.length > 0)
             {
-                alertify.okBtn('Evet');
-                alertify.cancelBtn('Hayır');
-
-                alertify.confirm('Evrağı iptal etmek istediğinize eminmisiniz ?', 
-                function()
-                { 
-                    $('#MdlBelgeIptalSifre').modal({backdrop: 'static', keyboard: false});
-                    FocusBarkod = false;
-                    FocusAraToplam = false;
-                    FocusMusteri = false;
-                    FocusStok = false;
-                    FocusKartOdeme = false;
-                    FirstKey = false;
-                    FocusYetkiliSifre = false;
-                    FocusKasaSifre = false;
-                    FocusBelgeIptal = true;
-                }
-                ,function(){});
-            }
-            else
-            {
-                let YetkiliList = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',['']);
-                let GirisOnay = false;
-                for (let i = 0; i < YetkiliList.length; i++) 
+                if(pTip == 0)
                 {
-                    if(YetkiliList[i].TAG == 1)
+                    alertify.okBtn('Evet');
+                    alertify.cancelBtn('Hayır');
+
+                    alertify.confirm('Evrağı iptal etmek istediğinize eminmisiniz ?', 
+                    function()
+                    { 
+                        $('#MdlBelgeIptalSifre').modal({backdrop: 'static', keyboard: false});
+                        FocusBarkod = false;
+                        FocusAraToplam = false;
+                        FocusMusteri = false;
+                        FocusStok = false;
+                        FocusKartOdeme = false;
+                        FirstKey = false;
+                        FocusYetkiliSifre = false;
+                        FocusKasaSifre = false;
+                        FocusBelgeIptal = true;
+                    }
+                    ,function(){});
+                }
+                else
+                {
+                    let YetkiliList = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',['']);
+                    let GirisOnay = false;
+                    for (let i = 0; i < YetkiliList.length; i++) 
                     {
-                        let ParamList = await db.GetPromiseTag($scope.Firma,'ParamGetir',[YetkiliList[i].CODE]);
-                        for (let x = 0; x < ParamList.length; x++) 
+                        if(YetkiliList[i].TAG == 1)
                         {
-                            if(YetkiliList[i].PASSWORD == $scope.TxtBelgeIptalSifre)
+                            let ParamList = await db.GetPromiseTag($scope.Firma,'ParamGetir',[YetkiliList[i].CODE]);
+                            for (let x = 0; x < ParamList.length; x++) 
                             {
-                                GirisOnay = true;
+                                if(YetkiliList[i].PASSWORD == $scope.TxtBelgeIptalSifre)
+                                {
+                                    GirisOnay = true;
+                                }
                             }
                         }
                     }
-                }
-                if(GirisOnay)
-                {
-                    db.ExecuteTag($scope.Firma,'PosSatisBelgeIptal',[$scope.Seri,$scope.Sira,$scope.EvrakTip],function(data)
+                    if(GirisOnay)
                     {
-                        if(typeof(data.result.err) == 'undefined')
+                        db.ExecuteTag($scope.Firma,'PosSatisBelgeIptal',[$scope.Seri,$scope.Sira,$scope.EvrakTip],function(data)
                         {
-                            db.ExecuteTag($scope.Firma,'PosTahIptal',[$scope.Seri,$scope.Sira,0],function(data)
+                            if(typeof(data.result.err) == 'undefined')
                             {
-                                if(typeof(data.result.err) != 'undefined')
+                                db.ExecuteTag($scope.Firma,'PosTahIptal',[$scope.Seri,$scope.Sira,0],function(data)
                                 {
-                                    console.log(data.result.err);
-                                }
-                            });
-                            $scope.TxtBelgeIptalSifre = "";
-                            $("#MdlBelgeIptalSifre").modal("hide");
-                            $scope.YeniEvrak();
-                        }
-                        else
-                        {
-                            console.log(data.result.err);
-                        }
-                    });
+                                    if(typeof(data.result.err) != 'undefined')
+                                    {
+                                        console.log(data.result.err);
+                                    }
+                                });
+                                $scope.TxtBelgeIptalSifre = "";
+                                $("#MdlBelgeIptalSifre").modal("hide");
+                                $scope.YeniEvrak();
+                            }
+                            else
+                            {
+                                console.log(data.result.err);
+                            }
+                        });
+                    }
                 }
+            }
+            else
+            {
+                alertify.okBtn("Tamam");
+                alertify.alert("Kayıtlı Evrak Olmadan Belge İptal Yapılamaz.");
             }
         }
         else
         {
             alertify.okBtn("Tamam");
-            alertify.alert("Kayıtlı Evrak Olmadan Belge İptal Yapılamaz.");
+            alertify.alert("Tahsilat Giriş Yapılmış Evrak İptal Edilemez.");
         }
     }
     $scope.BtnSatirIptal = function()
     {
-        alertify.okBtn('Evet');
-        alertify.cancelBtn('Hayır');
+        if($scope.TahList.length <= 0)
+        {
+            alertify.okBtn('Evet');
+            alertify.cancelBtn('Hayır');
 
-        alertify.confirm('Satırı iptal etmek istediğinize eminmisiniz ?', 
-        function()
-        {   
-            if($scope.IslemListeSelectedIndex > -1)
-            {
-                db.ExecuteTag($scope.Firma,'PosSatisSatirIptal',[$scope.SatisList[$scope.IslemListeSelectedIndex].GUID],async function(data)
+            alertify.confirm('Satırı iptal etmek istediğinize eminmisiniz ?', 
+            function()
+            {   
+                if($scope.IslemListeSelectedIndex > -1)
                 {
-                    if(typeof(data.result.err) == 'undefined')
+                    db.ExecuteTag($scope.Firma,'PosSatisSatirIptal',[$scope.SatisList[$scope.IslemListeSelectedIndex].GUID],async function(data)
                     {
-                        if($scope.SatisList.length <= 1)
+                        if(typeof(data.result.err) == 'undefined')
                         {
-                            db.ExecuteTag($scope.Firma,'PosTahIptal',[$scope.Seri,$scope.Sira,0],function(data)
+                            if($scope.SatisList.length <= 1)
                             {
-                                if(typeof(data.result.err) != 'undefined')
+                                db.ExecuteTag($scope.Firma,'PosTahIptal',[$scope.Seri,$scope.Sira,0],function(data)
                                 {
-                                    console.log(data.result.err);
-                                }
-                            });
-                            
-                            $scope.YeniEvrak();
+                                    if(typeof(data.result.err) != 'undefined')
+                                    {
+                                        console.log(data.result.err);
+                                    }
+                                });
+                                
+                                $scope.YeniEvrak();
+                            }
+                            else
+                            {
+                                //*********** BİRDEN FAZLA MİKTARLI FİYAT GÜNCELLEME İÇİN YAPILDI. */
+                                let TmpSatisData = await db.GetPromiseTag($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira]);
+                                $scope.SatisList = TmpSatisData;
+
+                                for (let i = 0; i < $scope.SatisList.length; i++) 
+                                {               
+                                    await FiyatUpdate($scope.SatisList[i]);
+                                }  
+                                /***************************************************************** */
+                                db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(data)
+                                {
+                                    $scope.SatisList = data;
+                                    $("#TblIslem").jsGrid({data : $scope.SatisList});                                    
+                                    DipToplamHesapla();
+                                    $scope.TxtBarkod = ""; 
+                                    $scope.IslemListeRowClick($scope.SatisList.length-1,$scope.SatisList[$scope.SatisList.length-1]);   
+                                });
+                            }
                         }
                         else
                         {
-                            //*********** BİRDEN FAZLA MİKTARLI FİYAT GÜNCELLEME İÇİN YAPILDI. */
-                            let TmpSatisData = await db.GetPromiseTag($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira]);
-                            $scope.SatisList = TmpSatisData;
-
-                            for (let i = 0; i < $scope.SatisList.length; i++) 
-                            {               
-                                await FiyatUpdate($scope.SatisList[i]);
-                            }  
-                            /***************************************************************** */
-                            db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(data)
-                            {
-                                $scope.SatisList = data;
-                                $("#TblIslem").jsGrid({data : $scope.SatisList});                                    
-                                DipToplamHesapla();
-                                $scope.TxtBarkod = ""; 
-                                $scope.IslemListeRowClick($scope.SatisList.length-1,$scope.SatisList[$scope.SatisList.length-1]);   
-                            });
-                        }
-                    }
-                    else
-                    {
-                        console.log(data.result.err);
-                    }                                        
-                });
-            }
-            else
-            {
-                alertify.okBtn("Tamam");
-                alertify.alert("Seçili satır olmadan evrak iptal edemezsiniz !");
-            }
-        },
-        function(){});
+                            console.log(data.result.err);
+                        }                                        
+                    });
+                }
+                else
+                {
+                    alertify.okBtn("Tamam");
+                    alertify.alert("Seçili satır olmadan evrak iptal edemezsiniz !");
+                }
+            },
+            function(){});
+        }
+        else
+        {
+            alertify.okBtn("Tamam");
+            alertify.alert("Tahsilat Girişi Mevcut Satır İptal Edilemez.");
+        }
     }
     $scope.BtnParkdakiIslem = function()
     {
@@ -2588,7 +2608,7 @@ function Pos($scope,$window,$rootScope,db)
                 return;
             }
             
-            $("#MdlAraToplam").modal("show");
+            $("#MdlAraToplam").modal({backdrop: 'static', keyboard: false});
             FocusAraToplam = true;
             FocusBarkod = false;
             FocusMusteri = false;
@@ -2603,6 +2623,13 @@ function Pos($scope,$window,$rootScope,db)
                 TahTip = 0;
                 angular.element('#ChkNakit').trigger('click');
                 angular.element('#ChkFis').trigger('click');
+                $scope.BtnIngenicoCiktiTip(0);
+            }
+            //INGENICO CIHAZI İÇİN YAPILDI İLERİDE PARAMETREYE BAĞLANACAK
+            if($scope.GenelToplam >= 3000) 
+            {
+                angular.element('#ChkFatura').trigger('click');
+                $scope.BtnIngenicoCiktiTip(1);
             }
             TahSonYenile();
         }
@@ -2688,7 +2715,7 @@ function Pos($scope,$window,$rootScope,db)
     {   
         if($scope.SatisList.length > 0)
         {
-            db.ExecuteTag($scope.Firma,'PosTahIptal',[$scope.TahSeri,$scope.TahSira,0],function(data)
+            db.ExecuteTag($scope.Firma,'PosTahIptal',[$scope.TahSeri,$scope.TahSira,$scope.EvrakTip],function(data)
             {
                 if(typeof(data.result.err) == 'undefined')
                 {
@@ -2824,10 +2851,20 @@ function Pos($scope,$window,$rootScope,db)
                 alertify.alert("Satış işlemi yapmadan tahsilat giremezsiniz !");
                 return;
             }
+            //INGENICO CIHAZI İÇİN YAPILDI İLERİDE PARAMETREYE BAĞLANACAK
+            if($scope.GenelToplam >= 3000) 
+            {
+                console.log(1)
+                angular.element('#ChkFatura1').trigger('click');
+                $scope.BtnIngenicoCiktiTip(1);
+            }
+            else
+            {
+                angular.element('#ChkFis1').trigger('click');
+                $scope.BtnIngenicoCiktiTip(0);
+            }
 
-            $("#MdlKartOdeme").modal("show");
-            angular.element('#ChkFis1').trigger('click');
-            $scope.BtnIngenicoCiktiTip(0);
+            $("#MdlKartOdeme").modal({backdrop: 'static', keyboard: false});
             FocusBarkod = false;
             FocusAraToplam = false;
             FocusMusteri = false;
@@ -2967,57 +3004,64 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.BtnAvans = async function(pTip)
     {
-        if(pTip == 0)
+        if($scope.SatisList.length <= 0)
         {
-            $("#MdlYetkiliGiris").modal("show");
-            FocusBarkod = false;
-            FocusAraToplam = false;
-            FocusMusteri = false;
-            FocusStok = false;
-            FocusKartOdeme = false;
-            FirstKey = false;
-            FocusYetkiliSifre = true;
-        }
-        else
-        {
-            let YetkiliList = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',['']);
-            let GirisOnay = false;
-            for (let i = 0; i < YetkiliList.length; i++) 
+            if(pTip == 0)
             {
-                if(YetkiliList[i].TAG == 1)
-                {
-                    let ParamList = await db.GetPromiseTag($scope.Firma,'ParamGetir',[YetkiliList[i].CODE]);
-                    for (let x = 0; x < ParamList.length; x++) 
-                    {
-                        if(YetkiliList[i].PASSWORD == $scope.TxtYetkiliSifre)
-                        {
-                            GirisOnay = true;
-                        }   
-                    }
-                }   
-            }
-            if(GirisOnay)
-            {
-                $("#MdlYetkiliGiris").modal("hide");
-                angular.element('#ChkAlma').trigger('click');
-                $scope.TxtYetkiliSifre = "";
+                $("#MdlYetkiliGiris").modal("show");
                 FocusBarkod = false;
                 FocusAraToplam = false;
                 FocusMusteri = false;
                 FocusStok = false;
                 FocusKartOdeme = false;
-                FocusYetkiliSifre = false;
-                FocusKasaSifre = false;
                 FirstKey = false;
-                FocusAvans = true;
-
-                $("#MdlAvans").modal("show");
+                FocusYetkiliSifre = true;
             }
             else
             {
-                $("#MdlYetkiliGiris").modal("hide");
-                alertify.alert("Yetkili Şifre Yanlış.");
+                let YetkiliList = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',['']);
+                let GirisOnay = false;
+                for (let i = 0; i < YetkiliList.length; i++) 
+                {
+                    if(YetkiliList[i].TAG == 1)
+                    {
+                        let ParamList = await db.GetPromiseTag($scope.Firma,'ParamGetir',[YetkiliList[i].CODE]);
+                        for (let x = 0; x < ParamList.length; x++) 
+                        {
+                            if(YetkiliList[i].PASSWORD == $scope.TxtYetkiliSifre)
+                            {
+                                GirisOnay = true;
+                            }   
+                        }
+                    }   
+                }
+                if(GirisOnay)
+                {
+                    $("#MdlYetkiliGiris").modal("hide");
+                    angular.element('#ChkAlma').trigger('click');
+                    $scope.TxtYetkiliSifre = "";
+                    FocusBarkod = false;
+                    FocusAraToplam = false;
+                    FocusMusteri = false;
+                    FocusStok = false;
+                    FocusKartOdeme = false;
+                    FocusYetkiliSifre = false;
+                    FocusKasaSifre = false;
+                    FirstKey = false;
+                    FocusAvans = true;
+
+                    $("#MdlAvans").modal("show");
+                }
+                else
+                {
+                    $("#MdlYetkiliGiris").modal("hide");
+                    alertify.alert("Yetkili Şifre Yanlış.");
+                }
             }
+        }
+        else
+        {
+            alertify.alert("Satış Listesi Doluyken Avans İşlemi Yapılamaz.")
         }
     }
     $scope.BtnAvansKaydet = function()

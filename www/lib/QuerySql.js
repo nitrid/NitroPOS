@@ -930,13 +930,13 @@ var QuerySql =
     },
     PosTahIptal : 
     {
-        query: "DELETE FROM POS_PAYMENT WHERE REF = @REF AND REF_NO = @REF_NO AND TYPE = @TYPE",
+        query: "DELETE FROM POS_PAYMENT WHERE REF = @REF AND REF_NO = @REF_NO AND TYPE = @TYPE AND STATUS = 0 ",
         param: ['REF','REF_NO','TYPE'],
         type:  ['string|25','int','int']
     },
     PosTahSatirIptal : 
     {
-        query: "DELETE FROM POS_PAYMENT WHERE GUID = @GUID",
+        query: "DELETE FROM POS_PAYMENT WHERE GUID = @GUID AND STATUS = 0 ",
         param: ['GUID'],
         type:  ['string|50']
     },
