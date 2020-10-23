@@ -20,7 +20,7 @@ function Main ($scope,$rootScope,$window,db)
             HtmlText = HtmlText + "</a>";
             HtmlText = HtmlText + "</li>";
             HtmlText = HtmlText + "<li class='site-menu-item'>"
-            HtmlText = HtmlText + "<a class='animsition-link' href='#!KullaniciParametre'>";
+            HtmlText = HtmlText + "<a class='animsition-link' href='#!CihazParametre'>";
             HtmlText = HtmlText + "<span class='site-menu-title'>Cihaz Tanımlama</span>";
             HtmlText = HtmlText + "</a>";
             HtmlText = HtmlText + "</li>";

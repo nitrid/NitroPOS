@@ -969,7 +969,8 @@ var QuerySql =
     },
     PosSatisKapatUpdate : 
     {
-        query: "UPDATE [dbo].[POS_SALES] SET [STATUS] = 1 WHERE DEPARTMENT = @DEPARTMENT AND REF = @REF AND REF_NO = @REF_NO AND TYPE = @TYPE",
+        query: "UPDATE [dbo].[POS_SALES] SET [STATUS] = 1 WHERE DEPARTMENT = @DEPARTMENT AND REF = @REF AND REF_NO = @REF_NO AND TYPE = @TYPE " +
+               "UPDATE [dbo].[POS_PAYMENT] SET [STATUS] = 1 WHERE DEPARTMENT = @DEPARTMENT AND REF = @REF AND REF_NO = @REF_NO AND DOC_TYPE = @TYPE",
         param: ['DEPARTMENT','REF','REF_NO','TYPE'],
         type:  ['int','string|25','int','int']
     },
