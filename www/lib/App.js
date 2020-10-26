@@ -27,4 +27,8 @@ angular.module("app",
     {
         templateUrl : "html/ayarlar/KullaniciParametre.html"
     })
+    .when("/CihazParametre",
+    {
+        templateUrl : "html/ayarlar/CihazParametre.html"
+    })
 });

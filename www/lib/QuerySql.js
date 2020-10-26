@@ -930,13 +930,13 @@ var QuerySql =
     },
     PosTahIptal : 
     {
-        query: "DELETE FROM POS_PAYMENT WHERE REF = @REF AND REF_NO = @REF_NO AND TYPE = @TYPE",
+        query: "DELETE FROM POS_PAYMENT WHERE REF = @REF AND REF_NO = @REF_NO AND TYPE = @TYPE AND STATUS = 0 ",
         param: ['REF','REF_NO','TYPE'],
         type:  ['string|25','int','int']
     },
     PosTahSatirIptal : 
     {
-        query: "DELETE FROM POS_PAYMENT WHERE GUID = @GUID",
+        query: "DELETE FROM POS_PAYMENT WHERE GUID = @GUID AND STATUS = 0 ",
         param: ['GUID'],
         type:  ['string|50']
     },
@@ -969,7 +969,8 @@ var QuerySql =
     },
     PosSatisKapatUpdate : 
     {
-        query: "UPDATE [dbo].[POS_SALES] SET [STATUS] = 1 WHERE DEPARTMENT = @DEPARTMENT AND REF = @REF AND REF_NO = @REF_NO AND TYPE = @TYPE",
+        query: "UPDATE [dbo].[POS_SALES] SET [STATUS] = 1 WHERE DEPARTMENT = @DEPARTMENT AND REF = @REF AND REF_NO = @REF_NO AND TYPE = @TYPE " +
+               "UPDATE [dbo].[POS_PAYMENT] SET [STATUS] = 1 WHERE DEPARTMENT = @DEPARTMENT AND REF = @REF AND REF_NO = @REF_NO AND DOC_TYPE = @TYPE",
         param: ['DEPARTMENT','REF','REF_NO','TYPE'],
         type:  ['int','string|25','int','int']
     },
@@ -1165,7 +1166,44 @@ var QuerySql =
     {
         query : "UPDATE PARAMS SET VALUE = @VALUE,LDATE = GETDATE() WHERE NAME = @NAME AND [USER] = @USER ",
         param : ['VALUE:string|25','NAME:string|25','USER:string|25']
-    }
+    },
+    //CİHAZ PARAMETRE
+    CihazGetir :
+    {
+        query : "SELECT *,CASE WHEN STATUS = 1 THEN 'Aktif' ELSE 'Pasif' END AS DURUM FROM DEVICE WHERE ((CODE IN (@CODE)) OR (@CODE = '')) ORDER BY CODE ASC ",
+        param : ['CODE:string|25']
+    },
+    CihazInsert : 
+    {
+        query : "INSERT INTO [dbo].[USERS] " +
+                "([CDATE] " +
+                ",[LDATE] " +
+                ",[CODE] " +
+                ",[NAME] " +
+                ",[PASSWORD] " +
+                ",[TAG] " +
+                ",[STATUS]) " +
+                "VALUES " +
+                "(GETDATE()						--<CDATE, datetime,>  \n" + 
+                ",GETDATE()						--<LDATE, datetime,>  \n" + 
+                ",@CODE							--<CODE, nvarchar(25),>  \n" + 
+                ",@NAME							--<NAME, nvarchar(50),>  \n" + 
+                ",@PASSWORD						--<PASSWORD, nvarchar(25),>  \n" + 
+                ",@TAG							--<TAG, nvarchar(25),>  \n" + 
+                ",@STATUS							--<STATUS, int,>  \n" + 
+                ")",
+        param : ['CODE:string|25','NAME:string|50','PASSWORD:string|25','TAG:string|25','STATUS:int']
+    },
+    CihazUpdate : 
+    {
+        query : "UPDATE USERS SET CODE = @CODE,NAME = @NAME, PASSWORD = @PASSWORD, STATUS = @STATUS,LDATE = GETDATE() WHERE GUID = @GUID " ,
+        param : ['CODE:string|25','NAME:string|50','PASSWORD:string|25','STATUS:int','GUID:string|150']
+    },
+    CihazDelete : 
+    {
+        query : "DELETE FROM USERS WHERE GUID = @GUID " ,
+        param : ['GUID:string|150']
+    },
 };
 
 

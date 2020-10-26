@@ -406,7 +406,7 @@
                                         <button class="form-group btn btn-warning btn-block my-1" style="height:70px;  font-size: 16px;" ng-click = "BtnXReport(0)">X Raporu</button>
                                     </div> 
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px;  font-size: 16px;"></button>
+                                        <button class="form-group btn btn-warning btn-block my-1" style="height:70px;  font-size: 16px;" ng-click = "BtnFisIptal()">Fiş İptal</button>
                                     </div>
                                     <div class="col-2 px-1">
                                         <button class="form-group btn btn-default btn-block my-1" style="height:70px;  font-size: 16px;"></button>
@@ -438,7 +438,7 @@
                                         <button class="form-group btn btn-warning btn-block my-1" style="height:70px; font-size: 16px;" ng-click = "BtnKasaRapor()">Kasa Raporu</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px; font-size: 16px;"></button>
+                                        <button class="form-group btn btn-warning btn-block my-1" style="height:70px; font-size: 16px;" ng-click = "BtnOkcEslesme(1)">Okc Eşleşme</button>
                                     </div>
                                     <div class="col-2 px-1">
                                         <button class="form-group btn btn-default btn-block my-1" style="height:70px; font-size: 16px;"></button>                                    
@@ -950,9 +950,9 @@
             <div class="modal-dialog modal-simple modal-primary modal-center">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">X</span>
-                        </button>
+                        </button> -->
                         <h4 class="modal-title">Ara Toplam</h4>
                     </div>
                     <div class="modal-body">
@@ -979,6 +979,18 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
+                            <div class="btn-group btn-group-toggle col-7 offset-2" data-toggle="buttons" role="group">
+                                <label id = "ChkFis" class="btn btn-outline btn-primary col-6" ng-click = "BtnIngenicoCiktiTip(0)">
+                                    <input type="radio" />
+                                    FİŞ
+                                </label>
+                                <label id = "ChkFatura" class="btn btn-outline btn-primary col-6" ng-click = "BtnIngenicoCiktiTip(1)">
+                                    <input type="radio" />
+                                    FATURA
+                                </label>
+                            </div> 
                         </div>
                         <div class="row">
                             <div class="col-2">
@@ -1354,18 +1366,26 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div class="btn-group btn-group-toggle col-12" data-toggle="buttons" role="group">
+                                <label id = "ChkFis1" class="btn btn-outline btn-primary col-6" ng-click = "BtnIngenicoCiktiTip(0)">
+                                    <input type="radio" />
+                                    FİŞ
+                                </label>
+                                <label id = "ChkFatura1" class="btn btn-outline btn-primary col-6" ng-click = "BtnIngenicoCiktiTip(1)">
+                                    <input type="radio" />
+                                    FATURA
+                                </label>
+                            </div> 
+                        </div>
+                        <div class="row">
                             <div class="col-12">
                                 <div class="row">
                                     <div class="col-12">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="form-group my-5">
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control h-50" id="TxtKartOdemeTutar" ng-model="TxtAraToplamTutar" 
-                                                        style="font-size: 20pt;font-weight: bold; border-width: 3px;border-color: #428bca;" ng-click="TxtKartOdemeTutarPress($event)">
-                                                    </div>
-                                                </div>
-                                            </div>                                                     
+                                        <div class="form-group my-5">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control h-50" id="TxtKartOdemeTutar" ng-model="TxtAraToplamTutar" 
+                                                style="font-size: 20pt;font-weight: bold; border-width: 3px;border-color: #428bca;" ng-click="TxtKartOdemeTutarPress($event)">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1678,7 +1698,7 @@
                         </div>
                         <div class="row py-1">
                             <div class="col-12">
-                                <button type="text" class="form-control btn-danger btn btn-block font-size-15" style="height:60px; font-size: 18px;" ng-click="BtnSonKopya(1)">Giriş</button>
+                                <button type="text" class="form-control btn-danger btn btn-block font-size-15" style="height:60px; font-size: 18px;" ng-click="BtnZReport(1)">Giriş</button>
                             </div>
                         </div>
                     </div>
@@ -2061,7 +2081,7 @@
                         <h5 class="text-primary text-center">{{TxtOkcMesaj}}</h5>
                         <div class="row py-1">
                             <div class="col-12">
-                                <button type="text" class="form-control btn-danger btn btn-block font-size-15" style="height:60px;" ng-click="BtnOkcEslesme()">{{BtnTxtOkcEslesme}}</button>
+                                <button type="text" class="form-control btn-danger btn btn-block font-size-15" style="height:60px;" ng-click="BtnOkcEslesme(0)">{{BtnTxtOkcEslesme}}</button>
                             </div>
                         </div>
                     </div>
