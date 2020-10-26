@@ -1,13 +1,13 @@
-function KullaniciParametreCtrl($route,$scope,$window,$rootScope,db)
+function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
 {
     let KullaniciListeRow = null;
-    $('#MdlKullanici').on('hide.bs.modal', function () 
+    $('#MdlCihaz').on('hide.bs.modal', function () 
     {
         $scope.Kullanici = "";
         $scope.Sifre = "";
         $scope.Kodu = "";
     });
-    $('#MdlKullaniciGuncelle').on('hide.bs.modal', function () 
+    $('#MdlCihazGuncelle').on('hide.bs.modal', function () 
     {
         $scope.Kullanici = "";
         $scope.Sifre = "";
@@ -64,56 +64,49 @@ function KullaniciParametreCtrl($route,$scope,$window,$rootScope,db)
 
         $scope.PersonelListe = [];
         $scope.SorumlulukListe = [];
-        $scope.KullaniciListe = [];
+        $scope.CihazListe = [];
         $scope.DepoListe = [];
     }
-    function InitKullaniciGrid()
+    function InitCihazGrid()
     {   
-        $("#TblKullanici").jsGrid({
+        $("#TblCihaz").jsGrid({
             responsive: true,
             width: "100%",
             height: "500px",
             updateOnResize: true,
             heading: true,
             selecting: true,
-            data : $scope.KullaniciListe,
+            data : $scope.CihazListe,
             autoload: true,
             fields: 
             [
                 {
                     name: "CODE",
-                    title: "KODU",
+                    title: "KASA KODU",
+                    type: "text",
+                    align: "center",
+                    width: 80
+                },
+                {
+                    name: "DEPOT",
+                    title: "ŞUBE KODU",
                     type: "text",
                     align: "center",
                     width: 80
                 },
                 {
                     name: "NAME",
-                    title: "KULLANICI",
+                    title: "KASA ADI",
                     type: "text",
                     align: "center",
                     width: 120
                 },
                 {
-                    name: "PASSWORD",
-                    title: "ŞİFRE",
-                    type: "text",
-                    align: "center",
-                    width: 100
-                }, 
-                {
-                    name: "YETKI",
-                    title: "TAG",
-                    type: "text",
-                    align: "center",
-                    width: 25
-                },
-                {
                     name: "DURUM",
-                    title: "DURUM",
+                    title: "KASA DURUM",
                     type: "number",
                     align: "center",
-                    width: 25
+                    width: 50
                 },
                 [
                     { 
@@ -194,10 +187,10 @@ function KullaniciParametreCtrl($route,$scope,$window,$rootScope,db)
     function KullaniciGetir()
     {
         Init();
-        db.GetData($scope.Firma,'KullaniciGetir',[''],function(data)
+        db.GetData($scope.Firma,'CihazGetir',[''],function(data)
         {   
-            $scope.KullaniciListe = data;
-            $("#TblKullanici").jsGrid({data : $scope.KullaniciListe}); 
+            $scope.CihazListe = data;
+            $("#TblCihaz").jsGrid({data : $scope.CihazListe}); 
         });
     }
     function KullaniciInsert()
@@ -303,7 +296,7 @@ function KullaniciParametreCtrl($route,$scope,$window,$rootScope,db)
                     }
                     ParamInsert(Object.keys(Param[i]),Object.values(Param[i]),Tag,$scope.Kodu)
                 }
-                $('#MdlKullanici').modal('hide');
+                $('#MdlCihaz').modal('hide');
                 KullaniciGetir();
             }   
             else
@@ -320,7 +313,7 @@ function KullaniciParametreCtrl($route,$scope,$window,$rootScope,db)
             if(typeof(InsertResult.result.err) == 'undefined')
             {   
                 alert("Kullanıcı Güncellendi.");
-                $('#MdlKullaniciGuncelle').modal('hide');
+                $('#MdlCihazGuncelle').modal('hide');
                 KullaniciGetir();
             }   
             else
@@ -509,15 +502,15 @@ function KullaniciParametreCtrl($route,$scope,$window,$rootScope,db)
     $scope.KullaniciRowClick = function(pIndex,pItem,pObj)
     {
         if ( KullaniciListeRow ) { KullaniciListeRow.children('.jsgrid-cell').css('background-color', '').css('color',''); }
-        var $row = $("#TblKullanici").jsGrid("rowByItem", pItem);
+        var $row = $("#TblCihaz").jsGrid("rowByItem", pItem);
         $row.children('.jsgrid-cell').css('background-color','#2979FF').css('color','white');
         KullaniciListeRow = $row;
     }
-    $scope.BtnKullaniciInsert = function(pTip)
+    $scope.BtnCihazInsert = function(pTip)
     {
         if(pTip == 0)
         {
-            $("#MdlKullanici").modal("show");
+            $("#MdlCihaz").modal("show");
             Init();
         }
         else
@@ -541,7 +534,7 @@ function KullaniciParametreCtrl($route,$scope,$window,$rootScope,db)
             $scope.Sifre = pData.PASSWORD;
             $scope.AktifPasif = pData.STATUS == 0 ? false : true;
             $scope.KullaniciGuid = pData.GUID;
-            $('#MdlKullaniciGuncelle').modal('show');
+            $('#MdlCihazGuncelle').modal('show');
         }
         else
         {
@@ -645,7 +638,7 @@ function KullaniciParametreCtrl($route,$scope,$window,$rootScope,db)
     $scope.YeniEvrak = function()
     {
         Init();
-        InitKullaniciGrid();
+        InitCihazGrid();
         KullaniciGetir();
 
         db.GetData($scope.Firma,'CmbDepoGetir',['TÜMÜ'],function(data)

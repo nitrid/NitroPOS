@@ -1,4 +1,4 @@
-<div class="col-12" ng-controller="KullaniciParametreCtrl" ng-init="YeniEvrak()">
+<div class="col-12" ng-controller="CihazParametreCtrl" ng-init="YeniEvrak()">
     <div class="row">
         <div class="col-12">
             <div class="tab-content">
@@ -7,18 +7,13 @@
                         <div class="col-3 py-2">
                             <label class="form-control-label"><h4>CİHAZ TANIMLAMA</h4></label>
                         </div>
-                        <!-- <div class="col-2 offset-5 py-2">
-                            <select class="form-control form-control ng-pristine ng-untouched ng-valid ng-not-empty" style="height:40px; font-size: 16px;" ng-model="DepoNo" ng-change = 'KullaniciDepoChange()'>
-                                <option ng-repeat="option in DepoListe" value="{{option.KODU}}">{{option.ADI}}</option>
-                            </select>
-                        </div> -->
                         <div class="col-2 offset-7 py-2">
-                            <button type="submit" class="btn btn-primary form-control btn-block" style="height:40px; font-size: 16px;" ng-click="BtnKullaniciInsert(0)">Yeni Ekle</button>
+                            <button type="submit" class="btn btn-primary form-control btn-block" style="height:40px; font-size: 16px;" ng-click="BtnCihazInsert(0)">Yeni Ekle</button>
                         </div>
                     </div>
                     <div class="panel">
                         <div class="panel-body">
-                            <div id="TblKullanici"></div>
+                            <div id="TblCihaz"></div>
                         </div>
                     </div>
                 </div>
@@ -232,35 +227,28 @@
             </div>
         </div>
     </div>
-    <!-- KULLANICI EKLE -->
-    <div class="modal fade" id="MdlKullanici" aria-labelledby="exampleOptionalSmall" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true">
+    <!--CİHAZ EKLE -->
+    <div class="modal fade" id="MdlCihaz" aria-labelledby="exampleOptionalSmall" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-simple modal-primary modal-center px-10">
             <div class="modal-content ">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">X</span>
                     </button>
-                    <h4 class="modal-title">Kullanıcı</h4>
+                    <h4 class="modal-title">CİHAZ EKLE</h4>
                 </div>
                 <div class="modal-body py-10">
                     <div class="form-group row my-10">
-                        <label class="form-control-label col-3 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Kodu :</b></span></div></label>
-                        <input type="text" class="form-control col-9" ng-model="Kodu">
+                        <label class="form-control-label col-3 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Kasa Kodu :</b></span></div></label>
+                        <input type="text" class="form-control col-9" ng-model="KasaKodu">
                     </div>
                     <div class="form-group row my-10">
-                        <label class="form-control-label col-3 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Kullanıcı :</b></span></div></label>
-                        <input type="text" class="form-control col-9" ng-model="Kullanici">
+                        <label class="form-control-label col-3 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Kasa Adı :</b></span></div></label>
+                        <input type="text" class="form-control col-9" ng-model="KasaAdi">
                     </div>
                     <div class="form-group row my-10">
-                        <label class="form-control-label col-3 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Şifre :</b></span></div></label>
-                        <input type="text" class="form-control col-9" ng-model="Sifre">
-                    </div>
-                    <div class="form-group row my-10">
-                        <label class="form-control-label col-3 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Yetki :</b></span></div></label>
-                        <select class="form-control col-9 ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="Yetki">
-                            <option value="0" selected="selected">Kullanıcı</option>
-                            <option value="1">Admin</option>
-                        </select>
+                        <label class="form-control-label col-3 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Şube Kodu :</b></span></div></label>
+                        <input type="text" class="form-control col-9" ng-model="SubeKodu">
                     </div>
                     <div class="form-group row my-10">
                         <label class="form-control-label col-3 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Aktif / Pasif :</b></span></div></label>
@@ -270,7 +258,7 @@
                         </div>
                     </div>
                     <div class="row my-5">
-                        <button type="submit" class="btn btn-primary form-control btn-block col-12" style="height:40px; font-size: 16px;" ng-click="BtnKullaniciInsert(1)">Kaydet</button>
+                        <button type="submit" class="btn btn-primary form-control btn-block col-12" style="height:40px; font-size: 16px;" ng-click="BtnCihazInsert(1)">Kaydet</button>
                     </div>
                 </div>
             </div>
