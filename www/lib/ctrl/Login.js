@@ -1,10 +1,10 @@
 function Login ($scope,$rootScope,$window,db)
 {
     localStorage.mode = true;
-
+    console.log($window)
     $scope.server_adress = localStorage.host;
     $scope.socket_port = localStorage.socketport;
- 
+    
     $rootScope.LoadingShow = function() 
     {
         $("#loading").show();
