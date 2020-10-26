@@ -1962,7 +1962,6 @@ function Pos($scope,$window,$rootScope,db)
                             {
                                 let TmpPayment = {};
                                 
-                                console.log(Number(Math.round(($scope.TahList[i].AMOUNT * 100)+'e'+2)+'e-'+2));
                                 TmpPayment.TYPE = $scope.TahList[i].TYPE;
                                 TmpPayment.AMOUNT = Number(Math.round(($scope.TahList[i].AMOUNT * 100)+'e'+2)+'e-'+2);
 

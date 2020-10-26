@@ -1,17 +1,17 @@
 function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
 {
-    let KullaniciListeRow = null;
+    let CihazListeRow = null;
     $('#MdlCihaz').on('hide.bs.modal', function () 
     {
-        $scope.Kullanici = "";
-        $scope.Sifre = "";
-        $scope.Kodu = "";
+        $scope.KasaID = "";
+        $scope.KasaAdi = "";
+        $scope.SubeKodu = "1";
     });
     $('#MdlCihazGuncelle').on('hide.bs.modal', function () 
     {
-        $scope.Kullanici = "";
-        $scope.Sifre = "";
-        $scope.Kodu = "";
+        $scope.KasaID = "";
+        $scope.KasaAdi = "";
+        $scope.SubeKodu = "1";
     });
     $rootScope.LoadingShow = function() 
     {
@@ -29,20 +29,14 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
     {
         UserParam = Param[$window.sessionStorage.getItem('User')];                
         $scope.Firma = 'NITROGENPOS'
-        //KULLANICI
-        $scope.Kodu = "";
-        $scope.Kullanici = "";
-        $scope.Sifre = "";
-        $scope.Yetki = "0";
-        $scope.KullaniciGuid = "";
+        $scope.KasaID = "";
+        $scope.KasaAdi = "";
+        $scope.SubeKodu = "";
         $scope.AktifPasif = true;
-        //SİSTEM
         $scope.KiloBarkod = "";
-        $scope.KiloFlag = "";
+        $scope.KiloFlag = "26,27,28,29";
         $scope.KiloBaslangic = "";
         $scope.KiloUzunluk = "";
-        $scope.SatirBirlestir = 0;
-        //POSSATIŞ
         $scope.SatisSeri = "IRS";
         $scope.TahsilatSeri = "THS";
         $scope.IadeSeri = "IADE";
@@ -50,22 +44,10 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
         $scope.CariKodu = "1";
         $scope.NKasaKodu = "1";
         $scope.KKasaKodu = "1";
-        $scope.DepoNo = "1";
-        $scope.FiyatListeNo = 1;
-        $scope.PersonelKodu = 1;
-        $scope.SorumlulukKodu = 1;
-        $scope.EvrakTip = 1;
-        //MENÜ
-        $scope.PosSatis = true;
-        $scope.StokListe = true;
-        $scope.StokTanitim = true;
-        $scope.CariListe = true;
-        $scope.CariTanitim = true;
+        $scope.CihazGuid = "";
 
-        $scope.PersonelListe = [];
-        $scope.SorumlulukListe = [];
         $scope.CihazListe = [];
-        $scope.DepoListe = [];
+        $scope.SubeListe = [];
     }
     function InitCihazGrid()
     {   
@@ -81,15 +63,8 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
             fields: 
             [
                 {
-                    name: "CODE",
-                    title: "KASA KODU",
-                    type: "text",
-                    align: "center",
-                    width: 80
-                },
-                {
-                    name: "DEPOT",
-                    title: "ŞUBE KODU",
+                    name: "ID",
+                    title: "KASA ID",
                     type: "text",
                     align: "center",
                     width: 80
@@ -97,6 +72,13 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
                 {
                     name: "NAME",
                     title: "KASA ADI",
+                    type: "text",
+                    align: "center",
+                    width: 120
+                },
+                {
+                    name: "SUBENO",
+                    title: "ŞUBE NO",
                     type: "text",
                     align: "center",
                     width: 120
@@ -115,7 +97,8 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
                             return $("<button type='submit' style='height:30px; font-size: 12px;' class='btn btn-info btn-block'></button>").text("Güncelle")
                                 .on("click", function() 
                                 {
-                                    $scope.BtnKullaniciGuncelle(0,item);
+                                    $scope.BtnCihazGuncelle(0,item);
+                                    $scope.$apply();
                                 });
                         },
                         width: 25
@@ -131,10 +114,11 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
                                     alertify.okBtn('Evet');
                                     alertify.cancelBtn('Hayır');
 
-                                    alertify.confirm('Kullanıcı Silmek İstediğinize Emin Misiniz ?', 
+                                    alertify.confirm('Cihaz Silmek İstediğinize Emin Misiniz ?', 
                                     function()
                                     { 
-                                        KullaniciDelete(item);
+                                        CihazDelete(item);
+                                        $scope.$apply();
                                     }
                                     ,function(){});
                                 });
@@ -146,69 +130,45 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
                     { 
                         itemTemplate: function(_, item) 
                         {
-                            return $("<div class='btn-group'><button type='button' style='height:30px; font-size: 12px;' class='btn btn-primary dropdown-toggle' data-toggle='dropdown' aria-expanded='false'>Ayarlar</button><div class='dropdown-menu' aria-labelledby='exampleSizingDropdown1' role='menu'><a class='dropdown-item' role='menuitem' ng-click='Deneme()'>Sistem Ayarları</a><a class='dropdown-item' role='menuitem'>Pos Ayarları</a><a class='dropdown-item' role='menuitem'>Menü Ayarları</a></div></div>")
+                            return $("<button type='submit' style='height:30px; font-size: 12px;' class='btn btn-primary btn-block'>Ayarlar</button>")
                                 .on("click", function() 
                                 {
-                                    $scope.Kodu = item.CODE
+                                    ParamGetir(item.ID);
+                                    $scope.KasaID = item.ID
+                                    $("#TbMain").removeClass('active');
+                                    $("#TbParametre").addClass('active');
+                                    $scope.$apply();
                                 });
                         },
                         width: 25
                     }
                 ],
             ],
-            rowClick: function(args)
-            {   
-                ParamGetir();
-                if(args.event.target.outerText == 'Sistem Ayarları')
-                {
-                    $("#TbSistem").addClass('active');
-                    $("#TbMain").removeClass('active');
-                    $("#TbPosSatis").removeClass('active');
-                    $("#TbMenu").removeClass('active');
-                }
-                else if(args.event.target.outerText == 'Pos Ayarları')
-                {
-                    $("#TbPosSatis").addClass('active');
-                    $("#TbMain").removeClass('active');
-                    $("#TbSistem").removeClass('active');
-                    $("#TbMenu").removeClass('active');
-                }
-                else if(args.event.target.outerText == 'Menü Ayarları')
-                {
-                    $("#TbMenu").addClass('active');
-                    $("#TbPosSatis").removeClass('active');
-                    $("#TbSistem").removeClass('active');
-                    $("#TbMain").removeClass('active');
-                }
-                $scope.$apply();
-            },
         });
     }
-    function KullaniciGetir()
+    function CihazGetir()
     {
-        Init();
         db.GetData($scope.Firma,'CihazGetir',[''],function(data)
         {   
             $scope.CihazListe = data;
-            $("#TblCihaz").jsGrid({data : $scope.CihazListe}); 
+            $("#TblCihaz").jsGrid({data : $scope.CihazListe});
+            $scope.BtnYeni();
         });
     }
-    function KullaniciInsert()
+    function CihazInsert()
     {
         var InsertData = 
         [
-            $scope.Kodu,
-            $scope.Kullanici,
-            $scope.Sifre,
-            $scope.Yetki,
+            $scope.KasaID,
+            $scope.KasaAdi,
             $scope.AktifPasif == true ? 1 : 0
         ];
 
-        db.ExecuteTag($scope.Firma,'KullaniciInsert',InsertData,async function(InsertResult)
+        db.ExecuteTag($scope.Firma,'CihazInsert',InsertData,async function(InsertResult)
         {              
             if(typeof(InsertResult.result.err) == 'undefined')
             {   
-                alert("Kayıt İşlemi Gerçekleşti.");
+                alertify.alert("Kayıt İşlemi Gerçekleşti.")
                 //PARAM INSERT
                 let Param =
                 [
@@ -223,9 +183,6 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
                     },
                     {
                         KiloUzunluk : $scope.KiloUzunluk,
-                    },
-                    {
-                        SatirBirlestir : $scope.SatirBirlestir,
                     },
                     {
                         SatisSeri : $scope.SatisSeri,
@@ -249,104 +206,64 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
                         KKasaKodu : $scope.KKasaKodu,
                     },
                     {
-                        DepoNo : $scope.DepoNo,
-                    },
-                    {
-                        FiyatListeNo : $scope.FiyatListeNo,
-                    },
-                    {
-                        PersonelKodu : $scope.PersonelKodu,
-                    },
-                    {
-                        SorumlulukKodu : $scope.SorumlulukKodu,
-                    },
-                    {
-                        EvrakTip : $scope.EvrakTip,
-                    },
-                    {
-                        PosSatis : $scope.PosSatis == true ? 1 : 0,
-                    },
-                    {
-                        StokListe : $scope.StokListe == true ? 1 : 0,
-                    },
-                    {
-                        StokTanitim : $scope.StokTanitim == true ? 1 : 0,
-                    },
-                    {
-                        CariListe : $scope.CariListe == true ? 1 : 0,
-                    },
-                    {
-                        CariTanitim : $scope.CariTanitim == true ? 1 : 0
+                        DepoNo : $scope.SubeKodu,
                     },
                 ]
+
                 for (let i = 0; i < Param.length; i++) 
                 {
-                    let Tag = 0;
-                    if(i <= 4)
-                    {
-                        Tag = 0;
-                    }
-                    else if(i <= 15)
-                    {
-                        Tag = 1;
-                    }
-                    else
-                    {
-                        Tag = 2;
-                    }
-                    ParamInsert(Object.keys(Param[i]),Object.values(Param[i]),Tag,$scope.Kodu)
+                    ParamInsert(Object.keys(Param[i]),Object.values(Param[i]),$scope.KasaID)
                 }
                 $('#MdlCihaz').modal('hide');
-                KullaniciGetir();
+                CihazGetir();
             }   
             else
             {
-                alert("Kayıt İşleminde Hata.");
+                alertify.alert("Kayıt İşleminde Hata.");
                 console.log(InsertResult.result.err);
             }
         });
     }
-    function KullaniciUpdate(pData)
+    function CihazUpdate(pData)
     {
-        db.ExecuteTag($scope.Firma,'KullaniciUpdate',pData,async function(InsertResult)
+        db.ExecuteTag($scope.Firma,'CihazUpdate',pData,async function(InsertResult)
         {         
             if(typeof(InsertResult.result.err) == 'undefined')
             {   
-                alert("Kullanıcı Güncellendi.");
+                alertify.alert("Cihaz Güncellendi.");
                 $('#MdlCihazGuncelle').modal('hide');
-                KullaniciGetir();
+                CihazGetir();
             }   
             else
             {
-                alert("Kullanıcı Güncelleme İşleminde Hata.");
+                alertify.alert("Cihaz Güncelleme İşleminde Hata.");
                 console.log(InsertResult.result.err);
             }
         });
     }
-    function KullaniciDelete(pData)
+    function CihazDelete(pData)
     {
-        db.ExecuteTag($scope.Firma,'KullaniciDelete',[pData.GUID],async function(InsertResult)
+        db.ExecuteTag($scope.Firma,'CihazDelete',[pData.GUID],async function(InsertResult)
         {              
             if(typeof(InsertResult.result.err) == 'undefined')
             {   
                 ParamDelete(pData);
-                alert("Kullanıcı Silme İşlemi Gerçekleşti");
-                KullaniciGetir();
+                alertify.alert("Cihaz Silme İşlemi Gerçekleşti");
+                CihazGetir();
             }   
             else
             {
-                alert("Kullanıcı Silme İşleminde Hata.");
+                alertify.alert("Cihaz Silme İşleminde Hata.");
                 console.log(InsertResult.result.err);
             }
         });
     }
-    function ParamGetir()
+    function ParamGetir(pID)
     {
-        db.GetData($scope.Firma,'ParamGetir',[$scope.Kodu],function(data)
+        db.GetData($scope.Firma,'ParamGetir',[pID],function(data)
         {   
             for (let i = 0; i < data.length; i++) 
             {
-                //SİSTEM
                 if(data[i].NAME == "KiloBarkod")
                 {
                     $scope.KiloBarkod = data[i].VALUE;
@@ -363,11 +280,6 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
                 {
                     $scope.KiloUzunluk = data[i].VALUE;
                 }
-                else if(data[i].NAME == "SatirBirlestir")
-                {
-                    $scope.SatirBirlestir = data[i].VALUE;
-                }
-                //POSSATIŞ
                 else if(data[i].NAME == "SatisSeri")
                 {
                     $scope.SatisSeri = data[i].VALUE;
@@ -379,6 +291,10 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
                 else if(data[i].NAME == "IadeSeri")
                 {
                     $scope.IadeSeri = data[i].VALUE;
+                }
+                else if(data[i].NAME == "AvansSeri")
+                {
+                    $scope.AvansSeri = data[i].VALUE;
                 }
                 else if(data[i].NAME == "CariKodu")
                 {
@@ -394,55 +310,18 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
                 }
                 else if(data[i].NAME == "DepoNo")
                 {
-                    $scope.DepoNo = data[i].VALUE;
-                }
-                else if(data[i].NAME == "FiyatListeNo")
-                {
-                    $scope.FiyatListeNo = data[i].VALUE;
-                }
-                else if(data[i].NAME == "PersonelKodu")
-                {
-                    $scope.PersonelKodu = data[i].VALUE;
-                }
-                else if(data[i].NAME == "SorumlulukKodu")
-                {
-                    $scope.SorumlulukKodu = data[i].VALUE;
-                }
-                else if(data[i].NAME == "EvrakTip")
-                {
-                    $scope.EvrakTip = data[i].VALUE;
-                }
-                //MENÜ
-                else if(data[i].NAME == "PosSatis")
-                {
-                    $scope.PosSatis = data[i].VALUE == 0 ? false : true;
-                }
-                else if(data[i].NAME == "StokListe")
-                {
-                    $scope.StokListe = data[i].VALUE == 0 ? false : true;
-                }
-                else if(data[i].NAME == "StokTanitim")
-                {
-                    $scope.StokTanitim = data[i].VALUE == 0 ? false : true;
-                }
-                else if(data[i].NAME == "CariListe")
-                {
-                    $scope.CariListe = data[i].VALUE == 0 ? false : true;
-                }
-                else if(data[i].NAME == "CariTanitim")
-                {
-                    $scope.CariTanitim = data[i].VALUE == 0 ? false : true;
+                    $scope.SubeKodu = data[i].VALUE;
                 }
             }
             db.GetData($scope.Firma,'CmbDepoGetir',['TÜMÜ'],function(data)
             {   
-                $scope.DepoListe = data;
+                $scope.SubeListe = data;
             });
         });
     }
     function ParamDelete(pData)
     {
-        db.ExecuteTag($scope.Firma,'ParamDelete',[pData.CODE],async function(InsertResult)
+        db.ExecuteTag($scope.Firma,'ParamDelete',[pData.ID],async function(InsertResult)
         {              
             if(typeof(InsertResult.result.err) == 'undefined')
             {   
@@ -454,16 +333,16 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
             }
         });
     }
-    function ParamInsert(pKeys,pValues,pTag,pKullanici)
+    function ParamInsert(pKeys,pValues,pKasaID)
     {
         let InsertData = 
         [
-            pKullanici,
-            pKullanici,
+            pKasaID,
+            pKasaID,
             pKeys[0],
             pValues[0],
-            pTag,
-            pKullanici
+            0,
+            pKasaID
         ];
 
         db.ExecuteTag($scope.Firma,'ParamInsert',InsertData,async function(InsertResult)
@@ -477,13 +356,13 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
             }
         });
     }
-    function ParamUpdate(pKeys,pValues,pKodu)
+    function ParamUpdate(pKeys,pValues,pID)
     {
         var UpdateData = 
         [
             pValues[0],
             pKeys[0],
-            pKodu
+            pID
         ];
 
         db.ExecuteTag($scope.Firma,'ParamUpdate',UpdateData,async function(UpdateResult)
@@ -494,30 +373,30 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
             }   
             else
             {
-                alert("Parametre Güncelleme İşleminde Hata.");
+                alertify.alert("Parametre Güncelleme İşleminde Hata.");
                 console.log(UpdateResult.result.err);
             }
         });
     }
-    $scope.KullaniciRowClick = function(pIndex,pItem,pObj)
+    $scope.CihazRowClick = function(pIndex,pItem,pObj)
     {
-        if ( KullaniciListeRow ) { KullaniciListeRow.children('.jsgrid-cell').css('background-color', '').css('color',''); }
+        if ( CihazListeRow ) { CihazListeRow.children('.jsgrid-cell').css('background-color', '').css('color',''); }
         var $row = $("#TblCihaz").jsGrid("rowByItem", pItem);
         $row.children('.jsgrid-cell').css('background-color','#2979FF').css('color','white');
-        KullaniciListeRow = $row;
+        CihazListeRow = $row;
     }
     $scope.BtnCihazInsert = function(pTip)
     {
         if(pTip == 0)
         {
             $("#MdlCihaz").modal("show");
-            Init();
+            $scope.BtnYeni();
         }
         else
         {
-            if($scope.Kodu != '' && $scope.Kullanici != '' && $scope.Sifre != '')
+            if($scope.KasaID != '' && $scope.KasaAdi != '')
             {
-                KullaniciInsert();
+                CihazInsert();
             }
             else
             {
@@ -525,34 +404,33 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
             }
         }
     }
-    $scope.BtnKullaniciGuncelle = function(pTip,pData)
+    $scope.BtnCihazGuncelle = function(pTip,pData)
     {
+        
         if(pTip == 0)
         {
-            $scope.Kodu = pData.CODE;
-            $scope.Kullanici = pData.NAME;
-            $scope.Sifre = pData.PASSWORD;
-            $scope.AktifPasif = pData.STATUS == 0 ? false : true;
-            $scope.KullaniciGuid = pData.GUID;
             $('#MdlCihazGuncelle').modal('show');
+            $scope.KasaID = pData.ID;
+            $scope.KasaAdi = pData.NAME;
+            $scope.AktifPasif = pData.STATUS == 0 ? false : true;
+            $scope.CihazGuid = pData.GUID;
         }
         else
         {
             let UpdateData = 
             [
-                $scope.Kodu,
-                $scope.Kullanici,
-                $scope.Sifre,
+                $scope.KasaID,
+                $scope.KasaAdi,
                 $scope.AktifPasif == true ? 1 : 0,
-                $scope.KullaniciGuid 
+                $scope.CihazGuid 
             ]
 
-            KullaniciUpdate(UpdateData);
+            CihazUpdate(UpdateData);
         }
     }
     $scope.BtnParamGuncelle = function()
     {
-        if($scope.Kodu != "")
+        if($scope.KasaID != "")
         {
             let Param =
             [
@@ -567,9 +445,6 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
                 },
                 {
                     KiloUzunluk : $scope.KiloUzunluk,
-                },
-                {
-                    SatirBirlestir : $scope.SatirBirlestir,
                 },
                 {
                     SatisSeri : $scope.SatisSeri,
@@ -593,44 +468,17 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
                     KKasaKodu : $scope.KKasaKodu,
                 },
                 {
-                    DepoNo : $scope.DepoNo,
-                },
-                {
-                    FiyatListeNo : $scope.FiyatListeNo,
-                },
-                {
-                    PersonelKodu : $scope.PersonelKodu,
-                },
-                {
-                    SorumlulukKodu : $scope.SorumlulukKodu,
-                },
-                {
-                    EvrakTip : $scope.EvrakTip,
-                },
-                {
-                    PosSatis : $scope.PosSatis == true ? 1 : 0,
-                },
-                {
-                    StokListe : $scope.StokListe == true ? 1 : 0,
-                },
-                {
-                    StokTanitim : $scope.StokTanitim == true ? 1 : 0,
-                },
-                {
-                    CariListe : $scope.CariListe == true ? 1 : 0,
-                },
-                {
-                    CariTanitim : $scope.CariTanitim == true ? 1 : 0
+                    DepoNo : $scope.SubeKodu,
                 },
             ]
             for (let i = 0; i < Param.length; i++) 
             {
-                ParamUpdate(Object.keys(Param[i]),Object.values(Param[i]),$scope.Kodu)
+                ParamUpdate(Object.keys(Param[i]),Object.values(Param[i]),$scope.KasaID)
             }
         }
         else
         {
-            alert("Parametre Güncellemesi İçin Kullanıcı Seçmelisiniz.")
+            alert("Parametre Güncellemesi İçin Cihaz Seçmelisiniz.")
         }
 
         alert("Parametreler Güncellendi.");
@@ -639,22 +487,35 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
     {
         Init();
         InitCihazGrid();
-        KullaniciGetir();
+        CihazGetir();
 
         db.GetData($scope.Firma,'CmbDepoGetir',['TÜMÜ'],function(data)
         {   
-            $scope.DepoListe = data;
+            $scope.SubeListe = data;
+            $scope.SubeKodu = $scope.SubeListe[0].KODU;
         });
-    }
-    $scope.KullaniciDepoChange = function()
-    {
-        KullaniciGetir();
     }
     $scope.BtnGeri = function()
     {
         $("#TbMain").addClass('active');
-        $("#TbPosSatis").removeClass('active');
-        $("#TbSistem").removeClass('active');
-        $("#TbMenu").removeClass('active');
+        $("#TbParametre").removeClass('active');
+        CihazGetir();
+    }
+    $scope.BtnYeni = function()
+    {
+        $scope.KasaID = "";
+        $scope.KasaAdi = "";
+        $scope.KiloBarkod = "";
+        $scope.KiloFlag = "26,27,28,29";
+        $scope.KiloBaslangic = "";
+        $scope.KiloUzunluk = "";
+        $scope.SatisSeri = "IRS";
+        $scope.TahsilatSeri = "THS";
+        $scope.IadeSeri = "IADE";
+        $scope.AvansSeri = "AVNS";
+        $scope.CariKodu = "1";
+        $scope.NKasaKodu = "1";
+        $scope.KKasaKodu = "1";
+        $scope.CihazGuid = ""; //CİHAZ GÜNCELLEME SİLME İŞLEMİ İÇİN KULLANILIYOR.
     }
 }

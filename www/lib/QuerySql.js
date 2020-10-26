@@ -1139,7 +1139,7 @@ var QuerySql =
                 ",[NAME] " +
                 ",[VALUE] " +
                 ",[TAG] " +
-                ",[USER]) " +
+                ",[ID]) " +
                 "VALUES " +
                 "(@CUSER						--<CUSER, nvarchar(25),> \n " +
                 ",GETDATE()					--<CDATE, datetime,> \n " +
@@ -1148,60 +1148,58 @@ var QuerySql =
                 ",@NAME						--<NAME, nvarchar(25),> \n " +
                 ",@VALUE						--<VALUE, nvarchar(50),> \n " +
                 ",@TAG						--<TAG, nvarchar(25),> \n " +
-                ",@USER						--<USER, nvarchar(25),> \n " +
+                ",@ID						--<ID, nvarchar(25),> \n " +
                 ")",
-        param : ['CUSER:string|25','LUSER:string|25','NAME:string|25','VALUE:string|50','TAG:string|25','USER:string|25']
+        param : ['CUSER:string|25','LUSER:string|25','NAME:string|25','VALUE:string|50','TAG:string|25','ID:string|25']
     },
     ParamGetir : 
     {
-        query : "SELECT * FROM PARAMS WHERE [USER] = @USER " ,
-        param : ['USER:string|25']
+        query : "SELECT * FROM PARAMS WHERE ID = @ID " ,
+        param : ['ID:string|25']
     },
     ParamDelete : 
     {
-        query : "DELETE FROM PARAMS WHERE [USER] = @USER " ,
-        param : ['USER:string|150']
+        query : "DELETE FROM PARAMS WHERE ID = @ID " ,
+        param : ['ID:string|150']
     },
     ParamUpdate : 
     {
-        query : "UPDATE PARAMS SET VALUE = @VALUE,LDATE = GETDATE() WHERE NAME = @NAME AND [USER] = @USER ",
-        param : ['VALUE:string|25','NAME:string|25','USER:string|25']
+        query : "UPDATE PARAMS SET VALUE = @VALUE,LDATE = GETDATE() WHERE NAME = @NAME AND ID = @ID ",
+        param : ['VALUE:string|25','NAME:string|25','ID:string|25']
     },
     //CİHAZ PARAMETRE
     CihazGetir :
     {
-        query : "SELECT *,CASE WHEN STATUS = 1 THEN 'Aktif' ELSE 'Pasif' END AS DURUM FROM DEVICE WHERE ((CODE IN (@CODE)) OR (@CODE = '')) ORDER BY CODE ASC ",
-        param : ['CODE:string|25']
+        query : "SELECT *,CASE WHEN DV.STATUS = 1 THEN 'Aktif' ELSE 'Pasif' END AS DURUM, " +
+                "(SELECT VALUE FROM PARAMS AS PS WHERE PS.ID = DV.ID AND NAME = 'DepoNo') AS SUBENO " +
+                "FROM DEVICE AS DV WHERE ((ID IN (@ID)) OR (@ID = '')) ORDER BY ID ASC " ,
+        param : ['ID:string|25']
     },
     CihazInsert : 
     {
-        query : "INSERT INTO [dbo].[USERS] " +
-                "([CDATE] " +
+        query : "INSERT INTO [dbo].[DEVICE] " +
+                "([CDATE]" +
                 ",[LDATE] " +
-                ",[CODE] " +
+                ",[ID] " +
                 ",[NAME] " +
-                ",[PASSWORD] " +
-                ",[TAG] " +
                 ",[STATUS]) " +
                 "VALUES " +
                 "(GETDATE()						--<CDATE, datetime,>  \n" + 
                 ",GETDATE()						--<LDATE, datetime,>  \n" + 
-                ",@CODE							--<CODE, nvarchar(25),>  \n" + 
+                ",@ID							--<ID, nvarchar(25),>  \n" + 
                 ",@NAME							--<NAME, nvarchar(50),>  \n" + 
-                ",@PASSWORD						--<PASSWORD, nvarchar(25),>  \n" + 
-                ",@TAG							--<TAG, nvarchar(25),>  \n" + 
                 ",@STATUS							--<STATUS, int,>  \n" + 
                 ")",
-        param : ['CODE:string|25','NAME:string|50','PASSWORD:string|25','TAG:string|25','STATUS:int']
+        param : ['ID:string|25','NAME:string|50','STATUS:int']
     },
     CihazUpdate : 
     {
-        query : "UPDATE USERS SET CODE = @CODE,NAME = @NAME, PASSWORD = @PASSWORD, STATUS = @STATUS,LDATE = GETDATE() WHERE GUID = @GUID " ,
-        param : ['CODE:string|25','NAME:string|50','PASSWORD:string|25','STATUS:int','GUID:string|150']
+        query : "UPDATE DEVICE SET ID = @ID,NAME = @NAME, STATUS = @STATUS,LDATE = GETDATE() WHERE GUID = @GUID " ,
+        param : ['ID:string|25','NAME:string|50','STATUS:int','GUID:string|150']
     },
     CihazDelete : 
     {
-        query : "DELETE FROM USERS WHERE GUID = @GUID " ,
+        query : "DELETE FROM DEVICE WHERE GUID = @GUID " ,
         param : ['GUID:string|150']
     },
 };
