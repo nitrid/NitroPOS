@@ -2469,13 +2469,9 @@ function Pos($scope,$window,$rootScope,db)
                     {
                         if(YetkiliList[i].TAG == 1)
                         {
-                            let ParamList = await db.GetPromiseTag($scope.Firma,'ParamGetir',[YetkiliList[i].CODE]);
-                            for (let x = 0; x < ParamList.length; x++) 
+                            if(YetkiliList[i].PASSWORD == $scope.TxtBelgeIptalSifre)
                             {
-                                if(YetkiliList[i].PASSWORD == $scope.TxtBelgeIptalSifre)
-                                {
-                                    GirisOnay = true;
-                                }
+                                GirisOnay = true;
                             }
                         }
                     }
