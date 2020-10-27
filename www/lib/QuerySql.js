@@ -1101,7 +1101,7 @@ var QuerySql =
     //KULLANICI PARAMETRE
     KullaniciGetir :
     {
-        query : "SELECT *,CASE WHEN TAG = 0 THEN 'Kullanıcı' WHEN TAG = 1 THEN 'Yetkili' END AS YETKI,CASE WHEN STATUS = 1 THEN 'Aktif' ELSE 'Pasif' END AS DURUM FROM USERS WHERE ((CODE IN (@CODE)) OR (@CODE = '')) ORDER BY CODE ASC  ",
+        query : "SELECT *,CASE WHEN TAG = 0 THEN 'Kullanıcı' WHEN TAG = 1 THEN 'Yetkili' END AS YETKI,CASE WHEN STATUS = 1 THEN 'Aktif' ELSE 'Pasif' END AS DURUM FROM USERS WHERE ((CODE IN (@CODE)) OR (@CODE = '')) ",
         param : ['CODE:string|25']
     },
     KullaniciInsert : 
