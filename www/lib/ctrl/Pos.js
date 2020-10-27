@@ -440,7 +440,7 @@ function Pos($scope,$window,$rootScope,db)
     function Init()
     {
         $scope.Kullanici = $window.sessionStorage.getItem('User');
-        $scope.CihazID = $window.localStorage.getItem('cihazid');
+        $scope.CihazID = $window.localStorage.getItem('device');
         $scope.Firma = 'NITROGENPOS'
         $scope.Seri = "";
         $scope.TahSeri = "";
@@ -1578,6 +1578,8 @@ function Pos($scope,$window,$rootScope,db)
             InitKasaAraToplamGrid();
             
             $scope.ParamListe = await db.GetPromiseTag($scope.Firma,'ParamGetir',[$scope.CihazID]);
+
+            console.log($scope.CihazID)
             $scope.KullaniciListe = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',[$scope.Kullanici]);
 
             if($scope.ParamListe.length > 0)
@@ -2831,6 +2833,7 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.BtnMiktarGuncelle = function()
     {
+        console.log($scope.SatisList[$scope.IslemListeSelectedIndex].QUANTITY)
         $("#MdlMiktarGuncelle").modal("show");
         $scope.TxtMiktarGuncelle = $scope.SatisList[$scope.IslemListeSelectedIndex].QUANTITY.toString();
 
