@@ -440,6 +440,7 @@ function Pos($scope,$window,$rootScope,db)
     function Init()
     {
         $scope.Kullanici = $window.sessionStorage.getItem('User');
+        $scope.CihazID = $window.localStorage.getItem('cihazid');
         $scope.Firma = 'NITROGENPOS'
         $scope.Seri = "";
         $scope.TahSeri = "";
@@ -490,7 +491,7 @@ function Pos($scope,$window,$rootScope,db)
         $scope.TxtCariTel = "";
         $scope.ChkFis = true;
         $scope.ChkFatura = true;
-
+        
         $scope.KasaNo = 1;
         $scope.Saat = moment(new Date(),"HH:mm:ss").format("HH:mm:ss");
 
@@ -866,6 +867,13 @@ function Pos($scope,$window,$rootScope,db)
             fields: 
             [
             {
+                name: "DEVICE",
+                title: "CİHAZ",
+                type: "date",
+                align: "center",
+                width: 50
+            },
+            {
                 name: "CDATE",
                 title: "TARIH",
                 type: "date",
@@ -1073,6 +1081,13 @@ function Pos($scope,$window,$rootScope,db)
             fields: 
             [
                 {
+                    name: "DEVICE",
+                    title: "CİHAZ",
+                    type: "text",
+                    align: "center",
+                    width: 50
+                },
+                {
                     name: "DOC_TYPE",
                     title: "EVRAK TİP",
                     type: "text",
@@ -1123,6 +1138,13 @@ function Pos($scope,$window,$rootScope,db)
             },
             fields: 
             [
+                {
+                    name: "DEVICE",
+                    title: "CİHAZ",
+                    type: "text",
+                    align: "center",
+                    width: 50
+                },
                 {
                     name: "TYPE",
                     title: "SATIŞ TİP",
@@ -1554,8 +1576,8 @@ function Pos($scope,$window,$rootScope,db)
             InitSonSatisTahDetayGrid();
             InitAraToplamGrid();
             InitKasaAraToplamGrid();
-
-            $scope.ParamListe = await db.GetPromiseTag($scope.Firma,'ParamGetir',[$scope.Kullanici]);
+            
+            $scope.ParamListe = await db.GetPromiseTag($scope.Firma,'ParamGetir',[$scope.CihazID]);
             $scope.KullaniciListe = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',[$scope.Kullanici]);
 
             if($scope.ParamListe.length > 0)
@@ -1798,6 +1820,7 @@ function Pos($scope,$window,$rootScope,db)
         [
             $scope.Kullanici,
             $scope.Kullanici,
+            $scope.CihazID,
             $scope.Sube,
             $scope.EvrakTip,
             $scope.Tarih,
@@ -1883,6 +1906,7 @@ function Pos($scope,$window,$rootScope,db)
         [
             $scope.Kullanici,
             $scope.Kullanici,
+            $scope.CihazID,
             $scope.Sube,
             $scope.TahTip,
             $scope.EvrakTip, //EVRAKTIP
@@ -1962,7 +1986,6 @@ function Pos($scope,$window,$rootScope,db)
                             {
                                 let TmpPayment = {};
                                 
-                                console.log(Number(Math.round(($scope.TahList[i].AMOUNT * 100)+'e'+2)+'e-'+2));
                                 TmpPayment.TYPE = $scope.TahList[i].TYPE;
                                 TmpPayment.AMOUNT = Number(Math.round(($scope.TahList[i].AMOUNT * 100)+'e'+2)+'e-'+2);
 
@@ -2750,7 +2773,7 @@ function Pos($scope,$window,$rootScope,db)
         $("#TbSonSatisListesi").addClass('active');
         $("#TbMain").removeClass('active');
 
-        db.GetData($scope.Firma,'PosSonSatisGetir',[$scope.Sube,$scope.Tarih,$scope.Kullanici],function(PosSonSatis)
+        db.GetData($scope.Firma,'PosSonSatisGetir',[$scope.Sube,$scope.Tarih,$scope.CihazID],function(PosSonSatis)
         {  
             $scope.SonSatisList = PosSonSatis;
             $("#TblSonSatis").jsGrid({data : $scope.SonSatisList});
@@ -3028,14 +3051,10 @@ function Pos($scope,$window,$rootScope,db)
                 {
                     if(YetkiliList[i].TAG == 1)
                     {
-                        let ParamList = await db.GetPromiseTag($scope.Firma,'ParamGetir',[YetkiliList[i].CODE]);
-                        for (let x = 0; x < ParamList.length; x++) 
+                        if(YetkiliList[i].PASSWORD == $scope.TxtYetkiliSifre)
                         {
-                            if(YetkiliList[i].PASSWORD == $scope.TxtYetkiliSifre)
-                            {
-                                GirisOnay = true;
-                            }   
-                        }
+                            GirisOnay = true;
+                        }   
                     }   
                 }
                 if(GirisOnay)
@@ -3106,6 +3125,7 @@ function Pos($scope,$window,$rootScope,db)
                 [
                     $scope.Kullanici,
                     $scope.Kullanici,
+                    $scope.CihazID,
                     $scope.Sube,
                     0, //SATIŞ TİPİ(NAKİT-KREDİ KARTI)
                     $scope.AvansTip, //EVRAKTIP
@@ -3124,7 +3144,10 @@ function Pos($scope,$window,$rootScope,db)
                     {   
                         if(typeof(InsertResult.result.err) == 'undefined')
                         {   
-                            db.Ingenico.CaseOut("{AMOUNT:"+ $scope.TxtAvans * 100 + "}");      //KASAYA PARA VERME
+                            if(typeof require != 'undefined')
+                            {
+                                db.Ingenico.CaseOut("{AMOUNT:"+ $scope.TxtAvans * 100 + "}");      //KASAYA PARA VERME
+                            }
                             $scope.TxtAvans = 0;
                             alertify.alert("Avans Çekme İşlemi Başarıyla Gerçekleşti.")
                             $("#MdlAvans").modal("hide");
@@ -3142,7 +3165,10 @@ function Pos($scope,$window,$rootScope,db)
                     {   
                         if(typeof(InsertResult.result.err) == 'undefined')
                         {   
-                            db.Ingenico.CaseIn("{AMOUNT:" + $scope.TxtAvans * 100 + "}");         //KASADAN PARA ALMA
+                            if(typeof require != 'undefined')
+                            {
+                                db.Ingenico.CaseIn("{AMOUNT:" + $scope.TxtAvans * 100 + "}");         //KASADAN PARA ALMA
+                            }
                             $scope.TxtAvans = 0;
                             alertify.alert(Msg2)
                             $("#MdlAvans").modal("hide");
@@ -3415,6 +3441,7 @@ function Pos($scope,$window,$rootScope,db)
                         [
                             $scope.Kullanici,
                             $scope.Kullanici,
+                            $scope.CihazID,
                             $scope.Sube,
                             0, //TYPE
                             1, //DOC_TYPE
@@ -3492,15 +3519,28 @@ function Pos($scope,$window,$rootScope,db)
             }
         }
     }
-    $scope.BtnKasaRapor = function()
+    $scope.BtnKasaRapor = function(pTip)
     {
-        db.GetData($scope.Firma,'PosAraToplamRapor',[$scope.Sube,$scope.Tarih,$scope.Kullanici],function(AraToplamRapor)
+        let Kullanici = '';
+        $scope.RaporTitle = '';
+        if(pTip == 0)
+        {
+            Kullanici = '';
+            $scope.RaporTitle = 'KASA RAPORU';
+        }
+        else
+        {
+            Kullanici = $scope.Kullanici;
+            $scope.RaporTitle = 'KASİYER ÇIKIŞ RAPORU';
+        }
+
+        db.GetData($scope.Firma,'PosAraToplamRapor',[$scope.Sube,$scope.Tarih,$scope.CihazID,Kullanici],function(AraToplamRapor)
         {  
             $scope.AraToplamRaporList = AraToplamRapor;
             $("#TblAraToplam").jsGrid({data : $scope.AraToplamRaporList});
             $scope.TxtBarkod = "";
         });
-        db.GetData($scope.Firma,'PosAraToplamKasaRapor',[$scope.Sube,$scope.Tarih,$scope.Kullanici],function(KasaAraToplamRapor)
+        db.GetData($scope.Firma,'PosAraToplamKasaRapor',[$scope.Sube,$scope.Tarih,$scope.CihazID,Kullanici],function(KasaAraToplamRapor)
         {  
             $scope.KasaAraToplamRaporList = KasaAraToplamRapor;
             $("#TblKasaAraToplam").jsGrid({data : $scope.KasaAraToplamRaporList});
@@ -3524,7 +3564,7 @@ function Pos($scope,$window,$rootScope,db)
                 {
                     $scope.TxtOkcMesaj = "OKC Cihazıyla Eşleşme Yapılıyor.";
                     $scope.BtnTxtOkcEslesme = "İptal"
-                    $("#MdlIngenicoEslesme").modal("show");  
+                    $("#MdlIngenicoEslesme").modal("show"); 
                     db.Ingenico.Init();
                 }
             }
@@ -3559,7 +3599,10 @@ function Pos($scope,$window,$rootScope,db)
             }
             else
             {
-                db.Ingenico.ZReport("{PASSWORD:'" + $scope.TxtZSifre + "'}");
+                if(typeof require != 'undefined')
+                {
+                    db.Ingenico.ZReport("{PASSWORD:'" + $scope.TxtZSifre + "'}");
+                }
                 $("#MdlZSifre").modal("hide");
                 $scope.TxtZSifre = "";
                 FocusBarkod = true;
@@ -3598,7 +3641,10 @@ function Pos($scope,$window,$rootScope,db)
             }
             else
             {
-                db.Ingenico.XReport("{PASSWORD:'" + $scope.TxtXSifre + "'}");
+                if(typeof require != 'undefined')
+                {
+                    db.Ingenico.XReport("{PASSWORD:'" + $scope.TxtXSifre + "'}");
+                }
                 $("#MdlXSifre").modal("hide");
                 $scope.TxtXSifre = "";
                 FocusBarkod = true;
@@ -3856,7 +3902,10 @@ function Pos($scope,$window,$rootScope,db)
             }
             else
             {
-                db.Ingenico.EndCopy("{PASSWORD:'" + $scope.TxtSonKopyaSifre + "'}");
+                if(typeof require != 'undefined')
+                {
+                    db.Ingenico.EndCopy("{PASSWORD:'" + $scope.TxtSonKopyaSifre + "'}");
+                }
                 $("#MdlSonKopya").modal("hide");
                 $scope.TxtSonKopyaSifre = "";
             }

@@ -7,11 +7,6 @@
                         <div class="col-3 py-2">
                             <label class="form-control-label"><h4>KULLANICI TANIMLAMA</h4></label>
                         </div>
-                        <!-- <div class="col-2 offset-5 py-2">
-                            <select class="form-control form-control ng-pristine ng-untouched ng-valid ng-not-empty" style="height:40px; font-size: 16px;" ng-model="DepoNo" ng-change = 'KullaniciDepoChange()'>
-                                <option ng-repeat="option in DepoListe" value="{{option.KODU}}">{{option.ADI}}</option>
-                            </select>
-                        </div> -->
                         <div class="col-2 offset-7 py-2">
                             <button type="submit" class="btn btn-primary form-control btn-block" style="height:40px; font-size: 16px;" ng-click="BtnKullaniciInsert(0)">Yeni Ekle</button>
                         </div>
@@ -22,13 +17,13 @@
                         </div>
                     </div>
                 </div>
-                <div id="TbSistem" class="tab-pane">
+                <div id="TbParametre" class="tab-pane">
                     <div class="row">
                         <div class="col-3 py-2">
-                            <label class="form-control-label"><h4>SİSTEM PARAMETRELERİ</h4></label>
+                            <label class="form-control-label"><h4>KULLANICI PARAMETRELERİ</h4></label>
                         </div>
                         <div class="col-3 py-2">
-                            <label class="form-control-label"><h4>KULLANICI : {{Kodu}}</h4></label>
+                            <label class="form-control-label"><h4>KULLANICI : {{KullaniciID}}</h4></label>
                         </div>
                         <div class="col-2 offset-2 py-2">
                             <button type="submit" class="btn btn-primary form-control btn-block" style="height:40px; font-size: 16px;" ng-click="BtnParamGuncelle()">Güncelle</button>
@@ -39,195 +34,9 @@
                     </div>
                     <div class="panel">
                         <div class="panel-body">
-                            <div class="form-group row py-2">
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">Firma No :</label>
-                                <div class="col-4">
-                                    <input type="text" class="form-control" ng-model = "Firma">
-                                </div>
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">Satır Birleştir :</label>
-                                <div class="col-4">
-                                  <input type="text" class="form-control" ng-model = "SatirBirlestir">
-                                </div>
-                            </div>
-                            <div class="form-group row py-2">
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">Kilo Barkod :</label>
-                                <div class="col-4">
-                                  <input type="text" class="form-control" ng-model = "KiloBarkod">
-                                </div>
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">Kilo Flag :</label>
-                                <div class="col-4">
-                                  <input type="text" class="form-control" ng-model = "KiloFlag">
-                                </div>
-                            </div>
-                            <div class="form-group row py-2">
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">Kilo Başlangıç :</label>
-                                <div class="col-4">
-                                  <input type="text" class="form-control" ng-model = "KiloBaslangic">
-                                </div>
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">Kilo Uzunluk :</label>
-                                <div class="col-4">
-                                  <input type="text" class="form-control" ng-model = "KiloUzunluk">
-                                </div>
-                            </div>
+                  
                         </div>
                     </div>
-                </div>
-                <div id="TbPosSatis" class="tab-pane">
-                    <div class="row">
-                        <div class="col-3 py-2">
-                            <label class="form-control-label"><h4>POS PARAMETRELERİ</h4></label>
-                        </div>
-                        <div class="col-2 py-2">
-                            <label class="form-control-label"><h4>KULLANICI : {{Kodu}}</h4></label>
-                        </div>
-                        <div class="col-2 offset-3 py-2">
-                            <button type="submit" class="btn btn-primary form-control btn-block" style="height:40px; font-size: 16px;" ng-click="BtnParamGuncelle()">Güncelle</button>
-                        </div>
-                        <div class="col-2 py-2">
-                            <button type="submit" class="btn btn-primary form-control btn-block" style="height:40px; font-size: 16px;" ng-click="BtnGeri()"><i class="icon wb-reply" aria-hidden="true"></i></button>
-                        </div>
-                    </div>
-                    <div class="panel">
-                        <div class="panel-body">
-                            <div class="form-group row py-2">
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">Satış Seri :</label>
-                                <div class="col-4">
-                                    <input type="text" class="form-control" ng-model = "SatisSeri">
-                                </div>
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">Tahsilat Seri :</label>
-                                <div class="col-4">
-                                    <input type="text" class="form-control" ng-model = "TahsilatSeri">
-                                </div>
-                            </div>
-                            <div class="form-group row py-2">
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">İade Seri :</label>
-                                <div class="col-4">
-                                  <input type="text" class="form-control" ng-model = "IadeSeri">
-                                </div>
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">Avans Seri :</label>
-                                <div class="col-4">
-                                  <input type="text" class="form-control" ng-model = "AvansSeri">
-                                </div>
-                            </div>
-                            <div class="form-group row py-2">
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">Nakit Kasa Kodu :</label>
-                                <div class="col-4">
-                                  <input type="text" class="form-control" ng-model = "NKasaKodu">
-                                </div>
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">K.Kartı Kasa Kodu :</label>
-                                <div class="col-4">
-                                  <input type="text" class="form-control" ng-model = "KKasaKodu">
-                                </div>
-                            </div>
-                            <div class="form-group row py-2">
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">Depo No :</label>
-                                <div class="col-4">
-                                    <select class="form-control ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="DepoNo">
-                                        <option ng-repeat="option in DepoListe" value="{{option.KODU}}">{{option.ADI}}</option>
-                                    </select>
-                                </div>
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">Fiyat Liste :</label>
-                                <div class="col-4">
-                                  <input type="text" class="form-control" ng-model = "FiyatListeNo">
-                                </div>
-                            </div>
-                            <div class="form-group row py-2">
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">Personel Kodu :</label>
-                                <div class="col-4">
-                                    <select class="form-control ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="PersonelNo">
-                                        <option ng-repeat="option in PersonelListe" value="{{option.KODU}}">{{option.ADI}}</option>
-                                    </select>
-                                </div>
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">Sorumluluk Kodu :</label>
-                                <div class="col-4">
-                                    <select class="form-control ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="SorumlulukKodu">
-                                        <option ng-repeat="option in SorumlulukListe" value="{{option.KODU}}">{{option.ADI}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row py-2">
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">Evrak Tip :</label>
-                                <div class="col-4">
-                                  <input type="text" class="form-control" ng-model = "EvrakTip">
-                                </div>
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">Cari Kodu :</label>
-                                <div class="col-4">
-                                  <input type="text" class="form-control" ng-model = "CariKodu">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="TbMenu" class="tab-pane">
-                    <div class="row">
-                        <div class="col-3 py-2">
-                            <label class="form-control-label"><h4>MENÜ PARAMETRELERİ</h4></label>
-                        </div>
-                        <div class="col-2 py-2">
-                            <label class="form-control-label"><h4>KULLANICI : {{Kodu}}</h4></label>
-                        </div>
-                        <div class="col-2 offset-3 py-2">
-                            <button type="submit" class="btn btn-primary form-control btn-block" style="height:40px; font-size: 16px;" ng-click="BtnParamGuncelle()">Güncelle</button>
-                        </div>
-                        <div class="col-2 py-2">
-                            <button type="submit" class="btn btn-primary form-control btn-block" style="height:40px; font-size: 16px;" ng-click="BtnGeri()"><i class="icon wb-reply" aria-hidden="true"></i></button>
-                        </div>
-                    </div>
-                    <div class="panel">
-                        <div class="panel-body">
-                            <div class="form-group row py-2">
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">Pos Satış :</label>
-                                <div class="col-4">
-                                    <li class="list-inline-item">
-                                        <div class="checkbox-custom checkbox-primary">
-                                        <input type="checkbox" ng-model = 'PosSatis' name="inputCheckboxes" />
-                                        <label></label>
-                                        </div>
-                                    </li>
-                                </div>
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">Stok Tanıtım :</label>
-                                <div class="col-4">
-                                    <li class="list-inline-item">
-                                        <div class="checkbox-custom checkbox-primary">
-                                        <input type="checkbox" ng-model = 'StokTanitim' name="inputCheckboxes" />
-                                        <label></label>
-                                        </div>
-                                    </li>
-                                </div>
-                            </div>
-                            <div class="form-group row py-2">
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">Stok Listesi :</label>
-                                <div class="col-4">
-                                    <li class="list-inline-item">
-                                        <div class="checkbox-custom checkbox-primary">
-                                        <input type="checkbox" ng-model = 'StokListe' name="inputCheckboxes" />
-                                        <label></label>
-                                        </div>
-                                    </li>
-                                </div>
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">Cari Tanıtım :</label>
-                                <div class="col-4">
-                                    <li class="list-inline-item">
-                                        <div class="checkbox-custom checkbox-primary">
-                                        <input type="checkbox" ng-model = 'CariTanitim' name="inputCheckboxes" />
-                                        <label></label>
-                                        </div>
-                                    </li>
-                                </div>
-                            </div>
-                            <div class="form-group row py-2">
-                                <label style="height:40px; font-size: 15px;" class="col-2 form-control-label">Cari Listesi :</label>
-                                <div class="col-4">
-                                    <li class="list-inline-item">
-                                        <div class="checkbox-custom checkbox-primary">
-                                        <input type="checkbox" ng-model = 'CariListe' name="inputCheckboxes" />
-                                        <label></label>
-                                        </div>
-                                    </li>
-                                </div>
-                            </div>
-                        </div>
-                    </div>  
                 </div>
             </div>
         </div>
@@ -244,7 +53,7 @@
                 </div>
                 <div class="modal-body py-10">
                     <div class="form-group row my-10">
-                        <label class="form-control-label col-3 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Kodu :</b></span></div></label>
+                        <label class="form-control-label col-3 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>KullanıcıID :</b></span></div></label>
                         <input type="text" class="form-control col-9" ng-model="Kodu">
                     </div>
                     <div class="form-group row my-10">
@@ -288,7 +97,7 @@
                 </div>
                 <div class="modal-body py-10">
                     <div class="form-group row my-10">
-                        <label class="form-control-label col-3 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>Kodu :</b></span></div></label>
+                        <label class="form-control-label col-3 pr-20"><div class="float-right"><span style="color:dodgerblue;"><b>KullanıcıID :</b></span></div></label>
                         <input type="text" class="form-control col-9" ng-model="Kodu">
                     </div>
                     <div class="form-group row my-10">
@@ -314,7 +123,7 @@
                         </div>
                     </div>
                     <div class="row my-5">
-                        <button type="submit" class="btn btn-primary form-control btn-block col-12" style="height:40px; font-size: 16px;" ng-click="BtnKullaniciGuncelle(1,'')">Kaydet</button>
+                        <button type="submit" class="btn btn-primary form-control btn-block col-12" style="height:40px; font-size: 16px;" ng-click="BtnKullaniciGuncelle(1,'')">Güncelle</button>
                     </div>
                 </div>
             </div>
