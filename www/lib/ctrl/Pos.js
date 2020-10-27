@@ -2812,6 +2812,7 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.BtnMiktarGuncelle = function()
     {
+        console.log($scope.SatisList[$scope.IslemListeSelectedIndex].QUANTITY)
         $("#MdlMiktarGuncelle").modal("show");
         $scope.TxtMiktarGuncelle = $scope.SatisList[$scope.IslemListeSelectedIndex].QUANTITY.toString();
 
