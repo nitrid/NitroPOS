@@ -29,6 +29,7 @@ function Login ($scope,$rootScope,$window,db)
             localStorage.mode = "true";
             $scope.server_adress = window.location.hostname;
             $scope.socket_port = "";
+            $scope.device = "";
             $scope.HostSettingSave();
         }
         db.Connection(function(data)
