@@ -226,6 +226,7 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
     }
     function CihazUpdate(pData)
     {
+        console.log(2)
         db.ExecuteTag($scope.Firma,'CihazUpdate',pData,async function(InsertResult)
         {         
             if(typeof(InsertResult.result.err) == 'undefined')
@@ -406,7 +407,6 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
     }
     $scope.BtnCihazGuncelle = function(pTip,pData)
     {
-        
         if(pTip == 0)
         {
             $('#MdlCihazGuncelle').modal('show');
