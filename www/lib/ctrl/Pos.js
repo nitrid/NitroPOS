@@ -3417,62 +3417,69 @@ function Pos($scope,$window,$rootScope,db)
         }
         else
         {
-            alertify.okBtn('Evet');
-            alertify.cancelBtn('Hayır');
-            alertify.confirm('İade Almak İstediğinize Emin Misiniz ?', 
-            function()
-            { 
-                //POS SATIS UPDATE
-                var TmpQuery = 
-                {
-                    db : $scope.Firma,
-                    query:  "UPDATE POS_SALES SET LDATE = GETDATE(),TYPE = 1,STATUS = 1,REF = @IREF,REF_NO = @IREF_NO WHERE DEPARTMENT = @DEPARTMENT AND TYPE = 0 AND REF = @SREF AND REF_NO = @SREFNO",
-                    param:  ['IREF','IREF_NO','DEPARTMENT','SREF','SREFNO'],
-                    type:   ['string|25','int','int','string|25','int'],
-                    value:  [$scope.IadeSeri,$scope.IadeSira,$scope.Sube,$scope.Seri,$scope.Sira]
-                }
-                db.ExecuteQuery(TmpQuery,function(UpdateResult)
-                {
-                    if(typeof(UpdateResult.result.err) == 'undefined')
-                    {                       
-                        var InsertData = 
-                        [
-                            $scope.Kullanici,
-                            $scope.Kullanici,
-                            $scope.CihazID,
-                            $scope.Sube,
-                            0, //TYPE
-                            1, //DOC_TYPE
-                            $scope.Tarih,
-                            $scope.IadeSeri,
-                            $scope.IadeSira,
-                            $scope.CariKodu,
-                            $scope.Kasa,
-                            $scope.GenelToplam,
-                            0, //PARA USTU
-                            1
-                        ];
-            
-                        db.ExecuteTag($scope.Firma,'PosTahInsert',InsertData,function(InsertResult)
-                        {
-                            if(typeof(InsertResult.result.err) == 'undefined')
-                            {                       
-                                $scope.YeniEvrak();
-                                $scope.TxtBarkod = "";
-                            }
-                            else
-                            {
-                                console.log(InsertResult.result.err);
-                            }
-                        });    
-                    }
-                    else
+            if($scope.SatisList.length == 0)
+            {
+                alertify.okBtn('Evet');
+                alertify.cancelBtn('Hayır');
+                alertify.confirm('İade Almak İstediğinize Emin Misiniz ?', 
+                function()
+                { 
+                    //POS SATIS UPDATE
+                    var TmpQuery = 
                     {
-                        console.log(UpdateResult.result.err);
+                        db : $scope.Firma,
+                        query:  "UPDATE POS_SALES SET LDATE = GETDATE(),TYPE = 1,STATUS = 1,REF = @IREF,REF_NO = @IREF_NO WHERE DEPARTMENT = @DEPARTMENT AND TYPE = 0 AND REF = @SREF AND REF_NO = @SREFNO",
+                        param:  ['IREF','IREF_NO','DEPARTMENT','SREF','SREFNO'],
+                        type:   ['string|25','int','int','string|25','int'],
+                        value:  [$scope.IadeSeri,$scope.IadeSira,$scope.Sube,$scope.Seri,$scope.Sira]
                     }
-                });
+                    db.ExecuteQuery(TmpQuery,function(UpdateResult)
+                    {
+                        if(typeof(UpdateResult.result.err) == 'undefined')
+                        {                       
+                            var InsertData = 
+                            [
+                                $scope.Kullanici,
+                                $scope.Kullanici,
+                                $scope.CihazID,
+                                $scope.Sube,
+                                0, //TYPE
+                                1, //DOC_TYPE
+                                $scope.Tarih,
+                                $scope.IadeSeri,
+                                $scope.IadeSira,
+                                $scope.CariKodu,
+                                $scope.Kasa,
+                                $scope.GenelToplam,
+                                0, //PARA USTU
+                                1
+                            ];
+                
+                            db.ExecuteTag($scope.Firma,'PosTahInsert',InsertData,function(InsertResult)
+                            {
+                                if(typeof(InsertResult.result.err) == 'undefined')
+                                {                       
+                                    $scope.YeniEvrak();
+                                    $scope.TxtBarkod = "";
+                                }
+                                else
+                                {
+                                    console.log(InsertResult.result.err);
+                                }
+                            });    
+                        }
+                        else
+                        {
+                            console.log(UpdateResult.result.err);
+                        }
+                    });
+                }
+                ,function(){});
             }
-            ,function(){});
+            else
+            {
+                alertify.alert("Satış Listesi Doluyken İade Alınamaz.(İade işlemi için iade butonunu aktifleştirin.)")
+            }
         }
     }
     $scope.BtnKasaKilitle = async function(pTip)
