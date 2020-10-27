@@ -1578,8 +1578,6 @@ function Pos($scope,$window,$rootScope,db)
             InitKasaAraToplamGrid();
             
             $scope.ParamListe = await db.GetPromiseTag($scope.Firma,'ParamGetir',[$scope.CihazID]);
-
-            console.log($scope.CihazID)
             $scope.KullaniciListe = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',[$scope.Kullanici]);
 
             if($scope.ParamListe.length > 0)
@@ -1615,6 +1613,10 @@ function Pos($scope,$window,$rootScope,db)
                         $scope.Kasa = $scope.ParamListe[i].VALUE;
                     }
                 }
+            }
+            else
+            {
+                alertify.alert("Parametre Getirme İşlemi Başarısız Oldu, Lütfen CihazID'nizi Kontrol Edin.")
             }
             $scope.Miktar = 1;
 
@@ -3917,7 +3919,7 @@ function Pos($scope,$window,$rootScope,db)
         }
         else
         {
-            alertify.alert("Satış Listesi Ve Park Listesi Doluyken Z Raporu Alınamaz.")
+            alertify.alert("Satış Listesi Ve Park Listesi Doluyken Kopya Alınamaz.")
         }
     }
     $scope.BtnFisIptal = async function()
