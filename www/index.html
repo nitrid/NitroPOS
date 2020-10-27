@@ -73,15 +73,18 @@
                 <p>{{ConnectionStatus}}</p>
               </div>              
               <div class="row">                               
-                <div class="col-8 form-group">
+                <div class="col-6 form-group">
                   <input type="text" class="form-control" name="server_adress" placeholder="Sunucu Adresi" id="server_adress" ng-model="server_adress">
                 </div>
                 <!-- <div class="col-xl-4 form-group">
                   <input type="text" class="form-control" name="server_port" placeholder="Sunucu Port" id="server_port" ng-model="server_port">
                 </div> -->
-                <div class="col-4 form-group">
-                    <input type="text" class="form-control" name="socket_port" placeholder="Soket Port" id="socket_port" ng-model="socket_port">
-                </div>               
+                <div class="col-3 form-group">
+                  <input type="text" class="form-control" name="socket_port" placeholder="Soket Port" id="socket_port" ng-model="socket_port">
+                </div> 
+                <div class="col-3 form-group">
+                  <input type="text" class="form-control" name="server_adress" placeholder="device" id="device" ng-model="device">
+                </div>
                 <div class="col-xl-offset-12">
                   <a class="btn btn-primary" href="#" ng-click="BtnTryConnect()">Bağlantı Test</a>                
                   <a class="btn btn-success" href="#" ng-click="HostSettingSave()" data-dismiss="modal">Kaydet</a>   

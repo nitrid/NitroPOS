@@ -1,9 +1,9 @@
 function Login ($scope,$rootScope,$window,db)
 {
     localStorage.mode = true;
-    console.log($window)
     $scope.server_adress = localStorage.host;
     $scope.socket_port = localStorage.socketport;
+    $scope.device = localStorage.device;
     
     $rootScope.LoadingShow = function() 
     {
@@ -65,26 +65,34 @@ function Login ($scope,$rootScope,$window,db)
     {
         localStorage.host = $scope.server_adress;
         localStorage.socketport = $scope.socket_port;
+        localStorage.device = $scope.device;
 
         db.SetHost($scope.server_adress);
         $window.location.reload();
     }
     $scope.BtnEntry = function()
     {
-        for(i = 0;i < $scope.KullaniciListe.length;i++)
+        if(typeof(localStorage.device) != 'undefined')
         {
-            if($scope.KullaniciListe[i].CODE == $scope.Kullanici && $scope.KullaniciListe[i].PASSWORD == $scope.Password)
+            for(i = 0;i < $scope.KullaniciListe.length;i++)
             {
-                console.log("Kullanıcı adı ve şifre doğru");
-                $window.sessionStorage.setItem('User', $scope.Kullanici);
-                
-                var url = "pos.html";
-                $window.location.href = url;
-                return;
+                if($scope.KullaniciListe[i].CODE == $scope.Kullanici && $scope.KullaniciListe[i].PASSWORD == $scope.Password)
+                {
+                    console.log("Kullanıcı adı ve şifre doğru");
+                    $window.sessionStorage.setItem('User', $scope.Kullanici);
+                    
+                    var url = "pos.html";
+                    $window.location.href = url;
+                    return;
+                }
             }
+            alertify.okBtn("Tamam");
+            alertify.alert("Kullanıcı adı veya şifre yanlış");
         }
-        alertify.okBtn("Tamam");
-        alertify.alert("Kullanıcı adı veya şifre yanlış");
+        else
+        {
+            alertify.alert("CihazID Tanımsız Giriş Yapılamaz.")
+        }
     }
     $scope.BtnTryConnect = function()
     {

@@ -341,7 +341,7 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
             pKasaID,
             pKeys[0],
             pValues[0],
-            0,
+            'CİHAZ',
             pKasaID
         ];
 

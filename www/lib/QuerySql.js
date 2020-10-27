@@ -788,6 +788,7 @@ var QuerySql =
                 ",[CDATE] " +
                 ",[LUSER] " + 
                 ",[LDATE] " +
+                ",[DEVICE] " +
                 ",[DEPARTMENT] " +
                 ",[TYPE] " +
                 ",[DOC_DATE] " +
@@ -808,6 +809,7 @@ var QuerySql =
                 ",GETDATE()                             --<CDATE, datetime,> \n" +
                 ",@LUSER                                --<LUSER, nvarchar(25),> \n" +    
                 ",GETDATE()                             --<LDATE, datetime,> \n" +
+                ",@DEVICE                               --<DEVICE, nvarchar(20),> \n" +
                 ",@DEPARTMENT                           --<DEPARTMENT, int,> \n" +
                 ",@TYPE                                 --<TYPE, tinyint,> \n" +
                 ",@DOC_DATE                             --<DOC_DATE, datetime,> \n" +
@@ -824,7 +826,7 @@ var QuerySql =
                 ",@VAT                                  --<VAT, float,> \n" +
                 ",@STATUS                               --<STATUS, int,> \n" +
                 ") ",
-        param : ['CUSER:string','LUSER:string','DEPARTMENT:int','TYPE:int','DOC_DATE:date','REF:string|25','REF_NO:int','CUSTOMER_CODE:string|25','ITEM_CODE:string|25',
+        param : ['CUSER:string','LUSER:string','DEVICE:string|20','DEPARTMENT:int','TYPE:int','DOC_DATE:date','REF:string|25','REF_NO:int','CUSTOMER_CODE:string|25','ITEM_CODE:string|25',
                  'BARCODE:string|50','QUANTITY:float','UNIT:string','PRICE:float','DISCOUNT:float','VAT:float',"STATUS:int"]
     },
     PosSatisGetir : 
@@ -895,6 +897,7 @@ var QuerySql =
                 ",[CDATE] " +
                 ",[LUSER] " + 
                 ",[LDATE] " +
+                ",[DEVICE] " +
                 ",[DEPARTMENT] " +
                 ",[TYPE] " +
                 ",[DOC_TYPE] " +
@@ -912,6 +915,7 @@ var QuerySql =
                 ",GETDATE()                             --<CDATE, datetime,> \n" +
                 ",@LUSER                                --<LUSER, nvarchar(25),> \n" +    
                 ",GETDATE()                             --<LDATE, datetime,> \n" +
+                ",@DEVICE	                           --<DEVICE, nvarchar(25,> \n" +
                 ",@DEPARTMENT	                        --<DEPARTMENT, int,> \n" +
                 ",@TYPE			                        --<TYPE, tinyint,> \n" +
                 ",@DOC_TYPE		                        --<DOC_TYPE, tinyint,> \n" +
@@ -925,7 +929,7 @@ var QuerySql =
                 ",@CHANGE			                    --<CHANGE, float,> \n" +
                 ",@STATUS		                        --<STATUS, int,> \n" +
                 ")",
-        param : ['CUSER:string','LUSER:string','DEPARTMENT:int','TYPE:int','DOC_TYPE:int','DOC_DATE:date','REF:string|25','REF_NO:int','CUSTOMER_CODE:string|25',
+        param : ['CUSER:string','LUSER:string','DEVICE:string|20','DEPARTMENT:int','TYPE:int','DOC_TYPE:int','DOC_DATE:date','REF:string|25','REF_NO:int','CUSTOMER_CODE:string|25',
                  'CASE_CODE:string|25','AMOUNT:float','CHANGE:float','STATUS:int']
     },
     PosTahIptal : 
@@ -977,6 +981,7 @@ var QuerySql =
     PosSonSatisGetir : 
     {
         query:  "SELECT " +
+                "(SELECT NAME FROM DEVICE WHERE ID = DEVICE) AS DEVICE, " +
                 "MAX(GUID) AS GUID, " +
                 "REF AS REF, " +
                 "REF_NO AS REF_NO, " +
@@ -985,10 +990,10 @@ var QuerySql =
                 "CAST((SUM(QUANTITY * PRICE)) AS DECIMAL(10,2)) AS AMOUNT, " +
                 "CONVERT(VARCHAR(10), MAX(CDATE), 108) AS CHOUR, " +
                 "CONVERT(VARCHAR(10), MAX(CDATE), 104) AS CDATE " +
-                "FROM POS_SALES AS PS WHERE DEPARTMENT = @DEPARTMENT AND STATUS <> 0 AND DOC_DATE = @DOC_DATE AND CUSER = @CUSER " +
-                "GROUP BY REF,REF_NO ORDER BY LINE_NO DESC " ,
-        param: ['DEPARTMENT','DOC_DATE','CUSER'],
-        type: ['int','date','string|25']
+                "FROM POS_SALES AS PS WHERE DEPARTMENT = @DEPARTMENT AND STATUS <> 0 AND DOC_DATE = @DOC_DATE AND DEVICE = @DEVICE " +
+                "GROUP BY REF,REF_NO,DEVICE ORDER BY LINE_NO DESC " ,
+        param: ['DEPARTMENT','DOC_DATE','DEVICE'],
+        type: ['int','date','string|20']
     },
     PosSonSatisDetayGetir : 
     {
@@ -998,9 +1003,9 @@ var QuerySql =
                 "CAST(QUANTITY AS decimal(10,2)) AS QUANTITY, " +
                 "CAST(PRICE AS decimal(10,2))  AS PRICE, " +
                 "CAST((QUANTITY * PRICE) AS decimal(10,2)) AS AMOUNT " +
-                "FROM POS_SALES AS PS WHERE DEPARTMENT = @DEPARTMENT AND REF = @REF AND REF_NO = @REF_NO AND STATUS <> 0 AND CUSER = @CUSER " ,
-        param: ['DEPARTMENT','REF','REF_NO','CUSER'],
-        type: ['int','string|25','int','string|25']
+                "FROM POS_SALES AS PS WHERE DEPARTMENT = @DEPARTMENT AND REF = @REF AND REF_NO = @REF_NO AND STATUS <> 0 " ,
+        param: ['DEPARTMENT','REF','REF_NO'],
+        type: ['int','string|25','int']
     },
     PosSonSatisTahDetayGetir : 
     {
@@ -1010,9 +1015,9 @@ var QuerySql =
                 "CASE WHEN DOC_TYPE = 0 THEN 'TAHSİLAT' WHEN DOC_TYPE = 1 THEN 'İADE' WHEN DOC_TYPE = 2 THEN 'PERSONEL' WHEN DOC_TYPE = 3 THEN 'AVANS ALMA' WHEN DOC_TYPE = 4 THEN 'AVANS VERME' END AS DOC_TYPE, " +
                 "AMOUNT AS AMOUNT, " +
                 "CHANGE AS CHANGE " +
-                "FROM POS_PAYMENT AS PS WHERE DEPARTMENT = @DEPARTMENT AND REF = @REF AND REF_NO = @REF_NO AND STATUS <> 0 AND CUSER = @CUSER " ,
-        param: ['DEPARTMENT','REF','REF_NO','CUSER'],
-        type: ['int','string|25','int','string|25']
+                "FROM POS_PAYMENT AS PS WHERE DEPARTMENT = @DEPARTMENT AND REF = @REF AND REF_NO = @REF_NO AND STATUS <> 0  " ,
+        param: ['DEPARTMENT','REF','REF_NO'],
+        type: ['int','string|25','int']
     },
     PosSatisFiyatGetir : 
     {
@@ -1059,6 +1064,7 @@ var QuerySql =
     PosAraToplamRapor : 
     {
         query : "SELECT " +
+                "(SELECT NAME FROM DEVICE WHERE ID = DEVICE) AS DEVICE, " +
                 "CASE WHEN DOC_TYPE = 0 THEN 'SATIŞ' " +
                 "WHEN DOC_TYPE = 1 THEN 'İADE' " +
                 "WHEN DOC_TYPE = 2 THEN 'PERSONEL SATIŞ' " +
@@ -1069,15 +1075,16 @@ var QuerySql =
                 "CUSER AS CUSER, " +
                 "CONVERT(VARCHAR,CAST(SUM(AMOUNT) as MONEY), 1) AS AMOUNT " +
                 "FROM POS_PAYMENT  " +
-                "WHERE DEPARTMENT = @DEPARTMENT AND CUSER = @CUSER AND DOC_DATE = @DOC_DATE " +
+                "WHERE DEPARTMENT = @DEPARTMENT AND DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE AND ((CUSER IN (@CUSER)) OR (@CUSER = '')) " +
                 "GROUP BY " +
-                "DOC_TYPE,CUSER,DEPARTMENT " ,
-        param : ['DEPARTMENT','DOC_DATE','CUSER'],
-        type : ['int','date','string|25']
+                "DOC_TYPE,CUSER,DEPARTMENT,DEVICE " ,
+        param : ['DEPARTMENT','DOC_DATE','DEVICE','CUSER'],
+        type : ['int','date','string|20','string|25']
     },
     PosAraToplamKasaRapor : 
     {
         query : "SELECT " +
+                "(SELECT NAME FROM DEVICE WHERE ID = DEVICE) AS DEVICE, " +
                 "CASE WHEN TYPE = 0 THEN 'NAKİT' " +
                 "WHEN TYPE = 1 THEN 'KREDİ KARTI' " +
                 "END AS TYPE, " + 
@@ -1085,11 +1092,11 @@ var QuerySql =
                 "CUSER AS CUSER, " +
                 "CONVERT(VARCHAR,CAST(SUM(AMOUNT) AS MONEY), 1) AS AMOUNT " +
                 "FROM POS_PAYMENT " +
-                "WHERE DEPARTMENT = @DEPARTMENT AND CUSER = @CUSER AND DOC_DATE = @DOC_DATE AND DOC_TYPE IN(0,2)" +
+                "WHERE DEPARTMENT = @DEPARTMENT AND DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE AND DOC_TYPE IN(0,2) AND ((CUSER IN (@CUSER)) OR (@CUSER = '')) " +
                 "GROUP BY " +
-                "TYPE,CUSER,DEPARTMENT " ,
-        param : ['DEPARTMENT','DOC_DATE','CUSER'],
-        type : ['int','date','string|25']
+                "TYPE,CUSER,DEPARTMENT,DEVICE " ,
+        param : ['DEPARTMENT','DOC_DATE','DEVICE','CUSER'],
+        type : ['int','date','string|20','string|25']
     },
     //KULLANICI PARAMETRE
     KullaniciGetir :
