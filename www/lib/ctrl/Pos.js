@@ -3417,7 +3417,7 @@ function Pos($scope,$window,$rootScope,db)
         }
         else
         {
-            if($scope.SatisList.length == 0)
+            if($scope.SatisList.length == 0 || $scope.Class.BtnIadeAl == "form-group btn btn-primary btn-block my-1")
             {
                 alertify.okBtn('Evet');
                 alertify.cancelBtn('Hayır');
