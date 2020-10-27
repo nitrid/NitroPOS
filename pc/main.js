@@ -10,8 +10,6 @@ let SettingWindow;
 
 app.on('ready',function()
 {
-    
-    
     fs.readFile('config.json', function (err, data) 
     {
         if (err) 
@@ -35,9 +33,6 @@ app.on('ready',function()
         const mainMenu = Menu.buildFromTemplate(mainMenuTemplate)
         Menu.setApplicationMenu(mainMenu);
     });
-    
-
-    
 });
 function OpenSettings()
 {
