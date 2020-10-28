@@ -2011,15 +2011,23 @@ function Pos($scope,$window,$rootScope,db)
                                 TmpSale.AMOUNT = Number(Math.round(($scope.SatisList[i].PRICE * 100)+'e'+2)+'e-'+2);
                                 TmpData.SALES.push(TmpSale);
                             }
+                            
+                            let TmpPayment = {};
+                            let Amount = 0;
+
                             for(let i = 0;i < $scope.TahList.length;i++)
                             {
-                                let TmpPayment = {};
-                                
-                                TmpPayment.TYPE = $scope.TahList[i].TYPE;
-                                TmpPayment.AMOUNT = Number(Math.round(($scope.TahList[i].AMOUNT * 100)+'e'+2)+'e-'+2);
+                                Amount = Amount + Number(Math.round(($scope.TahList[i].AMOUNT * 100)+'e'+2)+'e-'+2);
+                                // TmpPayment.TYPE = $scope.TahList[i].TYPE;
+                                // TmpPayment.AMOUNT = Number(Math.round(($scope.TahList[i].AMOUNT * 100)+'e'+2)+'e-'+2);
 
-                                TmpData.PAYMENT.push(TmpPayment);
+                                // TmpData.PAYMENT.push(TmpPayment);
                             }
+
+                            TmpPayment.TYPE = 0;
+                            TmpPayment.AMOUNT = Amount
+                            TmpData.PAYMENT.push(TmpPayment);
+
                      
                             if($scope.ChkFis)
                             {
