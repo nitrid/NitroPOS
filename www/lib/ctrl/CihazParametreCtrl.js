@@ -45,6 +45,7 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
         $scope.NKasaKodu = "1";
         $scope.KKasaKodu = "1";
         $scope.CihazGuid = "";
+        $scope.PluKodu = "";
 
         $scope.CihazListe = [];
         $scope.SubeListe = [];
@@ -208,6 +209,9 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
                     {
                         DepoNo : $scope.SubeKodu,
                     },
+                    {
+                        PluKodu : $scope.PluKodu,
+                    },
                 ]
 
                 for (let i = 0; i < Param.length; i++) 
@@ -226,7 +230,6 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
     }
     function CihazUpdate(pData)
     {
-        console.log(2)
         db.ExecuteTag($scope.Firma,'CihazUpdate',pData,async function(InsertResult)
         {         
             if(typeof(InsertResult.result.err) == 'undefined')
@@ -312,6 +315,10 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
                 else if(data[i].NAME == "DepoNo")
                 {
                     $scope.SubeKodu = data[i].VALUE;
+                }
+                else if(data[i].NAME == "PluKodu")
+                {
+                    $scope.PluKodu = data[i].VALUE;
                 }
             }
             db.GetData($scope.Firma,'CmbDepoGetir',['TÜMÜ'],function(data)
@@ -470,6 +477,9 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
                 {
                     DepoNo : $scope.SubeKodu,
                 },
+                {
+                    PluKodu : $scope.PluKodu,
+                },
             ]
             for (let i = 0; i < Param.length; i++) 
             {
@@ -516,6 +526,7 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
         $scope.CariKodu = "1";
         $scope.NKasaKodu = "1";
         $scope.KKasaKodu = "1";
+        $scope.PluKodu = "";
         $scope.CihazGuid = ""; //CİHAZ GÜNCELLEME SİLME İŞLEMİ İÇİN KULLANILIYOR.
     }
 }

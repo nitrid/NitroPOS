@@ -42,8 +42,6 @@ function Login ($scope,$rootScope,$window,db)
                 });
             }
 
-
-
             // if(data == true)
             // {
             //     $('#alert').alert('close');
