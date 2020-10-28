@@ -417,6 +417,7 @@ function Pos($scope,$window,$rootScope,db)
                 else if(pData.msg == "FAULT")
                 {
                     db.Ingenico.TicketClose();
+                    $scope.BtnTahBelgeIptal();
                     $("#MdlAraToplam").modal("hide");
                     $("#MdlIngenicoEslesme").modal("show");
                     $scope.TxtOkcMesaj = "Ödeme İşlemi Başarısız.";
