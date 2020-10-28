@@ -30,8 +30,8 @@ app.on('ready',function()
         let TmpConfig = JSON.parse(data.toString())
         mainWindow.loadURL(TmpConfig.host);
         
-        const mainMenu = Menu.buildFromTemplate(mainMenuTemplate)
-        Menu.setApplicationMenu(mainMenu);
+        // const mainMenu = Menu.buildFromTemplate(mainMenuTemplate)
+        // Menu.setApplicationMenu(mainMenu);
     });
 });
 function OpenSettings()

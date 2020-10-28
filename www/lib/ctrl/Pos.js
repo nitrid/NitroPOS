@@ -401,6 +401,7 @@ function Pos($scope,$window,$rootScope,db)
                 else if(pData.msg == "FAULT")
                 {
                     db.Ingenico.TicketClose();
+                    $scope.BtnTahBelgeIptal(); //ÖDEME BAŞARISIZ OLURSA TAHSİLAT İPTAL EDİLİYOR.
                     $("#MdlAraToplam").modal("hide");
                     $("#MdlIngenicoEslesme").modal("show");
                     $scope.TxtOkcMesaj = "Ödeme İşlemi Başarısız.";
@@ -2858,7 +2859,6 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.BtnMiktarGuncelle = function()
     {
-        console.log($scope.SatisList[$scope.IslemListeSelectedIndex].QUANTITY)
         $("#MdlMiktarGuncelle").modal("show");
         $scope.TxtMiktarGuncelle = $scope.SatisList[$scope.IslemListeSelectedIndex].QUANTITY.toString();
 
@@ -2903,7 +2903,6 @@ function Pos($scope,$window,$rootScope,db)
             //INGENICO CIHAZI İÇİN YAPILDI İLERİDE PARAMETREYE BAĞLANACAK
             if($scope.GenelToplam >= 3000) 
             {
-                console.log(1)
                 angular.element('#ChkFatura1').trigger('click');
                 $scope.BtnIngenicoCiktiTip(1);
             }
