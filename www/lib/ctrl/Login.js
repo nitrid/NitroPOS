@@ -19,8 +19,8 @@ function Login ($scope,$rootScope,$window,db)
     }
     $scope.Init = function()
     {
-        $scope.Kullanici = "Admin";
-        $scope.Password = 1;
+        $scope.Kullanici = "";
+        $scope.Password = "";
         $scope.Firma = "NITROGENPOS";
         $scope.KullaniciListe = [];
 
