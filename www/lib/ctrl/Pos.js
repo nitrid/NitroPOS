@@ -1580,24 +1580,24 @@ function Pos($scope,$window,$rootScope,db)
             $scope.ParamListe = await db.GetPromiseTag($scope.Firma,'ParamGetir',[$scope.CihazID]);
             $scope.KullaniciListe = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',[$scope.Kullanici]);
 
-            if($scope.SatisList.length == 0) //15 DAKİKA DA BİR SATIŞ LİSTESİ BOŞSA ŞİFRE GİRİŞ EKRANI AÇILIYOR.
-            {
-                setInterval(()=>
-                {
-                    db.SafeApply($scope,function()
-                    {
-                        $('#MdlKasaSifre').modal({backdrop: 'static', keyboard: false});
-                        FocusBarkod = false;
-                        FocusAraToplam = false;
-                        FocusMusteri = false;
-                        FocusStok = false;
-                        FocusKartOdeme = false;
-                        FirstKey = false;
-                        FocusYetkiliSifre = false;
-                        FocusKasaSifre = true;
-                    })
-                },900000);
-            }
+            // setInterval(()=>
+            // {
+            //     db.SafeApply($scope,function()
+            //     {
+            //         if($scope.SatisList.length == 0) //15 DAKİKA DA BİR SATIŞ LİSTESİ BOŞSA ŞİFRE GİRİŞ EKRANI AÇILIYOR.
+            //         {
+            //             $('#MdlKasaSifre').modal({backdrop: 'static', keyboard: false});
+            //             FocusBarkod = false;
+            //             FocusAraToplam = false;
+            //             FocusMusteri = false;
+            //             FocusStok = false;
+            //             FocusKartOdeme = false;
+            //             FirstKey = false;
+            //             FocusYetkiliSifre = false;
+            //             FocusKasaSifre = true;
+            //         }
+            //     })
+            // },900000);
 
             if($scope.ParamListe.length > 0)
             {
