@@ -178,6 +178,7 @@ function KullaniciParametreCtrl($route,$scope,$window,$rootScope,db)
     }
     function KullaniciUpdate(pData)
     {
+        console.log(pData)
         db.ExecuteTag($scope.Firma,'KullaniciUpdate',pData,async function(InsertResult)
         {         
             if(typeof(InsertResult.result.err) == 'undefined')
@@ -242,9 +243,11 @@ function KullaniciParametreCtrl($route,$scope,$window,$rootScope,db)
             $scope.Kodu = pData.CODE;
             $scope.Kullanici = pData.NAME;
             $scope.Sifre = pData.PASSWORD;
+            $scope.Yetki = pData.TAG;
             $scope.AktifPasif = pData.STATUS == 0 ? false : true;
             $scope.KullaniciGuid = pData.GUID;
             $('#MdlKullaniciGuncelle').modal('show');
+            console.log($scope.KullaniciGuid)
         }
         else
         {
@@ -252,6 +255,7 @@ function KullaniciParametreCtrl($route,$scope,$window,$rootScope,db)
             [
                 $scope.Kodu,
                 $scope.Kullanici,
+                $scope.Yetki,
                 $scope.Sifre,
                 $scope.AktifPasif == true ? 1 : 0,
                 $scope.KullaniciGuid 

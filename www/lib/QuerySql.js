@@ -1132,8 +1132,8 @@ var QuerySql =
     },
     KullaniciUpdate : 
     {
-        query : "UPDATE USERS SET CODE = @CODE,NAME = @NAME, PASSWORD = @PASSWORD, STATUS = @STATUS,LDATE = GETDATE() WHERE GUID = @GUID " ,
-        param : ['CODE:string|25','NAME:string|50','PASSWORD:string|25','STATUS:int','GUID:string|150']
+        query : "UPDATE USERS SET CODE = @CODE,NAME = @NAME, TAG = @TAG,PASSWORD = @PASSWORD, STATUS = @STATUS,LDATE = GETDATE() WHERE GUID = @GUID " ,
+        param : ['CODE:string|25','NAME:string|50','TAG:int','PASSWORD:string|25','STATUS:int','GUID:string|150']
     },
     KullaniciDelete : 
     {
