@@ -1598,7 +1598,7 @@ function Pos($scope,$window,$rootScope,db)
             //             FocusKasaSifre = true;
             //         }
             //     })
-            // },5000);
+            // },900000);
 
             if($scope.ParamListe.length > 0)
             {
