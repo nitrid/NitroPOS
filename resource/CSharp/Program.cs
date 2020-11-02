@@ -144,6 +144,11 @@ namespace Ingenico
                         Console.WriteLine(line);
                     }
                 }
+                else if (tag == "OPENSAFE")
+                {
+                    line = OpenSafe();
+                    Console.WriteLine(line);
+                }
                 if (tag == "exit") // Check string
                 { 
                     break;
@@ -737,12 +742,10 @@ namespace Ingenico
         {
             UInt32 RetCode = 0;
 
-            Console.WriteLine(pPassword);
-
             ST_FUNCTION_PARAMETERS stFunctionParameters = new ST_FUNCTION_PARAMETERS();
             stFunctionParameters.Password.supervisor = pPassword; 
             RetCode = Json_GMPSmartDLL.FP3_FunctionReports(CurrentInterface, 2, ref stFunctionParameters, 120 * 1000);
-            Console.WriteLine(RetCode);
+          
             if (RetCode != 0)
             {
                 return "ZREPORT|ERROR";
@@ -965,6 +968,18 @@ namespace Ingenico
                 return "INVOICE|FAULT";
             }
         }
-        
+        static string OpenSafe()
+        {
+            UInt32 RetCode = 0;
+
+            RetCode = GMPSmartDLL.FP3_FunctionOpenDrawer(CurrentInterface);
+
+            if (RetCode != 0)
+            {
+                return "OPENSAFE|ERROR";
+            }
+
+            return "OPENSAFE|SUCCESS";
+        }
     }
 }

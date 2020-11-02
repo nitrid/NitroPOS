@@ -19,8 +19,6 @@ var Ingenico =
 
         Ingenico.prototype.Init = function()
         {
-            console.log(1)
-            console.log(Pairing)
             if(Pairing)
             {
                 return;
@@ -31,7 +29,6 @@ var Ingenico =
             //console.log("PING")
             Terminal.stdout.on('data', function (data) 
             {
-                console.log(data.toString().trim())
                 if(data.toString().trim().split('|')[0] == "PING")
                 {
                     LocalEvent({tag:"PING",msg:data.toString().trim().split('|')[1]});
@@ -83,6 +80,11 @@ var Ingenico =
                     LocalEvent({tag:"INVOICE",msg:data.toString().trim().split('|')[1]});
                     console.log(data.toString().trim().split('|')[1]);
                 }
+                else if(data.toString().trim().split('|')[0] == "OPENSAFE")
+                {
+                    LocalEvent({tag:"OPENSAFE",msg:data.toString().trim().split('|')[1]});
+                    console.log(data.toString().trim().split('|')[1]);
+                }
             });
         }
         Ingenico.prototype.SendData = function(pData)
@@ -114,6 +116,10 @@ var Ingenico =
         Ingenico.prototype.EndCopy = function(pData)
         {
             Terminal.stdin.write('ENDCOPY|' + pData + '\n');
+        }
+        Ingenico.prototype.OpenSafe = function()
+        {
+            Terminal.stdin.write('OPENSAFE' + '\n');
         }
         Ingenico.prototype.Invoice = function(pData)
         {
