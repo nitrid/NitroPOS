@@ -1409,7 +1409,7 @@ function Pos($scope,$window,$rootScope,db)
                     value:  [$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira]
                 }
                 db.GetDataQuery(TmpQuery,function(pData)
-                {
+                {                   
                     //SATIŞ SONUNDA PARA ÜSTÜ MODAL EKRANI AÇILIYOR. TMPPARAUSTU DEĞİŞKENİ EKRAN YENİLENDİĞİ İÇİN KULLANILDI. 
                     if($scope.TahParaUstu > 0)
                     {
@@ -1623,24 +1623,26 @@ function Pos($scope,$window,$rootScope,db)
             $scope.ParamListe = await db.GetPromiseTag($scope.Firma,'ParamGetir',[$scope.CihazID]);
             $scope.KullaniciListe = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',[$scope.Kullanici]);
 
-            // setInterval(()=>
-            // {
-            //     db.SafeApply($scope,function()
-            //     {
-            //         if($scope.SatisList.length == 0) //15 DAKİKA DA BİR SATIŞ LİSTESİ BOŞSA ŞİFRE GİRİŞ EKRANI AÇILIYOR.
-            //         {
-            //             $('#MdlKasaSifre').modal({backdrop: 'static', keyboard: false});
-            //             FocusBarkod = false;
-            //             FocusAraToplam = false;
-            //             FocusMusteri = false;
-            //             FocusStok = false;
-            //             FocusKartOdeme = false;
-            //             FirstKey = false;
-            //             FocusYetkiliSifre = false;
-            //             FocusKasaSifre = true;
-            //         }
-            //     })
-            // },900000);
+            clearInterval($scope.ClearInterval); //INTERVAL RESETLENIYOR
+
+            if($scope.SatisList.length == 0) //30 DAKİKA DA BİR SATIŞ LİSTESİ BOŞSA ŞİFRE GİRİŞ EKRANI AÇILIYOR.
+            {
+                $scope.ClearInterval = setInterval(()=>
+                {
+                    db.SafeApply($scope,function()
+                    {
+                        $('#MdlKasaSifre').modal({backdrop: 'static', keyboard: false});
+                        FocusBarkod = false;
+                        FocusAraToplam = false;
+                        FocusMusteri = false;
+                        FocusStok = false;
+                        FocusKartOdeme = false;
+                        FirstKey = false;
+                        FocusYetkiliSifre = false;
+                        FocusKasaSifre = true;
+                    })
+                },1800000);
+            }
 
             if($scope.ParamListe.length > 0)
             {
@@ -1885,6 +1887,7 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.PosSatisInsert = function()
     {    
+        
         var InsertData = 
         [
             $scope.Kullanici,
@@ -1921,7 +1924,6 @@ function Pos($scope,$window,$rootScope,db)
                 /***************************************************************** */
                 db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosSatisData)
                 {   
-                    console.log(PosSatisData[PosSatisData.length - 1].ITEM_NAME)
                     db.LCDPrint
                     (
                         {
