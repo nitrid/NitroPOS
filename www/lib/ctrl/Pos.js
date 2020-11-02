@@ -1925,8 +1925,8 @@ function Pos($scope,$window,$rootScope,db)
                     (
                         {
                             blink : 0,
-                            text :  db.PrintText(PosSatisData[PosSatisData.length - 1].ITEM_NAME,11) + " " + 
-                                    db.PrintText(PosSatisData[PosSatisData.length - 1].PRICE.toFixed(2).toString() + "TL" ,8,"Start") +
+                            text :  db.PrintText($scope.Stok[0].NAME,11) + " " + 
+                                    db.PrintText($scope.Stok[0].PRICE.toString() + "TL" ,8,"Start") +
                                     "TOPLAM : " + db.PrintText(db.SumColumn(PosSatisData,"AMOUNT").toFixed(2).toString() + "TL",11,"Start")
                         }                        
                     );
