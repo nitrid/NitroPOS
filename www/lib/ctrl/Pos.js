@@ -2013,23 +2013,18 @@ function Pos($scope,$window,$rootScope,db)
                             }
                             
                             let TmpPayment = {};
-                            //let Amount = 0;
+                            let Amount = 0;
 
                             for(let i = 0;i < $scope.TahList.length;i++)
                             {
-                                let TmpPayment = {};
-                                //Amount = Amount + Number(Math.round(($scope.TahList[i].AMOUNT * 100)+'e'+2)+'e-'+2);
-                                TmpPayment.TYPE = $scope.TahList[i].TYPE;
-                                TmpPayment.AMOUNT = Number(Math.round(($scope.TahList[i].AMOUNT * 100)+'e'+2)+'e-'+2);
-
-                                TmpData.PAYMENT.push(TmpPayment);
+                                Amount = Amount + Number(Math.round(($scope.TahList[i].AMOUNT * 100)+'e'+2)+'e-'+2);
                             }
 
-                            // TmpPayment.TYPE = 0;
-                            // TmpPayment.AMOUNT = Amount
-                            // TmpData.PAYMENT.push(TmpPayment);
+                            Amount = Amount + Number(Math.round(($scope.TahParaUstu * 100)+'e'+2)+'e-'+2);
+                            TmpPayment.TYPE = $scope.TahList.pop().TYPE;
+                            TmpPayment.AMOUNT = Amount
+                            TmpData.PAYMENT.push(TmpPayment);
 
-                     
                             if($scope.ChkFis)
                             {
                                 db.Ingenico.SendData(TmpData);
