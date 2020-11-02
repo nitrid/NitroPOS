@@ -1356,8 +1356,8 @@ function Pos($scope,$window,$rootScope,db)
                 (
                     {
                         blink : 0,
-                        text :  db.PrintText(PosSatisData[PosSatisData.length - 1].ITEM_NAME,11) + " " + 
-                                db.PrintText(PosSatisData[PosSatisData.length - 1].PRICE.toFixed(2).toString() + "TL" ,8,"Start") +
+                        text :  db.PrintText(pData.ITEM_NAME,11) + " " + 
+                                db.PrintText(pData.PRICE.toString() + "TL" ,8,"Start") +
                                 "TOPLAM : " + db.PrintText(db.SumColumn(PosSatisData,"AMOUNT").toFixed(2).toString() + "TL",11,"Start")
                     }                        
                 );
@@ -2126,8 +2126,8 @@ function Pos($scope,$window,$rootScope,db)
                 (
                     {
                         blink : 0,
-                        text :  db.PrintText(PosSatisData[PosSatisData.length - 1].ITEM_NAME,11) + " " + 
-                                db.PrintText(PosSatisData[PosSatisData.length - 1].PRICE.toFixed(2).toString() + "TL" ,8,"Start") +
+                        text :  db.PrintText(pData.ITEM_NAME,11) + " " + 
+                                db.PrintText(pData.PRICE.toString() + "TL" ,8,"Start") +
                                 "TOPLAM : " + db.PrintText(db.SumColumn(PosSatisData,"AMOUNT").toFixed(2).toString() + "TL",11,"Start")
                     }                        
                 );
