@@ -2119,6 +2119,11 @@ function Pos($scope,$window,$rootScope,db)
     {
         if($scope.TxtMiktarGuncelle != "" && $scope.TxtMiktarGuncelle > 0)
         {
+            if($scope.Stok[0].UNIT == "1")
+            {
+                $scope.TxtMiktarGuncelle = parseInt($scope.TxtMiktarGuncelle);
+            }
+
             if(typeof keyEvent == 'undefined')
             {
                 $scope.PosSatisMiktarUpdate($scope.SatisList[$scope.IslemListeSelectedIndex],$scope.TxtMiktarGuncelle);
