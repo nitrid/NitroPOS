@@ -1921,6 +1921,7 @@ function Pos($scope,$window,$rootScope,db)
                 /***************************************************************** */
                 db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosSatisData)
                 {   
+                    console.log(PosSatisData[PosSatisData.length - 1].ITEM_NAME)
                     db.LCDPrint
                     (
                         {
