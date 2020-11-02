@@ -27,6 +27,7 @@ function Pos($scope,$window,$rootScope,db)
     let FocusCariEkleTel = false;
     let FocusBelgeIptal = false;
     let FocusSonKopya = false;
+    let FocusIade = false;
 
     $('#MdlAraToplam').on('hide.bs.modal', function () 
     {
@@ -44,6 +45,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusZSifre = false;
         FocusBelgeIptal = false;
         FocusSonKopya = false;
+        FocusIade = false;
         $rootScope.LoadingHide();
     });
     $('#MdlMusteriListele').on('hide.bs.modal', function () 
@@ -62,6 +64,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusZSifre = false;
         FocusBelgeIptal = false;
         FocusSonKopya = false;
+        FocusIade = false;
     });
     $('#MdlStokListele').on('hide.bs.modal', function () 
     {
@@ -77,6 +80,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusIade = false;
         db.SafeApply($scope,function()
         {
             $scope.TxtBarkod = "";
@@ -100,6 +104,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusZSifre = false;
         FocusBelgeIptal = false;
         FocusSonKopya = false;
+        FocusIade = false;
     });
     $('#MdlFiyatGuncelle').on('hide.bs.modal', function () 
     {
@@ -117,6 +122,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusZSifre = false;
         FocusBelgeIptal = false;
         FocusSonKopya = false;
+        FocusIade = false;
     });
     $('#MdlKartOdeme').on('hide.bs.modal', function () 
     {
@@ -134,6 +140,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusZSifre = false;
         FocusBelgeIptal = false;
         FocusSonKopya = false;
+        FocusIade = false;
     });
     $('#MdlParaUstu').on('hide.bs.modal', function () 
     {
@@ -151,6 +158,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusZSifre = false;
         FocusBelgeIptal = false;
         FocusSonKopya = false;
+        FocusIade = false;
         $rootScope.LoadingHide();
     });
     $('#MdlYetkiliGiris').on('hide.bs.modal', function () 
@@ -169,6 +177,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusZSifre = false;
         FocusBelgeIptal = false;
         FocusSonKopya = false;
+        FocusIade = false;
     });
     $('#MdlKasaSifre').on('hide.bs.modal', function () 
     {
@@ -186,6 +195,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusZSifre = false;
         FocusBelgeIptal = false;
         FocusSonKopya = false;
+        FocusIade = false;
     });
     $('#MdlZSifre').on('hide.bs.modal', function () 
     {
@@ -203,6 +213,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusZSifre = false;
         FocusBelgeIptal = false;
         FocusSonKopya = false;
+        FocusIade = false;
     });
     $('#MdlXSifre').on('hide.bs.modal', function () 
     {
@@ -220,6 +231,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusZSifre = false;
         FocusBelgeIptal = false;
         FocusSonKopya = false;
+        FocusIade = false;
     });
     $('#MdlAvans').on('hide.bs.modal', function () 
     {
@@ -237,6 +249,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusAvans = false;
         FocusBelgeIptal = false;
         FocusSonKopya = false;
+        FocusIade = false;
         $scope.TxtYetkiliSifre = "";
     });
     $('#MdlPluEdit').on('hide.bs.modal', function () 
@@ -256,6 +269,7 @@ function Pos($scope,$window,$rootScope,db)
         $scope.DivPlu = false;
         FocusBelgeIptal = false;
         FocusSonKopya = false;
+        FocusIade = false;
         $scope.PluGrupAdi = "";
         $scope.PluStokKod = "";
         $scope.Index = "";
@@ -279,6 +293,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusCariEkleAdres = false;
         FocusBelgeIptal = false;
         FocusSonKopya = false;
+        FocusIade = false;
         $scope.TxtCariTcNo = "";
         $scope.TxtCariAdi = "";
         $scope.TxtCariSoyadi = "";
@@ -306,6 +321,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusZSifre = false;
         FocusBelgeIptal = false;
         FocusSonKopya = false;
+        FocusIade = false;
     });
     $('#MdlSonKopya').on('hide.bs.modal', function () 
     {
@@ -323,6 +339,25 @@ function Pos($scope,$window,$rootScope,db)
         FocusZSifre = false;
         FocusBelgeIptal = false;
         FocusSonKopya = false;
+        FocusIade = false;
+    });
+    $('#MdlFocusIade').on('hide.bs.modal', function () 
+    {
+        FocusBarkod = true;
+        FocusAraToplam = false;
+        FocusMusteri = false;
+        FocusStok = false;
+        FocusMiktarGuncelle = false;
+        FocusFiyatGuncelle = false;
+        FocusAvans = false;
+        FocusKartOdeme = false;
+        FocusYetkiliSifre = false;
+        FocusKasaSifre = false;
+        FocusXSifre = false;
+        FocusZSifre = false;
+        FocusBelgeIptal = false;
+        FocusSonKopya = false;
+        FocusIade = false;
     });
 
     setTimeout(function()
@@ -484,6 +519,7 @@ function Pos($scope,$window,$rootScope,db)
         $scope.TxtXSifre = "";
         $scope.TxtBelgeIptalSifre = "";
         $scope.TxtSonKopyaSifre = "";
+        $scope.TxtIadeSifre = "";
         $scope.TxtOkcMesaj = "OKC Cihazıyla Eşleşme Yapılıyor.";
         $scope.BtnTxtOkcEslesme = "İptal";
         $scope.TxtCariTcNo = "";
@@ -1487,6 +1523,10 @@ function Pos($scope,$window,$rootScope,db)
         {
             $window.document.getElementById("TxtXSifre").focus();
         }
+        else if(FocusIade)
+        {
+            $window.document.getElementById("TxtIadeSifre").focus();
+        }
     }
     $scope.IslemListeRowClick = function(pIndex,pItem)
     {
@@ -2228,6 +2268,10 @@ function Pos($scope,$window,$rootScope,db)
         {
             $scope.TxtSonKopyaSifre = $scope.TxtSonKopyaSifre.substring(0,$scope.TxtSonKopyaSifre.length-1);
         }
+        else if(FocusIade)
+        {
+            $scope.TxtIadeSifre = $scope.TxtIadeSifre.substring(0,$scope.TxtIadeSifre.length-1);
+        }
     }
     $scope.BtnOnayClick = function()
     {
@@ -2440,6 +2484,18 @@ function Pos($scope,$window,$rootScope,db)
                 FirstKey = true;
             }
         }
+        else if(FocusIade)
+        {
+            if(FirstKey)
+            {
+                $scope.TxtIadeSifre = $scope.TxtIadeSifre + Key; 
+            }
+            else
+            {
+                $scope.TxtIadeSifre = Key; 
+                FirstKey = true;
+            }
+        }
     }
     $scope.TxtSeriSira = function(Data)
     {
@@ -2535,6 +2591,11 @@ function Pos($scope,$window,$rootScope,db)
                                 console.log(data.result.err);
                             }
                         });
+                    }
+                    else
+                    {
+                        $("#MdlBelgeIptalSifre").modal("hide");
+                        alertify.alert("Yetkili Şifre Yanlış.")
                     }
                 }
             }
@@ -3495,16 +3556,55 @@ function Pos($scope,$window,$rootScope,db)
             alertify.alert("Plu Düzenleme Yetkiniz Bulunmamakta.")
         }
     }
-    $scope.BtnIadeAl = function()
+    $scope.BtnIadeAl = async function(pTip)
     {
-        if($scope.SatisList.length == 0)
+        if($scope.Class.BtnIadeAl == "form-group btn btn-primary btn-block my-1" == false)
         {
-            $scope.Class.BtnIadeAl = "form-group btn btn-primary btn-block my-1";
-            alertify.alert("İade İşlemi İçin Fiyat Güncelleme Aktifleştirildi.")
+            if(pTip == 0)
+            {
+                $('#MdlIadeSifre').modal({backdrop: 'static', keyboard: false});
+                FocusBarkod = false;
+                FocusAraToplam = false;
+                FocusMusteri = false;
+                FocusStok = false;
+                FocusKartOdeme = false;
+                FirstKey = false;
+                FocusYetkiliSifre = false;
+                FocusKasaSifre = false;
+                FocusIade = true;
+            }
+            else
+            {
+                let YetkiliList = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',['']);
+                let GirisOnay = false;
+                for (let i = 0; i < YetkiliList.length; i++) 
+                {
+                    if(YetkiliList[i].TAG == 1)
+                    {
+                        if(YetkiliList[i].PASSWORD == $scope.TxtIadeSifre)
+                        {
+                            GirisOnay = true;
+                        }
+                    }
+                }
+                if(GirisOnay)
+                {
+                    $scope.TxtIadeSifre = "";
+                    $("#MdlIadeSifre").modal("hide");
+                    $scope.Class.BtnIadeAl = "form-group btn btn-primary btn-block my-1";
+                    alertify.alert("İade İşlemi İçin Fiyat Güncelleme Aktifleştirildi.")
+                }
+                else
+                {
+                    $scope.TxtIadeSifre = "";
+                    $("#MdlIadeSifre").modal("hide");
+                    alertify.alert("Yetkili Şifre Yanlış.")
+                }
+            }
         }
         else
         {
-            if($scope.SatisList.length == 0 || $scope.Class.BtnIadeAl == "form-group btn btn-primary btn-block my-1")
+            if($scope.Class.BtnIadeAl == "form-group btn btn-primary btn-block my-1")
             {
                 alertify.okBtn('Evet');
                 alertify.cancelBtn('Hayır');
@@ -3563,52 +3663,52 @@ function Pos($scope,$window,$rootScope,db)
                 }
                 ,function(){});
             }
-            else
-            {
-                alertify.alert("Satış Listesi Doluyken İade Alınamaz.(İade işlemi için iade butonunu aktifleştirin.)")
-            }
         }
     }
     $scope.BtnKasaKilitle = async function(pTip)
     {
-        if(pTip == 0)
+        if($scope.SatisList.length == 0)
         {
-            alertify.okBtn('Evet');
-            alertify.cancelBtn('Hayır');
-            alertify.confirm('Kasayı Kilitlemek İstediğinize Emin Misiniz ?', 
-            function()
-            { 
-                $('#MdlKasaSifre').modal({backdrop: 'static', keyboard: false});
-                FocusBarkod = false;
-                FocusAraToplam = false;
-                FocusMusteri = false;
-                FocusStok = false;
-                FocusKartOdeme = false;
-                FirstKey = false;
-                FocusYetkiliSifre = false;
-                FocusKasaSifre = true;
-            }
-            ,function(){});
-        }
-        else
-        {
-            for (let i = 0; i < $scope.ParamListe.length; i++) 
+            if(pTip == 0)
             {
-                if($scope.KullaniciListe[0].PASSWORD == $scope.TxtKasaSifre && $scope.KullaniciListe[0].CODE == $scope.Kullanici)
+                alertify.okBtn('Evet');
+                alertify.cancelBtn('Hayır');
+                alertify.confirm('Kasayı Kilitlemek İstediğinize Emin Misiniz ?', 
+                function()
+                { 
+                    $('#MdlKasaSifre').modal({backdrop: 'static', keyboard: false});
+                    FocusBarkod = false;
+                    FocusAraToplam = false;
+                    FocusMusteri = false;
+                    FocusStok = false;
+                    FocusKartOdeme = false;
+                    FirstKey = false;
+                    FocusYetkiliSifre = false;
+                    FocusKasaSifre = true;
+                }
+                ,function(){});
+            }
+            else
+            {
+                let SifreList = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',[$scope.Kullanici]);
+
+                if(SifreList[0].PASSWORD == $scope.TxtKasaSifre)
                 {
                     $scope.TxtKasaSifre = "";
                     $("#MdlKasaSifre").modal("hide");
                     alertify.alert("Şifre Kabul Edildi.")
-                    return;
                 }
                 else
                 {
-                    if($scope.KullaniciListe[0].CODE == $scope.Kullanici)
-                    {
-                        //alertify.alert("Şifre Reddedildi.")
-                    }
+                    $scope.TxtKasaSifre = "";
+                    $("#MdlKasaSifre").modal("hide");
+                    alertify.alert("Kullanıcı Şifresi Yanlış")
                 }
-            }
+            }   
+        }
+        else
+        {
+            alertify.alert("Satış Listesi Doluyken Kasa Kilitleme İşlemi Yapılamaz.")
         }
     }
     $scope.BtnKasaRapor = function(pTip)
