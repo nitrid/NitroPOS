@@ -2119,7 +2119,7 @@ function Pos($scope,$window,$rootScope,db)
     {
         if($scope.TxtMiktarGuncelle != "" && $scope.TxtMiktarGuncelle > 0)
         {
-            if($scope.Stok[0].UNIT == "1")
+            if($scope.SatisList[$scope.IslemListeSelectedIndex].UNIT_ID == "1")
             {
                 $scope.TxtMiktarGuncelle = parseInt($scope.TxtMiktarGuncelle);
             }
