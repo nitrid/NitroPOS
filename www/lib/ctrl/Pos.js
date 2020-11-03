@@ -689,6 +689,10 @@ function Pos($scope,$window,$rootScope,db)
             heading: true,
             selecting: true,
             data : $scope.StokListe,
+            paging : true,
+            pageSize: 10,
+            pageButtonCount: 3,
+            pagerFormat: "{pages} {next} {last}    {pageIndex} of {pageCount}",
             fields: 
             [
                 {
