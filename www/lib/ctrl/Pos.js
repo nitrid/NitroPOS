@@ -3206,7 +3206,7 @@ function Pos($scope,$window,$rootScope,db)
                 {
                     if(YetkiliList[i].TAG == 1)
                     {
-                        if(YetkiliList[i].PASSWORD == $scope.TxtYetkiliSifre)
+                        if(YetkiliList[i].PASSWORD == $scope.TxtAvans)
                         {
                             GirisOnay = true;
                         }   
