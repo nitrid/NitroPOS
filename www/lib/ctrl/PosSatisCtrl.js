@@ -161,7 +161,7 @@ function PosSatisCtrl($scope,$window,db)
             }
         });
     }
-  /*  function InitDepoMiktarGrid()
+    /*  function InitDepoMiktarGrid()
     {
         $("#TblDepoMiktar").jsGrid
         ({
@@ -927,6 +927,7 @@ function PosSatisCtrl($scope,$window,db)
     }
     $scope.YeniEvrak = async function()
     {
+        
         Init();
         InitIslemGrid();
         InitParkIslemGrid();
