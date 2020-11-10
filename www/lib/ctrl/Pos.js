@@ -403,7 +403,7 @@ function Pos($scope,$window,$rootScope,db)
         db.LCDPrint
         (
             {   
-                port : "COM7",
+                port : $scope.LCDPORT,
                 blink : 0,
                 text :  db.PrintText("HOSGELDINIZ",20) + 
                         db.PrintText(moment(new Date()).format("DD.MM.YYYY"),20)
@@ -570,6 +570,8 @@ function Pos($scope,$window,$rootScope,db)
         $scope.ChkFis = true;
         $scope.ChkFatura = true;
         $scope.PluKodu = "";
+        $scope.LCDPORT = "";
+        $scope.SCALEPORT = "";
         
         $scope.KasaNo = 1;
         $scope.Saat = moment(new Date(),"HH:mm:ss").format("HH:mm:ss");
@@ -1399,7 +1401,7 @@ function Pos($scope,$window,$rootScope,db)
                 db.LCDPrint
                 (
                     {
-                        port : "COM7",
+                        port : $scope.LCDPORT,
                         blink : 0,
                         text :  db.PrintText(pData.ITEM_NAME,11) + " " + 
                                 db.PrintText(pData.PRICE.toString() + "TL" ,8,"Start") +
@@ -1476,6 +1478,7 @@ function Pos($scope,$window,$rootScope,db)
                             db.LCDPrint
                             (
                                 {
+                                    port : $scope.LCDPORT,
                                     blink : 0,
                                     text :  db.PrintText("IYI GUNLER",20)
                                 }
@@ -1487,6 +1490,7 @@ function Pos($scope,$window,$rootScope,db)
                             db.LCDPrint
                             (
                                 {
+                                    port : $scope.LCDPORT,
                                     blink : 0,
                                     text :  db.PrintText("HOSGELDINIZ",20) + 
                                             db.PrintText(moment(new Date()).format("DD.MM.YYYY"),20)
@@ -1729,6 +1733,14 @@ function Pos($scope,$window,$rootScope,db)
                     {
                         $scope.PluKodu = $scope.ParamListe[i].VALUE;
                     }
+                    else if($scope.ParamListe[i].NAME == 'LCDPORT')
+                    {
+                        $scope.LCDPORT = $scope.ParamListe[i].VALUE;
+                    }
+                    else if($scope.ParamListe[i].NAME == 'SCALEPORT')
+                    {
+                        $scope.SCALEPORT = $scope.ParamListe[i].VALUE;
+                    }
                 }
             }
             else
@@ -1883,7 +1895,7 @@ function Pos($scope,$window,$rootScope,db)
                     {
                         if(TmpKiloFlag[i] == pBarkod.substring(0,2))
                         {
-                            $scope.Miktar = await db.Scale.Send("COM3");
+                            $scope.Miktar = await db.Scale.Send($scope.SCALEPORT);
                             
                             if($scope.Miktar <= 0)
                             {
@@ -1976,6 +1988,7 @@ function Pos($scope,$window,$rootScope,db)
                     db.LCDPrint
                     (
                         {
+                            port : $scope.LCDPORT,
                             blink : 0,
                             text :  db.PrintText($scope.Stok[0].NAME,11) + " " + 
                                     db.PrintText($scope.Stok[0].PRICE.toString() + "TL" ,8,"Start") +
@@ -2177,6 +2190,7 @@ function Pos($scope,$window,$rootScope,db)
                 db.LCDPrint
                 (
                     {
+                        port : $scope.LCDPORT,
                         blink : 0,
                         text :  db.PrintText(pData.ITEM_NAME,11) + " " + 
                                 db.PrintText(pData.PRICE.toString() + "TL" ,8,"Start") +
