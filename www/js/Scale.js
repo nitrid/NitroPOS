@@ -13,11 +13,11 @@ var Scale =
            
         }
 
-        function _Send()
+        function _Send(pPort)
         {
             return new Promise(resolve =>
             {
-                let port = new SerialPort("COM2",{baudRate:9600,dataBits:8,parity:'none',stopBits:1,xon:true,xoff:true});
+                let port = new SerialPort(pPort,{baudRate:9600,dataBits:8,parity:'none',stopBits:1,xon:true,xoff:true});
                 //TERAZİYE İSTEK GÖNDERİLİYOR.
                 port.write('$');
                 port.on('data',line =>

@@ -359,7 +359,7 @@ angular.module('app.db', []).service('db',function($rootScope)
         escpos.Serial = require('escpos-serialport');
         escpos.Screen = require('escpos-screen');
 
-        let device  = new escpos.Serial("COM3", { baudRate: 9600, autoOpen: false });
+        let device  = new escpos.Serial(pData.port, { baudRate: 9600, autoOpen: false });
         let options = { encoding: "GB18030" /* default */ }
         let usbScreen = new escpos.Screen(device,options);
 
@@ -370,7 +370,7 @@ angular.module('app.db', []).service('db',function($rootScope)
             usbScreen.text(pData.text).close();
         });
     }
-    function _LCDClear()
+    function _LCDClear(pPort)
     {
         if(typeof require == 'undefined')
         {
@@ -381,7 +381,7 @@ angular.module('app.db', []).service('db',function($rootScope)
         escpos.Serial = require('escpos-serialport');
         escpos.Screen = require('escpos-screen');
 
-        let device  = new escpos.Serial("COM3", { baudRate: 9600, autoOpen: false });
+        let device  = new escpos.Serial(pPort, { baudRate: 9600, autoOpen: false });
         let options = { encoding: "GB18030" /* default */ }
         let usbScreen = new escpos.Screen(device,options);
 

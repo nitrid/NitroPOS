@@ -402,7 +402,8 @@ function Pos($scope,$window,$rootScope,db)
     { 
         db.LCDPrint
         (
-            {
+            {   
+                port : "COM7",
                 blink : 0,
                 text :  db.PrintText("HOSGELDINIZ",20) + 
                         db.PrintText(moment(new Date()).format("DD.MM.YYYY"),20)
@@ -1398,6 +1399,7 @@ function Pos($scope,$window,$rootScope,db)
                 db.LCDPrint
                 (
                     {
+                        port : "COM7",
                         blink : 0,
                         text :  db.PrintText(pData.ITEM_NAME,11) + " " + 
                                 db.PrintText(pData.PRICE.toString() + "TL" ,8,"Start") +
@@ -1881,7 +1883,7 @@ function Pos($scope,$window,$rootScope,db)
                     {
                         if(TmpKiloFlag[i] == pBarkod.substring(0,2))
                         {
-                            $scope.Miktar = await db.Scale.Send();
+                            $scope.Miktar = await db.Scale.Send("COM3");
                             
                             if($scope.Miktar <= 0)
                             {
