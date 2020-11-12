@@ -1748,6 +1748,7 @@ function Pos($scope,$window,$rootScope,db)
                 }
             ];
 
+                    
             // CARI GETIR
             if($scope.CariKodu != "")
             {
