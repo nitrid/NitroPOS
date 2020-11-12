@@ -2032,8 +2032,8 @@ function Pos($scope,$window,$rootScope,db)
         TahTutar = parseFloat($scope.TxtAraToplamTutar.replace(',','.'));
         if($scope.GenelToplam < (db.SumColumn($scope.TahList,"AMOUNT") + parseFloat($scope.TxtAraToplamTutar.replace(',','.'))))
         {
-            TahParaUstu = parseFloat((db.SumColumn($scope.TahList,"AMOUNT") + parseFloat($scope.TxtAraToplamTutar.replace(',','.'))) - $scope.GenelToplam).toFixed(4);
-            TahTutar = parseFloat(parseFloat($scope.TxtAraToplamTutar.replace(',','.')) - TahParaUstu).toFixed(4);
+            TahParaUstu = parseFloat((db.SumColumn($scope.TahList,"AMOUNT") + parseFloat($scope.TxtAraToplamTutar.replace(',','.'))) - $scope.GenelToplam).toFixed(2);
+            TahTutar = parseFloat(parseFloat($scope.TxtAraToplamTutar.replace(',','.')) - TahParaUstu).toFixed(2);
         }
 
         var InsertData = 
@@ -2112,7 +2112,6 @@ function Pos($scope,$window,$rootScope,db)
                                     TmpSale.TAX = 0;
                                 }
 
-                                console.log(Number(Math.round(($scope.SatisList[i].PRICE * 100)+'e'+2)+'e-'+2))
                                 TmpSale.AMOUNT = Number(Math.round(($scope.SatisList[i].PRICE * 100)+'e'+2)+'e-'+2);
                                 TmpData.SALES.push(TmpSale);
                             }
@@ -2125,8 +2124,12 @@ function Pos($scope,$window,$rootScope,db)
                                 Amount = Amount + Number(Math.round(($scope.TahList[i].AMOUNT * 100)+'e'+2)+'e-'+2);
                             }
 
+                            console.log(Amount)
+                            console.log($scope.TahParaUstu)
+
                             Amount = Amount + Number(Math.round(($scope.TahParaUstu * 100)+'e'+2)+'e-'+2);
                             TmpPayment.TYPE = $scope.TahList.pop().TYPE;
+                            
                             TmpPayment.AMOUNT = Amount
                             TmpData.PAYMENT.push(TmpPayment);
 
