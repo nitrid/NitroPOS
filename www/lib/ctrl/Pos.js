@@ -1301,23 +1301,15 @@ function Pos($scope,$window,$rootScope,db)
 
         angular.forEach($scope.SatisList,function(value)
         {
-            let TmpKdv = (((value.QUANTITY * value.PRICE) - value.DISCOUNT)) - ((((value.QUANTITY * value.PRICE) - value.DISCOUNT)) / ((value.VAT / 100) + 1)); 
-            $scope.ToplamKdv += parseFloat((TmpKdv.toFixed(2)));
-            $scope.AraToplam += parseFloat((value.QUANTITY * value.PRICE).toFixed(2)) - TmpKdv;
-            $scope.ToplamIskonto +=  parseFloat((value.DISCOUNT.toFixed(2)));
+            let TmpKdv = ((parseFloat((value.QUANTITY * value.PRICE).toFixed(4)) - parseFloat(value.DISCOUNT.toFixed(4)))) - (((parseFloat((value.QUANTITY * value.PRICE).toFixed(4)) - parseFloat(value.DISCOUNT.toFixed(4)))) / (parseFloat((value.VAT / 100).toFixed(4)) + 1)); 
+            $scope.ToplamKdv += parseFloat((TmpKdv.toFixed(4)));
+            $scope.AraToplam += parseFloat((value.QUANTITY * value.PRICE).toFixed(4)) - TmpKdv;
+            $scope.ToplamIskonto +=  parseFloat((value.DISCOUNT.toFixed(4)));
         });
 
         $scope.ToplamKalan = (($scope.AraToplam - $scope.ToplamIskonto) + $scope.ToplamKdv) - db.SumColumn($scope.TahList,"AMOUNT");
         $scope.GenelToplam = (($scope.AraToplam - $scope.ToplamIskonto) + $scope.ToplamKdv);
         
-        // $scope.GenelToplam = Number(Math.round($scope.GenelToplam +'e'+2)+'e-'+2)
-        // $scope.ToplamKalan = Number(Math.round($scope.ToplamKalan +'e'+2)+'e-'+2)
-        // $scope.AraToplam = Number(Math.round($scope.AraToplam +'e'+2)+'e-'+2)
-
-     
-        // $scope.AraToplam = db.NumberFixed($scope.AraToplam,2)
-        // $scope.ToplamKalan = db.NumberFixed($scope.ToplamKalan,2)
-        // $scope.GenelToplam = db.NumberFixed($scope.GenelToplam,2)
     }
     function DipToplamFisHesapla()
     {
@@ -1775,7 +1767,6 @@ function Pos($scope,$window,$rootScope,db)
                 }
             ];
 
-                    
             // CARI GETIR
             if($scope.CariKodu != "")
             {
@@ -1907,22 +1898,22 @@ function Pos($scope,$window,$rootScope,db)
             {
                 if(BarkodData.length > 0)
                 { 
-                    let TmpKiloFlag = $scope.ParamListe.find(x => x.NAME === 'KiloFlag').VALUE.split(',');
+                    // let TmpKiloFlag = $scope.ParamListe.find(x => x.NAME === 'KiloFlag').VALUE.split(',');
 
-                    for(let i = 0;i < TmpKiloFlag.length;i++)
-                    {
-                        if(TmpKiloFlag[i] == pBarkod.substring(0,2))
-                        {
-                            $scope.Miktar = await db.Scale.Send($scope.SCALEPORT);
+                    // for(let i = 0;i < TmpKiloFlag.length;i++)
+                    // {
+                    //     if(TmpKiloFlag[i] == pBarkod.substring(0,2))
+                    //     {
+                    //         $scope.Miktar = await db.Scale.Send($scope.SCALEPORT);
                             
-                            if($scope.Miktar <= 0)
-                            {
-                                alertify.alert("Lütfen Tartım Alınız.");
-                                $scope.TxtBarkod = "";
-                                return;
-                            }
-                        }
-                    }
+                    //         if($scope.Miktar <= 0)
+                    //         {
+                    //             alertify.alert("Lütfen Tartım Alınız.");
+                    //             $scope.TxtBarkod = "";
+                    //             return;
+                    //         }
+                    //     }
+                    // }
 
                     if(BarkodData[0].PRICE == 0)
                     {
@@ -2138,9 +2129,6 @@ function Pos($scope,$window,$rootScope,db)
                                 TmpData.SALES.push(TmpSale);
                             }
                             
-                            let TmpPayment = {};
-                            let Amount = 0;
-
                             for(let i = 0;i < $scope.TahList.length;i++)
                             {
                                 let TmpPayment = {};
@@ -2150,6 +2138,7 @@ function Pos($scope,$window,$rootScope,db)
                                 if($scope.TahList[i].TYPE == 0)
                                 {
                                     //TmpPayment.AMOUNT = Number(Math.round((($scope.TahList[i].AMOUNT + $scope.TahList[i].CHANGE) * 100)+'e'+2)+'e-'+2);
+                                    console.log(TmpPayment.AMOUNT)
                                     TmpPayment.AMOUNT = parseFloat((($scope.TahList[i].AMOUNT + $scope.TahList[i].CHANGE) * 100).toFixed(2))
                                 }
                                 else
@@ -2159,12 +2148,6 @@ function Pos($scope,$window,$rootScope,db)
                                 }
                                 TmpData.PAYMENT.push(TmpPayment);
                             }
-
-                            Amount = Amount + Number(Math.round(($scope.TahParaUstu * 100)+'e'+2)+'e-'+2);
-                            TmpPayment.TYPE = $scope.TahList.pop().TYPE;
-                            
-                            TmpPayment.AMOUNT = Amount
-                            TmpData.PAYMENT.push(TmpPayment);
 
                             if($scope.ChkFis)
                             {
@@ -2257,12 +2240,6 @@ function Pos($scope,$window,$rootScope,db)
     {
         if($scope.TxtMiktarGuncelle != "" && $scope.TxtMiktarGuncelle > 0)
         {
-            console.log($scope.SatisList[$scope.IslemListeSelectedIndex].UNIT_ID)
-            if($scope.SatisList[$scope.IslemListeSelectedIndex].UNIT_ID == "1")
-            {
-                $scope.TxtMiktarGuncelle = parseInt($scope.TxtMiktarGuncelle);
-            }
-
             if(typeof keyEvent == 'undefined')
             {
                 $scope.PosSatisMiktarUpdate($scope.SatisList[$scope.IslemListeSelectedIndex],$scope.TxtMiktarGuncelle);
