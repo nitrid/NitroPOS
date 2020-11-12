@@ -2117,27 +2117,19 @@ function Pos($scope,$window,$rootScope,db)
                                 {
                                     TmpSale.TAX = 0;
                                 }
-                                console.log($scope.SatisList[i].PRICE)
                                 TmpSale.AMOUNT = Number(Math.round(($scope.SatisList[i].PRICE * 100) +'e'+2)+'e-'+2);
                                 TmpData.SALES.push(TmpSale);
                             }
                             
-                            let TmpPayment = {};
-                            let Amount = 0;
-
-                            console.log($scope.TahList)
                             for(let i = 0;i < $scope.TahList.length;i++)
                             {
-                           ///     Amount = Amount + Number(Math.round(($scope.TahList[i].AMOUNT * 100)+'e'+2)+'e-'+2);
                                 let TmpPayment = {};
                                 TmpPayment.TYPE = $scope.TahList[i].TYPE;
                                 TmpPayment.AMOUNT = 0;
-
                                 
                                 if($scope.TahList[i].TYPE == 0)
                                 {
                                     TmpPayment.AMOUNT = Number(Math.round((($scope.TahList[i].AMOUNT + $scope.TahList[i].CHANGE) * 100)+'e'+2)+'e-'+2);
-                                    console.log(TmpPayment.AMOUNT)
                                 }
                                 else
                                 {
@@ -2145,10 +2137,6 @@ function Pos($scope,$window,$rootScope,db)
                                 }
                                 TmpData.PAYMENT.push(TmpPayment);
                             }
-
-                            // Amount = Amount + Number(Math.round(($scope.TahParaUstu * 100)+'e'+2)+'e-'+2);
-                            // TmpPayment.TYPE = $scope.TahList.pop().TYPE;
-                            // TmpPayment.AMOUNT = Amount
 
                             if($scope.ChkFis)
                             {
