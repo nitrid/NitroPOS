@@ -1305,6 +1305,10 @@ function Pos($scope,$window,$rootScope,db)
 
         $scope.ToplamKalan = (($scope.AraToplam - $scope.ToplamIskonto) + $scope.ToplamKdv) - db.SumColumn($scope.TahList,"AMOUNT");
         $scope.GenelToplam = (($scope.AraToplam - $scope.ToplamIskonto) + $scope.ToplamKdv);
+
+        $scope.AraToplam = db.NumberFixed($scope.AraToplam,2)
+        $scope.ToplamKalan = db.NumberFixed($scope.ToplamKalan,2)
+        $scope.GenelToplam = db.NumberFixed($scope.GenelToplam,2)
     }
     function DipToplamFisHesapla()
     {
@@ -1359,7 +1363,7 @@ function Pos($scope,$window,$rootScope,db)
         }
 
         $scope.TxtAraToplamTutar = parseFloat($scope.TahKalan).toFixed(2);
-    }  
+    }
     function FiyatUpdate(pData)
     {
         return new Promise(async resolve => 
@@ -1762,7 +1766,6 @@ function Pos($scope,$window,$rootScope,db)
                 }
             ];
 
-                    
             // CARI GETIR
             if($scope.CariKodu != "")
             {
@@ -1892,20 +1895,20 @@ function Pos($scope,$window,$rootScope,db)
                 { 
                     let TmpKiloFlag = $scope.ParamListe.find(x => x.NAME === 'KiloFlag').VALUE.split(',');
 
-                    for(let i = 0;i < TmpKiloFlag.length;i++)
-                    {
-                        if(TmpKiloFlag[i] == pBarkod.substring(0,2))
-                        {
-                            $scope.Miktar = await db.Scale.Send($scope.SCALEPORT);
+                    // for(let i = 0;i < TmpKiloFlag.length;i++)
+                    // {
+                    //     if(TmpKiloFlag[i] == pBarkod.substring(0,2))
+                    //     {
+                    //         $scope.Miktar = await db.Scale.Send($scope.SCALEPORT);
                             
-                            if($scope.Miktar <= 0)
-                            {
-                                alertify.alert("Lütfen Tartım Alınız.");
-                                $scope.TxtBarkod = "";
-                                return;
-                            }
-                        }
-                    }
+                    //         if($scope.Miktar <= 0)
+                    //         {
+                    //             alertify.alert("Lütfen Tartım Alınız.");
+                    //             $scope.TxtBarkod = "";
+                    //             return;
+                    //         }
+                    //     }
+                    // }
 
                     if(BarkodData[0].PRICE == 0)
                     {
@@ -2030,7 +2033,9 @@ function Pos($scope,$window,$rootScope,db)
             }
             return;
         }
-        TahTutar = parseFloat($scope.TxtAraToplamTutar.replace(',','.'));
+        
+        TahTutar = parseFloat($scope.TxtAraToplamTutar.replace(',','.')).toFixed(2);
+
         if($scope.GenelToplam < (db.SumColumn($scope.TahList,"AMOUNT") + parseFloat($scope.TxtAraToplamTutar.replace(',','.'))))
         {
             TahParaUstu = parseFloat((db.SumColumn($scope.TahList,"AMOUNT") + parseFloat($scope.TxtAraToplamTutar.replace(',','.'))) - $scope.GenelToplam).toFixed(2);
@@ -2112,27 +2117,38 @@ function Pos($scope,$window,$rootScope,db)
                                 {
                                     TmpSale.TAX = 0;
                                 }
-
-                                TmpSale.AMOUNT = Number(Math.round(($scope.SatisList[i].PRICE * 100)+'e'+2)+'e-'+2);
+                                console.log($scope.SatisList[i].PRICE)
+                                TmpSale.AMOUNT = Number(Math.round(($scope.SatisList[i].PRICE * 100) +'e'+2)+'e-'+2);
                                 TmpData.SALES.push(TmpSale);
                             }
                             
                             let TmpPayment = {};
                             let Amount = 0;
 
+                            console.log($scope.TahList)
                             for(let i = 0;i < $scope.TahList.length;i++)
                             {
-                                Amount = Amount + Number(Math.round(($scope.TahList[i].AMOUNT * 100)+'e'+2)+'e-'+2);
+                           ///     Amount = Amount + Number(Math.round(($scope.TahList[i].AMOUNT * 100)+'e'+2)+'e-'+2);
+                                let TmpPayment = {};
+                                TmpPayment.TYPE = $scope.TahList[i].TYPE;
+                                TmpPayment.AMOUNT = 0;
+
+                                
+                                if($scope.TahList[i].TYPE == 0)
+                                {
+                                    TmpPayment.AMOUNT = Number(Math.round((($scope.TahList[i].AMOUNT + $scope.TahList[i].CHANGE) * 100)+'e'+2)+'e-'+2);
+                                    console.log(TmpPayment.AMOUNT)
+                                }
+                                else
+                                {
+                                    TmpPayment.AMOUNT = Number(Math.round(($scope.TahList[i].AMOUNT * 100)+'e'+2)+'e-'+2);
+                                }
+                                TmpData.PAYMENT.push(TmpPayment);
                             }
 
-                            console.log(Amount)
-                            console.log($scope.TahParaUstu)
-
-                            Amount = Amount + Number(Math.round(($scope.TahParaUstu * 100)+'e'+2)+'e-'+2);
-                            TmpPayment.TYPE = $scope.TahList.pop().TYPE;
-                            
-                            TmpPayment.AMOUNT = Amount
-                            TmpData.PAYMENT.push(TmpPayment);
+                            // Amount = Amount + Number(Math.round(($scope.TahParaUstu * 100)+'e'+2)+'e-'+2);
+                            // TmpPayment.TYPE = $scope.TahList.pop().TYPE;
+                            // TmpPayment.AMOUNT = Amount
 
                             if($scope.ChkFis)
                             {

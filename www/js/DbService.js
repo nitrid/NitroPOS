@@ -275,6 +275,16 @@ angular.module('app.db', []).service('db',function($rootScope)
         
         return Sum;
     }
+    function _NumberFixed(pNumber,pFixed)    
+    {
+        let Number = 0;
+        Number = pNumber;
+        Number = Number.toString().split('.')[1]
+        if(typeof Number != 'undefined')
+        Number = Number.substring(0,pFixed)
+
+        return parseFloat(pNumber.toString().split('.')[0] + '.' + Number).toFixed(pFixed);
+    }
     function _EscposPrint(pData,fn)
     {
         if(typeof require == 'undefined')
@@ -407,6 +417,7 @@ angular.module('app.db', []).service('db',function($rootScope)
     this.ExecutePromiseTag = _ExecutePromiseTag;
     this.ExecutePromiseQuery = _ExecutePromiseQuery;
     this.SumColumn = _SumColumn;
+    this.NumberFixed = _NumberFixed;
     this.PrintText = _PrintText;
     this.SocketConnected = false;
     this.EscposCaseOpen = _EscposCaseOpen;
