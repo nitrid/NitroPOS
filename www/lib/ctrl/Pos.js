@@ -1,5 +1,3 @@
-const { parse } = require('path');
-
 function Pos($scope,$window,$rootScope,db)
 {
     let IslemSelectedRow = null;
