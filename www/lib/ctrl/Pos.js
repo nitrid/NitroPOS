@@ -1900,22 +1900,22 @@ function Pos($scope,$window,$rootScope,db)
             {
                 if(BarkodData.length > 0)
                 { 
-                    // let TmpKiloFlag = $scope.ParamListe.find(x => x.NAME === 'KiloFlag').VALUE.split(',');
+                    let TmpKiloFlag = $scope.ParamListe.find(x => x.NAME === 'KiloFlag').VALUE.split(',');
 
-                    // for(let i = 0;i < TmpKiloFlag.length;i++)
-                    // {
-                    //     if(TmpKiloFlag[i] == pBarkod.substring(0,2))
-                    //     {
-                    //         $scope.Miktar = await db.Scale.Send($scope.SCALEPORT);
+                    for(let i = 0;i < TmpKiloFlag.length;i++)
+                    {
+                        if(TmpKiloFlag[i] == pBarkod.substring(0,2))
+                        {
+                            $scope.Miktar = await db.Scale.Send($scope.SCALEPORT);
                             
-                    //         if($scope.Miktar <= 0)
-                    //         {
-                    //             alertify.alert("Lütfen Tartım Alınız.");
-                    //             $scope.TxtBarkod = "";
-                    //             return;
-                    //         }
-                    //     }
-                    // }
+                            if($scope.Miktar <= 0)
+                            {
+                                alertify.alert("Lütfen Tartım Alınız.");
+                                $scope.TxtBarkod = "";
+                                return;
+                            }
+                        }
+                    }
 
                     if(BarkodData[0].PRICE == 0)
                     {
