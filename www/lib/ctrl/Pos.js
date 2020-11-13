@@ -1301,15 +1301,16 @@ function Pos($scope,$window,$rootScope,db)
 
         angular.forEach($scope.SatisList,function(value)
         {
-            let TmpKdv = ((parseFloat((value.QUANTITY * value.PRICE).toFixed(4)) - parseFloat(value.DISCOUNT.toFixed(4)))) - (((parseFloat((value.QUANTITY * value.PRICE).toFixed(4)) - parseFloat(value.DISCOUNT.toFixed(4)))) / (parseFloat((value.VAT / 100).toFixed(4)) + 1)); 
-            $scope.ToplamKdv += parseFloat((TmpKdv.toFixed(4)));
-            $scope.AraToplam += parseFloat((value.QUANTITY * value.PRICE).toFixed(4)) - TmpKdv;
-            $scope.ToplamIskonto +=  parseFloat((value.DISCOUNT.toFixed(4)));
+            let TmpAmount = parseFloat(value.QUANTITY * value.PRICE) - parseFloat(value.DISCOUNT)
+            let TmpVatRate = parseFloat((value.VAT / 100)) + 1;
+            let TmpKdv =  TmpAmount - (TmpAmount / TmpVatRate); 
+            $scope.ToplamKdv += parseFloat((TmpKdv));
+            $scope.AraToplam += TmpAmount - TmpKdv;
+            $scope.ToplamIskonto +=  parseFloat((value.DISCOUNT));
         });
 
-        $scope.ToplamKalan = (($scope.AraToplam - $scope.ToplamIskonto) + $scope.ToplamKdv) - db.SumColumn($scope.TahList,"AMOUNT");
-        $scope.GenelToplam = (($scope.AraToplam - $scope.ToplamIskonto) + $scope.ToplamKdv);
-        
+        $scope.ToplamKalan = Math.floor((((($scope.AraToplam) - $scope.ToplamIskonto) + $scope.ToplamKdv) - db.SumColumn($scope.TahList,"AMOUNT")) * 100) / 100;
+        $scope.GenelToplam = Math.floor((($scope.AraToplam - $scope.ToplamIskonto) + $scope.ToplamKdv) * 100) / 100;
     }
     function DipToplamFisHesapla()
     {
@@ -2148,6 +2149,13 @@ function Pos($scope,$window,$rootScope,db)
                                 }
                                 TmpData.PAYMENT.push(TmpPayment);
                             }
+
+                            // console.log(db.SumColumn($scope.TahList,"AMOUNT") - db.SumColumn($scope.SatisList,"AMOUNT"))
+                            // if((db.SumColumn($scope.TahList,"AMOUNT") - db.SumColumn($scope.SatisList,"AMOUNT")) == 0.01)
+                            // {
+                            //     console.log(999)
+                            //     TmpData.PAYMENT[TmpData.PAYMENT.length - 1].AMOUNT -=  1
+                            // }
 
                             if($scope.ChkFis)
                             {
