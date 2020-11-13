@@ -1,3 +1,5 @@
+const { parse } = require('path');
+
 function Pos($scope,$window,$rootScope,db)
 {
     let IslemSelectedRow = null;
@@ -1298,19 +1300,18 @@ function Pos($scope,$window,$rootScope,db)
         $scope.GenelToplam = 0;
         $scope.ToplamIskonto = 0;
         $scope.ToplamFisIskonto = 0;
-
         angular.forEach($scope.SatisList,function(value)
         {
-            let TmpAmount = parseFloat(value.QUANTITY * value.PRICE) - parseFloat(value.DISCOUNT)
             let TmpVatRate = parseFloat((value.VAT / 100)) + 1;
-            let TmpKdv =  TmpAmount - (TmpAmount / TmpVatRate); 
-            $scope.ToplamKdv += parseFloat((TmpKdv));
-            $scope.AraToplam += TmpAmount - TmpKdv;
+            let TmpKdv =  value.AMOUNT - (value.AMOUNT / TmpVatRate); 
+
+            $scope.ToplamKdv += (TmpKdv * 100) / 100;
+            $scope.AraToplam += value.AMOUNT - TmpKdv;
             $scope.ToplamIskonto +=  parseFloat((value.DISCOUNT));
         });
 
-        $scope.ToplamKalan = Math.floor((((($scope.AraToplam) - $scope.ToplamIskonto) + $scope.ToplamKdv) - db.SumColumn($scope.TahList,"AMOUNT")) * 100) / 100;
-        $scope.GenelToplam = Math.floor((($scope.AraToplam - $scope.ToplamIskonto) + $scope.ToplamKdv) * 100) / 100;
+        $scope.ToplamKalan = ((($scope.AraToplam) - $scope.ToplamIskonto) + $scope.ToplamKdv) - db.SumColumn($scope.TahList,"AMOUNT")
+        $scope.GenelToplam = ($scope.AraToplam - $scope.ToplamIskonto) + $scope.ToplamKdv
     }
     function DipToplamFisHesapla()
     {
@@ -2125,7 +2126,6 @@ function Pos($scope,$window,$rootScope,db)
                                     TmpSale.TAX = 0;
                                 }
 
-                                //TmpSale.AMOUNT = Number(Math.round(($scope.SatisList[i].PRICE * 100) +'e'+2)+'e-'+2);
                                 TmpSale.AMOUNT =  parseFloat(($scope.SatisList[i].PRICE * 100).toFixed(2));
                                 TmpData.SALES.push(TmpSale);
                             }
@@ -2138,24 +2138,14 @@ function Pos($scope,$window,$rootScope,db)
 
                                 if($scope.TahList[i].TYPE == 0)
                                 {
-                                    //TmpPayment.AMOUNT = Number(Math.round((($scope.TahList[i].AMOUNT + $scope.TahList[i].CHANGE) * 100)+'e'+2)+'e-'+2);
-                                    console.log(TmpPayment.AMOUNT)
                                     TmpPayment.AMOUNT = parseFloat((($scope.TahList[i].AMOUNT + $scope.TahList[i].CHANGE) * 100).toFixed(2))
                                 }
                                 else
                                 {
-                                    //TmpPayment.AMOUNT = Number(Math.round(($scope.TahList[i].AMOUNT * 100)+'e'+2)+'e-'+2);
                                     TmpPayment.AMOUNT = parseFloat(($scope.TahList[i].AMOUNT * 100).toFixed(2))
                                 }
                                 TmpData.PAYMENT.push(TmpPayment);
                             }
-
-                            // console.log(db.SumColumn($scope.TahList,"AMOUNT") - db.SumColumn($scope.SatisList,"AMOUNT"))
-                            // if((db.SumColumn($scope.TahList,"AMOUNT") - db.SumColumn($scope.SatisList,"AMOUNT")) == 0.01)
-                            // {
-                            //     console.log(999)
-                            //     TmpData.PAYMENT[TmpData.PAYMENT.length - 1].AMOUNT -=  1
-                            // }
 
                             if($scope.ChkFis)
                             {
