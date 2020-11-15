@@ -1298,12 +1298,19 @@ function Pos($scope,$window,$rootScope,db)
         $scope.GenelToplam = 0;
         $scope.ToplamIskonto = 0;
         $scope.ToplamFisIskonto = 0;
+        let TmpKdv = 0;
+        let TmpAmount = 0;
+        let TmpVat =0;
         angular.forEach($scope.SatisList,function(value)
         {
-            let TmpAmount = (value.PRICE * value.QUANTITY)
+            TmpAmount = (value.PRICE * value.QUANTITY)
             TmpAmount = db.MathRound(TmpAmount.toFixed(3));
-            let TmpKdv =  db.MathRound((TmpAmount / value.VAT));
-
+            TmpVat = (TmpAmount / value.VAT)
+            if(value.VAT > 0)
+            TmpKdv =  db.MathRound(TmpVat);
+            else
+            TmpKdv = 0;
+            
             $scope.AraToplam += TmpAmount - TmpKdv;
             $scope.ToplamKdv += db.MathRound(TmpKdv)
         });
