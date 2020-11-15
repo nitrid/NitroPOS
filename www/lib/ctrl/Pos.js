@@ -1298,18 +1298,20 @@ function Pos($scope,$window,$rootScope,db)
         $scope.GenelToplam = 0;
         $scope.ToplamIskonto = 0;
         $scope.ToplamFisIskonto = 0;
+        let TmpAmount = 0;
         angular.forEach($scope.SatisList,function(value)
         {
             let TmpVatRate = parseFloat((value.VAT / 100)) + 1;
             let TmpKdv =  value.AMOUNT - (value.AMOUNT / TmpVatRate); 
 
             $scope.ToplamKdv += (TmpKdv * 100) / 100;
+            TmpAmount += value.AMOUNT
             $scope.AraToplam += value.AMOUNT - TmpKdv;
-            $scope.ToplamIskonto +=  parseFloat((value.DISCOUNT));
+            $scope.ToplamIskonto +=  parseFloat(value.DISCOUNT);
         });
 
-        $scope.ToplamKalan = ((($scope.AraToplam) - $scope.ToplamIskonto) + $scope.ToplamKdv) - db.SumColumn($scope.TahList,"AMOUNT")
-        $scope.GenelToplam = ($scope.AraToplam - $scope.ToplamIskonto) + $scope.ToplamKdv
+        $scope.ToplamKalan = TmpAmount - db.SumColumn($scope.TahList,"AMOUNT")
+        $scope.GenelToplam = TmpAmount
     }
     function DipToplamFisHesapla()
     {
@@ -1918,6 +1920,13 @@ function Pos($scope,$window,$rootScope,db)
                     if(BarkodData[0].PRICE == 0)
                     {
                         alertify.alert("Ürünün fiyat bilgisi tanımsız !");
+                        $scope.TxtBarkod = "";
+                        return;
+                    }
+
+                    if(typeof BarkodData[0].UNIT == 'undefined' || BarkodData.UNIT == '')
+                    { 
+                        alertify.alert("Ürünün birim bilgisi tanımsız !");
                         $scope.TxtBarkod = "";
                         return;
                     }
