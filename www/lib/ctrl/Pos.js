@@ -1298,18 +1298,25 @@ function Pos($scope,$window,$rootScope,db)
         $scope.GenelToplam = 0;
         $scope.ToplamIskonto = 0;
         $scope.ToplamFisIskonto = 0;
+        let TmpKdv = 0;
+        let TmpAmount = 0;
+        let TmpVat =0;
         angular.forEach($scope.SatisList,function(value)
         {
-            let TmpVatRate = parseFloat((value.VAT / 100)) + 1;
-            let TmpKdv =  value.AMOUNT - (value.AMOUNT / TmpVatRate); 
-
-            $scope.ToplamKdv += (TmpKdv * 100) / 100;
-            $scope.AraToplam += value.AMOUNT - TmpKdv;
-            $scope.ToplamIskonto +=  parseFloat((value.DISCOUNT));
+            TmpAmount = (value.PRICE * value.QUANTITY)
+            TmpAmount = db.MathRound(TmpAmount.toFixed(3));
+            TmpVat = (TmpAmount / value.VAT)
+            if(value.VAT > 0)
+            TmpKdv =  db.MathRound(TmpVat);
+            else
+            TmpKdv = 0;
+            
+            $scope.AraToplam += TmpAmount - TmpKdv;
+            $scope.ToplamKdv += db.MathRound(TmpKdv)
         });
 
-        $scope.ToplamKalan = ((($scope.AraToplam) - $scope.ToplamIskonto) + $scope.ToplamKdv) - db.SumColumn($scope.TahList,"AMOUNT")
-        $scope.GenelToplam = ($scope.AraToplam - $scope.ToplamIskonto) + $scope.ToplamKdv
+        $scope.ToplamKalan = ($scope.AraToplam + $scope.ToplamKdv) - db.SumColumn($scope.TahList,"AMOUNT")
+        $scope.GenelToplam = $scope.AraToplam + $scope.ToplamKdv
     }
     function DipToplamFisHesapla()
     {
@@ -1922,6 +1929,13 @@ function Pos($scope,$window,$rootScope,db)
                         return;
                     }
 
+                    if(typeof BarkodData[0].UNIT == 'undefined' || BarkodData.UNIT == '')
+                    { 
+                        alertify.alert("Ürünün birim bilgisi tanımsız !");
+                        $scope.TxtBarkod = "";
+                        return;
+                    }
+
                     $scope.Stok = BarkodData;
                     if(TmpFiyat > 0 )
                     {
@@ -1974,7 +1988,7 @@ function Pos($scope,$window,$rootScope,db)
             $scope.Stok[0].BARCODE,
             $scope.Miktar * $scope.Stok[0].FACTOR,
             $scope.Stok[0].UNIT,
-            $scope.Stok[0].PRICE = db.NumberFixed($scope.Stok[0].PRICE,2),
+            $scope.Stok[0].PRICE = $scope.Stok[0].PRICE.toFixed(2),
             0, //ISKONTO TUTAR 1
             $scope.Stok[0].VAT,
             0  //DURUM
@@ -3759,49 +3773,42 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.BtnKasaKilitle = async function(pTip)
     {
-        if($scope.SatisList.length == 0)
+        if(pTip == 0)
         {
-            if(pTip == 0)
-            {
-                alertify.okBtn('Evet');
-                alertify.cancelBtn('Hayır');
-                alertify.confirm('Kasayı Kilitlemek İstediğinize Emin Misiniz ?', 
-                function()
-                { 
-                    $('#MdlKasaSifre').modal({backdrop: 'static', keyboard: false});
-                    FocusBarkod = false;
-                    FocusAraToplam = false;
-                    FocusMusteri = false;
-                    FocusStok = false;
-                    FocusKartOdeme = false;
-                    FirstKey = false;
-                    FocusYetkiliSifre = false;
-                    FocusKasaSifre = true;
-                }
-                ,function(){});
+            alertify.okBtn('Evet');
+            alertify.cancelBtn('Hayır');
+            alertify.confirm('Kasayı Kilitlemek İstediğinize Emin Misiniz ?', 
+            function()
+            { 
+                $('#MdlKasaSifre').modal({backdrop: 'static', keyboard: false});
+                FocusBarkod = false;
+                FocusAraToplam = false;
+                FocusMusteri = false;
+                FocusStok = false;
+                FocusKartOdeme = false;
+                FirstKey = false;
+                FocusYetkiliSifre = false;
+                FocusKasaSifre = true;
             }
-            else
-            {
-                let SifreList = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',[$scope.Kullanici]);
-
-                if(SifreList[0].PASSWORD == $scope.TxtKasaSifre)
-                {
-                    $scope.TxtKasaSifre = "";
-                    $("#MdlKasaSifre").modal("hide");
-                    alertify.alert("Şifre Kabul Edildi.")
-                }
-                else
-                {
-                    $scope.TxtKasaSifre = "";
-                    $("#MdlKasaSifre").modal("hide");
-                    alertify.alert("Kullanıcı Şifresi Yanlış")
-                }
-            }   
+            ,function(){});
         }
         else
         {
-            alertify.alert("Satış Listesi Doluyken Kasa Kilitleme İşlemi Yapılamaz.")
-        }
+            let SifreList = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',[$scope.Kullanici]);
+
+            if(SifreList[0].PASSWORD == $scope.TxtKasaSifre)
+            {
+                $scope.TxtKasaSifre = "";
+                $("#MdlKasaSifre").modal("hide");
+                alertify.alert("Şifre Kabul Edildi.")
+            }
+            else
+            {
+                $scope.TxtKasaSifre = "";
+                $("#MdlKasaSifre").modal("hide");
+                alertify.alert("Kullanıcı Şifresi Yanlış")
+            }
+        }   
     }
     $scope.BtnKasaRapor = function(pTip)
     {

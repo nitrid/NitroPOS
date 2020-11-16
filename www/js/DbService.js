@@ -275,15 +275,9 @@ angular.module('app.db', []).service('db',function($rootScope)
         
         return Sum;
     }
-    function _NumberFixed(pNumber,pFixed)    
+    function _MathRound(pData)    
     {
-        let Number = 0;
-        Number = pNumber;
-        Number = Number.toString().split('.')[1]
-        if(typeof Number != 'undefined')
-        Number = Number.substring(0,pFixed)
-
-        return parseFloat(pNumber.toString().split('.')[0] + '.' + Number).toFixed(pFixed);
+        return Math.round((pData * 100)) / 100;
     }
     function _EscposPrint(pData,fn)
     {
@@ -417,7 +411,7 @@ angular.module('app.db', []).service('db',function($rootScope)
     this.ExecutePromiseTag = _ExecutePromiseTag;
     this.ExecutePromiseQuery = _ExecutePromiseQuery;
     this.SumColumn = _SumColumn;
-    this.NumberFixed = _NumberFixed;
+    this.MathRound = _MathRound;
     this.PrintText = _PrintText;
     this.SocketConnected = false;
     this.EscposCaseOpen = _EscposCaseOpen;
