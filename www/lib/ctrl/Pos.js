@@ -3469,7 +3469,6 @@ function Pos($scope,$window,$rootScope,db)
                     $scope.PluStokGrupList = PluData
                     $scope.PagePluStokGrupList = $scope.PluStokGrupList.slice($scope.PluStokGrupStartIndex,$scope.PluStokGrupEndIndex);
                     
-
                     $("#TbPluStokGrup").addClass('active');
                     $("#TbMain").removeClass('active');
                 });
