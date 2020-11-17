@@ -1300,23 +1300,21 @@ function Pos($scope,$window,$rootScope,db)
         $scope.ToplamFisIskonto = 0;
         let TmpKdv = 0;
         let TmpAmount = 0;
-        let TmpVat =0;
+        let TmpVatRate = 0;
+        let TmpToplam = 0;
         angular.forEach($scope.SatisList,function(value)
         {
             TmpAmount = (value.PRICE * value.QUANTITY)
-            TmpAmount = db.MathRound(TmpAmount.toFixed(3));
-            TmpVat = (TmpAmount / value.VAT)
-            if(value.VAT > 0)
-            TmpKdv =  db.MathRound(TmpVat);
-            else
-            TmpKdv = 0;
+            TmpAmount = db.MathRound(TmpAmount.toFixed(4));
+            TmpVatRate = parseFloat((value.VAT / 100)) + 1;
+            TmpKdv =  TmpAmount - (TmpAmount / TmpVatRate);
+            TmpToplam += TmpAmount;
             
-            $scope.AraToplam += TmpAmount - TmpKdv;
             $scope.ToplamKdv += db.MathRound(TmpKdv)
         });
-
-        $scope.ToplamKalan = ($scope.AraToplam + $scope.ToplamKdv) - db.SumColumn($scope.TahList,"AMOUNT")
-        $scope.GenelToplam = $scope.AraToplam + $scope.ToplamKdv
+        $scope.AraToplam = TmpToplam - $scope.ToplamKdv;
+        $scope.ToplamKalan = ($scope.AraToplam + $scope.ToplamKdv) - db.SumColumn($scope.TahList,"AMOUNT");
+        $scope.GenelToplam = $scope.AraToplam + $scope.ToplamKdv;
     }
     function DipToplamFisHesapla()
     {
