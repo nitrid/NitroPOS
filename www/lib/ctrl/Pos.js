@@ -1422,7 +1422,7 @@ function Pos($scope,$window,$rootScope,db)
                 );
             });
         });
-    } 
+    }
     function SatirBirlestir()
     {
         let TmpStatus = false;
