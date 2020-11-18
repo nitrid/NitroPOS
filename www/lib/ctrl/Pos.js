@@ -793,13 +793,6 @@ function Pos($scope,$window,$rootScope,db)
             fields: 
             [
             {
-                name: "NO",
-                title: "NO",
-                type: "text",
-                align: "center",
-                width: 30
-            },
-            {
                 name: "ITEM_NAME",
                 title: "ADI",
                 type: "text",
