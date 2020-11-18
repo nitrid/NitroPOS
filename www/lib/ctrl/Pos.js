@@ -1308,7 +1308,7 @@ function Pos($scope,$window,$rootScope,db)
             TmpToplam += value.AMOUNT
         });
         $scope.ToplamKdv = TmpKdv;
-        $scope.AraToplam = TmpAraToplam - TmpKdv;
+        $scope.AraToplam = TmpAraToplam;
         $scope.ToplamKalan = (TmpAraToplam + TmpKdv) - db.SumColumn($scope.TahList,"AMOUNT");
         $scope.GenelToplam = TmpAraToplam + TmpKdv;
     }
