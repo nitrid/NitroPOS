@@ -79,13 +79,13 @@
             background-color: #fff;
             z-index: 99;
             text-align: center;
-            font-size : 100px;
+            font-size : 30px;
         }
     </style>
     </head>
     <body class="animsition site-navbar-small site-menubar-fold site-menubar-keep" ng-controller="Pos" ng-Init = "YeniEvrak()">
         <audio id="audio" src="http://www.soundjay.com/button/beep-04.wav" autoplay="false" ></audio>
-    <div id="loading" style="display:none;z-index: 1800;">Bekleyiniz...</div>
+    <div id="loading" style="display:none;z-index: 1800;"><div class="loader vertical-align-middle loader-circle"></div><div ng-show = "MsgLoading">Ödeme Bekleniyor...</div></div>
     <!--[if lt IE 8]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->

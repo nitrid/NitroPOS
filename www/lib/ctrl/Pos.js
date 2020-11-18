@@ -1,5 +1,3 @@
-const { CONNREFUSED } = require('dns');
-
 function Pos($scope,$window,$rootScope,db)
 {
     let IslemSelectedRow = null;
@@ -50,6 +48,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
+        $scope.MsgLoading = false;
         $rootScope.LoadingHide();
     });
     $('#MdlMusteriListele').on('hide.bs.modal', function () 
@@ -150,6 +149,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
+        $scope.MsgLoading = false;
     });
     $('#MdlParaUstu').on('hide.bs.modal', function () 
     {
@@ -482,6 +482,7 @@ function Pos($scope,$window,$rootScope,db)
                     $("#MdlIngenicoEslesme").modal("show");
                     $scope.TxtOkcMesaj = "Ödeme İşlemi Başarısız.";
                     $scope.BtnTxtOkcEslesme = "İptal";  
+                    $scope.MsgLoading = false;
                 }
             }
             else if(pData.tag == "INVOICE")
@@ -497,7 +498,8 @@ function Pos($scope,$window,$rootScope,db)
                     $("#MdlAraToplam").modal("hide");
                     $("#MdlIngenicoEslesme").modal("show");
                     $scope.TxtOkcMesaj = "Ödeme İşlemi Başarısız.";
-                    $scope.BtnTxtOkcEslesme = "İptal";  
+                    $scope.BtnTxtOkcEslesme = "İptal";
+                    $scope.MsgLoading = false;
                 }
             }
         });
@@ -574,6 +576,7 @@ function Pos($scope,$window,$rootScope,db)
         $scope.PluKodu = "";
         $scope.LCDPORT = "";
         $scope.SCALEPORT = "";
+        $scope.MsgLoading = false;
         
         $scope.KasaNo = 1;
         $scope.Saat = moment(new Date(),"HH:mm:ss").format("HH:mm:ss");
@@ -2167,6 +2170,7 @@ function Pos($scope,$window,$rootScope,db)
 
                                 db.Ingenico.Invoice(FaturaData); 
                             }
+                            $scope.MsgLoading = true;
                         } 
                         else
                         {
