@@ -1,3 +1,5 @@
+const { CONNREFUSED } = require('dns');
+
 function Pos($scope,$window,$rootScope,db)
 {
     let IslemSelectedRow = null;
@@ -1298,25 +1300,20 @@ function Pos($scope,$window,$rootScope,db)
         $scope.GenelToplam = 0;
         $scope.ToplamIskonto = 0;
         $scope.ToplamFisIskonto = 0;
+
         let TmpKdv = 0;
-        let TmpAmount = 0;
-        let TmpVat =0;
+        let TmpAraToplam = 0;
+        let TmpToplam = 0;
+
         angular.forEach($scope.SatisList,function(value)
         {
-            TmpAmount = (value.PRICE * value.QUANTITY)
-            TmpAmount = db.MathRound(TmpAmount.toFixed(3));
-            TmpVat = (TmpAmount / value.VAT)
-            if(value.VAT > 0)
-            TmpKdv =  db.MathRound(TmpVat);
-            else
-            TmpKdv = 0;
-            
-            $scope.AraToplam += TmpAmount - TmpKdv;
-            $scope.ToplamKdv += db.MathRound(TmpKdv)
+            TmpKdv += value.VATIN
+            TmpAraToplam += value.VATOUTAMOUNT
+            TmpToplam += value.AMOUNT
         });
-
-        $scope.ToplamKalan = ($scope.AraToplam + $scope.ToplamKdv) - db.SumColumn($scope.TahList,"AMOUNT")
-        $scope.GenelToplam = $scope.AraToplam + $scope.ToplamKdv
+        $scope.AraToplam = TmpAraToplam - TmpKdv;
+        $scope.ToplamKalan = (TmpAraToplam + TmpKdv) - db.SumColumn($scope.TahList,"AMOUNT");
+        $scope.GenelToplam = TmpAraToplam + TmpKdv;
     }
     function DipToplamFisHesapla()
     {
@@ -2150,11 +2147,11 @@ function Pos($scope,$window,$rootScope,db)
 
                                 if($scope.TahList[i].TYPE == 0)
                                 {
-                                    TmpPayment.AMOUNT = parseFloat((($scope.TahList[i].AMOUNT + $scope.TahList[i].CHANGE) * 100).toFixed(2))
+                                    TmpPayment.AMOUNT = parseFloat((($scope.TahList[i].AMOUNT + $scope.TahList[i].CHANGE) * 100).toFixed(2));
                                 }
                                 else
                                 {
-                                    TmpPayment.AMOUNT = parseFloat(($scope.TahList[i].AMOUNT * 100).toFixed(2))
+                                    TmpPayment.AMOUNT = parseFloat(($scope.TahList[i].AMOUNT * 100).toFixed(2));
                                 }
                                 TmpData.PAYMENT.push(TmpPayment);
                             }
@@ -2803,8 +2800,8 @@ function Pos($scope,$window,$rootScope,db)
         {   
             db.GetData($scope.Firma,'PosCariGetir',[PosSatisData[0].CUSTOMER_CODE,''],function(data)
             {
-                $scope.CariAdi = data[0].NAME;
-                $scope.CariKodu = data[0].CODE;
+                //$scope.CariAdi = data[0].NAME;
+                //$scope.CariKodu = data[0].CODE;
             });
 
             InsertSonYenile(PosSatisData);
