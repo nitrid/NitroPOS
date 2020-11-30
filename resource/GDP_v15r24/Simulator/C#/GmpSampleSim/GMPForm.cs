@@ -1986,6 +1986,8 @@ namespace GmpSampleSim
                                 display += String.Format(Environment.NewLine + "{0}({1})", m_stTicket.stPayment[m_stTicket.totalNumberOfPayments - 1].stBankPayment.stPaymentErrMessage.AppErrorMsg
                                                                                     , m_stTicket.stPayment[m_stTicket.totalNumberOfPayments - 1].stBankPayment.stPaymentErrMessage.AppErrorCode
                                                                                     );
+
+                                MessageBox.Show(display + "1990");
                             }
                         }
 
@@ -1995,8 +1997,11 @@ namespace GmpSampleSim
                         break;
                 }
 
+
                 if (display.Length != 0)
                     textBox1.Text = display;
+
+                MessageBox.Show(textBox1.Text);
 
                 HandleErrorCode(retcode);
 

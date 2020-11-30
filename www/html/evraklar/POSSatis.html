@@ -1318,21 +1318,33 @@
         <div class="col-12">
             <div class="panel">
                 <div class="panel-body">
-                <div class="row hb-50" stlye="font-size:160%;">
-                    <div class="col-4 offset-4">
-                        <h1>FİYAT TEKLİFİ</h1>
+                    <div class="row hb-50" stlye="font-size:160%;">
+                        <div class="col-4 offset-4">
+                            <h1>FİYAT TEKLİFİ</h1>
+                        </div>
                     </div>
-                </div>
-                <div class="row" >
-                    <div class="col-4">
-                        <p stlye="font-size:160%;">
-                            <br>
-                            <br>
-                            <b><h4>Müşteri Kodu :</b><h4> {{CariKodu}}</h4>
-                            <br>
-                            <br>
-                            <b><h4>Müşteri Adı :</b></h4><h4> {{CariAdi}}</h4>
-                        </p>
+                    <div class="row" >
+                        <div class="col-4">
+                            <p stlye="font-size:160%;">
+                                <br>
+                                <br>
+                                <b><h4>Müşteri Kodu :</b><h4> {{CariKodu}}</h4>
+                                <br>
+                                <br>
+                                <b><h4>Müşteri Adı :</b></h4><h4> {{CariAdi}}</h4>
+                            </p>
+                        </div>
+                        <div class="col-3 offset-4">
+                            <p stlye="font-size:140%;">
+                                <br>
+                                <br>
+                                <b><h4>Evrak No : </b></h4><h4>{{FisSeri}} - {{FisSira}}</h4>
+                                <br>
+                                <br>
+                                <b><h4>TARİH:</b></h4><h4> {{Tarih}}<h4>
+                                <br>
+                            </p>
+                        </div>
                     </div>
                     <div class="col-3 offset-4">
                         <p stlye="font-size:140%;">
@@ -1345,70 +1357,58 @@
                             <br>
                         </p>
                     </div>
-                </div>
-                <div class="col-3 offset-4">
-                    <p stlye="font-size:140%;">
-                        <br>
-                        <br>
-                        <b><h4>Evrak No : </b></h4><h4>{{FisSeri}} - {{FisSira}}</h4>
-                        <br>
-                        <br>
-                        <b><h4>TARİH:</b></h4><h4> {{Tarih}}<h4>
-                        <br>
-                    </p>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                    <div class="row">
+                        <div class="col-12">
+                            ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <table style="width:100%">
-                            <tr>
-                                <th style="font: size 20px;">STOK KODU</th>
-                                <th style="font-size:20px;">ADI</th>
-                                <th style="font-size:20px;">BİRİM</th>
-                                <th style="font-size:20px;">MİKTAR</th>
-                                <th style="font-size:20px;">BİRİM FİYATI</th>
-                                <th style="font-size:20px;">TUTAR</th>
-                                <th style="font-size:20px;">ISKONTO</th>
-                            </tr>
-                            <tr ng-repeat="Item in SatisFisList">
-                                <td style="font-size:18px;">{{Item.SKODU}}</td>
-                                <td style="font-size:18px;">{{Item.SADI}}</td>
-                                <td style="font-size:18px;">{{Item.BIRIMADI}}</td>
-                                <td style="font-size:18px;">{{Item.BIRIM | number:2}}</td>
-                                <td style="font-size:18px;">{{Item.BKDVDAHIL | number:2}}</td>
-                                <td style="font-size:18px;">{{Item.TKDVDAHIL | number:2}}</td>
-                                <td style="font-size:18px;">{{Item.ISKONTO | number:2}}</td>
-                            </tr>
-                        </table>
+                    <div class="row">
+                        <div class="col-12">
+                            <table style="width:100%">
+                                <tr>
+                                    <th style="font: size 20px;">STOK KODU</th>
+                                    <th style="font-size:20px;">ADI</th>
+                                    <th style="font-size:20px;">BİRİM</th>
+                                    <th style="font-size:20px;">MİKTAR</th>
+                                    <th style="font-size:20px;">BİRİM FİYATI</th>
+                                    <th style="font-size:20px;">TUTAR</th>
+                                    <th style="font-size:20px;">ISKONTO</th>
+                                </tr>
+                                <tr ng-repeat="Item in SatisFisList">
+                                    <td style="font-size:18px;">{{Item.SKODU}}</td>
+                                    <td style="font-size:18px;">{{Item.SADI}}</td>
+                                    <td style="font-size:18px;">{{Item.BIRIMADI}}</td>
+                                    <td style="font-size:18px;">{{Item.BIRIM | number:2}}</td>
+                                    <td style="font-size:18px;">{{Item.BKDVDAHIL | number:2}}</td>
+                                    <td style="font-size:18px;">{{Item.TKDVDAHIL | number:2}}</td>
+                                    <td style="font-size:18px;">{{Item.ISKONTO | number:2}}</td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
-                </div>
-                <div class="col-2">
-                    BİRİM FİYATI
-                </div>
-                <div class="row" style="font-size:160%;">
-                    <div class="col-4 offset-5">
-                        <b>TOPLAM İNDİRİM :</b>
+                    <div class="col-2">
+                        BİRİM FİYATI
                     </div>
-                    <div class="col-3">
-                        {{ToplamIskonto | number:2}}
+                    <div class="row" style="font-size:160%;">
+                        <div class="col-4 offset-5">
+                            <b>TOPLAM İNDİRİM :</b>
+                        </div>
+                        <div class="col-3">
+                            {{ToplamIskonto | number:2}}
+                        </div>
                     </div>
-                </div>
-                <div class="row" style="font-size:160%;">
-                    <div class="col-4 offset-5">
-                        <b>GENEL TOPLAM :</b>
-                    </div>
-                    <div class="col-3">
-                        {{FisGenelToplam | number:2}}
+                    <div class="row" style="font-size:160%;">
+                        <div class="col-4 offset-5">
+                            <b>GENEL TOPLAM :</b>
+                        </div>
+                        <div class="col-3">
+                            {{FisGenelToplam | number:2}}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 </div>
 
