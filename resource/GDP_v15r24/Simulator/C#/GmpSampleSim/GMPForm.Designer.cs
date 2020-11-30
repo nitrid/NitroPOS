@@ -1527,11 +1527,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.Enabled = false;
             this.textBox1.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.textBox1.Location = new System.Drawing.Point(6, 54);
+            this.textBox1.Location = new System.Drawing.Point(6, 96);
             this.textBox1.MaxLength = 12;
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(515, 100);
+            this.textBox1.Size = new System.Drawing.Size(515, 58);
             this.textBox1.TabIndex = 148;
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 

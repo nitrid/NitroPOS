@@ -34,9 +34,21 @@ namespace Ingenico
                 else if (tag == "PAIRING")
                 {
                     line = StartPairing();
+                    //OpenHandle();
+
+                    //if (ProcessBatchCommand())
+                    //{
+                    //    Console.WriteLine(ActiveTransactionHandle.ToString());
+                    //}
+                    //else
+                    //{
+                    //    Console.WriteLine("ITEM_SALE|FAULT");
+                    //}
+
+                    //ClearProcessBatchCommand();
                     Console.WriteLine(line);
                 }
-                else if (tag == "ITEM_SALE")
+                else if (tag == "ITEM_SALE2")
                 {
                     if (line.Split('|').Length > 0)
                     {
@@ -68,6 +80,56 @@ namespace Ingenico
                         TotalPrint();
                         MFPrintBefore();
                         MFPrint();
+                        CloseHandle();
+
+                        if (ProcessBatchCommand())
+                        {
+                            Console.WriteLine("ITEM_SALE|SUCCES");
+                        }
+                        else
+                        {
+                            Console.WriteLine("ITEM_SALE|FAULT");
+                        }
+
+                        ClearProcessBatchCommand();
+                    }
+                }
+                else if (tag == "ITEM_SALE")
+                {
+                    if (line.Split('|').Length > 0)
+                    {
+                        OpenHandle();
+                        TicketHeader();
+                        OptionFlag();
+                        string Callback = "";
+
+
+                        JObject TmpMaster = JObject.Parse(line.Split('|')[1]);
+                        foreach (JProperty MasterItem in TmpMaster.Properties())
+                        {
+                            if (MasterItem.Name == "SALES")
+                            {
+                                JArray TmpSales = JArray.Parse(MasterItem.Value.ToString());
+                                foreach (JObject SalesItem in TmpSales.Children<JObject>())
+                                {
+                                    AddItem(SalesItem.Property("NAME").Value.ToString(), (UInt32)SalesItem.Property("QUANTITY").Value, (uint)SalesItem.Property("AMOUNT").Value, (int)SalesItem.Property("TAX").Value, (int)SalesItem.Property("TYPE").Value);
+                                }
+                            }
+                            //else if (MasterItem.Name == "PAYMENT")
+                            //{
+                            //    JArray TmpPayment = JArray.Parse(MasterItem.Value.ToString());
+                            //    foreach (JObject PaymentItem in TmpPayment.Children<JObject>())
+                            //    {
+                            //        CashPayment((int)PaymentItem.Property("TYPE").Value, (UInt32)PaymentItem.Property("AMOUNT").Value);
+                            //    }
+                            //}
+                        }
+
+                        Console.WriteLine(Callback);
+
+                        //TotalPrint();
+                        //MFPrintBefore();
+                        //MFPrint();
                         CloseHandle();
 
                         if (ProcessBatchCommand())
@@ -452,7 +514,7 @@ namespace Ingenico
                 }
                 catch(Exception ex)
                 {
-                    return false;
+                    //return false;
                 }                
             }
             else
@@ -483,6 +545,7 @@ namespace Ingenico
             byteArrLen = ba.Length;
             Array.Copy(ba, 0, Out_byteArr, 0, ba.Length);
         }
+     
 
         static string Ping()
         {
@@ -619,7 +682,7 @@ namespace Ingenico
             {
                 precition = 3;
             }
-
+            
             stItem.type = Defines.ITEM_TYPE_DEPARTMENT;
             stItem.subType = 0;
             stItem.deptIndex = (byte)pTax;
@@ -652,6 +715,9 @@ namespace Ingenico
         {
             UInt16 currencyOfPayment = (UInt16)ECurrency.CURRENCY_TL;
             ST_PAYMENT_REQUEST[] stPaymentRequest = new ST_PAYMENT_REQUEST[1];
+            ST_TICKET m_stTicket = new ST_TICKET();
+            string display = "";
+            UInt32 retcode;
 
             for (int i = 0; i < stPaymentRequest.Length; i++)
             {
@@ -673,8 +739,11 @@ namespace Ingenico
                 stPaymentRequest[0].numberOfinstallments = 0;
                 stPaymentRequest[0].rawData = Encoding.Default.GetBytes("RawData from external application for the payment application");
                 stPaymentRequest[0].rawDataLen = (ushort)stPaymentRequest[0].rawData.Length;
-            }
 
+                retcode = Json_GMPSmartDLL.FP3_Payment(CurrentInterface, GetTransactionHandle(CurrentInterface), ref stPaymentRequest[0], ref m_stTicket, 30000);
+                if(retcode !=0)
+                display = String.Format(Environment.NewLine + "REMAIN : {0}", formatAmount(m_stTicket.KasaPaymentAmount != 0 ? m_stTicket.KasaPaymentAmount - m_stTicket.stPayment[0].payAmount : pAmount - m_stTicket.TotalReceiptPayment, ECurrency.CURRENCY_TL));
+            }
 
             stPaymentRequest[0].payAmount = pAmount;
             stPaymentRequest[0].payAmountCurrencyCode = currencyOfPayment;
@@ -682,9 +751,10 @@ namespace Ingenico
             byte[] buffer = new byte[1024];
             int bufferLen = 0;
 
+
             bufferLen = Json_GMPSmartDLL.prepare_Payment(buffer, buffer.Length, ref stPaymentRequest[0]);
             AddIntoCommandBatch("prepare_Payment", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen);
-            return "PAYMENT";
+            return display;
         }
         static string TotalPrint()
         {
@@ -980,6 +1050,30 @@ namespace Ingenico
             }
 
             return "OPENSAFE|SUCCESS";
+        }
+        static string formatAmount(uint amount, ECurrency currency)
+        {
+            string amountStr = String.Format("{0}.{1:00}", amount / 100, amount % 100);
+
+            switch (currency)
+            {
+                case ECurrency.CURRENCY_NONE:
+                    break;
+                case ECurrency.CURRENCY_DOLAR:
+                    amountStr += " $";
+                    break;
+                case ECurrency.CURRENCY_EU:
+                    amountStr += " €";
+                    break;
+                case ECurrency.CURRENCY_TL:
+                    amountStr += " TL";
+                    break;
+                default:
+                    amountStr += " ?";
+                    break;
+            }
+
+            return amountStr;
         }
     }
 }
