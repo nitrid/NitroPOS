@@ -3806,8 +3806,6 @@ function Pos($scope,$window,$rootScope,db)
             else
             {
                 $scope.TxtKasaSifre = "";
-                $("#MdlKasaSifre").modal("hide");
-                alertify.alert("Kullanıcı Şifresi Yanlış")
             }
         }   
     }
