@@ -10,11 +10,12 @@
   "author": "Ali Kemal KARACA",
   "license": "ISC",
   "dependencies": {
-    "electron": "^10.1.3",
+    "electron": "^10.1.6",
     "escpos": "^3.0.0-alpha.6",
     "escpos-screen": "^3.0.0-alpha.6",
     "escpos-serialport": "^3.0.0-alpha.4",
     "escpos-usb": "^3.0.0-alpha.4",
+    "printer": "^0.4.0",
     "serialport": "^9.0.1"
   },
   "devDependencies": {

@@ -235,7 +235,7 @@ angular.module('app.db', []).service('db',function($rootScope)
     }   
     function _PrintText(pData,pLen,pType)
     {
-        pData = pData.split("İ").join("I").split("ı").join("i").split("Ç").join("C").split("ç").join("c").split("Ğ").join("G").split("ğ").join("g").split("Ş").join("S").split("ş").join("s").split("Ö").join("O").split("ö").join("o").split("Ü").join("U").split("ü").join("u");
+        pData = pData.toString().split("İ").join("I").split("ı").join("i").split("Ç").join("C").split("ç").join("c").split("Ğ").join("G").split("ğ").join("g").split("Ş").join("S").split("ş").join("s").split("Ö").join("O").split("ö").join("o").split("Ü").join("U").split("ü").join("u");
         if(pData.length > pLen)
         {
             pData = pData.toString().substring(0,pLen);
@@ -327,6 +327,26 @@ angular.module('app.db', []).service('db',function($rootScope)
                 }
             );
         });      
+    }
+    function _EscposSerialPrint(pData,pSerial,fn)
+    {
+        var printer = require("printer");
+        let text = "print from Node.JS buffer";
+        text += "print from Node.JS buffer";
+        text += "print from Node.JS buffer";
+        text += "print from Node.JS buffer";
+        text += "print from Node.JS buffer";
+        text += "print from Node.JS buffer";
+        text += "print from Node.JS buffer";
+        text += "print from Node.JS buffer";
+
+        console.log(text)
+        printer.printDirect({data:text 
+            , success:function(jobID){
+                console.log("sent to printer with ID: "+jobID);
+            }
+            , error:function(err){console.log(err);}
+        });
     }
     function _EscposCaseOpen()
     {
@@ -743,6 +763,122 @@ angular.module('app.db', []).service('db',function($rootScope)
         TmpData.push({font:"b",style:"b",align:"lt",data:_PrintText(" ",64)});
         
         _EscposPrint(TmpData,function()
+        {
+            pCallback();
+        });
+    }
+    this.EscposSerialPrint = function(pSData,pTData,pVData,pSerial,pCallback)
+    {
+        let TmpData = [];
+        let TmpLine = {};
+
+        //HEADER
+        TmpLine = 
+        {
+            data:
+                _PrintText("URUN ISMI",12) + " " + 
+                _PrintText("MIKTAR",6) + " " + 
+                _PrintText("KDV",3) + " " + 
+                _PrintText("FIYAT",10) + " " + 
+                _PrintText("TUTAR",10)
+        }
+        TmpData.push(TmpLine);
+
+        // SATIŞ LİSTESİ
+        for (let i = 0; i < pSData.length; i++) 
+        {
+            TmpLine = 
+            {
+                data: _PrintText(pSData[i].ITEM_NAME.substring(0,12),12,"Start") + " " +
+                      _PrintText(pSData[i].QUANTITY,4,"Start") + " " +
+                      _PrintText(pSData[i].VAT,2,"Start") + " " +
+                      _PrintText(parseFloat(pSData[i].PRICE).toFixed(2) + " TL",8,"Start") + " " + 
+                      _PrintText(parseFloat(pSData[i].AMOUNT).toFixed(2) + " TL",10,"Start")
+            }
+            TmpData.push(TmpLine);
+        }
+
+        TmpData.push({font:"b",style:"bu",align:"lt",data:_PrintText(" ",42)});
+        //DİP TOPLAM
+        TmpLine = 
+        {
+            data: _PrintText("Toplam",17) + 
+                  _PrintText(parseFloat(_SumColumn(pSData,"AMOUNT")).toFixed(2) + " TL",15,"Start")
+        }
+        TmpData.push(TmpLine);
+
+        // //ÖDEME TOPLAMLARI
+        // for (let i = 0; i < pTData.length; i++) 
+        // {
+        //     let TmpType = "";
+        //     if(pTData[i].TYPE == 0)
+        //         TmpType = "Espece" //BUNLAR PARAMETRİK OLACAK.
+        //     else if (pTData[i].TYPE == 1)
+        //         TmpType = "CB"
+        //     else if(pTData[i].TYPE == 2)
+        //         TmpType = "T.Rest"
+      
+
+        //     TmpLine = 
+        //     {
+        //         font: "a",
+        //         align: "lt",
+        //         data: _PrintText(TmpType,33) +
+        //               _PrintText(parseFloat(_SumColumn(pTData,"AMOUNT","TYPE = " + pTData[i].TYPE)).toFixed(2) + " EUR",15,"Start")
+        //     }
+        //     TmpData.push(TmpLine);
+        // }
+        // //PARA ÜSTÜ
+        // TmpLine = 
+        // {
+        //     font: "a",
+        //     align: "lt",
+        //     data: _PrintText("Rendu",33) +
+        //           _PrintText(parseFloat(_SumColumn(pTData,"CHANGE")).toFixed(2) + " EUR",15,"Start")
+        // }
+        // TmpData.push(TmpLine);
+        
+        // TmpData.push({font:"b",align:"lt",data:_PrintText(" ",64)});
+
+        // TmpLine = 
+        // {
+        //     font: "b",
+        //     style: "bu",
+        //     align: "lt",
+        //     data: _PrintText(" ",5) + " " +
+        //           _PrintText("Taux",10) + " " +
+        //           _PrintText("HT",10) + " " +
+        //           _PrintText("TVA",10) + " " +
+        //           _PrintText("TTC",10)
+        // }
+
+        // TmpData.push(TmpLine);        
+
+        // for (let i = 0; i < pVData.length; i++) 
+        // {
+        //     TmpLine = 
+        //     {
+        //         font: "b",
+        //         align: "lt",
+        //         data: _PrintText(pVData[i].VAT_TYPE,5) + " " +
+        //               _PrintText(pVData[i].VAT + "%",10) + " " +
+        //               _PrintText(parseFloat(pVData[i].HT).toFixed(2),10) + " " + 
+        //               _PrintText(parseFloat(pVData[i].TVA).toFixed(2),10) + " " + 
+        //               _PrintText(parseFloat(pVData[i].TTC).toFixed(2),10)
+        //     }
+        //     TmpData.push(TmpLine);  
+        // }
+
+        // TmpData.push({font:"b",style:"b",align:"lt",data:_PrintText(" ",64)});
+        // TmpData.push({font:"b",align:"lt",data:_PrintText(pSData.length.toString() + " Aricle(s)",14)});
+
+        // TmpData.push({font:"a",style:"b",align:"ct",data:"Avoir valable 3 mois apres edition..."});
+        // TmpData.push({font:"b",style:"b",align:"lt",data:_PrintText(" ",64)});
+        // TmpData.push({font:"a",style:"b",align:"ct",data:"Merci de votre fidelite a tres bientot ..."});
+        // TmpData.push({font:"b",style:"b",align:"lt",data:_PrintText(" ",64)});
+        // TmpData.push({font:"b",style:"b",align:"lt",data:_PrintText(" ",64)});
+        
+        _EscposSerialPrint(TmpData,pSerial,function()
         {
             pCallback();
         });

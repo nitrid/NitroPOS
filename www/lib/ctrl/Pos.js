@@ -576,6 +576,7 @@ function Pos($scope,$window,$rootScope,db)
         $scope.PluKodu = "";
         $scope.LCDPORT = "";
         $scope.SCALEPORT = "";
+        $scope.PRINTPORT = "";
         $scope.MsgLoading = false;
         $scope.KiloBaslangic = 0;
         $scope.KiloUzunluk = 0;
@@ -1757,6 +1758,10 @@ function Pos($scope,$window,$rootScope,db)
                     {
                         $scope.SCALEPORT = $scope.ParamListe[i].VALUE;
                     }
+                    else if($scope.ParamListe[i].NAME == 'PRINTPORT')
+                    {
+                        $scope.PRINTPORT = $scope.ParamListe[i].VALUE;
+                    }
                     else if($scope.ParamListe[i].NAME == 'KiloBaslangic')
                     {
                         $scope.KiloBaslangic = $scope.ParamListe[i].VALUE;
@@ -1889,7 +1894,6 @@ function Pos($scope,$window,$rootScope,db)
         }
         db.GetData($scope.Firma,'StokGetir',[Kodu,Adi],function(StokData)
         {
-            console.log(StokData)
             db.SafeApply($scope,function()
             {
                 $scope.StokListe = StokData;
@@ -3224,7 +3228,7 @@ function Pos($scope,$window,$rootScope,db)
                 }
                 db.GetDataQuery(TmpQuery,function(pData)
                 {
-                    db.EscposPrint(PosSatisData,PosTahData,pData,function()
+                    db.EscposSerialPrint(PosSatisData,PosTahData,pData,$scope.PRINTPORT,function()
                     {
                         
                     });
