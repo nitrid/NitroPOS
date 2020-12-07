@@ -341,7 +341,8 @@ angular.module('app.db', []).service('db',function($rootScope)
         text += "print from Node.JS buffer";
 
         console.log(text)
-        printer.printDirect({data:text 
+
+        printer.printDirect({data:text
             , success:function(jobID){
                 console.log("sent to printer with ID: "+jobID);
             }
