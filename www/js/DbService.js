@@ -747,5 +747,33 @@ angular.module('app.db', []).service('db',function($rootScope)
             pCallback();
         });
     }
+    this.KiloBarkod = function(pBarkod,pBaslangic,pUzunluk,pKiloFlag)
+    {
+        let Kilo = pBarkod;
+        let KiloFlag = pKiloFlag;
+        let FlagDizi = KiloFlag.split(',')
+        let Flag = Kilo.toString().slice(0,2);
+        let Miktar = 1;
+
+        for (i = 0; i < FlagDizi.length; i++ )
+        {
+            if(pBarkod.length <= 7)
+            {
+                let pResult = {Barkod : pBarkod,Miktar : 0};
+                return pResult;
+            }
+
+            if(Flag == FlagDizi[i])
+            {
+                var kBarkod = Kilo.slice(0,pBaslangic);
+                var Uzunluk = Kilo.slice(pBaslangic,(parseInt(pBaslangic)+parseInt(pUzunluk)));
+                pBarkod = kBarkod
+                Miktar = (Uzunluk / 1000)
+            }
+        }
+
+        let pResult = {Barkod : pBarkod,Miktar : Miktar};
+        return pResult;
+    }
      //#endregion "PUBLIC"
 });

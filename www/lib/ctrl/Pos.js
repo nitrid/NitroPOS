@@ -577,6 +577,9 @@ function Pos($scope,$window,$rootScope,db)
         $scope.LCDPORT = "";
         $scope.SCALEPORT = "";
         $scope.MsgLoading = false;
+        $scope.KiloBaslangic = 0;
+        $scope.KiloUzunluk = 0;
+        $scope.KiloFlag = 0;
         
         $scope.KasaNo = 1;
         $scope.Saat = moment(new Date(),"HH:mm:ss").format("HH:mm:ss");
@@ -1754,6 +1757,19 @@ function Pos($scope,$window,$rootScope,db)
                     {
                         $scope.SCALEPORT = $scope.ParamListe[i].VALUE;
                     }
+                    else if($scope.ParamListe[i].NAME == 'KiloBaslangic')
+                    {
+                        $scope.KiloBaslangic = $scope.ParamListe[i].VALUE;
+                        console.log($scope.KiloBaslangic)
+                    }
+                    else if($scope.ParamListe[i].NAME == 'KiloUzunluk')
+                    {
+                        $scope.KiloUzunluk = $scope.ParamListe[i].VALUE;
+                    }
+                    else if($scope.ParamListe[i].NAME == 'KiloFlag')
+                    {
+                        $scope.KiloFlag = $scope.ParamListe[i].VALUE;
+                    }
                 }
             }
             else
@@ -1900,6 +1916,8 @@ function Pos($scope,$window,$rootScope,db)
                 pBarkod = pBarkod.split("*")[1];
             }
 
+            let pKiloBarkod = pBarkod;
+            pBarkod = db.KiloBarkod(pBarkod,$scope.KiloBaslangic,$scope.KiloUzunluk,$scope.KiloFlag).Barkod;
             let TmpFiyat = 0;
 
             db.StokBarkodGetir($scope.Firma,pBarkod,async function(BarkodData)
@@ -1913,12 +1931,20 @@ function Pos($scope,$window,$rootScope,db)
                         if(TmpKiloFlag[i] == pBarkod.substring(0,2))
                         {
                             $scope.Miktar = await db.Scale.Send($scope.SCALEPORT);
-                            
+
                             if($scope.Miktar <= 0)
                             {
-                                alertify.alert("Lütfen Tartım Alınız.");
-                                $scope.TxtBarkod = "";
-                                return;
+                                if(typeof db.KiloBarkod(pKiloBarkod,$scope.KiloBaslangic,$scope.KiloUzunluk,$scope.KiloFlag).Miktar !='undefined')
+                                {
+                                    $scope.Miktar = db.KiloBarkod(pKiloBarkod,$scope.KiloBaslangic,$scope.KiloUzunluk,$scope.KiloFlag).Miktar;
+
+                                    if($scope.Miktar == 0)
+                                    {
+                                        alertify.alert("Lütfen Tartım Alınız.");
+                                        $scope.TxtBarkod = "";
+                                        return;
+                                    }
+                                }
                             }
                         }
                     }
