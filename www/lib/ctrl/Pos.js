@@ -2198,10 +2198,10 @@ function Pos($scope,$window,$rootScope,db)
                                 {
                                     TmpSale.TAX = 4;
                                 }
-                                else if($scope.SatisList[i].VAT == 0)
-                                {
-                                    TmpSale.TAX = 6;
-                                }
+                                // else if($scope.SatisList[i].VAT == 0)
+                                // {
+                                //     TmpSale.TAX = 6;
+                                // }
                                 else
                                 {
                                     TmpSale.TAX = 0;
