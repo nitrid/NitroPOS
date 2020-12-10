@@ -756,7 +756,9 @@ var QuerySql =
                 "ISNULL((SELECT TOP 1 PRICE FROM ITEM_PRICE WHERE [TYPE] = 0 AND (QUANTITY = 1 OR QUANTITY = 0) AND ITEM_CODE = ITEMS.CODE),0) AS PRICE, " +
                 "ITEMS.[NAME] AS [NAME], " +
                 "ITEMS.SNAME AS SNAME, " +
-                "ITEMS.VAT AS VAT, " +
+                "ISNULL((SELECT TOP 1 VAT FROM ITEM_TAX WHERE ITEM_CODE = ITEMS.CODE),0) AS VAT, " +
+                "ISNULL((SELECT TOP 1 RETAILPNTR FROM ITEM_TAX WHERE ITEM_CODE = ITEMS.CODE),0) AS RETAILPNTR, " +
+                //"ITEMS.VAT AS VAT, " +
                 "ISNULL(UNIT.FACTOR,1) AS FACTOR, " + 
                // "ISNULL(CONVERT(NVARCHAR(50),UNIT.[GUID]),'') AS UNIT " +
                 "UNIT.CODE AS UNIT " +
