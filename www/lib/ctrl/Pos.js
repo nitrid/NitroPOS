@@ -1536,20 +1536,21 @@ function Pos($scope,$window,$rootScope,db)
 
             const BrowserWindow = electron.remote.BrowserWindow; 
             let win = new BrowserWindow({show: true})
-
+            
             fs.writeFile('print.txt', FisDizayn,function()
             {
                 win.loadFile('print.txt')
                 win.webContents.on('did-finish-load', () => 
                 {
-                    win.webContents.print({silent:true})
-                    setTimeout(function(){
-                        console.log(1)
-                        win.close();
-                    }, 1000);
+                    win.webContents.print({silent:false})
+                    // setTimeout(function(){
+                    //     console.log(1)
+                    //     win.close();
+                    // }, 1000);
                 })
             })
-            // win.loadURL('file://'+__dirname+'/print.txt')
+            win.loadURL('file://'+__dirname+'/print.txt')
+            
             console.log(BrowserWindow)
         }
     }
@@ -2056,9 +2057,9 @@ function Pos($scope,$window,$rootScope,db)
             $scope.Stok[0].VAT,
             0  //DURUM
         ];
-        
         db.ExecuteTag($scope.Firma,'PosSatisInsert',InsertData,async function(InsertResult)
-        {               
+        {      
+            console.log(InsertResult)         
             if(typeof(InsertResult.result.err) == 'undefined')
             {   
                 //*********** BİRDEN FAZLA MİKTARLI FİYAT GÜNCELLEME İÇİN YAPILDI. */
@@ -2206,6 +2207,7 @@ function Pos($scope,$window,$rootScope,db)
                                 {
                                     TmpSale.TAX = 0;
                                 }
+                                
 
                                 TmpSale.AMOUNT =  parseFloat(($scope.SatisList[i].PRICE * 100).toFixed(2));
                                 TmpData.SALES.push(TmpSale);
