@@ -2182,32 +2182,30 @@ function Pos($scope,$window,$rootScope,db)
                                     TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY;
                                 }
 
-                                console.log($scope.SatisList[i])
-                                if($scope.SatisList[i].VAT == 5)
+                                if($scope.SatisList[i].RETAIL == 3)
                                 {
                                     TmpSale.TAX = 1; 
                                 }
-                                else if($scope.SatisList[i].VAT == 10)
+                                else if($scope.SatisList[i].RETAIL == 4)
                                 {
                                     TmpSale.TAX = 2;
                                 }
-                                else if($scope.SatisList[i].VAT == 16)
+                                else if($scope.SatisList[i].RETAIL == 5)
                                 {
                                     TmpSale.TAX = 3;
                                 }
-                                else if($scope.SatisList[i].VAT == 20)
+                                else if($scope.SatisList[i].RETAIL == 6)
                                 {
                                     TmpSale.TAX = 4;
                                 }
-                                // else if($scope.SatisList[i].VAT == 0)
-                                // {
-                                //     TmpSale.TAX = 6;
-                                // }
+                                else if($scope.SatisList[i].VAT == 7)
+                                {
+                                    TmpSale.TAX = 6;
+                                }
                                 else
                                 {
                                     TmpSale.TAX = 0;
                                 }
-                                
 
                                 TmpSale.AMOUNT =  parseFloat(($scope.SatisList[i].PRICE * 100).toFixed(2));
                                 TmpData.SALES.push(TmpSale);
