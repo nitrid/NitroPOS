@@ -2001,7 +2001,6 @@ function Pos($scope,$window,$rootScope,db)
                     }
 
                     $scope.Stok = BarkodData;
-                    console.log($scope.Stok)
                     if(TmpFiyat > 0 )
                     {
                         $scope.Stok[0].PRICE = TmpFiyat;
@@ -2060,7 +2059,6 @@ function Pos($scope,$window,$rootScope,db)
         ];
         db.ExecuteTag($scope.Firma,'PosSatisInsert',InsertData,async function(InsertResult)
         {      
-            console.log(InsertResult)         
             if(typeof(InsertResult.result.err) == 'undefined')
             {   
                 //*********** BİRDEN FAZLA MİKTARLI FİYAT GÜNCELLEME İÇİN YAPILDI. */
@@ -2184,6 +2182,7 @@ function Pos($scope,$window,$rootScope,db)
                                     TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY;
                                 }
 
+                                console.log($scope.SatisList[i])
                                 if($scope.SatisList[i].VAT == 5)
                                 {
                                     TmpSale.TAX = 1; 

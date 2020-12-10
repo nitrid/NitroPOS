@@ -757,7 +757,7 @@ var QuerySql =
                 "ITEMS.[NAME] AS [NAME], " +
                 "ITEMS.SNAME AS SNAME, " +
                 "ISNULL((SELECT TOP 1 VAT FROM ITEM_TAX WHERE ITEM_CODE = ITEMS.CODE),0) AS VAT, " +
-                "ISNULL((SELECT TOP 1 RETAILPNTR FROM ITEM_TAX WHERE ITEM_CODE = ITEMS.CODE),0) AS RETAILPNTR, " +
+                "ISNULL((SELECT RETAILPNTR FROM ITEM_TAX WHERE ITEM_CODE = ITEMS.CODE),0) AS RETAILPNTR, " +
                 //"ITEMS.VAT AS VAT, " +
                 "ISNULL(UNIT.FACTOR,1) AS FACTOR, " + 
                // "ISNULL(CONVERT(NVARCHAR(50),UNIT.[GUID]),'') AS UNIT " +
@@ -776,7 +776,7 @@ var QuerySql =
                 "ITEMS.[NAME] AS [NAME], " +
                 "SNAME AS SNAME, " +
                 "ISNULL((SELECT TOP 1 VAT FROM ITEM_TAX WHERE ITEM_CODE = ITEMS.CODE),0) AS VAT, " +
-                "ISNULL((SELECT TOP 1 RETAILPNTR FROM ITEM_TAX WHERE ITEM_CODE = ITEMS.CODE),0) AS RETAILPNTR, " +
+                "ISNULL((SELECT RETAILPNTR FROM ITEM_TAX WHERE ITEM_CODE = ITEMS.CODE),0) AS RETAILPNTR, " +
                 //"ITEMS.VAT AS VAT, " +
                 "ISNULL(BARCODE.BARCODE,'') AS BARCODE, " + 
                 "ISNULL(UNIT.FACTOR,1) AS FACTOR, " +
