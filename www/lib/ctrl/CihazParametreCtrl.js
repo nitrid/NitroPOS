@@ -47,7 +47,8 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
         $scope.CihazGuid = "";
         $scope.PluKodu = "";
         $scope.LCDPORT = "";
-        $scope.SCALEPORT = "COM2";
+        $scope.SCALEPORT = "";
+        $scope.PRINTPORT = "";
 
         $scope.CihazListe = [];
         $scope.SubeListe = [];
@@ -220,6 +221,9 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
                     {
                         SCALEPORT : $scope.SCALEPORT,
                     },
+                    {
+                        PRINTPORT : $scope.PRINTPORT,
+                    },
                 ]
 
                 for (let i = 0; i < Param.length; i++) 
@@ -335,6 +339,10 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
                 else if(data[i].NAME == "SCALEPORT")
                 {
                     $scope.SCALEPORT = data[i].VALUE;
+                }
+                else if(data[i].NAME == "PRINTPORT")
+                {
+                    $scope.PRINTPORT = data[i].VALUE;
                 }
             }
             db.GetData($scope.Firma,'CmbDepoGetir',['TÜMÜ'],function(data)
@@ -502,6 +510,9 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
                 {
                     SCALEPORT : $scope.SCALEPORT,
                 },
+                {
+                    PRINTPORT : $scope.PRINTPORT,
+                },
             ]
             for (let i = 0; i < Param.length; i++) 
             {
@@ -552,5 +563,6 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
         $scope.CihazGuid = ""; //CİHAZ GÜNCELLEME SİLME İŞLEMİ İÇİN KULLANILIYOR.
         $scope.LCDPORT = "";
         $scope.SCALEPORT = "";
+        $scope.PRINTPORT = "";
     }
 }

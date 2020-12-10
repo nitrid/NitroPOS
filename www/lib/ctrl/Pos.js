@@ -503,8 +503,8 @@ function Pos($scope,$window,$rootScope,db)
                 }
             }
         });
-    }
 
+    }       
     $rootScope.LoadingShow = function() 
     {
         $("#loading").show();
@@ -576,6 +576,7 @@ function Pos($scope,$window,$rootScope,db)
         $scope.PluKodu = "";
         $scope.LCDPORT = "";
         $scope.SCALEPORT = "";
+        $scope.PRINTPORT = "";
         $scope.MsgLoading = false;
         $scope.KiloBaslangic = 0;
         $scope.KiloUzunluk = 0;
@@ -1519,6 +1520,39 @@ function Pos($scope,$window,$rootScope,db)
             });
         }
     }
+    function PrintElectron()
+    {
+        if(typeof require != 'undefined')
+        {
+            let FisDizayn = "DENEME DENEME DENEME 1" + "\n" + 
+                            "DENEME DENEME DENEME 2" + "\n" + 
+                            "DENEME DENEME DENEME 3" + "\n" + 
+                            "DENEME DENEME DENEME 4" 
+
+            console.log(FisDizayn)
+            const electron = require('electron') 
+            const fs = require('fs')
+            //const path = require('path')
+
+            const BrowserWindow = electron.remote.BrowserWindow; 
+            let win = new BrowserWindow({show: true})
+
+            fs.writeFile('print.txt', FisDizayn,function()
+            {
+                win.loadFile('print.txt')
+                win.webContents.on('did-finish-load', () => 
+                {
+                    win.webContents.print({silent:true})
+                    setTimeout(function(){
+                        console.log(1)
+                        win.close();
+                    }, 1000);
+                })
+            })
+            // win.loadURL('file://'+__dirname+'/print.txt')
+            console.log(BrowserWindow)
+        }
+    }
     document.onkeydown = function(e)
     {
         if(FocusBarkod)
@@ -1675,7 +1709,7 @@ function Pos($scope,$window,$rootScope,db)
     $scope.YeniEvrak = async function()
     {
         db.Connection(async function(data)
-        {
+        {            
             Init();
             InitIslemGrid();
             InitParkIslemGrid();
@@ -1756,6 +1790,10 @@ function Pos($scope,$window,$rootScope,db)
                     else if($scope.ParamListe[i].NAME == 'SCALEPORT')
                     {
                         $scope.SCALEPORT = $scope.ParamListe[i].VALUE;
+                    }
+                    else if($scope.ParamListe[i].NAME == 'PRINTPORT')
+                    {
+                        $scope.PRINTPORT = $scope.ParamListe[i].VALUE;
                     }
                     else if($scope.ParamListe[i].NAME == 'KiloBaslangic')
                     {
@@ -1889,7 +1927,6 @@ function Pos($scope,$window,$rootScope,db)
         }
         db.GetData($scope.Firma,'StokGetir',[Kodu,Adi],function(StokData)
         {
-            console.log(StokData)
             db.SafeApply($scope,function()
             {
                 $scope.StokListe = StokData;
@@ -2120,6 +2157,7 @@ function Pos($scope,$window,$rootScope,db)
                         {
                             $rootScope.LoadingShow();
                         }
+
                         if(typeof require != 'undefined' && $scope.TahKalan <= 0)
                         {
                             let TmpData = 
@@ -2132,15 +2170,16 @@ function Pos($scope,$window,$rootScope,db)
                             {
                                 let TmpSale = {};
                                 TmpSale.NAME = $scope.SatisList[i].ITEM_NAME.split("İ").join("I").split("ı").join("i").split("Ç").join("C").split("ç").join("c").split("Ğ").join("G").split("ğ").join("g").split("Ş").join("S").split("ş").join("s").split("Ö").join("O").split("ö").join("o").split("Ü").join("U").split("ü").join("u");
-                                if($scope.SatisList[i].UNIT_ID == 1)
-                                {
-                                    TmpSale.TYPE = 1;
-                                    TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY;
-                                }
-                                else
+                                
+                                if($scope.SatisList[i].ITEM_UNIT == 2)
                                 {
                                     TmpSale.TYPE = 2;
                                     TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY.toFixed(3) * 1000
+                                }
+                                else
+                                {
+                                    TmpSale.TYPE = 1;
+                                    TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY;
                                 }
 
                                 if($scope.SatisList[i].VAT == 5)
@@ -2159,6 +2198,10 @@ function Pos($scope,$window,$rootScope,db)
                                 {
                                     TmpSale.TAX = 4;
                                 }
+                                // else if($scope.SatisList[i].VAT == 0)
+                                // {
+                                //     TmpSale.TAX = 6;
+                                // }
                                 else
                                 {
                                     TmpSale.TAX = 0;
@@ -3224,10 +3267,11 @@ function Pos($scope,$window,$rootScope,db)
                 }
                 db.GetDataQuery(TmpQuery,function(pData)
                 {
-                    db.EscposPrint(PosSatisData,PosTahData,pData,function()
-                    {
+                    PrintElectron();
+                    // db.EscposSerialPrint(PosSatisData,PosTahData,pData,$scope.PRINTPORT,function()
+                    // {
                         
-                    });
+                    // });
                 });
             });
         });

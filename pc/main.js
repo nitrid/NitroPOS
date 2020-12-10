@@ -12,6 +12,7 @@ app.on('ready',function()
 {
     fs.readFile('config.json', function (err, data) 
     {
+        console.log(data)
         if (err) 
         {
           return console.error(err);
@@ -22,9 +23,11 @@ app.on('ready',function()
             webPreferences: 
             {
                 nodeIntegration: true,
-                nodeIntegrationInWorker: true
+                nodeIntegrationInWorker: true,
+                enableRemoteModule: true
             }
         });
+
         mainWindow.maximize();
         
         let TmpConfig = JSON.parse(data.toString())
