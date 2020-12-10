@@ -2200,7 +2200,7 @@ function Pos($scope,$window,$rootScope,db)
                                 }
                                 else if($scope.SatisList[i].VAT == 7)
                                 {
-                                    TmpSale.TAX = 6;
+                                    TmpSale.TAX = 5;
                                 }
                                 else
                                 {
