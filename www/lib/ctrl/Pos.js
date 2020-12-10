@@ -2001,6 +2001,7 @@ function Pos($scope,$window,$rootScope,db)
                     }
 
                     $scope.Stok = BarkodData;
+                    console.log($scope.Stok)
                     if(TmpFiyat > 0 )
                     {
                         $scope.Stok[0].PRICE = TmpFiyat;
