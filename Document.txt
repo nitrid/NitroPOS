@@ -20,6 +20,9 @@ npm i escpos-serialport
 npm i escpos-usb
 npm i serialport
 npm i electron-rebuild
+npm i printer
+npm run package-win
+npm install printer --msvs_version=2019  --build-from-source=node_printer
 .\node_modules\.bin\electron-rebuild.cmd
 
 

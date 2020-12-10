@@ -2182,23 +2182,23 @@ function Pos($scope,$window,$rootScope,db)
                                     TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY;
                                 }
 
-                                if($scope.SatisList[i].RETAILPNTR == 3)
+                                if($scope.SatisList[i].RETAIL == 3)
                                 {
                                     TmpSale.TAX = 1; 
                                 }
-                                else if($scope.SatisList[i].RETAILPNTR == 4)
+                                else if($scope.SatisList[i].RETAIL == 4)
                                 {
                                     TmpSale.TAX = 2;
                                 }
-                                else if($scope.SatisList[i].RETAILPNTR == 5)
+                                else if($scope.SatisList[i].RETAIL == 5)
                                 {
                                     TmpSale.TAX = 3;
                                 }
-                                else if($scope.SatisList[i].RETAILPNTR == 6)
+                                else if($scope.SatisList[i].RETAIL == 6)
                                 {
                                     TmpSale.TAX = 4;
                                 }
-                                else if($scope.SatisList[i].RETAILPNTR == 7)
+                                else if($scope.SatisList[i].VAT == 7)
                                 {
                                     TmpSale.TAX = 6;
                                 }
