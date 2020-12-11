@@ -1520,40 +1520,6 @@ function Pos($scope,$window,$rootScope,db)
             });
         }
     }
-    function PrintElectron()
-    {
-        if(typeof require != 'undefined')
-        {
-            let FisDizayn = "DENEME DENEME DENEME 1" + "\n" + 
-                            "DENEME DENEME DENEME 2" + "\n" + 
-                            "DENEME DENEME DENEME 3" + "\n" + 
-                            "DENEME DENEME DENEME 4" 
-
-            console.log(FisDizayn)
-            const electron = require('electron') 
-            const fs = require('fs')
-            //const path = require('path')
-
-            const BrowserWindow = electron.remote.BrowserWindow; 
-            let win = new BrowserWindow({show: true})
-            
-            fs.writeFile('print.txt', FisDizayn,function()
-            {
-                win.loadFile('print.txt')
-                win.webContents.on('did-finish-load', () => 
-                {
-                    win.webContents.print({silent:false})
-                    // setTimeout(function(){
-                    //     console.log(1)
-                    //     win.close();
-                    // }, 1000);
-                })
-            })
-            win.loadURL('file://'+__dirname+'/print.txt')
-            
-            console.log(BrowserWindow)
-        }
-    }
     document.onkeydown = function(e)
     {
         if(FocusBarkod)
@@ -3268,11 +3234,10 @@ function Pos($scope,$window,$rootScope,db)
                 }
                 db.GetDataQuery(TmpQuery,function(pData)
                 {
-                    PrintElectron();
-                    // db.EscposSerialPrint(PosSatisData,PosTahData,pData,$scope.PRINTPORT,function()
-                    // {
+                    db.EscposSerialPrint(PosSatisData,PosTahData,pData,$scope.PRINTPORT,function()
+                    {
                         
-                    // });
+                    });
                 });
             });
         });

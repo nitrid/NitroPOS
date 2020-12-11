@@ -330,23 +330,26 @@ angular.module('app.db', []).service('db',function($rootScope)
     }
     function _EscposSerialPrint(pData,pSerial,fn)
     {
-        var printer = require("printer");
-        let text = "print from Node.JS buffer";
-        text += "print from Node.JS buffer";
-        text += "print from Node.JS buffer";
-        text += "print from Node.JS buffer";
-        text += "print from Node.JS buffer";
-        text += "print from Node.JS buffer";
-        text += "print from Node.JS buffer";
-        text += "print from Node.JS buffer";
+        let printer = require("printer");
 
-        console.log(text)
+        let data = "";
 
-        printer.printDirect({data:text
-            , success:function(jobID){
-                console.log("sent to printer with ID: "+jobID);
-            }
-            , error:function(err){console.log(err);}
+        for (let i = 0; i < pData.length; i++) 
+        {
+            data += pData[i].data + "\n"
+            
+        }
+
+        printer.printDirect({
+        data: data,
+        type: 'TEXT',
+        success: function (jobID) {
+            console.log("ID: " + jobID);
+        },
+        error: function (err) {
+            console.log('printer module error: '+err);
+            throw err;
+        }
         });
     }
     function _EscposCaseOpen()
@@ -777,11 +780,11 @@ angular.module('app.db', []).service('db',function($rootScope)
         TmpLine = 
         {
             data:
-                _PrintText("URUN ISMI",12) + " " + 
+                _PrintText("URUN ISMI",9) + " " + 
                 _PrintText("MIKTAR",6) + " " + 
                 _PrintText("KDV",3) + " " + 
-                _PrintText("FIYAT",10) + " " + 
-                _PrintText("TUTAR",10)
+                _PrintText("FIYAT",5) + " " + 
+                _PrintText("TUTAR",5)
         }
         TmpData.push(TmpLine);
 
@@ -790,95 +793,37 @@ angular.module('app.db', []).service('db',function($rootScope)
         {
             TmpLine = 
             {
-                data: _PrintText(pSData[i].ITEM_NAME.substring(0,12),12,"Start") + " " +
-                      _PrintText(pSData[i].QUANTITY,4,"Start") + " " +
-                      _PrintText(pSData[i].VAT,2,"Start") + " " +
-                      _PrintText(parseFloat(pSData[i].PRICE).toFixed(2) + " TL",8,"Start") + " " + 
-                      _PrintText(parseFloat(pSData[i].AMOUNT).toFixed(2) + " TL",10,"Start")
+                data: _PrintText(pSData[i].ITEM_NAME.substring(0,9),9,"Start") + " " +
+                      _PrintText(pSData[i].QUANTITY,6,"Start") + " " +
+                      _PrintText(pSData[i].VAT,3,"Start") + " " +
+                      _PrintText(parseFloat(pSData[i].PRICE).toFixed(2) + " TL",5,"Start") + " " + 
+                      _PrintText(parseFloat(pSData[i].AMOUNT).toFixed(2) + " TL",5,"Start")
             }
             TmpData.push(TmpLine);
         }
 
         TmpData.push({font:"b",style:"bu",align:"lt",data:_PrintText(" ",42)});
+
         //DİP TOPLAM
         TmpLine = 
         {
-            data: _PrintText("Toplam",17) + 
+            data: _PrintText("Ara Toplam",17) + 
+                  _PrintText(parseFloat(_SumColumn(pSData,"VATOUTAMOUNT")).toFixed(2) + " TL",15,"Start")
+        }
+        TmpData.push(TmpLine);
+        TmpLine = 
+        {
+            data: _PrintText("Toplam Kdv",17) + 
+                  _PrintText(parseFloat(_SumColumn(pSData,"VATIN")).toFixed(2) + " TL",15,"Start")
+        }
+        TmpData.push(TmpLine);
+        TmpLine = 
+        {
+            data: _PrintText("Genel Toplam",17) + 
                   _PrintText(parseFloat(_SumColumn(pSData,"AMOUNT")).toFixed(2) + " TL",15,"Start")
         }
         TmpData.push(TmpLine);
 
-        // //ÖDEME TOPLAMLARI
-        // for (let i = 0; i < pTData.length; i++) 
-        // {
-        //     let TmpType = "";
-        //     if(pTData[i].TYPE == 0)
-        //         TmpType = "Espece" //BUNLAR PARAMETRİK OLACAK.
-        //     else if (pTData[i].TYPE == 1)
-        //         TmpType = "CB"
-        //     else if(pTData[i].TYPE == 2)
-        //         TmpType = "T.Rest"
-      
-
-        //     TmpLine = 
-        //     {
-        //         font: "a",
-        //         align: "lt",
-        //         data: _PrintText(TmpType,33) +
-        //               _PrintText(parseFloat(_SumColumn(pTData,"AMOUNT","TYPE = " + pTData[i].TYPE)).toFixed(2) + " EUR",15,"Start")
-        //     }
-        //     TmpData.push(TmpLine);
-        // }
-        // //PARA ÜSTÜ
-        // TmpLine = 
-        // {
-        //     font: "a",
-        //     align: "lt",
-        //     data: _PrintText("Rendu",33) +
-        //           _PrintText(parseFloat(_SumColumn(pTData,"CHANGE")).toFixed(2) + " EUR",15,"Start")
-        // }
-        // TmpData.push(TmpLine);
-        
-        // TmpData.push({font:"b",align:"lt",data:_PrintText(" ",64)});
-
-        // TmpLine = 
-        // {
-        //     font: "b",
-        //     style: "bu",
-        //     align: "lt",
-        //     data: _PrintText(" ",5) + " " +
-        //           _PrintText("Taux",10) + " " +
-        //           _PrintText("HT",10) + " " +
-        //           _PrintText("TVA",10) + " " +
-        //           _PrintText("TTC",10)
-        // }
-
-        // TmpData.push(TmpLine);        
-
-        // for (let i = 0; i < pVData.length; i++) 
-        // {
-        //     TmpLine = 
-        //     {
-        //         font: "b",
-        //         align: "lt",
-        //         data: _PrintText(pVData[i].VAT_TYPE,5) + " " +
-        //               _PrintText(pVData[i].VAT + "%",10) + " " +
-        //               _PrintText(parseFloat(pVData[i].HT).toFixed(2),10) + " " + 
-        //               _PrintText(parseFloat(pVData[i].TVA).toFixed(2),10) + " " + 
-        //               _PrintText(parseFloat(pVData[i].TTC).toFixed(2),10)
-        //     }
-        //     TmpData.push(TmpLine);  
-        // }
-
-        // TmpData.push({font:"b",style:"b",align:"lt",data:_PrintText(" ",64)});
-        // TmpData.push({font:"b",align:"lt",data:_PrintText(pSData.length.toString() + " Aricle(s)",14)});
-
-        // TmpData.push({font:"a",style:"b",align:"ct",data:"Avoir valable 3 mois apres edition..."});
-        // TmpData.push({font:"b",style:"b",align:"lt",data:_PrintText(" ",64)});
-        // TmpData.push({font:"a",style:"b",align:"ct",data:"Merci de votre fidelite a tres bientot ..."});
-        // TmpData.push({font:"b",style:"b",align:"lt",data:_PrintText(" ",64)});
-        // TmpData.push({font:"b",style:"b",align:"lt",data:_PrintText(" ",64)});
-        
         _EscposSerialPrint(TmpData,pSerial,function()
         {
             pCallback();
