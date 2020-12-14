@@ -3205,8 +3205,9 @@ function Pos($scope,$window,$rootScope,db)
     {
         let TmpSeri = $scope.SonSatisList[$scope.SonSatisListeSelectedIndex].REF;
         let TmpSira = $scope.SonSatisList[$scope.SonSatisListeSelectedIndex].REF_NO;
+        let TmpType = $scope.SonSatisList[$scope.SonSatisListeSelectedIndex].TYPE;
 
-        db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,TmpSeri,TmpSira],function(PosSatisData)
+        db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,TmpType,TmpSeri,TmpSira],function(PosSatisData)
         {   
             db.GetData($scope.Firma,'PosTahGetir',[$scope.Sube,0,TmpSeri,TmpSira],function(PosTahData)
             {

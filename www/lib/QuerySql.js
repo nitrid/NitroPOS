@@ -979,9 +979,10 @@ var QuerySql =
                 "MAX(CUSER) AS [USER], " +
                 "CAST((SUM(QUANTITY * PRICE)) AS DECIMAL(10,2)) AS AMOUNT, " +
                 "CONVERT(VARCHAR(10), MAX(CDATE), 108) AS CHOUR, " +
-                "CONVERT(VARCHAR(10), MAX(CDATE), 104) AS CDATE " +
+                "CONVERT(VARCHAR(10), MAX(CDATE), 104) AS CDATE, " +
+                "MAX(TYPE) AS TYPE " +
                 "FROM POS_SALES AS PS WHERE DEPARTMENT = @DEPARTMENT AND STATUS <> 0 AND DOC_DATE = @DOC_DATE AND DEVICE = @DEVICE " +
-                "GROUP BY REF,REF_NO,DEVICE ORDER BY LINE_NO DESC " ,
+                "GROUP BY REF,REF_NO,DEVICE ORDER BY REF_NO DESC " ,
         param: ['DEPARTMENT','DOC_DATE','DEVICE'],
         type: ['int','date','string|20']
     },

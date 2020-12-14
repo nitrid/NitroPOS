@@ -333,11 +333,15 @@ angular.module('app.db', []).service('db',function($rootScope)
         let printer = require("printer");
 
         let data = "";
+        data += "\n" ;
+        data += "\n" ;
+        data += "\n" ;
+        data += "\n" ;
+        data += "\n" ;
 
         for (let i = 0; i < pData.length; i++) 
         {
             data += pData[i].data + "\n"
-            
         }
 
         printer.printDirect({
