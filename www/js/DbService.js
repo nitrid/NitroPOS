@@ -330,9 +330,10 @@ angular.module('app.db', []).service('db',function($rootScope)
     }
     function _EscposSerialPrint(pData,pSerial,fn)
     {
-        let printer = require("printer");
+        //let printer = require("printer");
 
         let data = "";
+        data += "\n" ;
         data += "\n" ;
         data += "\n" ;
         data += "\n" ;
@@ -343,6 +344,7 @@ angular.module('app.db', []).service('db',function($rootScope)
         {
             data += pData[i].data + "\n"
         }
+        console.log(data)
 
         printer.printDirect({
         data: data,
@@ -779,6 +781,12 @@ angular.module('app.db', []).service('db',function($rootScope)
     {
         let TmpData = [];
         let TmpLine = {};
+
+        TmpLine = 
+        {
+            data: _PrintText("TARIH : " + pSData[0].DATE,32,"Start")
+        }
+        TmpData.push(TmpLine);
 
         //HEADER
         TmpLine = 
