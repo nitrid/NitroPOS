@@ -330,7 +330,7 @@ angular.module('app.db', []).service('db',function($rootScope)
     }
     function _EscposSerialPrint(pData,pSerial,fn)
     {
-        //let printer = require("printer");
+        let printer = require("printer");
 
         let data = "";
         data += "\n" ;
