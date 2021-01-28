@@ -1934,7 +1934,11 @@ function Pos($scope,$window,$rootScope,db)
                         if(TmpKiloFlag[i] == pBarkod.substring(0,2))
                         {
                             $scope.Miktar = await db.Scale.Send($scope.SCALEPORT);
-
+                            if($scope.Miktar.includes("S ") == true)
+                            {
+                                $scope.Miktar = $scope.Miktar.split("S ").join("");
+                            }
+                            
                             if($scope.Miktar <= 0)
                             {
                                 if(typeof db.KiloBarkod(pKiloBarkod,$scope.KiloBaslangic,$scope.KiloUzunluk,$scope.KiloFlag).Miktar !='undefined')
