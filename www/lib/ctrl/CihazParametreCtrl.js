@@ -49,6 +49,7 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
         $scope.LCDPORT = "";
         $scope.SCALEPORT = "";
         $scope.PRINTPORT = "";
+        $scope.ScaleType = "0";
 
         $scope.CihazListe = [];
         $scope.SubeListe = [];
@@ -224,6 +225,9 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
                     {
                         PRINTPORT : $scope.PRINTPORT,
                     },
+                    {
+                        ScaleType : $scope.ScaleType,
+                    },
                 ]
 
                 for (let i = 0; i < Param.length; i++) 
@@ -343,6 +347,10 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
                 else if(data[i].NAME == "PRINTPORT")
                 {
                     $scope.PRINTPORT = data[i].VALUE;
+                }
+                else if(data[i].NAME == "ScaleType")
+                {
+                    $scope.ScaleType = data[i].VALUE;
                 }
             }
             db.GetData($scope.Firma,'CmbDepoGetir',['TÜMÜ'],function(data)
@@ -513,6 +521,9 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
                 {
                     PRINTPORT : $scope.PRINTPORT,
                 },
+                {
+                    ScaleType : $scope.ScaleType,
+                },
             ]
             for (let i = 0; i < Param.length; i++) 
             {
@@ -564,5 +575,6 @@ function CihazParametreCtrl($route,$scope,$window,$rootScope,db)
         $scope.LCDPORT = "";
         $scope.SCALEPORT = "";
         $scope.PRINTPORT = "";
+        $scope.ScaleType = "0";
     }
 }

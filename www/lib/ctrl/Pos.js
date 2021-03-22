@@ -1774,6 +1774,10 @@ function Pos($scope,$window,$rootScope,db)
                     {
                         $scope.KiloFlag = $scope.ParamListe[i].VALUE;
                     }
+                    else if($scope.ParamListe[i].NAME == 'ScaleType')
+                    {
+                        $scope.ScaleType = $scope.ParamListe[i].VALUE;
+                    }
                 }
             }
             else
@@ -1934,9 +1938,22 @@ function Pos($scope,$window,$rootScope,db)
                         if(TmpKiloFlag[i] == pBarkod.substring(0,2))
                         {
                             $scope.Miktar = await db.Scale.Send($scope.SCALEPORT);
-                            if($scope.Miktar.includes("S ") == true)
+
+                            if($scope.ScaleType == "0")
                             {
-                                $scope.Miktar = $scope.Miktar.split("S ").join("");
+                                if($scope.Miktar.includes("S ") == false)
+                                {
+                                    alertify.alert("Tartım başarısız lütfen tekrar tartım alınız.")
+                                    return;
+                                }
+                                if($scope.Miktar.includes("kg") == true)
+                                {
+                                    $scope.Miktar = $scope.Miktar.split("kg").join("");
+                                }
+                                if($scope.Miktar.includes("S ") == true)
+                                {
+                                    $scope.Miktar = $scope.Miktar.split("S ").join("");
+                                }
                             }
                             
                             if($scope.Miktar <= 0)
