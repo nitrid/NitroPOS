@@ -26,6 +26,7 @@ function Pos($scope,$window,$rootScope,db)
     let FocusCariEkleAdres = false;
     let FocusCariEkleTel = false;
     let FocusBelgeIptal = false;
+    let FocusSatirIptal = false;
     let FocusSonKopya = false;
     let FocusIade = false;
     let FocusCekmeceAc = false;
@@ -45,6 +46,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSatirIptal = false;
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
@@ -66,6 +68,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSatirIptal = false;
         FocusSonKopya = false;
         FocusIade = false
         FocusCekmeceAc = false;
@@ -84,6 +87,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSatirIptal = false;
         FocusIade = false;
         db.SafeApply($scope,function()
         {
@@ -108,6 +112,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSatirIptal = false;
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
@@ -127,6 +132,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSatirIptal = false;
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
@@ -146,6 +152,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSatirIptal = false;
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
@@ -166,6 +173,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSatirIptal = false;
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
@@ -186,6 +194,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSatirIptal = false;
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
@@ -205,6 +214,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSatirIptal = false;
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
@@ -224,6 +234,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSatirIptal = false;
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
@@ -243,6 +254,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSatirIptal = false;
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
@@ -262,6 +274,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusFiyatGuncelle = false;
         FocusAvans = false;
         FocusBelgeIptal = false;
+        FocusSatirIptal = false;
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
@@ -283,6 +296,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusKasaSifre = false;
         $scope.DivPlu = false;
         FocusBelgeIptal = false;
+        FocusSatirIptal = false;
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
@@ -308,6 +322,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusCariEkleTcNo = false;
         FocusCariEkleAdres = false;
         FocusBelgeIptal = false;
+        FocusSatirIptal = false;
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
@@ -337,6 +352,27 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSatirIptal = false;
+        FocusSonKopya = false;
+        FocusIade = false;
+        FocusCekmeceAc = false;
+    });
+    $('#MdlSatirIptalSifre').on('hide.bs.modal', function () 
+    {
+        FocusBarkod = true;
+        FocusAraToplam = false;
+        FocusMusteri = false;
+        FocusStok = false;
+        FocusMiktarGuncelle = false;
+        FocusFiyatGuncelle = false;
+        FocusAvans = false;
+        FocusKartOdeme = false;
+        FocusYetkiliSifre = false;
+        FocusKasaSifre = false;
+        FocusXSifre = false;
+        FocusZSifre = false;
+        FocusBelgeIptal = false;
+        FocusSatirIptal = false;
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
@@ -356,6 +392,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSatirIptal = false;
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
@@ -375,6 +412,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSatirIptal = false;
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
@@ -395,6 +433,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusXSifre = false;
         FocusZSifre = false;
         FocusBelgeIptal = false;
+        FocusSatirIptal = false;
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
@@ -561,6 +600,7 @@ function Pos($scope,$window,$rootScope,db)
         $scope.TxtZSifre = "";
         $scope.TxtXSifre = "";
         $scope.TxtBelgeIptalSifre = "";
+        $scope.TxtSatirIptalSifre = "";
         $scope.TxtSonKopyaSifre = "";
         $scope.TxtIadeSifre = "";
         $scope.TxtCekmeceAcSifre = "";
@@ -2412,6 +2452,10 @@ function Pos($scope,$window,$rootScope,db)
         {
             $scope.TxtBelgeIptalSifre = $scope.TxtBelgeIptalSifre.substring(0,$scope.TxtBelgeIptalSifre.length-1);
         }
+        else if(FocusSatirIptal)
+        {
+            $scope.TxtSatirIptalSifre = $scope.TxtSatirIptalSifre.substring(0,$scope.TxtSatirIptalSifre.length-1);
+        }
         else if(FocusSonKopya)
         {
             $scope.TxtSonKopyaSifre = $scope.TxtSonKopyaSifre.substring(0,$scope.TxtSonKopyaSifre.length-1);
@@ -2624,6 +2668,18 @@ function Pos($scope,$window,$rootScope,db)
                 FirstKey = true;
             }
         }
+        else if(FocusSatirIptal)
+        {
+            if(FirstKey)
+            {
+                $scope.TxtSatirIptalSifre = $scope.TxtSatirIptalSifre + Key; 
+            }
+            else
+            {
+                $scope.TxtSatirIptalSifre = Key; 
+                FirstKey = true;
+            }
+        }
         else if(FocusSonKopya)
         {
             if(FirstKey)
@@ -2715,6 +2771,7 @@ function Pos($scope,$window,$rootScope,db)
                         FirstKey = false;
                         FocusYetkiliSifre = false;
                         FocusKasaSifre = false;
+                        FocusSatirIptal = false;
                         FocusBelgeIptal = true;
                     }
                     ,function(){});
@@ -2775,68 +2832,109 @@ function Pos($scope,$window,$rootScope,db)
             alertify.alert("Tahsilat Giriş Yapılmış Evrak İptal Edilemez.");
         }
     }
-    $scope.BtnSatirIptal = function()
+    $scope.BtnSatirIptal = async function(pTip)
     {
         if($scope.TahList.length <= 0)
         {
-            alertify.okBtn('Evet');
-            alertify.cancelBtn('Hayır');
-
-            alertify.confirm('Satırı iptal etmek istediğinize eminmisiniz ?', 
-            function()
-            {   
-                if($scope.IslemListeSelectedIndex > -1)
+            if(pTip == 0)
+            {
+                alertify.okBtn('Evet');
+                alertify.cancelBtn('Hayır');
+    
+                alertify.confirm('Satırı iptal etmek istediğinize eminmisiniz ?', 
+                function()
+                {   
+                    $('#MdlSatirIptalSifre').modal({backdrop: 'static', keyboard: false});
+                    FocusBarkod = false;
+                    FocusAraToplam = false;
+                    FocusMusteri = false;
+                    FocusStok = false;
+                    FocusKartOdeme = false;
+                    FirstKey = false;
+                    FocusYetkiliSifre = false;
+                    FocusKasaSifre = false;
+                    FocusBelgeIptal = false;
+                    FocusSatirIptal = true;
+                },
+                function(){});
+            }
+            else
+            {
+                let YetkiliList = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',['']);
+                let GirisOnay = false;
+                for (let i = 0; i < YetkiliList.length; i++) 
                 {
-                    db.ExecuteTag($scope.Firma,'PosSatisSatirIptal',[$scope.SatisList[$scope.IslemListeSelectedIndex].GUID],async function(data)
+                    if(YetkiliList[i].TAG == 1)
                     {
-                        if(typeof(data.result.err) == 'undefined')
+                        if(YetkiliList[i].PASSWORD == $scope.TxtSatirIptalSifre)
                         {
-                            if($scope.SatisList.length <= 1)
+                            GirisOnay = true;
+                        }
+                    }
+                }
+                if(GirisOnay)
+                {
+                    if($scope.IslemListeSelectedIndex > -1)
+                    {
+                        db.ExecuteTag($scope.Firma,'PosSatisSatirIptal',[$scope.SatisList[$scope.IslemListeSelectedIndex].GUID],async function(data)
+                        {
+                            if(typeof(data.result.err) == 'undefined')
                             {
-                                db.ExecuteTag($scope.Firma,'PosTahIptal',[$scope.Seri,$scope.Sira,0],function(data)
+                                if($scope.SatisList.length <= 1)
                                 {
-                                    if(typeof(data.result.err) != 'undefined')
+                                    db.ExecuteTag($scope.Firma,'PosTahIptal',[$scope.Seri,$scope.Sira,0],function(data)
                                     {
-                                        console.log(data.result.err);
-                                    }
-                                });
-                                
-                                $scope.YeniEvrak();
+                                        if(typeof(data.result.err) != 'undefined')
+                                        {
+                                            console.log(data.result.err);
+                                        }
+                                    });
+                                    
+                                    $scope.TxtSatirIptalSifre = "";
+                                    $("#MdlSatirIptalSifre").modal("hide");
+                                    $scope.YeniEvrak();
+                                }
+                                else
+                                {
+                                    //*********** BİRDEN FAZLA MİKTARLI FİYAT GÜNCELLEME İÇİN YAPILDI. */
+                                    let TmpSatisData = await db.GetPromiseTag($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira]);
+                                    $scope.SatisList = TmpSatisData;
+    
+                                    for (let i = 0; i < $scope.SatisList.length; i++) 
+                                    {               
+                                        await FiyatUpdate($scope.SatisList[i]);
+                                    }  
+                                    /***************************************************************** */
+                                    db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(data)
+                                    {
+                                        $scope.SatisList = data;
+                                        $("#TblIslem").jsGrid({data : $scope.SatisList});                                    
+                                        DipToplamHesapla();
+                                        $scope.TxtBarkod = ""; 
+                                        $scope.IslemListeRowClick($scope.SatisList.length-1,$scope.SatisList[$scope.SatisList.length-1]);   
+                                    });
+                                    $scope.TxtSatirIptalSifre = "";
+                                    $("#MdlSatirIptalSifre").modal("hide");
+                                }
                             }
                             else
                             {
-                                //*********** BİRDEN FAZLA MİKTARLI FİYAT GÜNCELLEME İÇİN YAPILDI. */
-                                let TmpSatisData = await db.GetPromiseTag($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira]);
-                                $scope.SatisList = TmpSatisData;
-
-                                for (let i = 0; i < $scope.SatisList.length; i++) 
-                                {               
-                                    await FiyatUpdate($scope.SatisList[i]);
-                                }  
-                                /***************************************************************** */
-                                db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(data)
-                                {
-                                    $scope.SatisList = data;
-                                    $("#TblIslem").jsGrid({data : $scope.SatisList});                                    
-                                    DipToplamHesapla();
-                                    $scope.TxtBarkod = ""; 
-                                    $scope.IslemListeRowClick($scope.SatisList.length-1,$scope.SatisList[$scope.SatisList.length-1]);   
-                                });
-                            }
-                        }
-                        else
-                        {
-                            console.log(data.result.err);
-                        }                                        
-                    });
+                                console.log(data.result.err);
+                            }                                        
+                        });
+                    }
+                    else
+                    {
+                        alertify.okBtn("Tamam");
+                        alertify.alert("Seçili satır olmadan evrak iptal edemezsiniz !");
+                    }
                 }
                 else
                 {
-                    alertify.okBtn("Tamam");
-                    alertify.alert("Seçili satır olmadan evrak iptal edemezsiniz !");
+                    $("#MdlSatirIptalSifre").modal("hide");
+                    alertify.alert("Yetkili Şifre Yanlış.")
                 }
-            },
-            function(){});
+            }
         }
         else
         {
@@ -4298,6 +4396,7 @@ function Pos($scope,$window,$rootScope,db)
                 FocusYetkiliSifre = false;
                 FocusKasaSifre = false;
                 FocusBelgeIptal = false;
+                FocusSatirIptal = false;
                 FocusIade = false;
                 FocusCekmeceAc = true;
             }
