@@ -1967,7 +1967,7 @@ function Pos($scope,$window,$rootScope,db)
             pBarkod = db.KiloBarkod(pBarkod,$scope.KiloBaslangic,$scope.KiloUzunluk,$scope.KiloFlag).Barkod;
             let TmpFiyat = 0;
             
-            db.StokBarkodGetir($scope.Firma,pBarkod,async function(BarkodData)
+            db.StokBarkodGetir($scope.Firma,pBarkod,$scope.Sube,async function(BarkodData)
             {
                 if(BarkodData.length > 0)
                 { 
@@ -2028,7 +2028,6 @@ function Pos($scope,$window,$rootScope,db)
                     }
 
                     $scope.Stok = BarkodData;
-                    console.log($scope.Stok)
                     if(TmpFiyat > 0 )
                     {
                         $scope.Stok[0].PRICE = TmpFiyat;
@@ -2085,6 +2084,7 @@ function Pos($scope,$window,$rootScope,db)
             $scope.Stok[0].VAT,
             0  //DURUM
         ];
+
         db.ExecuteTag($scope.Firma,'PosSatisInsert',InsertData,async function(InsertResult)
         {      
             if(typeof(InsertResult.result.err) == 'undefined')
@@ -2093,10 +2093,10 @@ function Pos($scope,$window,$rootScope,db)
                 let TmpSatisData = await db.GetPromiseTag($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira]);
                 $scope.SatisList = TmpSatisData;
 
-                for (let i = 0; i < $scope.SatisList.length; i++) 
-                {               
-                    await FiyatUpdate($scope.SatisList[i]);
-                }  
+                // for (let i = 0; i < $scope.SatisList.length; i++) 
+                // {               
+                //     await FiyatUpdate($scope.SatisList[i]);
+                // }  
                 /***************************************************************** */
                 db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosSatisData)
                 {   
