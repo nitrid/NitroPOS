@@ -594,13 +594,13 @@ angular.module('app.db', []).service('db',function($rootScope)
             }
         });
     }
-    this.StokBarkodGetir = function(pFirma,pBarkod,pCallback)
+    this.StokBarkodGetir = function(pFirma,pBarkod,pSube,pCallback)
     {
         let m = 
         {
             db : pFirma,
             tag : 'BarkodGetir',
-            param : [pBarkod]
+            param : [pBarkod,pSube]
         }
         _SqlExecute(m,function(data)
         {
@@ -616,7 +616,7 @@ angular.module('app.db', []).service('db',function($rootScope)
                     {
                         db : pFirma,
                         tag : 'StokGetir',
-                        param : [pBarkod,'']
+                        param : [pBarkod,'',pSube]
                     }
                     _SqlExecute(m,function(data)
                     {
