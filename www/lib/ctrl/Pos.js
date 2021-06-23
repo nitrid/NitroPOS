@@ -3046,6 +3046,9 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.BtnStokListesi = function()
     {
+        $scope.StokListe = [];
+        $scope.TxtStokAra = "";
+        $("#TblStok").jsGrid({data : $scope.StokListe});
         $("#MdlStokListele").modal("show");
         FocusAraToplam = false;
         FocusBarkod = false;
