@@ -439,19 +439,6 @@ function Pos($scope,$window,$rootScope,db)
         FocusCekmeceAc = false;
     });
 
-    setTimeout(function()
-    { 
-        db.LCDPrint
-        (
-            {   
-                port : $scope.LCDPORT,
-                blink : 0,
-                text :  db.PrintText("HOSGELDINIZ",20) + 
-                        db.PrintText(moment(new Date()).format("DD.MM.YYYY"),20)
-            }
-        );
-    }, 1000);
-
     if(typeof require != 'undefined')
     {
         $("#MdlIngenicoEslesme").modal("show");  
@@ -1734,6 +1721,19 @@ function Pos($scope,$window,$rootScope,db)
             $scope.KullaniciListe = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',[$scope.Kullanici]);
 
             clearInterval($scope.ClearInterval); //INTERVAL RESETLENIYOR
+
+            setTimeout(function()
+            { 
+                db.LCDPrint
+                (
+                    {   
+                        port : $scope.LCDPORT,
+                        blink : 0,
+                        text :  db.PrintText("HOSGELDINIZ",20) + 
+                                db.PrintText(moment(new Date()).format("DD.MM.YYYY"),20)
+                    }
+                );
+            }, 1000);
 
             if($scope.SatisList.length == 0) //30 DAKİKA DA BİR SATIŞ LİSTESİ BOŞSA ŞİFRE GİRİŞ EKRANI AÇILIYOR.
             {
