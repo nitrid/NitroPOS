@@ -753,7 +753,8 @@ var QuerySql =
     {
         query:  "SELECT ITEMS.CODE AS CODE, " +
                 "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE AS BAR WHERE BAR.ITEM_CODE = ITEMS.CODE),'') AS BARCODE, " +
-                "ISNULL((SELECT TOP 1 PRICE FROM ITEM_PRICE WHERE [TYPE] = 0 AND (QUANTITY = 1 OR QUANTITY = 0) AND ITEM_CODE = ITEMS.CODE),0) AS PRICE, " +
+               // "ISNULL((SELECT TOP 1 PRICE FROM ITEM_PRICE WHERE [TYPE] = 0 AND (QUANTITY = 1 OR QUANTITY = 0) AND ITEM_CODE = ITEMS.CODE),0) AS PRICE, " +
+               "ISNULL((SELECT TOP 1 PRICE FROM ITEM_PRICE WHERE [TYPE] = 0 AND ITEM_CODE = ITEMS.CODE AND ((DEPOT = @DEPOT) OR (DEPOT = '0')) ORDER BY DEPOT DESC),'') AS PRICE, " +
                 "ITEMS.[NAME] AS [NAME], " +
                 "ITEMS.SNAME AS SNAME, " +
                 "ISNULL((SELECT VAT FROM ITEM_TAX WHERE ITEM_CODE = ITEMS.CODE),0) AS VAT, " +
@@ -766,13 +767,14 @@ var QuerySql =
                 "LEFT OUTER JOIN ITEM_UNIT AS UNIT ON " +
                 "UNIT.ITEM_CODE = ITEMS.CODE " +
                 "WHERE ((UPPER(ITEMS.CODE) LIKE UPPER(@CODE)) OR (UPPER(@CODE) = '')) AND ((UPPER(ITEMS.[NAME]) LIKE UPPER(@NAME)) OR (UPPER(@NAME) = '')) AND UNIT.CODE = 1 " ,
-        param : ['CODE','NAME'],
-        type : ['string|25','string|250']
+        param : ['CODE','NAME','DEPOT'],
+        type : ['string|25','string|250','string|25']
     },
     BarkodGetir:
     {
         query : "SELECT ITEMS.CODE AS CODE, " +
-                "ISNULL((SELECT TOP 1 PRICE FROM ITEM_PRICE WHERE [TYPE] = 0 AND (QUANTITY = 1 OR QUANTITY = 0) AND ITEM_CODE = ITEMS.CODE),0) AS PRICE, " +
+                //"ISNULL((SELECT TOP 1 PRICE FROM ITEM_PRICE WHERE [TYPE] = 0 AND (QUANTITY = 1 OR QUANTITY = 0) AND ITEM_CODE = ITEMS.CODE),0) AS PRICE, " +
+                "ISNULL((SELECT TOP 1 PRICE FROM ITEM_PRICE WHERE [TYPE] = 0 AND ITEM_CODE = ITEMS.CODE AND ((DEPOT = @DEPOT) OR (DEPOT = '0')) ORDER BY DEPOT DESC),'') AS PRICE, " +
                 "ITEMS.[NAME] AS [NAME], " +
                 "SNAME AS SNAME, " +
                 "ISNULL((SELECT VAT FROM ITEM_TAX WHERE ITEM_CODE = ITEMS.CODE),0) AS VAT, " +
@@ -787,8 +789,8 @@ var QuerySql =
                 "LEFT OUTER JOIN ITEM_BARCODE AS BARCODE ON " +
                 "BARCODE.ITEM_CODE = ITEMS.CODE AND BARCODE.UNIT = UNIT.CODE " + 
                 "WHERE BARCODE.BARCODE = @BARCODE" ,
-        param : ['BARCODE'],
-        type : ['string|50']
+        param : ['BARCODE','DEPOT'],
+        type : ['string|50','string|25']
     },
     PosSatisInsert : 
     {
