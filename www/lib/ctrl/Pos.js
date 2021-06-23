@@ -1720,6 +1720,8 @@ function Pos($scope,$window,$rootScope,db)
             $scope.ParamListe = await db.GetPromiseTag($scope.Firma,'ParamGetir',[$scope.CihazID]);
             $scope.KullaniciListe = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',[$scope.Kullanici]);
 
+            console.log($scope.KullaniciListe)
+
             clearInterval($scope.ClearInterval); //INTERVAL RESETLENIYOR
 
             setTimeout(function()
@@ -4399,6 +4401,7 @@ function Pos($scope,$window,$rootScope,db)
                 FocusSatirIptal = false;
                 FocusIade = false;
                 FocusCekmeceAc = true;
+                $scope.TxtCekmeceAcSifre = "";
             }
             else
             {
