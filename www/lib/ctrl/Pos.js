@@ -439,19 +439,6 @@ function Pos($scope,$window,$rootScope,db)
         FocusCekmeceAc = false;
     });
 
-    setTimeout(function()
-    { 
-        db.LCDPrint
-        (
-            {   
-                port : $scope.LCDPORT,
-                blink : 0,
-                text :  db.PrintText("HOSGELDINIZ",20) + 
-                        db.PrintText(moment(new Date()).format("DD.MM.YYYY"),20)
-            }
-        );
-    }, 1000);
-
     if(typeof require != 'undefined')
     {
         $("#MdlIngenicoEslesme").modal("show");  
@@ -1733,7 +1720,22 @@ function Pos($scope,$window,$rootScope,db)
             $scope.ParamListe = await db.GetPromiseTag($scope.Firma,'ParamGetir',[$scope.CihazID]);
             $scope.KullaniciListe = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',[$scope.Kullanici]);
 
+            console.log($scope.KullaniciListe)
+
             clearInterval($scope.ClearInterval); //INTERVAL RESETLENIYOR
+
+            setTimeout(function()
+            { 
+                db.LCDPrint
+                (
+                    {   
+                        port : $scope.LCDPORT,
+                        blink : 0,
+                        text :  db.PrintText("HOSGELDINIZ",20) + 
+                                db.PrintText(moment(new Date()).format("DD.MM.YYYY"),20)
+                    }
+                );
+            }, 1000);
 
             if($scope.SatisList.length == 0) //30 DAKİKA DA BİR SATIŞ LİSTESİ BOŞSA ŞİFRE GİRİŞ EKRANI AÇILIYOR.
             {
@@ -1751,7 +1753,7 @@ function Pos($scope,$window,$rootScope,db)
                         FocusYetkiliSifre = false;
                         FocusKasaSifre = true;
                     })
-                },1800000);
+                },2800000);
             }
 
             if($scope.ParamListe.length > 0)
@@ -1825,6 +1827,19 @@ function Pos($scope,$window,$rootScope,db)
                 alertify.alert("Parametre Getirme İşlemi Başarısız Oldu, Lütfen CihazID'nizi Kontrol Edin.")
             }
             $scope.Miktar = 1;
+
+            setTimeout(function()
+            { 
+                db.LCDPrint
+                (
+                    {   
+                        port : $scope.LCDPORT,
+                        blink : 0,
+                        text :  db.PrintText("HOSGELDINIZ",20) + 
+                                db.PrintText(moment(new Date()).format("DD.MM.YYYY"),20)
+                    }
+                );
+            }, 1000);
 
             $scope.Stok = 
             [
@@ -2312,10 +2327,10 @@ function Pos($scope,$window,$rootScope,db)
         db.GetData($scope.Firma,'PosSatisMiktarUpdate',[pMiktar,pData.GUID],async function(data)
         {    
             //*********** BİRDEN FAZLA MİKTARLI FİYAT GÜNCELLEME İÇİN YAPILDI. */      
-            for (let i = 0; i < $scope.SatisList.length; i++) 
-            {               
-                await FiyatUpdate($scope.SatisList[i]);
-            }
+            // for (let i = 0; i < $scope.SatisList.length; i++) 
+            // {               
+            //     await FiyatUpdate($scope.SatisList[i]);
+            // }
             //**************************************************************** */
             db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosSatisData)
             {  
@@ -3047,6 +3062,9 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.BtnStokListesi = function()
     {
+        $scope.StokListe = [];
+        $scope.TxtStokAra = "";
+        $("#TblStok").jsGrid({data : $scope.StokListe});
         $("#MdlStokListele").modal("show");
         FocusAraToplam = false;
         FocusBarkod = false;
@@ -4415,6 +4433,7 @@ function Pos($scope,$window,$rootScope,db)
                 FocusSatirIptal = false;
                 FocusIade = false;
                 FocusCekmeceAc = true;
+                $scope.TxtCekmeceAcSifre = "";
             }
             else
             {

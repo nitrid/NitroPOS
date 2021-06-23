@@ -819,6 +819,12 @@ angular.module('app.db', []).service('db',function($rootScope)
         //DİP TOPLAM
         TmpLine = 
         {
+            data: _PrintText("Para Üstü",17) + 
+                  _PrintText(parseFloat(_SumColumn(pSData,"CHANGE")).toFixed(2) + " TL",15,"Start")
+        }
+        TmpData.push(TmpLine);
+        TmpLine = 
+        {
             data: _PrintText("Ara Toplam",17) + 
                   _PrintText(parseFloat(_SumColumn(pSData,"VATOUTAMOUNT")).toFixed(2) + " TL",15,"Start")
         }
