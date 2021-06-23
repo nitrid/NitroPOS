@@ -439,18 +439,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusCekmeceAc = false;
     });
 
-    setTimeout(function()
-    { 
-        db.LCDPrint
-        (
-            {   
-                port : $scope.LCDPORT,
-                blink : 0,
-                text :  db.PrintText("HOSGELDINIZ",20) + 
-                        db.PrintText(moment(new Date()).format("DD.MM.YYYY"),20)
-            }
-        );
-    }, 1000);
+    
 
     if(typeof require != 'undefined')
     {
@@ -1825,6 +1814,19 @@ function Pos($scope,$window,$rootScope,db)
                 alertify.alert("Parametre Getirme İşlemi Başarısız Oldu, Lütfen CihazID'nizi Kontrol Edin.")
             }
             $scope.Miktar = 1;
+
+            setTimeout(function()
+            { 
+                db.LCDPrint
+                (
+                    {   
+                        port : $scope.LCDPORT,
+                        blink : 0,
+                        text :  db.PrintText("HOSGELDINIZ",20) + 
+                                db.PrintText(moment(new Date()).format("DD.MM.YYYY"),20)
+                    }
+                );
+            }, 1000);
 
             $scope.Stok = 
             [
