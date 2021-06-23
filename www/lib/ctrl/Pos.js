@@ -1751,7 +1751,7 @@ function Pos($scope,$window,$rootScope,db)
                         FocusYetkiliSifre = false;
                         FocusKasaSifre = true;
                     })
-                },1800000);
+                },2800000);
             }
 
             if($scope.ParamListe.length > 0)
