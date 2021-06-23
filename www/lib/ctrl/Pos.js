@@ -1969,15 +1969,31 @@ function Pos($scope,$window,$rootScope,db)
             
             db.StokBarkodGetir($scope.Firma,pBarkod,$scope.Sube,async function(BarkodData)
             {
+                console.log(BarkodData)
                 if(BarkodData.length > 0)
                 { 
                     let TmpKiloFlag = $scope.ParamListe.find(x => x.NAME === 'KiloFlag').VALUE.split(',');
+                    console.log(TmpKiloFlag)
 
                     for(let i = 0;i < TmpKiloFlag.length;i++)
                     {
                         if(TmpKiloFlag[i] == pBarkod.substring(0,2))
                         {
                             $scope.Miktar = await db.Scale.Send($scope.SCALEPORT);
+
+                            if($scope.Miktar.includes(".") == true)
+                            {
+                                $scope.Miktar = $scope.Miktar;
+                                if($scope.Miktar.includes("kg") == true)
+                                {
+                                    $scope.Miktar = $scope.Miktar.split("kg").join("");
+                                }
+                            }
+                            else
+                            {
+                                alertify.alert("Lütfen Tartım Alınız");
+                                return;
+                            }
 
                             if($scope.ScaleType == "0")
                             {
@@ -1995,7 +2011,7 @@ function Pos($scope,$window,$rootScope,db)
                                     $scope.Miktar = $scope.Miktar.split("S ").join("");
                                 }
                             }
-                            
+                          
                             if($scope.Miktar <= 0)
                             {
                                 if(typeof db.KiloBarkod(pKiloBarkod,$scope.KiloBaslangic,$scope.KiloUzunluk,$scope.KiloFlag).Miktar !='undefined')
