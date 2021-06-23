@@ -1984,11 +1984,9 @@ function Pos($scope,$window,$rootScope,db)
             
             db.StokBarkodGetir($scope.Firma,pBarkod,$scope.Sube,async function(BarkodData)
             {
-                console.log(BarkodData)
                 if(BarkodData.length > 0)
                 { 
                     let TmpKiloFlag = $scope.ParamListe.find(x => x.NAME === 'KiloFlag').VALUE.split(',');
-                    console.log(TmpKiloFlag)
 
                     for(let i = 0;i < TmpKiloFlag.length;i++)
                     {
