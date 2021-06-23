@@ -2296,10 +2296,10 @@ function Pos($scope,$window,$rootScope,db)
         db.GetData($scope.Firma,'PosSatisMiktarUpdate',[pMiktar,pData.GUID],async function(data)
         {    
             //*********** BİRDEN FAZLA MİKTARLI FİYAT GÜNCELLEME İÇİN YAPILDI. */      
-            for (let i = 0; i < $scope.SatisList.length; i++) 
-            {               
-                await FiyatUpdate($scope.SatisList[i]);
-            }
+            // for (let i = 0; i < $scope.SatisList.length; i++) 
+            // {               
+            //     await FiyatUpdate($scope.SatisList[i]);
+            // }
             //**************************************************************** */
             db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosSatisData)
             {  
