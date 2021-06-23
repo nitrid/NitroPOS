@@ -1979,6 +1979,7 @@ function Pos($scope,$window,$rootScope,db)
                         {
                             $scope.Miktar = await db.Scale.Send($scope.SCALEPORT);
 
+                            console.log($scope.ScaleType)
                             if($scope.ScaleType == "0")
                             {
                                 if($scope.Miktar.includes("S ") == false)
