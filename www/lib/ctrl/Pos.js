@@ -439,19 +439,6 @@ function Pos($scope,$window,$rootScope,db)
         FocusCekmeceAc = false;
     });
 
-    setTimeout(function()
-    { 
-        db.LCDPrint
-        (
-            {   
-                port : $scope.LCDPORT,
-                blink : 0,
-                text :  db.PrintText("HOSGELDINIZ",20) + 
-                        db.PrintText(moment(new Date()).format("DD.MM.YYYY"),20)
-            }
-        );
-    }, 1000);
-
     if(typeof require != 'undefined')
     {
         $("#MdlIngenicoEslesme").modal("show");  
@@ -1733,7 +1720,22 @@ function Pos($scope,$window,$rootScope,db)
             $scope.ParamListe = await db.GetPromiseTag($scope.Firma,'ParamGetir',[$scope.CihazID]);
             $scope.KullaniciListe = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',[$scope.Kullanici]);
 
+            console.log($scope.KullaniciListe)
+
             clearInterval($scope.ClearInterval); //INTERVAL RESETLENIYOR
+
+            setTimeout(function()
+            { 
+                db.LCDPrint
+                (
+                    {   
+                        port : $scope.LCDPORT,
+                        blink : 0,
+                        text :  db.PrintText("HOSGELDINIZ",20) + 
+                                db.PrintText(moment(new Date()).format("DD.MM.YYYY"),20)
+                    }
+                );
+            }, 1000);
 
             if($scope.SatisList.length == 0) //30 DAKİKA DA BİR SATIŞ LİSTESİ BOŞSA ŞİFRE GİRİŞ EKRANI AÇILIYOR.
             {
@@ -1825,6 +1827,19 @@ function Pos($scope,$window,$rootScope,db)
                 alertify.alert("Parametre Getirme İşlemi Başarısız Oldu, Lütfen CihazID'nizi Kontrol Edin.")
             }
             $scope.Miktar = 1;
+
+            setTimeout(function()
+            { 
+                db.LCDPrint
+                (
+                    {   
+                        port : $scope.LCDPORT,
+                        blink : 0,
+                        text :  db.PrintText("HOSGELDINIZ",20) + 
+                                db.PrintText(moment(new Date()).format("DD.MM.YYYY"),20)
+                    }
+                );
+            }, 1000);
 
             $scope.Stok = 
             [
@@ -1967,7 +1982,7 @@ function Pos($scope,$window,$rootScope,db)
             pBarkod = db.KiloBarkod(pBarkod,$scope.KiloBaslangic,$scope.KiloUzunluk,$scope.KiloFlag).Barkod;
             let TmpFiyat = 0;
             
-            db.StokBarkodGetir($scope.Firma,pBarkod,async function(BarkodData)
+            db.StokBarkodGetir($scope.Firma,pBarkod,$scope.Sube,async function(BarkodData)
             {
                 if(BarkodData.length > 0)
                 { 
@@ -1978,6 +1993,20 @@ function Pos($scope,$window,$rootScope,db)
                         if(TmpKiloFlag[i] == pBarkod.substring(0,2))
                         {
                             $scope.Miktar = await db.Scale.Send($scope.SCALEPORT);
+
+                            if($scope.Miktar.includes(".") == true)
+                            {
+                                $scope.Miktar = $scope.Miktar;
+                                if($scope.Miktar.includes("kg") == true)
+                                {
+                                    $scope.Miktar = $scope.Miktar.split("kg").join("");
+                                }
+                            }
+                            else
+                            {
+                                alertify.alert("Lütfen Tartım Alınız");
+                                return;
+                            }
 
                             if($scope.ScaleType == "0")
                             {
@@ -1995,7 +2024,7 @@ function Pos($scope,$window,$rootScope,db)
                                     $scope.Miktar = $scope.Miktar.split("S ").join("");
                                 }
                             }
-                            
+                          
                             if($scope.Miktar <= 0)
                             {
                                 if(typeof db.KiloBarkod(pKiloBarkod,$scope.KiloBaslangic,$scope.KiloUzunluk,$scope.KiloFlag).Miktar !='undefined')
@@ -2028,7 +2057,6 @@ function Pos($scope,$window,$rootScope,db)
                     }
 
                     $scope.Stok = BarkodData;
-                    console.log($scope.Stok)
                     if(TmpFiyat > 0 )
                     {
                         $scope.Stok[0].PRICE = TmpFiyat;
@@ -2085,6 +2113,7 @@ function Pos($scope,$window,$rootScope,db)
             $scope.Stok[0].VAT,
             0  //DURUM
         ];
+
         db.ExecuteTag($scope.Firma,'PosSatisInsert',InsertData,async function(InsertResult)
         {      
             if(typeof(InsertResult.result.err) == 'undefined')
@@ -2093,10 +2122,10 @@ function Pos($scope,$window,$rootScope,db)
                 let TmpSatisData = await db.GetPromiseTag($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira]);
                 $scope.SatisList = TmpSatisData;
 
-                for (let i = 0; i < $scope.SatisList.length; i++) 
-                {               
-                    await FiyatUpdate($scope.SatisList[i]);
-                }  
+                // for (let i = 0; i < $scope.SatisList.length; i++) 
+                // {               
+                //     await FiyatUpdate($scope.SatisList[i]);
+                // }  
                 /***************************************************************** */
                 db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosSatisData)
                 {   
@@ -2296,10 +2325,10 @@ function Pos($scope,$window,$rootScope,db)
         db.GetData($scope.Firma,'PosSatisMiktarUpdate',[pMiktar,pData.GUID],async function(data)
         {    
             //*********** BİRDEN FAZLA MİKTARLI FİYAT GÜNCELLEME İÇİN YAPILDI. */      
-            for (let i = 0; i < $scope.SatisList.length; i++) 
-            {               
-                await FiyatUpdate($scope.SatisList[i]);
-            }
+            // for (let i = 0; i < $scope.SatisList.length; i++) 
+            // {               
+            //     await FiyatUpdate($scope.SatisList[i]);
+            // }
             //**************************************************************** */
             db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(PosSatisData)
             {  
@@ -3031,6 +3060,9 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.BtnStokListesi = function()
     {
+        $scope.StokListe = [];
+        $scope.TxtStokAra = "";
+        $("#TblStok").jsGrid({data : $scope.StokListe});
         $("#MdlStokListele").modal("show");
         FocusAraToplam = false;
         FocusBarkod = false;
@@ -4399,6 +4431,7 @@ function Pos($scope,$window,$rootScope,db)
                 FocusSatirIptal = false;
                 FocusIade = false;
                 FocusCekmeceAc = true;
+                $scope.TxtCekmeceAcSifre = "";
             }
             else
             {

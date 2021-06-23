@@ -594,13 +594,13 @@ angular.module('app.db', []).service('db',function($rootScope)
             }
         });
     }
-    this.StokBarkodGetir = function(pFirma,pBarkod,pCallback)
+    this.StokBarkodGetir = function(pFirma,pBarkod,pSube,pCallback)
     {
         let m = 
         {
             db : pFirma,
             tag : 'BarkodGetir',
-            param : [pBarkod]
+            param : [pBarkod,pSube]
         }
         _SqlExecute(m,function(data)
         {
@@ -616,7 +616,7 @@ angular.module('app.db', []).service('db',function($rootScope)
                     {
                         db : pFirma,
                         tag : 'StokGetir',
-                        param : [pBarkod,'']
+                        param : [pBarkod,'',pSube]
                     }
                     _SqlExecute(m,function(data)
                     {
@@ -817,6 +817,12 @@ angular.module('app.db', []).service('db',function($rootScope)
         TmpData.push({font:"b",style:"bu",align:"lt",data:_PrintText(" ",42)});
 
         //DİP TOPLAM
+        TmpLine = 
+        {
+            data: _PrintText("Para Üstü",17) + 
+                  _PrintText(parseFloat(_SumColumn(pSData,"CHANGE")).toFixed(2) + " TL",15,"Start")
+        }
+        TmpData.push(TmpLine);
         TmpLine = 
         {
             data: _PrintText("Ara Toplam",17) + 
