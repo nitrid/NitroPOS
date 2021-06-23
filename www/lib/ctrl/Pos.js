@@ -439,8 +439,6 @@ function Pos($scope,$window,$rootScope,db)
         FocusCekmeceAc = false;
     });
 
-    
-
     if(typeof require != 'undefined')
     {
         $("#MdlIngenicoEslesme").modal("show");  
@@ -1722,7 +1720,22 @@ function Pos($scope,$window,$rootScope,db)
             $scope.ParamListe = await db.GetPromiseTag($scope.Firma,'ParamGetir',[$scope.CihazID]);
             $scope.KullaniciListe = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',[$scope.Kullanici]);
 
+            console.log($scope.KullaniciListe)
+
             clearInterval($scope.ClearInterval); //INTERVAL RESETLENIYOR
+
+            setTimeout(function()
+            { 
+                db.LCDPrint
+                (
+                    {   
+                        port : $scope.LCDPORT,
+                        blink : 0,
+                        text :  db.PrintText("HOSGELDINIZ",20) + 
+                                db.PrintText(moment(new Date()).format("DD.MM.YYYY"),20)
+                    }
+                );
+            }, 1000);
 
             if($scope.SatisList.length == 0) //30 DAKİKA DA BİR SATIŞ LİSTESİ BOŞSA ŞİFRE GİRİŞ EKRANI AÇILIYOR.
             {
@@ -1740,7 +1753,7 @@ function Pos($scope,$window,$rootScope,db)
                         FocusYetkiliSifre = false;
                         FocusKasaSifre = true;
                     })
-                },1800000);
+                },2800000);
             }
 
             if($scope.ParamListe.length > 0)
@@ -4401,6 +4414,7 @@ function Pos($scope,$window,$rootScope,db)
                 FocusSatirIptal = false;
                 FocusIade = false;
                 FocusCekmeceAc = true;
+                $scope.TxtCekmeceAcSifre = "";
             }
             else
             {
