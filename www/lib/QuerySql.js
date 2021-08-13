@@ -876,6 +876,12 @@ var QuerySql =
         param: ['REF','REF_NO','TYPE'],
         type:  ['string|25','int','int']
     },
+    PosSatisBelgeIptalLog : 
+    {
+        query: "INSERT INTO POS_SALES_LOG SELECT * FROM POS_SALES WHERE REF = @REF AND REF_NO = @REF_NO AND TYPE = @TYPE",
+        param: ['REF','REF_NO','TYPE'],
+        type:  ['string|25','int','int']
+    },
     PosSatisSatirIptal : 
     {
         query: "DELETE FROM POS_SALES WHERE GUID = @GUID",

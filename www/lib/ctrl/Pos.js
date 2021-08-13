@@ -2794,26 +2794,38 @@ function Pos($scope,$window,$rootScope,db)
                     }
                     if(GirisOnay)
                     {
-                        db.ExecuteTag($scope.Firma,'PosSatisBelgeIptal',[$scope.Seri,$scope.Sira,$scope.EvrakTip],function(data)
+                        db.ExecuteTag($scope.Firma,'PosSatisBelgeIptalLog',[$scope.Seri,$scope.Sira,$scope.EvrakTip],function(data)
                         {
                             if(typeof(data.result.err) == 'undefined')
                             {
-                                db.ExecuteTag($scope.Firma,'PosTahIptal',[$scope.Seri,$scope.Sira,0],function(data)
+                                db.ExecuteTag($scope.Firma,'PosSatisBelgeIptal',[$scope.Seri,$scope.Sira,$scope.EvrakTip],function(data)
                                 {
-                                    if(typeof(data.result.err) != 'undefined')
+                                    if(typeof(data.result.err) == 'undefined')
+                                    {
+                                        db.ExecuteTag($scope.Firma,'PosTahIptal',[$scope.Seri,$scope.Sira,0],function(data)
+                                        {
+                                            if(typeof(data.result.err) != 'undefined')
+                                            {
+                                                console.log(data.result.err);
+                                            }
+                                        });
+                                        $scope.TxtBelgeIptalSifre = "";
+                                        $("#MdlBelgeIptalSifre").modal("hide");
+                                        $scope.YeniEvrak();
+                                    }
+                                    else
                                     {
                                         console.log(data.result.err);
                                     }
                                 });
-                                $scope.TxtBelgeIptalSifre = "";
-                                $("#MdlBelgeIptalSifre").modal("hide");
-                                $scope.YeniEvrak();
                             }
                             else
                             {
                                 console.log(data.result.err);
+                                alertify.alert("Loglama İşleminde Hata Oluştu.")
                             }
                         });
+                       
                     }
                     else
                     {

@@ -1,4 +1,4 @@
-function RptGunlukEvrakCtrl($scope,$window,db)
+function IptalSatisCtrl($scope,$window,db)
 {   
     let SonSatisSelectedRow = null;
     
@@ -20,84 +20,43 @@ function RptGunlukEvrakCtrl($scope,$window,db)
             {
                 return "rowheight";
             },
-            fields: 
+            fields:     
             [
                 {
+                    name: "SERI",
+                    title: "SERI",
+                    type: "TEXT",
+                    align: "center",
+                    width: 75
+                },
+                {
                     name: "SIRA",
+                    title: "SIRA",
                     type: "number",
                     align: "center",
-                    width: 75
-                },
-                {
-                    name: "KULLANICI",
-                    type: "text",
-                    align: "center",
-                    width: 100
-                },
-                {
-                    name: "SERI",
-                    type: "text",
-                    align: "center",
-                    width: 75
+                    width: 35
                 },
                 {
                     name: "TARIH",
+                    title: "TARIH",
                     type: "number",
                     align: "center",
-                    width: 75
-                },
-                {
-                    name: "SAAT",
-                    type: "number",
-                    align: "center",
-                    width: 75
-                },
-                {
-                    name: "TIPADI",
-                    title: "TİPİ",
-                    type: "text",
-                    align: "center",
-                    width: 100
-                },
-                {
-                    name: "SATIR",
-                    title: "SATIR",
-                    type: "number",
-                    align: "center",
-                    width: 75
+                    width: 50
                 },
                 {
                     name: "TUTAR",
+                    title: "TUTAR",
                     type: "number",
                     align: "center",
-                    width: 75
+                    width: 50
                 },
-                [
-                    { 
-                        itemTemplate: function(_, item) 
-                        {
-                            return $("<button type='submit' class='btn btn-primary btn-block btn-sm'></button>").text("Detay")
-                                .on("click", function() 
-                                {
-                                    $scope.BtnDuzenle();
-                                    //alert(item.Name);
-                                });
-                        },
-                        width: 50
-                    },
-                    { 
-                        itemTemplate: function(_, item) 
-                        {
-                            return $("<button type='submit' class='btn btn-danger btn-block btn-sm'></button>").text("Kilidi Aç")
-                                .on("click", function() 
-                                {
-                                    $scope.BtnKilidiAc();
-                                });
-                        },
-                        width: 50
-                    },
-                ]
-            ],
+                {
+                    name: "SUBE",
+                    title: "SUBE",
+                    type: "number",
+                    align: "center",
+                    width: 50
+                }],
             rowClick: function(args)
             {
                 $scope.SonSatisRowClick(args.itemIndex,args.item);
@@ -123,18 +82,11 @@ function RptGunlukEvrakCtrl($scope,$window,db)
             fields: 
             [
             {
-                name: "TIP",
-                title: "TIP",
-                type: "TEXT",
-                align: "center",
-                width: 75
-            },
-            {
                 name: "SERI",
                 title: "SERI",
                 type: "TEXT",
                 align: "center",
-                width: 35
+                width: 75
             },
             {
                 name: "SIRA",
@@ -144,15 +96,8 @@ function RptGunlukEvrakCtrl($scope,$window,db)
                 width: 35
             },
             {
-                name: "MIKTAR",
-                title: "MIKTAR",
-                type: "number",
-                align: "center",
-                width: 50
-            },
-            {
-                name: "FIYAT",
-                title: "FIYAT",
+                name: "TARIH",
+                title: "TARIH",
                 type: "number",
                 align: "center",
                 width: 50
@@ -165,11 +110,11 @@ function RptGunlukEvrakCtrl($scope,$window,db)
                 width: 50
             },
             {
-                name: "BARKOD",
-                title: "BARKOD",
+                name: "SUBE",
+                title: "SUBE",
                 type: "number",
                 align: "center",
-                width: 100
+                width: 50
             }],
             rowClick: function(args)
             {
@@ -182,7 +127,7 @@ function RptGunlukEvrakCtrl($scope,$window,db)
         InitIslemGrid();
         InitSonSatisDetayGrid();
         
-        $scope.Firma = $window.sessionStorage.getItem('Firma');
+        $scope.Firma = 'NITROGENPOS'
         UserParam = Param[$window.sessionStorage.getItem('User')];
 
         $scope.IlkTarih = moment(new Date()).format("DD.MM.YYYY");
@@ -194,36 +139,26 @@ function RptGunlukEvrakCtrl($scope,$window,db)
         $scope.GenelToplam = 0;
         $scope.Seri = "";
         $scope.Sira = 0;
-        $scope.Kullanici = "Tümü"
 
         $scope.IslemListe = [];
         $scope.SubeListe = [];
 
-        //ŞUBE YÖNETİCİSİNE BAĞLI KULLANICILARI GETİRMEK İÇİN YAPILAN FONKSİYON
-        let TmpObj = [];
-        UserParam.BagliKullanici.toString().split(',').forEach(element => 
-        {
-            TmpObj.push({KULLANICI : element});
-        });
+        // //ŞUBE YÖNETİCİSİNE BAĞLI KULLANICILARI GETİRMEK İÇİN YAPILAN FONKSİYON
+        // let TmpObj = [];
+        // UserParam.BagliKullanici.toString().split(',').forEach(element => 
+        // {
+        //     TmpObj.push({KULLANICI : element});
+        // });
         
-        $scope.KullaniciListe = TmpObj;
-        //FONKSİYON BİTİR
+        // $scope.KullaniciListe = TmpObj;
+        // //FONKSİYON BİTİR
 
-        $scope.SonSatisListeSelectedIndex = 0; 
+      
 
-        db.FillCmbDocInfo($scope.Firma,'CmbDepoGetir',function(data)
-        {
-            $scope.SubeListe = data; 
-            
-            if(UserParam.PosSatis.Sube == 0)
-            {
-                $scope.Sube = data[0].KODU.toString();
-            }
-            else
-            {   
-                $scope.Sube = UserParam.PosSatis.Sube;
-                $scope.SubeLock = true;
-            }
+        db.GetData($scope.Firma,'CmbDepoGetir',['TÜMÜ'],function(data)
+        {  
+            $scope.SubeListe = data;
+            $scope.Sube = "0"
         });
     }
     $scope.BtnDuzenle = function()
@@ -285,25 +220,13 @@ function RptGunlukEvrakCtrl($scope,$window,db)
     {
         var TmpQuery = 
         {
-            db : '{M}.' + $scope.Firma,
-            query:  "SELECT " +
-                    "ROW_NUMBER() OVER (ORDER BY RECID DESC) AS SIRA," +
-                    "MAX(KULLANICI) AS KULLANICI, " +
-                    "MAX(RECID) AS RECID, " +
-                    "MAX(TIP) AS TIP, " +
-                    "CASE WHEN MAX(TIP) = 1 THEN 'SATIŞ' WHEN MAX(TIP) = 2 THEN 'İADE' END AS TIPADI, " +
-                    "SERI AS SERI, " +
-                    "SIRA AS SIRA, " +
-                    "COUNT(SATIRNO) AS SATIR, " +
-                    "CAST(MAX(MIKTAR) AS DECIMAL(10,2)) AS MIKTAR, " +
-                    "CAST(SUM(((MIKTAR * FIYAT) - ISKONTO) * (((dbo.fn_VergiYuzde (KDVPNTR)) /100) + 1 ))as DECIMAL(10,2)) AS TUTAR, " +
-                    "CONVERT(VARCHAR(10), MAX(OTARIH), 108) AS SAAT, " +
-                    "CONVERT(VARCHAR(10), MAX(OTARIH), 104) AS TARIH " +
-                    "FROM TERP_POS_SATIS AS PS WHERE SUBE = @SUBE AND TARIH >= @ILKTARIH AND TARIH <= @SONTARIH AND DURUM IN (1,2) AND ((KULLANICI = @KULLANICI) OR (@KULLANICI = 'Tümü')) " +
-                    "GROUP BY SERI,SIRA,TIP,KULLANICI,RECID ORDER BY RECID DESC " ,
-            param:  ['SUBE','ILKTARIH','SONTARIH','KULLANICI'],
-            type:   ['int','date','date','string|25'],
-            value:  [$scope.Sube,$scope.IlkTarih,$scope.SonTarih,$scope.Kullanici]
+            db :  $scope.Firma,
+            query:  "SELECT REF AS SERI ,REF_NO AS SIRA , CONVERT(varchar,DOC_DATE,104) AS TARIH, SUM(QUANTITY * PRICE)  AS TUTAR ,(SELECT NAME FROM DEPOT WHERE DEPOT.CODE = DEPARTMENT) AS SUBE" + 
+                    " FROM POS_SALES_LOG AS PS WHERE ((DEPARTMENT = @DEPARTMENT) OR (@DEPARTMENT = 0)) AND DOC_DATE >= @ILKTARIH AND DOC_DATE <= @SONTARIH  " +
+                    "GROUP BY REF,REF_NO,DEPARTMENT,DOC_DATE ORDER BY DOC_DATE DESC " ,
+            param:  ['DEPARTMENT','ILKTARIH','SONTARIH'],
+            type:   ['int','date','date'],
+            value:  [$scope.Sube,$scope.IlkTarih,$scope.SonTarih]
         }
         db.GetDataQuery(TmpQuery,function(Data)
         {
