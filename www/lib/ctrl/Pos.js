@@ -1753,7 +1753,7 @@ function Pos($scope,$window,$rootScope,db)
                         FocusYetkiliSifre = false;
                         FocusKasaSifre = true;
                     })
-                },1800000);
+                },2800000);
             }
 
             if($scope.ParamListe.length > 0)
@@ -1827,6 +1827,19 @@ function Pos($scope,$window,$rootScope,db)
                 alertify.alert("Parametre Getirme İşlemi Başarısız Oldu, Lütfen CihazID'nizi Kontrol Edin.")
             }
             $scope.Miktar = 1;
+
+            setTimeout(function()
+            { 
+                db.LCDPrint
+                (
+                    {   
+                        port : $scope.LCDPORT,
+                        blink : 0,
+                        text :  db.PrintText("HOSGELDINIZ",20) + 
+                                db.PrintText(moment(new Date()).format("DD.MM.YYYY"),20)
+                    }
+                );
+            }, 1000);
 
             $scope.Stok = 
             [
@@ -1981,6 +1994,20 @@ function Pos($scope,$window,$rootScope,db)
                         {
                             $scope.Miktar = await db.Scale.Send($scope.SCALEPORT);
 
+                            if($scope.Miktar.includes(".") == true)
+                            {
+                                $scope.Miktar = $scope.Miktar;
+                                if($scope.Miktar.includes("kg") == true)
+                                {
+                                    $scope.Miktar = $scope.Miktar.split("kg").join("");
+                                }
+                            }
+                            else
+                            {
+                                alertify.alert("Lütfen Tartım Alınız");
+                                return;
+                            }
+
                             if($scope.ScaleType == "0")
                             {
                                 if($scope.Miktar.includes("S ") == false)
@@ -1997,7 +2024,7 @@ function Pos($scope,$window,$rootScope,db)
                                     $scope.Miktar = $scope.Miktar.split("S ").join("");
                                 }
                             }
-                            
+                          
                             if($scope.Miktar <= 0)
                             {
                                 if(typeof db.KiloBarkod(pKiloBarkod,$scope.KiloBaslangic,$scope.KiloUzunluk,$scope.KiloFlag).Miktar !='undefined')
@@ -3045,6 +3072,9 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.BtnStokListesi = function()
     {
+        $scope.StokListe = [];
+        $scope.TxtStokAra = "";
+        $("#TblStok").jsGrid({data : $scope.StokListe});
         $("#MdlStokListele").modal("show");
         FocusAraToplam = false;
         FocusBarkod = false;
