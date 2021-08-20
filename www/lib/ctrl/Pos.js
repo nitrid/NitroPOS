@@ -2917,51 +2917,62 @@ function Pos($scope,$window,$rootScope,db)
                 {
                     if($scope.IslemListeSelectedIndex > -1)
                     {
-                        db.ExecuteTag($scope.Firma,'PosSatisSatirIptal',[$scope.SatisList[$scope.IslemListeSelectedIndex].GUID],async function(data)
+                        db.ExecuteTag($scope.Firma,'PosSatisSatirIptalLog',[$scope.SatisList[$scope.IslemListeSelectedIndex].GUID,1],function(data)
                         {
                             if(typeof(data.result.err) == 'undefined')
                             {
-                                if($scope.SatisList.length <= 1)
+                                db.ExecuteTag($scope.Firma,'PosSatisSatirIptal',[$scope.SatisList[$scope.IslemListeSelectedIndex].GUID],async function(data)
                                 {
-                                    db.ExecuteTag($scope.Firma,'PosTahIptal',[$scope.Seri,$scope.Sira,0],function(data)
+                                    if(typeof(data.result.err) == 'undefined')
                                     {
-                                        if(typeof(data.result.err) != 'undefined')
+                                        if($scope.SatisList.length <= 1)
                                         {
-                                            console.log(data.result.err);
+                                            db.ExecuteTag($scope.Firma,'PosTahIptal',[$scope.Seri,$scope.Sira,0],function(data)
+                                            {
+                                                if(typeof(data.result.err) != 'undefined')
+                                                {
+                                                    console.log(data.result.err);
+                                                }
+                                            });
+                                            
+                                            $scope.TxtSatirIptalSifre = "";
+                                            $("#MdlSatirIptalSifre").modal("hide");
+                                            $scope.YeniEvrak();
                                         }
-                                    });
-                                    
-                                    $scope.TxtSatirIptalSifre = "";
-                                    $("#MdlSatirIptalSifre").modal("hide");
-                                    $scope.YeniEvrak();
-                                }
-                                else
-                                {
-                                    //*********** BİRDEN FAZLA MİKTARLI FİYAT GÜNCELLEME İÇİN YAPILDI. */
-                                    let TmpSatisData = await db.GetPromiseTag($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira]);
-                                    $scope.SatisList = TmpSatisData;
-    
-                                    for (let i = 0; i < $scope.SatisList.length; i++) 
-                                    {               
-                                        await FiyatUpdate($scope.SatisList[i]);
-                                    }  
-                                    /***************************************************************** */
-                                    db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(data)
+                                        else
+                                        {
+                                            //*********** BİRDEN FAZLA MİKTARLI FİYAT GÜNCELLEME İÇİN YAPILDI. */
+                                            let TmpSatisData = await db.GetPromiseTag($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira]);
+                                            $scope.SatisList = TmpSatisData;
+            
+                                            for (let i = 0; i < $scope.SatisList.length; i++) 
+                                            {               
+                                                await FiyatUpdate($scope.SatisList[i]);
+                                            }  
+                                            /***************************************************************** */
+                                            db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(data)
+                                            {
+                                                $scope.SatisList = data;
+                                                $("#TblIslem").jsGrid({data : $scope.SatisList});                                    
+                                                DipToplamHesapla();
+                                                $scope.TxtBarkod = ""; 
+                                                $scope.IslemListeRowClick($scope.SatisList.length-1,$scope.SatisList[$scope.SatisList.length-1]);   
+                                            });
+                                            $scope.TxtSatirIptalSifre = "";
+                                            $("#MdlSatirIptalSifre").modal("hide");
+                                        }
+                                    }
+                                    else
                                     {
-                                        $scope.SatisList = data;
-                                        $("#TblIslem").jsGrid({data : $scope.SatisList});                                    
-                                        DipToplamHesapla();
-                                        $scope.TxtBarkod = ""; 
-                                        $scope.IslemListeRowClick($scope.SatisList.length-1,$scope.SatisList[$scope.SatisList.length-1]);   
-                                    });
-                                    $scope.TxtSatirIptalSifre = "";
-                                    $("#MdlSatirIptalSifre").modal("hide");
-                                }
+                                        console.log(data.result.err);
+                                    }                                        
+                                });
                             }
                             else
                             {
                                 console.log(data.result.err);
-                            }                                        
+                                alertify.alert("Loglama İşleminde Hata Oluştu.")
+                            }
                         });
                     }
                     else

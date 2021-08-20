@@ -888,6 +888,36 @@ var QuerySql =
         param: ['GUID'],
         type:  ['string|50']
     },
+    PosSatisSatirIptalLog : 
+    {
+        query: "INSERT INTO POS_SALES_LOG " +
+               "SELECT  " +
+               "GUID AS GUID, " +
+               "CUSER AS CUSER, " +
+               "CDATE AS CDATE, " +
+               "LUSER AS LUSER, " +
+               "LDATE AS LDATE, " +
+               "DEVICE AS DEVICE, " +
+               "DEPARTMENT AS DEPARTMENT, " +
+               "1 AS TYPE, " +
+               "DOC_DATE AS DOC_DATE, " +
+               "REF AS REF, " +
+               "REF_NO AS REFNO, " +
+               "LINE_NO AS LINE_NO, " +
+               "CUSTOMER_CODE AS CUSTOMER_CODE, " +
+               "ITEM_CODE AS ITEM_CODE, " +
+               "BARCODE AS BARCODE, " +
+               "QUANTITY AS QUANTITY, " +
+               "UNIT AS UNIT, " +
+               "PRICE AS PRICE, " +
+               "DISCOUNT AS DISCOUNT, " +
+               "VAT AS VAT, " +
+               "STATUS AS STATUS " +
+               "FROM POS_SALES " +
+               "WHERE GUID = @GUID ", 
+        param: ['GUID'], 
+        type:  ['string|50']
+    },
     PosTahInsert : 
     {
         query : "INSERT INTO [dbo].[POS_PAYMENT] " +
