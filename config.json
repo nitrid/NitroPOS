@@ -1,9 +1,8 @@
 {
-    "server":"172.16.122.250",
+    "server":"192.168.100.12",
     "database":"NITROGENPOS",
     "uid":"nitrogen",
     "pwd":"lp8462+",
     "trustedConnection" : false,
-    "web" : "80",
-    "socket" : "90"
+    "port" : "80"
 }
