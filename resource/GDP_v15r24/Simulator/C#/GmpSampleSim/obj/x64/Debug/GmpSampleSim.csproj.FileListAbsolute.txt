@@ -111,7 +111,6 @@ C:\Projeler\NitroPOS\resource\GDP_v15r24\DLL_DEBUG\Windows\x64\GmpSampleSim.exe.
 C:\Projeler\NitroPOS\resource\GDP_v15r24\DLL_DEBUG\Windows\x64\GmpSampleSim.exe
 C:\Projeler\NitroPOS\resource\GDP_v15r24\DLL_DEBUG\Windows\x64\GmpSampleSim.pdb
 C:\Projeler\NitroPOS\resource\GDP_v15r24\DLL_DEBUG\Windows\x64\en-GB\GmpSampleSim.resources.dll
-C:\Projeler\NitroPOS\resource\GDP_v15r24\Simulator\C#\GmpSampleSim\obj\x64\Debug\GmpSampleSim.csprojAssemblyReference.cache
 C:\Projeler\NitroPOS\resource\GDP_v15r24\Simulator\C#\GmpSampleSim\obj\x64\Debug\GmpSampleSim.BankAppParams.resources
 C:\Projeler\NitroPOS\resource\GDP_v15r24\Simulator\C#\GmpSampleSim\obj\x64\Debug\GmpSampleSim.BankRefundParameters.resources
 C:\Projeler\NitroPOS\resource\GDP_v15r24\Simulator\C#\GmpSampleSim\obj\x64\Debug\GmpSampleSim.CashierForm.resources
@@ -144,3 +143,4 @@ C:\Projeler\NitroPOS\resource\GDP_v15r24\Simulator\C#\GmpSampleSim\obj\x64\Debug
 C:\Projeler\NitroPOS\resource\GDP_v15r24\Simulator\C#\GmpSampleSim\obj\x64\Debug\GmpSampleSim.csproj.CopyComplete
 C:\Projeler\NitroPOS\resource\GDP_v15r24\Simulator\C#\GmpSampleSim\obj\x64\Debug\GmpSampleSim.exe
 C:\Projeler\NitroPOS\resource\GDP_v15r24\Simulator\C#\GmpSampleSim\obj\x64\Debug\GmpSampleSim.pdb
+C:\Projeler\NitroPOS\resource\GDP_v15r24\Simulator\C#\GmpSampleSim\obj\x64\Debug\GmpSampleSim.csproj.AssemblyReference.cache

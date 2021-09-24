@@ -1,9 +1,10 @@
 INSTALL MODULE
 npm install express
-npm install socket.io 
+npm install socket.io@2.3.0
+npm install express-session
 npm install mssql
-npm install msnodesqlv8
 npm install moment
+npm install msnodesqlv8
 npm install node-machine-id
 npm install node-windows
 npm install escpos
@@ -39,4 +40,5 @@ DOCUMENT_TYPE = 1 - ÖDEME
 DOCUMENT_TYPE = 2 - PERSONEL 
 DOCUMENT_TYPE = 3 - AVANS VERME  -- KASAYA PARA VERME
 DOCUMENT_TYPE = 4 - AVANS ALMA   -- KASADAN PARA ALMA
+
 

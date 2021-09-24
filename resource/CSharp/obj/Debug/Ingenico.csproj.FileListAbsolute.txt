@@ -26,8 +26,8 @@ C:\Projeler\NitroPOS\resource\CSharp\bin\Debug\Ingenico.exe.config
 C:\Projeler\NitroPOS\resource\CSharp\bin\Debug\Ingenico.exe
 C:\Projeler\NitroPOS\resource\CSharp\bin\Debug\Ingenico.pdb
 C:\Projeler\NitroPOS\resource\CSharp\bin\Debug\Newtonsoft.Json.dll
-C:\Projeler\NitroPOS\resource\CSharp\obj\Debug\Ingenico.csprojAssemblyReference.cache
 C:\Projeler\NitroPOS\resource\CSharp\obj\Debug\Ingenico.csproj.CoreCompileInputs.cache
 C:\Projeler\NitroPOS\resource\CSharp\obj\Debug\Ingenico.csproj.CopyComplete
 C:\Projeler\NitroPOS\resource\CSharp\obj\Debug\Ingenico.exe
 C:\Projeler\NitroPOS\resource\CSharp\obj\Debug\Ingenico.pdb
+C:\Projeler\NitroPOS\resource\CSharp\obj\Debug\Ingenico.csproj.AssemblyReference.cache

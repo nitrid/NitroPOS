@@ -85,13 +85,32 @@ var Ingenico =
                     LocalEvent({tag:"OPENSAFE",msg:data.toString().trim().split('|')[1]});
                     console.log(data.toString().trim().split('|')[1]);
                 }
+                else if(data.toString().trim().split('|')[0] == "EKUCONTROL")
+                {
+                    LocalEvent({tag:"EKUCONTROL",msg:data.toString().trim().split('|')[1]});
+                    console.log(data.toString().trim().split('|')[1]);
+                }
             });
         }
-        Ingenico.prototype.SendData = function(pData)
+
+        Ingenico.prototype.SendData = function(pData,pCallBack)
         {
-            console.log(JSON.stringify(pData));
             //Terminal.stdin.write('ITEM_SALE|{"SALES":[{"NAME":"ÜLKER 100 GRM","QUANTITY":2,"AMOUNT":450,"TAX":1,"TYPE":0}],"PAYMENT":[{"TYPE":0,"AMOUNT":900}]}\n')
+            
+            console.log(JSON.stringify(pData))
+
             Terminal.stdin.write('ITEM_SALE|' + JSON.stringify(pData) +'\n');
+
+            let m = function(data)
+            {
+                if(data.toString().trim().split('|')[0] == "ITEM_SALE")
+                {
+                    pCallBack({tag:"ITEM_SALE",msg:data.toString().trim().split('|')[1]});
+                    Terminal.stdout.removeListener('data',m);
+                }
+            }
+
+            Terminal.stdout.on('data', m);
         }
         Ingenico.prototype.TicketClose = function()
         {
@@ -121,10 +140,40 @@ var Ingenico =
         {
             Terminal.stdin.write('OPENSAFE' + '\n');
         }
-        Ingenico.prototype.Invoice = function(pData)
+        Ingenico.prototype.EkuControl = function(pCallBack)
+        {
+            Terminal.stdin.write('EKUCONTROL' + '\n');
+
+            let m = function(data)
+            {
+                if(data.toString().trim().split('|')[0] == "EKUCONTROL")
+                {
+                    pCallBack({tag:"EKUCONTROL",msg:data.toString().trim().split('|')[1]});
+                    Terminal.stdout.removeListener('data',m);
+                }
+            }
+
+            Terminal.stdout.on('data', m);
+        }
+        Ingenico.prototype.Invoice = function(pData,pCallBack)
         {
             console.log(JSON.stringify(pData))
             Terminal.stdin.write('INVOICE|' + JSON.stringify(pData) + '\n');
+
+            let m = function(data)
+            {
+                if(data.toString().trim().split('|')[0] == "INVOICE")
+                {
+                    pCallBack({tag:"INVOICE",msg:data.toString().trim().split('|')[1]});
+                    Terminal.stdout.removeListener('data',m);
+                }
+            }
+
+            Terminal.stdout.on('data', m);
+        }
+        Ingenico.prototype.Pairing = function()
+        {
+            Terminal.stdin.write('PAIRING\n');
         }
         //#region "EVENT TRIGGER"        
         function LocalEvent(pData)

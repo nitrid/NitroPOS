@@ -128,11 +128,11 @@
             <!-- End Navbar Toolbar -->
             <!-- Navbar Toolbar Right -->
             <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
-                <!-- <li class="nav-item" style="width: 80px;">
+                <li class="nav-item" style="width: 80px;" ng-click = "BtnRefresh(0)">
                     <a class="nav-link">
-                    <i class="icon wb-signal" aria-hidden="true"><div class="row" style="font-family: 'Roboto', sans-serif;">Online</div></i>                    
+                    <i class="icon wb-refresh" aria-hidden="true"><div class="row" style="font-family: 'Roboto', sans-serif;"></div></i>                    
                     </a>
-                </li> -->
+                </li>
                 <li class="nav-item" style="width: 80px;" ng-click = "BtnEdit()">
                     <a class="nav-link">
                     <i ng-class="Class.BtnEdit" aria-hidden="true"><div class="row" style="font-family: 'Roboto', sans-serif;"></div></i>                    
@@ -411,7 +411,7 @@
                                         <button class="form-group btn btn-warning btn-block my-1" style="height:70px; font-size: 16px;" ng-click = "BtnSonKopya(0)">Son Kopya</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px; font-size: 16px;"></button>
+                                        <button class="form-group btn btn-warning btn-block my-1" style="height:70px; font-size: 16px;" ng-click = "BtnEkuControl(0)">Ekü Kontrol</button>
                                     </div>  
                                 </div>
                                 <div class="row">
@@ -2702,6 +2702,84 @@
                 </div>
             </div>
         </div>
+        <!--Sayfa Yenile Yetkili Giriş Modal -->
+        <div class="modal fade" id="MdlRefreshSifre" aria-hidden="true" aria-labelledby="examplePositionCenter" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple modal-primary modal-center modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">X</span>
+                        </button>
+                        <h4 class="modal-title">Şifre Giriş</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group my-5">
+                                            <div class="input-group">
+                                                <input type="password" class="form-control h-50" id="TxtRefreshSifre" ng-model="TxtRefreshSifre" 
+                                                style="font-size: 20pt;font-weight: bold; border-width: 3px;border-color: #428bca;" ng-click="TxtRefreshSifrePress($event)">
+                                            </div>
+                                        </div>
+                                    </div>                                                     
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row py-1">
+                            <div class="col-4">
+                                <button type="text" class="form-control btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('7')">7</button>
+                            </div>
+                            <div class="col-4">
+                                <button type="text" class="form-control btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('8')">8</button>
+                            </div>
+                            <div class="col-4">
+                                <button type="text" class="form-control btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('9')">9</button>
+                            </div>
+                        </div>
+                        <div class="row py-1">
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('4')">4</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('5')">5</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('6')">6</button>
+                            </div>
+                        </div>
+                        <div class="row py-1">
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('1')">1</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('2')">2</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('3')">3</button>
+                            </div>
+                        </div>
+                        <div class="row py-1">
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('0')">0</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('.')">.</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg  btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnSilClick()"><i class="fas fa-backspace fa-lg" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row py-1">
+                            <div class="col-12">
+                                <button type="text" class="form-control btn-danger btn btn-block font-size-15" style="height:60px; font-size: 18px;" ng-click="BtnRefresh(1)">Giriş</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- Sayfa Bitir -->
     
@@ -2721,6 +2799,7 @@
     <script src="theme/global/vendor/asscrollbar/jquery-asScrollbar.js"></script>
     <script src="theme/global/vendor/asscrollable/jquery-asScrollable.js"></script>
     <script src="theme/global/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
+    <script src="theme/global/sweetalert.min.js"></script>
     
     <!-- Plugins -->
     <script src="theme/global/vendor/switchery/switchery.js"></script>
