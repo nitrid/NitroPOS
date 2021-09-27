@@ -1,5 +1,6 @@
 function Login ($scope,$rootScope,$window,db)
 {
+    let FocusObject;
     localStorage.mode = true;
     $scope.server_adress = localStorage.host;
     $scope.socket_port = localStorage.socketport;
@@ -19,6 +20,15 @@ function Login ($scope,$rootScope,$window,db)
     }
     $scope.Init = function()
     {
+        if(navigator.userAgent.toLowerCase().search("iphone") > -1 || navigator.userAgent.toLowerCase().search("ipad") > -1 || navigator.userAgent.toLowerCase().search("android") > -1)
+        {
+            $scope.Mobile = true;
+        }
+        else
+        {
+            $scope.Mobile = false;
+        }
+
         $scope.Kullanici = "";
         $scope.Password = "";
         $scope.Firma = "NITROGENPOS";
@@ -73,8 +83,11 @@ function Login ($scope,$rootScope,$window,db)
     {
         if(typeof(localStorage.device) != 'undefined')
         {
+            $scope.Kullanici = document.getElementById('Kullanici').value;
+            $scope.Password = document.getElementById('Password').value;
+
             for(i = 0;i < $scope.KullaniciListe.length;i++)
-            {               
+            {            
                 if($scope.KullaniciListe[i].CODE == $scope.Kullanici && $scope.KullaniciListe[i].PASSWORD == $scope.Password)
                 {
                     console.log("Kullanıcı adı ve şifre doğru");
@@ -121,4 +134,20 @@ function Login ($scope,$rootScope,$window,db)
             $scope.$apply();            
         });
     }
+    $scope.BtnTusClick = function(Key)
+    {
+        FocusObject.value = FocusObject.value + Key
+    }
+    $scope.BtnSilClick = function()
+    {   
+        FocusObject.value = FocusObject.value.toString().substring(0,FocusObject.value.length-1);
+    }
+    document.getElementById('Kullanici').addEventListener('focus', (event) => 
+    {
+        FocusObject = document.getElementById('Kullanici');
+    });
+    document.getElementById('Password').addEventListener('focus', (event) => 
+    {
+        FocusObject = document.getElementById('Password');
+    });
 }

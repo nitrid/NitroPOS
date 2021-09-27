@@ -5087,7 +5087,6 @@ namespace GmpSampleSim
                 Len += GMPSmartDLL.gmpReadTLVlen_HL(ref msgBufferLen, sendBuffer, Len);
                 Buffer.BlockCopy(sendBuffer, Len, msgBuffer, 0, msgBufferLen);
                 Len += msgBufferLen;
-                MessageBox.Show(Len.ToString());
                 // Preceed received message
                 switch (msgCommandType)
                 {
@@ -5099,7 +5098,7 @@ namespace GmpSampleSim
                         retcode = Json_GMPSmartDLL.FP3_MultipleCommand(CurrentInterface, ref TransactionHandle, ref stReturnCodes, ref numberOfreturnCodes, msgBuffer, msgBufferLen, ref m_stTicket, 1000 * 100);
 
                         ACTIVE_TRX_HANDLE = TransactionHandle;
-
+                         
                         break;
                     case Defines.GMP3_EXT_DEVICE_GET_DATA_REQ:
                     case Defines.GMP3_EXT_DEVICE_GET_DATA_REQ_E:
@@ -5113,7 +5112,7 @@ namespace GmpSampleSim
             if (retcode == Defines.TRAN_RESULT_OK)
             {
                 //int indexOnListCtrl = 0;
-                numberOfreturnCodes = (ushort)m_listBatchCommand.Items.Count;
+                numberOfreturnCodes = (ushort)stReturnCodes.Length;
 
                 for (int t = 0; t < numberOfreturnCodes; t++)
                 {

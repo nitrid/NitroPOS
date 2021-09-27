@@ -18,7 +18,7 @@ namespace Ingenico
         static Dictionary<UInt32, byte[]> TransactionUniqueIdList = new Dictionary<UInt32, byte[]>();
         static byte[] TsmSign = null;
         static List<CommandItem> CommandList = new List<CommandItem>();
-
+        static int ProcStatus = 0;
         static void Main(string[] args)
         {
             while (true) // Loop indefinitely
@@ -34,21 +34,9 @@ namespace Ingenico
                 else if (tag == "PAIRING")
                 {
                     line = StartPairing();
-                    //OpenHandle();
-
-                    //if (ProcessBatchCommand())
-                    //{
-                    //    Console.WriteLine(ActiveTransactionHandle.ToString());
-                    //}
-                    //else
-                    //{
-                    //    Console.WriteLine("ITEM_SALE|FAULT");
-                    //}
-
-                    //ClearProcessBatchCommand();
                     Console.WriteLine(line);
                 }
-                else if (tag == "ITEM_SALE2")
+                else if (tag == "ITEM_SALE")
                 {
                     if (line.Split('|').Length > 0)
                     {
@@ -88,57 +76,10 @@ namespace Ingenico
                         }
                         else
                         {
-                            Console.WriteLine("ITEM_SALE|FAULT");
-                        }
-
-                        ClearProcessBatchCommand();
-                    }
-                }
-                else if (tag == "ITEM_SALE")
-                {
-                    if (line.Split('|').Length > 0)
-                    {
-                        OpenHandle();
-                        TicketHeader();
-                        OptionFlag();
-                        string Callback = "";
-
-
-                        JObject TmpMaster = JObject.Parse(line.Split('|')[1]);
-                        foreach (JProperty MasterItem in TmpMaster.Properties())
-                        {
-                            if (MasterItem.Name == "SALES")
+                            if(ProcStatus != Defines.TRAN_RESULT_OK)
                             {
-                                JArray TmpSales = JArray.Parse(MasterItem.Value.ToString());
-                                foreach (JObject SalesItem in TmpSales.Children<JObject>())
-                                {
-                                    AddItem(SalesItem.Property("NAME").Value.ToString(), (UInt32)SalesItem.Property("QUANTITY").Value, (uint)SalesItem.Property("AMOUNT").Value, (int)SalesItem.Property("TAX").Value, (int)SalesItem.Property("TYPE").Value);
-                                }
+                                Console.WriteLine("ITEM_SALE|FAULT:" + ProcStatus.ToString());
                             }
-                            //else if (MasterItem.Name == "PAYMENT")
-                            //{
-                            //    JArray TmpPayment = JArray.Parse(MasterItem.Value.ToString());
-                            //    foreach (JObject PaymentItem in TmpPayment.Children<JObject>())
-                            //    {
-                            //        CashPayment((int)PaymentItem.Property("TYPE").Value, (UInt32)PaymentItem.Property("AMOUNT").Value);
-                            //    }
-                            //}
-                        }
-
-                        Console.WriteLine(Callback);
-
-                        //TotalPrint();
-                        //MFPrintBefore();
-                        //MFPrint();
-                        CloseHandle();
-
-                        if (ProcessBatchCommand())
-                        {
-                            Console.WriteLine("ITEM_SALE|SUCCES");
-                        }
-                        else
-                        {
-                            Console.WriteLine("ITEM_SALE|FAULT");
                         }
 
                         ClearProcessBatchCommand();
@@ -186,7 +127,7 @@ namespace Ingenico
                         Console.WriteLine(line);
                     }
                 }
-                else if (tag == "INVOICE") 
+                else if (tag == "INVOICE")
                 {
                     if (line.Split('|').Length > 0)
                     {
@@ -206,13 +147,13 @@ namespace Ingenico
                         Console.WriteLine(line);
                     }
                 }
-                else if (tag == "OPENSAFE")
+                else if (tag == "EKUCONTROL")
                 {
-                    line = OpenSafe();
+                    line = EkuControl();
                     Console.WriteLine(line);
                 }
                 if (tag == "exit") // Check string
-                { 
+                {
                     break;
                 }
             }
@@ -269,7 +210,7 @@ namespace Ingenico
                     goto start_again;
                 }
                 else if (retcode == Defines.TRAN_RESULT_OK)
-                retcode = GMPSmartDLL.FP3_TicketHeader(CurrentInterface, GetTransactionHandle(CurrentInterface), ticketType, Defines.TIMEOUT_DEFAULT);
+                    retcode = GMPSmartDLL.FP3_TicketHeader(CurrentInterface, GetTransactionHandle(CurrentInterface), ticketType, Defines.TIMEOUT_DEFAULT);
 
                 if (retcode == Defines.TRAN_RESULT_OK)
                 {
@@ -440,7 +381,7 @@ namespace Ingenico
             UInt32 retcode = Defines.TRAN_RESULT_OK;
             byte[] sendBuffer = new byte[1024 * 16];
             UInt16 sendBufferLen = 0;
-            
+
             ST_MULTIPLE_RETURN_CODE[] stReturnCodes = new ST_MULTIPLE_RETURN_CODE[1024]; // will return return codes of each subcommand
             ST_TICKET m_stTicket = new ST_TICKET();
             UInt32 msgCommandType = 0;
@@ -455,14 +396,14 @@ namespace Ingenico
 
             UInt16 Len = 0;
             UInt64 TransactionHandle = 0;
-            
+
             while ((Len < sendBufferLen) && (retcode == Defines.TRAN_RESULT_OK))
             {
                 Len += GMPSmartDLL.gmpReadTLVtag(ref msgCommandType, sendBuffer, Len);
                 Len += GMPSmartDLL.gmpReadTLVlen_HL(ref msgBufferLen, sendBuffer, Len);
                 Buffer.BlockCopy(sendBuffer, Len, msgBuffer, 0, msgBufferLen);
                 Len += msgBufferLen;
-                
+
                 // Preceed received message
                 switch (msgCommandType)
                 {
@@ -484,13 +425,13 @@ namespace Ingenico
                         break;
                 }
             }
-            
+
             if (retcode == Defines.TRAN_RESULT_OK)
             {
                 try
                 {
                     //int indexOnListCtrl = 0;
-                    numberOfreturnCodes = (ushort)CommandList.Count;
+                    numberOfreturnCodes = (ushort)stReturnCodes.Length;
 
                     for (int t = 0; t < numberOfreturnCodes; t++)
                     {
@@ -507,21 +448,29 @@ namespace Ingenico
                                 continue;
 
                             GMPSmartDLL.GetErrorMessage(stReturnCodes[t].retcode, returnCodeString);
+
+                            if(stReturnCodes[t].retcode != Defines.TRAN_RESULT_OK)
+                            {
+                                ProcStatus = (int)stReturnCodes[t].retcode;
+                                return false;
+                            }
                         }
 
                         CommandList[t].Buffer = GMP_Tools.SetEncoding(returnCodeString);
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
-                    //return false;
-                }                
+                    ProcStatus = -1;
+                    return false;
+                }
             }
             else
             {
+                ProcStatus = (int)retcode;
                 return false;
             }
-
+            ProcStatus = (int)Defines.TRAN_RESULT_OK;
             return true;
         }
         private static void ClearProcessBatchCommand()
@@ -545,7 +494,6 @@ namespace Ingenico
             byteArrLen = ba.Length;
             Array.Copy(ba, 0, Out_byteArr, 0, ba.Length);
         }
-     
 
         static string Ping()
         {
@@ -573,7 +521,7 @@ namespace Ingenico
             UInt32 RetCode;
 
             RetCode = Json_GMPSmartDLL.FP3_Echo(CurrentInterface, ref stEcho, Defines.TIMEOUT_ECHO);
-            
+
             if (RetCode != Defines.TRAN_RESULT_OK)
             {
                 return "PAIRING|FAULT";
@@ -584,17 +532,17 @@ namespace Ingenico
             pairing.szExternalDeviceSerialNumber = "12344567";
             pairing.szEcrSerialNumber = "JHWE20000079";
             pairing.szProcOrderNumber = "000001";
-            pairing.szProcDate = DateTime.Now.Day.ToString().PadLeft(2,'0') + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Year.ToString().Substring(2,2);
+            pairing.szProcDate = DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Year.ToString().Substring(2, 2);
             pairing.szProcTime = DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0');
-            
+
             RetCode = Json_GMPSmartDLL.FP3_StartPairingInit(CurrentInterface, ref pairing, ref pairingResp);
 
             if (RetCode != Defines.TRAN_RESULT_OK)
             {
-                return "PAIRING|FAULT";
+                return "PAIRING|FAULT:" + RetCode.ToString();
             }
 
-            byte[] UniqueId = new byte[24] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };            
+            byte[] UniqueId = new byte[24] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
             RetCode = GMPSmartDLL.FP3_Start(CurrentInterface, ref TranHandle, 0, UniqueId, UniqueId.Length, null, 0, null, 0, Defines.TIMEOUT_DEFAULT);
             AddTrxHandles(TranHandle);
@@ -665,7 +613,7 @@ namespace Ingenico
 
             return "OPTION FLAG";
         }
-        static string AddItem(string pName, UInt32 pQuantity,uint pAmount,int pTax, int pType)
+        static string AddItem(string pName, UInt32 pQuantity, uint pAmount, int pTax, int pType)
         {
             UInt16 currency = 949;
             UInt32 itemCount = pQuantity;
@@ -682,7 +630,7 @@ namespace Ingenico
             {
                 precition = 3;
             }
-            
+
             stItem.type = Defines.ITEM_TYPE_DEPARTMENT;
             stItem.subType = 0;
             stItem.deptIndex = (byte)pTax;
@@ -694,7 +642,7 @@ namespace Ingenico
             stItem.countPrecition = (byte)precition;
             stItem.name = pName;
             stItem.barcode = "";
-            
+
             if (PromotionModel.Instance.Amount > 0)
             {
                 stItem.promotion.amount = (int)PromotionModel.Instance.Amount;
@@ -715,9 +663,6 @@ namespace Ingenico
         {
             UInt16 currencyOfPayment = (UInt16)ECurrency.CURRENCY_TL;
             ST_PAYMENT_REQUEST[] stPaymentRequest = new ST_PAYMENT_REQUEST[1];
-            ST_TICKET m_stTicket = new ST_TICKET();
-            string display = "";
-            UInt32 retcode;
 
             for (int i = 0; i < stPaymentRequest.Length; i++)
             {
@@ -739,11 +684,8 @@ namespace Ingenico
                 stPaymentRequest[0].numberOfinstallments = 0;
                 stPaymentRequest[0].rawData = Encoding.Default.GetBytes("RawData from external application for the payment application");
                 stPaymentRequest[0].rawDataLen = (ushort)stPaymentRequest[0].rawData.Length;
-
-                retcode = Json_GMPSmartDLL.FP3_Payment(CurrentInterface, GetTransactionHandle(CurrentInterface), ref stPaymentRequest[0], ref m_stTicket, 30000);
-                if(retcode !=0)
-                display = String.Format(Environment.NewLine + "REMAIN : {0}", formatAmount(m_stTicket.KasaPaymentAmount != 0 ? m_stTicket.KasaPaymentAmount - m_stTicket.stPayment[0].payAmount : pAmount - m_stTicket.TotalReceiptPayment, ECurrency.CURRENCY_TL));
             }
+
 
             stPaymentRequest[0].payAmount = pAmount;
             stPaymentRequest[0].payAmountCurrencyCode = currencyOfPayment;
@@ -751,10 +693,9 @@ namespace Ingenico
             byte[] buffer = new byte[1024];
             int bufferLen = 0;
 
-
             bufferLen = Json_GMPSmartDLL.prepare_Payment(buffer, buffer.Length, ref stPaymentRequest[0]);
             AddIntoCommandBatch("prepare_Payment", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen);
-            return display;
+            return "PAYMENT";
         }
         static string TotalPrint()
         {
@@ -813,9 +754,9 @@ namespace Ingenico
             UInt32 RetCode = 0;
 
             ST_FUNCTION_PARAMETERS stFunctionParameters = new ST_FUNCTION_PARAMETERS();
-            stFunctionParameters.Password.supervisor = pPassword; 
+            stFunctionParameters.Password.supervisor = pPassword;
             RetCode = Json_GMPSmartDLL.FP3_FunctionReports(CurrentInterface, 2, ref stFunctionParameters, 120 * 1000);
-          
+
             if (RetCode != 0)
             {
                 return "ZREPORT|ERROR";
@@ -885,7 +826,7 @@ namespace Ingenico
             stPaymentRequest[0].payAmount = pAmount;
             stPaymentRequest[0].payAmountCurrencyCode = currencyOfPayment;
 
-             m_stTicket = new ST_TICKET();
+            m_stTicket = new ST_TICKET();
             RetCode = Json_GMPSmartDLL.FP3_Payment(CurrentInterface, GetTransactionHandle(CurrentInterface), ref stPaymentRequest[0], ref m_stTicket, 30000);
 
             RetCode = GMPSmartDLL.FP3_PrintTotalsAndPayments(CurrentInterface, GetTransactionHandle(CurrentInterface), Defines.TIMEOUT_DEFAULT);
@@ -945,7 +886,7 @@ namespace Ingenico
             for (int i = 0; i < stPaymentRequest.Length; i++)
             {
                 stPaymentRequest[i] = new ST_PAYMENT_REQUEST();
-            } 
+            }
 
 
             stPaymentRequest[0].typeOfPayment = (uint)EPaymentTypes.PAYMENT_CASH_TL;
@@ -955,12 +896,12 @@ namespace Ingenico
 
             ST_TICKET m_stTicket = new ST_TICKET();
             RetCode = Json_GMPSmartDLL.FP3_Payment(CurrentInterface, GetTransactionHandle(CurrentInterface), ref stPaymentRequest[0], ref m_stTicket, 30000);
-            
-            if(RetCode == 2022)
+
+            if (RetCode == 2022)
             {
                 CaseOutTotalPrint(0);
             }
-            
+
             RetCode = GMPSmartDLL.FP3_PrintTotalsAndPayments(CurrentInterface, GetTransactionHandle(CurrentInterface), Defines.TIMEOUT_DEFAULT);
 
             ST_USER_MESSAGE[] stUserMessage = new ST_USER_MESSAGE[1];
@@ -985,7 +926,7 @@ namespace Ingenico
 
             return "TPAYMENT";
         }
-        static string Invoice(string pNo,string pVkn,UInt32 pAmount, int pType)
+        static string Invoice(string pNo, string pVkn, UInt32 pAmount, int pType)
         {
             OpenHandle();
             //TicketHeader();
@@ -1051,29 +992,20 @@ namespace Ingenico
 
             return "OPENSAFE|SUCCESS";
         }
-        static string formatAmount(uint amount, ECurrency currency)
+        static string EkuControl()
         {
-            string amountStr = String.Format("{0}.{1:00}", amount / 100, amount % 100);
+            UInt32 RetCode = 0;
 
-            switch (currency)
+            ST_EKU_MODULE_INFO pstEkuModuleInfo = new ST_EKU_MODULE_INFO();
+
+            RetCode = Json_GMPSmartDLL.FP3_FunctionEkuReadInfo(CurrentInterface, (ushort)EInfo.TLV_FUNC_INFO_EKU, ref pstEkuModuleInfo, Defines.TIMEOUT_DEFAULT);
+
+            if (RetCode != 0)
             {
-                case ECurrency.CURRENCY_NONE:
-                    break;
-                case ECurrency.CURRENCY_DOLAR:
-                    amountStr += " $";
-                    break;
-                case ECurrency.CURRENCY_EU:
-                    amountStr += " €";
-                    break;
-                case ECurrency.CURRENCY_TL:
-                    amountStr += " TL";
-                    break;
-                default:
-                    amountStr += " ?";
-                    break;
+                return "EKUCONTROL|ERROR";
             }
 
-            return amountStr;
+            return "EKUCONTROL|SUCCESS:[{'DATA USED':" + pstEkuModuleInfo.Eku.DataUsedArea.ToString() + "},{'DATA FREE':" + pstEkuModuleInfo.Eku.DataFreeArea.ToString() + "}]";
         }
     }
 }

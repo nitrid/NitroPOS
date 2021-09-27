@@ -912,7 +912,8 @@ var QuerySql =
                "PRICE AS PRICE, " +
                "DISCOUNT AS DISCOUNT, " +
                "VAT AS VAT, " +
-               "STATUS AS STATUS " +
+               "STATUS AS STATUS, " +
+               "GETDATE() AS DATE " +
                "FROM POS_SALES " +
                "WHERE GUID = @GUID ", 
         param: ['GUID'], 

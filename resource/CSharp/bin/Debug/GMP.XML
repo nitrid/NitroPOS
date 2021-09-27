@@ -37,7 +37,7 @@
 		<Parity>0</Parity>
 		<StopBit>0</StopBit>
 		<IsTcpConnection>TRUE</IsTcpConnection>
-		<IP>192.168.99.97</IP>
+		<IP>192.168.99.57</IP>
 		<Port>7500</Port>
 		<LOG>
 			<LogPrintToFileOpen>TRUE</LogPrintToFileOpen>
