@@ -43,7 +43,7 @@ function Login ($scope,$rootScope,$window,db)
             $scope.HostSettingSave();
         }
         db.Connection(function(data)
-        {     
+        {   
             if(data == true)
             {
                 db.GetData($scope.Firma,'KullaniciGetir',[''],function(data)
