@@ -2345,6 +2345,7 @@ function Pos($scope,$window,$rootScope,db)
                                                         swal("Uyarı", pData.msg.split("FAULT:")[1] + "\n" + "İşlem Reddedildi.." ,icon="warning");
                                                         $scope.BtnTahBelgeIptal();
                                                         $("#MdlAraToplam").modal("hide");
+                                                        $("#MdlKartOdeme").modal("hide");
                                                         $("#MdlIngenicoEslesme").modal("show");
                                                         $scope.TxtOkcMesaj = "Ödeme İşlemi Başarısız.";
                                                         $scope.BtnTxtOkcEslesme = "İptal";
@@ -2357,6 +2358,7 @@ function Pos($scope,$window,$rootScope,db)
                                                 db.Ingenico.TicketClose();
                                                 $scope.BtnTahBelgeIptal();
                                                 $("#MdlAraToplam").modal("hide");
+                                                $("#MdlKartOdeme").modal("hide");
                                                 $("#MdlIngenicoEslesme").modal("show");
                                                 $scope.TxtOkcMesaj = "Ödeme İşlemi Başarısız.";
                                                 $scope.BtnTxtOkcEslesme = "İptal";
@@ -2416,6 +2418,7 @@ function Pos($scope,$window,$rootScope,db)
                                                         swal("Uyarı", pData.msg.split("FAULT:")[1] + "\n" + "İşlem Reddedildi.." ,icon="warning");
                                                         $scope.BtnTahBelgeIptal();
                                                         $("#MdlAraToplam").modal("hide");
+                                                        $("#MdlKartOdeme").modal("hide");
                                                         $("#MdlIngenicoEslesme").modal("show");
                                                         $scope.TxtOkcMesaj = "Ödeme İşlemi Başarısız.";
                                                         $scope.BtnTxtOkcEslesme = "İptal";
@@ -2428,6 +2431,7 @@ function Pos($scope,$window,$rootScope,db)
                                                 db.Ingenico.TicketClose();
                                                 $scope.BtnTahBelgeIptal();
                                                 $("#MdlAraToplam").modal("hide");
+                                                $("#MdlKartOdeme").modal("hide");
                                                 $("#MdlIngenicoEslesme").modal("show");
                                                 $scope.TxtOkcMesaj = "Ödeme İşlemi Başarısız.";
                                                 $scope.BtnTxtOkcEslesme = "İptal";
@@ -3205,7 +3209,6 @@ function Pos($scope,$window,$rootScope,db)
             FocusMusteri = false;
             FocusStok = false;
             FocusKartOdeme = false;
-
             FirstKey = false;
 
             //EKRANA GİRDİĞİNDE OTOMATİK NAKİT SEÇİLİ GELSİN
@@ -3476,9 +3479,9 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.BtnKartOdemeGonder = function()
     {
-        $("#MdlKartOdeme").modal("hide");
         $scope.TahTip = 1;
-        $scope.PosTahInsert();     
+        $scope.PosTahInsert(); 
+        //$("#MdlKartOdeme").modal("hide");    
     }    
     $scope.BtnTahOnay = function()
     {
