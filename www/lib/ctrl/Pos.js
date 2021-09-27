@@ -2006,50 +2006,49 @@ function Pos($scope,$window,$rootScope,db)
                     {
                         if(TmpKiloFlag[i] == pBarkod.substring(0,2))
                         {
-                            $scope.Miktar = await db.Scale.Send($scope.SCALEPORT);
+                            if(typeof db.KiloBarkod(pKiloBarkod,$scope.KiloBaslangic,$scope.KiloUzunluk,$scope.KiloFlag).Miktar !='undefined')
+                            {
+                                $scope.Miktar = db.KiloBarkod(pKiloBarkod,$scope.KiloBaslangic,$scope.KiloUzunluk,$scope.KiloFlag).Miktar;
 
-                            if($scope.Miktar.includes(".") == true)
-                            {
-                                $scope.Miktar = $scope.Miktar;
-                                if($scope.Miktar.includes("kg") == true)
+                                if($scope.Miktar == 0)
                                 {
-                                    $scope.Miktar = $scope.Miktar.split("kg").join("");
-                                }
-                            }
-                            else
-                            {
-                                alertify.alert("Lütfen Tartım Alınız");
-                                return;
-                            }
+                                    $scope.Miktar = await db.Scale.Send($scope.SCALEPORT);
 
-                            if($scope.ScaleType == "0")
-                            {
-                                if($scope.Miktar.includes("S ") == false)
-                                {
-                                    alertify.alert("Tartım başarısız lütfen tekrar tartım alınız.")
-                                    return;
-                                }
-                                if($scope.Miktar.includes("kg") == true)
-                                {
-                                    $scope.Miktar = $scope.Miktar.split("kg").join("");
-                                }
-                                if($scope.Miktar.includes("S ") == true)
-                                {
-                                    $scope.Miktar = $scope.Miktar.split("S ").join("");
-                                }
-                            }
-                          
-                            if($scope.Miktar <= 0)
-                            {
-                                if(typeof db.KiloBarkod(pKiloBarkod,$scope.KiloBaslangic,$scope.KiloUzunluk,$scope.KiloFlag).Miktar !='undefined')
-                                {
-                                    $scope.Miktar = db.KiloBarkod(pKiloBarkod,$scope.KiloBaslangic,$scope.KiloUzunluk,$scope.KiloFlag).Miktar;
-
-                                    if($scope.Miktar == 0)
+                                    if($scope.Miktar.includes(".") == true)
                                     {
-                                        alertify.alert("Lütfen Tartım Alınız.");
+                                        $scope.Miktar = $scope.Miktar;
+                                        if($scope.Miktar.includes("kg") == true)
+                                        {
+                                            $scope.Miktar = $scope.Miktar.split("kg").join("");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        alertify.alert("Lütfen Tartım Alınız");
+                                        return;
+                                    }
+                                    if($scope.Miktar <= 0)
+                                    {
+                                        alertify.alert("Lütfen Tartım Alınız");
                                         $scope.TxtBarkod = "";
                                         return;
+                                    }
+
+                                    if($scope.ScaleType == "0")
+                                    {
+                                        if($scope.Miktar.includes("S ") == false)
+                                        {
+                                            alertify.alert("Tartım başarısız lütfen tekrar tartım alınız.")
+                                            return;
+                                        }
+                                        if($scope.Miktar.includes("kg") == true)
+                                        {
+                                            $scope.Miktar = $scope.Miktar.split("kg").join("");
+                                        }
+                                        if($scope.Miktar.includes("S ") == true)
+                                        {
+                                            $scope.Miktar = $scope.Miktar.split("S ").join("");
+                                        }
                                     }
                                 }
                             }
