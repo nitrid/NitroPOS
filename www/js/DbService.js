@@ -817,13 +817,13 @@ angular.module('app.db', []).service('db',function($rootScope)
         TmpLine = 
         {
             data: _PrintText("Alınan Para",17) + 
-                  _PrintText(parseFloat(_SumColumn(pSData,"CHANGE")).toFixed(2) + parseFloat(_SumColumn(pSData,"AMOUNT")).toFixed(2) + " TL",15,"Start")
+                  _PrintText(parseFloat(_SumColumn(pTData,"CHANGE")).toFixed(2) + parseFloat(_SumColumn(pTData,"AMOUNT")).toFixed(2) + " TL",15,"Start")
         }
         TmpData.push(TmpLine);
         TmpLine = 
         {
             data: _PrintText("Para Üstü",17) + 
-                  _PrintText(parseFloat(_SumColumn(pSData,"CHANGE")).toFixed(2) + " TL",15,"Start")
+                  _PrintText(parseFloat(_SumColumn(pTData,"CHANGE")).toFixed(2) + " TL",15,"Start")
         }
         TmpData.push(TmpLine);
         TmpLine = 
