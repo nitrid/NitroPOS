@@ -30,6 +30,7 @@ function Pos($scope,$window,$rootScope,db)
     let FocusSonKopya = false;
     let FocusIade = false;
     let FocusCekmeceAc = false;
+    let FocusRefresh = false;
 
     $('#MdlAraToplam').on('hide.bs.modal', function () 
     {
@@ -437,6 +438,27 @@ function Pos($scope,$window,$rootScope,db)
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
+    });
+    $('#MdlRefresh').on('hide.bs.modal', function () 
+    {
+        FocusBarkod = true;
+        FocusAraToplam = false;
+        FocusMusteri = false;
+        FocusStok = false;
+        FocusMiktarGuncelle = false;
+        FocusFiyatGuncelle = false;
+        FocusAvans = false;
+        FocusKartOdeme = false;
+        FocusYetkiliSifre = false;
+        FocusKasaSifre = false;
+        FocusXSifre = false;
+        FocusZSifre = false;
+        FocusBelgeIptal = false;
+        FocusSatirIptal = false;
+        FocusSonKopya = false;
+        FocusIade = false;
+        FocusCekmeceAc = false;
+        FocusRefresh = false;
     });
 
     if(typeof require != 'undefined')

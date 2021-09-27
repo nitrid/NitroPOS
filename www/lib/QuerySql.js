@@ -878,7 +878,7 @@ var QuerySql =
     },
     PosSatisBelgeIptalLog : 
     {
-        query: "INSERT INTO POS_SALES_LOG SELECT * FROM POS_SALES WHERE REF = @REF AND REF_NO = @REF_NO AND TYPE = @TYPE",
+        query: "INSERT INTO POS_SALES_LOG SELECT *,GETDATE() AS DATE FROM POS_SALES WHERE REF = @REF AND REF_NO = @REF_NO AND TYPE = @TYPE",
         param: ['REF','REF_NO','TYPE'],
         type:  ['string|25','int','int']
     },
