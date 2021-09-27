@@ -1547,6 +1547,7 @@ function Pos($scope,$window,$rootScope,db)
                     setTimeout(()=>
                     {
                         $('#MdlAraToplam').modal('hide');
+                        $('#MdlKartOdeme').modal('hide');
                         $scope.YeniEvrak();
                         $scope.TxtBarkod = "";
                         $scope.TahPanelKontrol = false;

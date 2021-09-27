@@ -152,6 +152,11 @@ namespace Ingenico
                     line = EkuControl();
                     Console.WriteLine(line);
                 }
+                else if (tag == "OPENSAFE")
+                {
+                    line = OpenSafe();
+                    Console.WriteLine(line);
+                }
                 if (tag == "exit") // Check string
                 {
                     break;
