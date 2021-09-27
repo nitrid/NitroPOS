@@ -814,11 +814,16 @@ angular.module('app.db', []).service('db',function($rootScope)
         TmpData.push({font:"b",style:"bu",align:"lt",data:_PrintText(" ",42)});
 
         //DİP TOPLAM
+
+        let a = parseFloat(_SumColumn(pTData,"CHANGE")).toFixed(2);
+        let b = parseFloat(_SumColumn(pTData,"AMOUNT")).toFixed(2);
+
         TmpLine = 
         {
             data: _PrintText("Alınan Para",17) + 
-                  _PrintText(parseFloat(_SumColumn(pTData,"CHANGE")).toFixed(2) + parseFloat(_SumColumn(pTData,"AMOUNT")).toFixed(2) + " TL",15,"Start")
+                  _PrintText(parseFloat(a) + parseFloat(b) + " TL",15,"Start")
         }
+        console.log(TmpLine)
         TmpData.push(TmpLine);
         TmpLine = 
         {
@@ -843,6 +848,7 @@ angular.module('app.db', []).service('db',function($rootScope)
             data: _PrintText("Genel Toplam",17) + 
                   _PrintText(parseFloat(_SumColumn(pSData,"AMOUNT")).toFixed(2) + " TL",15,"Start")
         }
+        console.log(TmpLine)
         TmpData.push(TmpLine);
 
         _EscposSerialPrint(TmpData,pSerial,function()
