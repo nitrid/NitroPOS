@@ -439,7 +439,7 @@ function Pos($scope,$window,$rootScope,db)
         FocusIade = false;
         FocusCekmeceAc = false;
     });
-    $('#MdlRefresh').on('hide.bs.modal', function () 
+    $('#MdlRefreshSifre').on('hide.bs.modal', function () 
     {
         FocusBarkod = true;
         FocusAraToplam = false;
@@ -4706,6 +4706,7 @@ function Pos($scope,$window,$rootScope,db)
             FocusYetkiliSifre = false;
             FocusKasaSifre = false;
             FocusIade = false;
+            FocusCekmeceAc = false;
             FocusRefresh = true;
         }
         else
