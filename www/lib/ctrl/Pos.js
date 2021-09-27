@@ -2006,50 +2006,49 @@ function Pos($scope,$window,$rootScope,db)
                     {
                         if(TmpKiloFlag[i] == pBarkod.substring(0,2))
                         {
-                            $scope.Miktar = await db.Scale.Send($scope.SCALEPORT);
+                            if(typeof db.KiloBarkod(pKiloBarkod,$scope.KiloBaslangic,$scope.KiloUzunluk,$scope.KiloFlag).Miktar !='undefined')
+                            {
+                                $scope.Miktar = db.KiloBarkod(pKiloBarkod,$scope.KiloBaslangic,$scope.KiloUzunluk,$scope.KiloFlag).Miktar;
 
-                            if($scope.Miktar.includes(".") == true)
-                            {
-                                $scope.Miktar = $scope.Miktar;
-                                if($scope.Miktar.includes("kg") == true)
+                                if($scope.Miktar == 0)
                                 {
-                                    $scope.Miktar = $scope.Miktar.split("kg").join("");
-                                }
-                            }
-                            else
-                            {
-                                alertify.alert("Lütfen Tartım Alınız");
-                                return;
-                            }
+                                    $scope.Miktar = await db.Scale.Send($scope.SCALEPORT);
 
-                            if($scope.ScaleType == "0")
-                            {
-                                if($scope.Miktar.includes("S ") == false)
-                                {
-                                    alertify.alert("Tartım başarısız lütfen tekrar tartım alınız.")
-                                    return;
-                                }
-                                if($scope.Miktar.includes("kg") == true)
-                                {
-                                    $scope.Miktar = $scope.Miktar.split("kg").join("");
-                                }
-                                if($scope.Miktar.includes("S ") == true)
-                                {
-                                    $scope.Miktar = $scope.Miktar.split("S ").join("");
-                                }
-                            }
-                          
-                            if($scope.Miktar <= 0)
-                            {
-                                if(typeof db.KiloBarkod(pKiloBarkod,$scope.KiloBaslangic,$scope.KiloUzunluk,$scope.KiloFlag).Miktar !='undefined')
-                                {
-                                    $scope.Miktar = db.KiloBarkod(pKiloBarkod,$scope.KiloBaslangic,$scope.KiloUzunluk,$scope.KiloFlag).Miktar;
-
-                                    if($scope.Miktar == 0)
+                                    if($scope.Miktar.includes(".") == true)
                                     {
-                                        alertify.alert("Lütfen Tartım Alınız.");
+                                        $scope.Miktar = $scope.Miktar;
+                                        if($scope.Miktar.includes("kg") == true)
+                                        {
+                                            $scope.Miktar = $scope.Miktar.split("kg").join("");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        alertify.alert("Lütfen Tartım Alınız");
+                                        return;
+                                    }
+                                    if($scope.Miktar <= 0)
+                                    {
+                                        alertify.alert("Lütfen Tartım Alınız");
                                         $scope.TxtBarkod = "";
                                         return;
+                                    }
+
+                                    if($scope.ScaleType == "0")
+                                    {
+                                        if($scope.Miktar.includes("S ") == false)
+                                        {
+                                            alertify.alert("Tartım başarısız lütfen tekrar tartım alınız.")
+                                            return;
+                                        }
+                                        if($scope.Miktar.includes("kg") == true)
+                                        {
+                                            $scope.Miktar = $scope.Miktar.split("kg").join("");
+                                        }
+                                        if($scope.Miktar.includes("S ") == true)
+                                        {
+                                            $scope.Miktar = $scope.Miktar.split("S ").join("");
+                                        }
                                     }
                                 }
                             }
@@ -2346,6 +2345,7 @@ function Pos($scope,$window,$rootScope,db)
                                                         swal("Uyarı", pData.msg.split("FAULT:")[1] + "\n" + "İşlem Reddedildi.." ,icon="warning");
                                                         $scope.BtnTahBelgeIptal();
                                                         $("#MdlAraToplam").modal("hide");
+                                                        $("#MdlKartOdeme").modal("hide");
                                                         $("#MdlIngenicoEslesme").modal("show");
                                                         $scope.TxtOkcMesaj = "Ödeme İşlemi Başarısız.";
                                                         $scope.BtnTxtOkcEslesme = "İptal";
@@ -2358,6 +2358,7 @@ function Pos($scope,$window,$rootScope,db)
                                                 db.Ingenico.TicketClose();
                                                 $scope.BtnTahBelgeIptal();
                                                 $("#MdlAraToplam").modal("hide");
+                                                $("#MdlKartOdeme").modal("hide");
                                                 $("#MdlIngenicoEslesme").modal("show");
                                                 $scope.TxtOkcMesaj = "Ödeme İşlemi Başarısız.";
                                                 $scope.BtnTxtOkcEslesme = "İptal";
@@ -2417,6 +2418,7 @@ function Pos($scope,$window,$rootScope,db)
                                                         swal("Uyarı", pData.msg.split("FAULT:")[1] + "\n" + "İşlem Reddedildi.." ,icon="warning");
                                                         $scope.BtnTahBelgeIptal();
                                                         $("#MdlAraToplam").modal("hide");
+                                                        $("#MdlKartOdeme").modal("hide");
                                                         $("#MdlIngenicoEslesme").modal("show");
                                                         $scope.TxtOkcMesaj = "Ödeme İşlemi Başarısız.";
                                                         $scope.BtnTxtOkcEslesme = "İptal";
@@ -2429,6 +2431,7 @@ function Pos($scope,$window,$rootScope,db)
                                                 db.Ingenico.TicketClose();
                                                 $scope.BtnTahBelgeIptal();
                                                 $("#MdlAraToplam").modal("hide");
+                                                $("#MdlKartOdeme").modal("hide");
                                                 $("#MdlIngenicoEslesme").modal("show");
                                                 $scope.TxtOkcMesaj = "Ödeme İşlemi Başarısız.";
                                                 $scope.BtnTxtOkcEslesme = "İptal";
@@ -3206,7 +3209,6 @@ function Pos($scope,$window,$rootScope,db)
             FocusMusteri = false;
             FocusStok = false;
             FocusKartOdeme = false;
-
             FirstKey = false;
 
             //EKRANA GİRDİĞİNDE OTOMATİK NAKİT SEÇİLİ GELSİN
@@ -3477,9 +3479,9 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.BtnKartOdemeGonder = function()
     {
-        $("#MdlKartOdeme").modal("hide");
         $scope.TahTip = 1;
-        $scope.PosTahInsert();     
+        $scope.PosTahInsert(); 
+        //$("#MdlKartOdeme").modal("hide");    
     }    
     $scope.BtnTahOnay = function()
     {
