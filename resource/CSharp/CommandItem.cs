@@ -10,4 +10,10 @@ namespace Ingenico
         public string Name;
         public string Buffer;
     }
+    class TerpItemList
+    {
+        public string Name;
+        public string Status;
+        public string Guid;
+    }
 }
