@@ -50,6 +50,11 @@ var Ingenico =
                     LocalEvent({tag:"ITEM_SALE",msg:data.toString().trim().split('|')[1]});
                     console.log(data.toString().trim().split('|')[1]);
                 }
+                else if(data.toString().trim().split('|')[0] == "R_PAYMENT")
+                {
+                    LocalEvent({tag:"R_PAYMENT",msg:data.toString().trim().split('|')[1]});
+                    console.log(data.toString().trim().split('|')[1]);
+                }
                 else if(data.toString().trim().split('|')[0] == "ZREPORT")
                 {
                     LocalEvent({tag:"ZREPORT",msg:data.toString().trim().split('|')[1]});
@@ -97,7 +102,7 @@ var Ingenico =
         {
             //Terminal.stdin.write('ITEM_SALE|{"SALES":[{"NAME":"ÜLKER 100 GRM","QUANTITY":2,"AMOUNT":450,"TAX":1,"TYPE":0}],"PAYMENT":[{"TYPE":0,"AMOUNT":900}]}\n')
             
-            console.log(JSON.stringify(pData))
+           // console.log(JSON.stringify(pData))
 
             Terminal.stdin.write('ITEM_SALE|' + JSON.stringify(pData) +'\n');
 
@@ -106,6 +111,23 @@ var Ingenico =
                 if(data.toString().trim().split('|')[0] == "ITEM_SALE")
                 {
                     pCallBack({tag:"ITEM_SALE",msg:data.toString().trim().split('|')[1]});
+                    Terminal.stdout.removeListener('data',m);
+                }
+            }
+
+            Terminal.stdout.on('data', m);
+        }
+        Ingenico.prototype.RPayment = function(pData,pCallBack)
+        {
+            //console.log(pData);
+            
+            Terminal.stdin.write('R_PAYMENT|' + JSON.stringify(pData) +'\n');
+
+            let m = function(data)
+            {
+                if(data.toString().trim().split('|')[0] == "R_PAYMENT")
+                {
+                    pCallBack({tag:"R_PAYMENT",msg:data.toString().trim().split('|')[1]});
                     Terminal.stdout.removeListener('data',m);
                 }
             }
