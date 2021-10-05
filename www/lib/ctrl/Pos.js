@@ -2571,7 +2571,7 @@ function Pos($scope,$window,$rootScope,db)
                                 else if($scope.ChkFatura)
                                 {
                                     let Seri = $scope.Seri.split("İ").join("I").split("ı").join("i").split("Ç").join("C").split("ç").join("c").split("Ğ").join("G").split("ğ").join("g").split("Ş").join("S").split("ş").join("s").split("Ö").join("O").split("ö").join("o").split("Ü").join("U").split("ü").join("u");
-                                    let TmpData = { NO : Seri + $scope.Sira,VKN : "11111111111" , AMOUNT : $scope.GenelToplam * 100 , TYPE : $scope.TahTip}
+                                    let TmpData = { NO : Seri + $scope.Sira,VKN : "11111111111" , GUID : "",AMOUNT : $scope.GenelToplam * 100 , TYPE : $scope.TahTip}
         
                                     await IngenicoSend(TmpData,1);
                                 }

@@ -171,9 +171,31 @@ namespace Ingenico
                 {
                     if (line.Split('|').Length > 0)
                     {
+                        OpenHandle();
+
                         JObject TmpMaster = JObject.Parse(line.Split('|')[1]);
-                        line = Invoice(TmpMaster.Property("NO").Value.ToString(), TmpMaster.Property("VKN").Value.ToString(), (UInt32)TmpMaster.Property("AMOUNT").Value, (int)TmpMaster.Property("TYPE").Value, (string)TmpMaster.Property("GUID").Value);
-                        Console.WriteLine(line);
+                        Invoice(TmpMaster.Property("NO").Value.ToString(), TmpMaster.Property("VKN").Value.ToString(), (UInt32)TmpMaster.Property("AMOUNT").Value, (int)TmpMaster.Property("TYPE").Value, (string)TmpMaster.Property("GUID").Value);
+
+                        TotalPrint();
+                        MFPrintBefore();
+                        MFPrint();
+                        CloseHandle();
+
+                        string result = JsonConvert.SerializeObject(CommandList);
+
+                        if (ProcessBatchCommand())
+                        {
+                            Console.WriteLine("INVOICE|SUCCES");
+                        }
+                        else
+                        {
+                            if (ProcStatus != Defines.TRAN_RESULT_OK)
+                            {
+                                Console.WriteLine("INVOICE|FAULT:" + ProcStatus.ToString() + '~' + JsonConvert.SerializeObject(TerpItemList));
+                            }
+                        }
+
+                        ClearProcessBatchCommand();
                     }
                 }
                 else if (tag == "ENDCOPY")
@@ -976,10 +998,6 @@ namespace Ingenico
         }
         static string Invoice(string pNo, string pVkn, UInt32 pAmount, int pType, string pGuid)
         {
-            OpenHandle();
-            //TicketHeader();
-            //OptionFlag();
-
             ST_TICKET m_stTicket = new ST_TICKET();
             ST_INVIOCE_INFO stInvoiceInfo = new ST_INVIOCE_INFO();
             stInvoiceInfo.source = (byte)0;
@@ -995,7 +1013,6 @@ namespace Ingenico
             stInvoiceInfo.date = new byte[3];
             DateTime TmpDate = DateTime.Now;
             string dateStr = TmpDate.Day.ToString().PadLeft(2, '0') + TmpDate.Month.ToString().PadLeft(2, '0') + TmpDate.Year.ToString().Substring(2, 2).PadLeft(2, '0');
-            Console.WriteLine(dateStr);
             ConvertStringToHexArray(dateStr, ref stInvoiceInfo.date, 3);
             Array.Reverse(stInvoiceInfo.date);
 
@@ -1011,21 +1028,9 @@ namespace Ingenico
             AddIntoCommandBatch("prepare_TicketHeader", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen, pGuid);
 
             CashPayment(pType, pAmount, pGuid);
-            TotalPrint();
-            MFPrintBefore();
-            MFPrint();
-            CloseHandle();
 
-            if (ProcessBatchCommand())
-            {
-                ClearProcessBatchCommand();
-                return "INVOICE|SUCCES";
-            }
-            else
-            {
-                ClearProcessBatchCommand();
-                return "INVOICE|FAULT";
-            }
+
+            return "INVOICE";
         }
         static string OpenSafe()
         {
