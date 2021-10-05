@@ -3173,6 +3173,7 @@ function Pos($scope,$window,$rootScope,db)
                                             if(typeof(data.result.err) != 'undefined')
                                             {
                                                 console.log(data.result.err);
+                                                $scope.ErrorIngenico = 0;
                                             }
                                         });
                                         $scope.TxtBelgeIptalSifre = "";
@@ -4736,6 +4737,7 @@ function Pos($scope,$window,$rootScope,db)
         if(typeof require != 'undefined')
         {
             db.Ingenico.TicketClose();
+            $scope.ErrorIngenico = 0;
         }
     }
     $scope.BtnIngenicoCiktiTip = async function(pTip)
