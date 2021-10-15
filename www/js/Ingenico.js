@@ -102,7 +102,7 @@ var Ingenico =
         {
             //Terminal.stdin.write('ITEM_SALE|{"SALES":[{"NAME":"ÜLKER 100 GRM","QUANTITY":2,"AMOUNT":450,"TAX":1,"TYPE":0}],"PAYMENT":[{"TYPE":0,"AMOUNT":900}]}\n')
             
-           // console.log(JSON.stringify(pData))
+            console.log(JSON.stringify(pData))
 
             Terminal.stdin.write('ITEM_SALE|' + JSON.stringify(pData) +'\n');
 
@@ -168,6 +168,7 @@ var Ingenico =
 
             let m = function(data)
             {
+                console.log(data)
                 if(data.toString().trim().split('|')[0] == "EKUCONTROL")
                 {
                     pCallBack({tag:"EKUCONTROL",msg:data.toString().trim().split('|')[1]});

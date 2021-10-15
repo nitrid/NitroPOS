@@ -51,7 +51,6 @@ function Pos($scope,$window,$rootScope,db)
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
-        $scope.MsgLoading = false;
         $rootScope.LoadingHide();
     });
     $('#MdlMusteriListele').on('hide.bs.modal', function () 
@@ -157,7 +156,6 @@ function Pos($scope,$window,$rootScope,db)
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
-        $scope.MsgLoading = false;
     });
     $('#MdlParaUstu').on('hide.bs.modal', function () 
     {
@@ -506,25 +504,27 @@ function Pos($scope,$window,$rootScope,db)
             }
             else if(pData.tag == "PAIRING")
             {
-                if(pData.msg == "SUCCES")
+                console.log(pData.msg.split("~",2).pop(1))
+
+                if(pData.msg.split(":",1).pop(0) == "SUCCES")
                 {
                     $("#MdlIngenicoEslesme").modal("hide");  
-                    $scope.BtnEkuControl(1); //EKU CONTROL
+                    //$scope.BtnEkuControl(1); //EKU CONTROL
                 }
                 else
                 {
                     let info = "";
 
-                    if(pData.msg.split("FAULT:")[1] == "2310")
+                    if(pData.msg.split("~",1).pop(1).split(":",2).pop(1) == "2310")
                     {
                         info = "Lütfen Tarih Saat Bilgisini Kontrol Edin."
                     }
-                    else if(pData.msg.split("FAULT:")[1] == "61468")
+                    else if(pData.msg.split("~",1).pop(1).split(":",2).pop(1) == "61468")
                     {
                         info = "Cihaz Meşgul Lütfen Tekrar Deneyiniz."
                     }
 
-                    $scope.TxtOkcMesaj = "Eşleşme Başarısız. Hata Kodu :  "+ pData.msg.split("FAULT:")[1] + " - " + info ;
+                    $scope.TxtOkcMesaj = "Eşleşme Başarısız. Hata Kodu :  "+ pData.msg.split("~",1).pop(1).split(":",2).pop(1) + " - " + info ;
                     $scope.BtnTxtOkcEslesme = "Tekrar";
                 }
             }
@@ -535,6 +535,7 @@ function Pos($scope,$window,$rootScope,db)
                     SatisKapat();
                     $scope.CheckPaymentList = [];
                     $scope.ErrorIngenico = 0;
+                    $scope.Timeout = 120;
                 }
                 // else(pData.msg.split(":",1).pop(1) == "FAULT")
                 // {
@@ -544,7 +545,6 @@ function Pos($scope,$window,$rootScope,db)
                 //     $("#MdlIngenicoEslesme").modal("show");
                 //     $scope.TxtOkcMesaj = "Ödeme İşlemi Başarısız.";
                 //     $scope.BtnTxtOkcEslesme = "İptal";  
-                //     $scope.MsgLoading = false;
                 // }
             }
             else if(pData.tag == "INVOICE")
@@ -554,6 +554,7 @@ function Pos($scope,$window,$rootScope,db)
                     SatisKapat();
                     $scope.CheckPaymentList = [];
                     $scope.ErrorIngenico = 0;
+                    $scope.Timeout = 120;
                 }
                 // else if(pData.msg == "FAULT")
                 // {
@@ -563,7 +564,6 @@ function Pos($scope,$window,$rootScope,db)
                 //     $("#MdlIngenicoEslesme").modal("show");
                 //     $scope.TxtOkcMesaj = "Ödeme İşlemi Başarısız.";
                 //     $scope.BtnTxtOkcEslesme = "İptal";
-                //     $scope.MsgLoading = false;
                 // }
             }
             else if(pData.tag == "R_PAYMENT")
@@ -573,6 +573,7 @@ function Pos($scope,$window,$rootScope,db)
                     SatisKapat();
                     $scope.CheckPaymentList = [];
                     $scope.ErrorIngenico = 0;
+                    $scope.Timeout = 120;
                 }
                 // else(pData.msg.split(":",1).pop(1) == "FAULT")
                 // {
@@ -582,17 +583,18 @@ function Pos($scope,$window,$rootScope,db)
                 //     $("#MdlIngenicoEslesme").modal("show");
                 //     $scope.TxtOkcMesaj = "Ödeme İşlemi Başarısız.";
                 //     $scope.BtnTxtOkcEslesme = "İptal";  
-                //     $scope.MsgLoading = false;
                 // }
             }
         });
     }       
     $rootScope.LoadingShow = function() 
     {
+        $scope.TimeoutControl = 1;
         $("#loading").show();
     }
     $rootScope.LoadingHide = function() 
     {
+        $scope.TimeoutControl = 0;
         $("#loading").hide();
     }
     $rootScope.MessageBox = function(pMsg)
@@ -661,11 +663,12 @@ function Pos($scope,$window,$rootScope,db)
         $scope.LCDPORT = "";
         $scope.SCALEPORT = "";
         $scope.PRINTPORT = "";
-        $scope.MsgLoading = false;
         $scope.KiloBaslangic = 0;
         $scope.KiloUzunluk = 0;
         $scope.KiloFlag = 0;
         $scope.ErrorIngenico = 0;
+        $scope.Timeout = 120;
+        $scope.TimeoutControl = 0;
         
         $scope.KasaNo = 1;
         $scope.Saat = moment(new Date(),"HH:mm:ss").format("HH:mm:ss");
@@ -1568,6 +1571,7 @@ function Pos($scope,$window,$rootScope,db)
                         $("#MdlParaUstu").modal("show");    
                         setTimeout(()=>{$("#MdlParaUstu").modal("hide")},5000);
                     }
+                    clearInterval($scope.IngenicoInterval); //INTERVAL RESETLENIYOR
                                         
                     setTimeout(()=>
                     {
@@ -1666,7 +1670,6 @@ function Pos($scope,$window,$rootScope,db)
                                 $("#MdlIngenicoEslesme").modal("show");
                                 $scope.TxtOkcMesaj = "Ödeme İşlemi Başarısız.";
                                 $scope.BtnTxtOkcEslesme = "İptal";
-                                $scope.MsgLoading = false;
                             }
                         }
                         else if(calbackstatus == 2085 || calbackstatus == 2086 || calbackstatus == 2087)
@@ -1687,6 +1690,14 @@ function Pos($scope,$window,$rootScope,db)
                             }
                       
                             swal("Uyarı", "Hata Kodu : " + calbackstatus + "\n" + "Ödeme Başarısız.Lütfen Tekrar Deneyin." ,icon="warning");
+                        }
+                        else if(calbackstatus == 2067)
+                        {
+                            db.Ingenico.TicketClose();
+                            $scope.BtnTahBelgeIptal();
+                            $("#MdlAraToplam").modal("hide");
+                            $("#MdlKartOdeme").modal("hide");
+                            swal("Uyarı", "Hata Kodu : " + calbackstatus + "\n" + "Ödeme Başarısız.Fiş Limiti Yetersiz." ,icon="warning");
                         }
                     }
                 });
@@ -1719,7 +1730,6 @@ function Pos($scope,$window,$rootScope,db)
                                 $("#MdlIngenicoEslesme").modal("show");
                                 $scope.TxtOkcMesaj = "Ödeme İşlemi Başarısız.";
                                 $scope.BtnTxtOkcEslesme = "İptal";
-                                $scope.MsgLoading = false;
                             }
                         }
                         else if(calbackstatus == 2085 || calbackstatus == 2086 || calbackstatus == 2087)
@@ -1740,6 +1750,14 @@ function Pos($scope,$window,$rootScope,db)
                             }
                       
                             swal("Uyarı", "Hata Kodu : " + calbackstatus + "\n" + "Ödeme Başarısız.Lütfen Tekrar Deneyin." ,icon="warning");
+                        }
+                        else if(calbackstatus == 2067)
+                        {
+                            db.Ingenico.TicketClose();
+                            $scope.BtnTahBelgeIptal();
+                            $("#MdlAraToplam").modal("hide");
+                            $("#MdlKartOdeme").modal("hide");
+                            swal("Uyarı", "Hata Kodu : " + calbackstatus + "\n" + "Ödeme Başarısız.Fiş Limiti Yetersiz." ,icon="warning");
                         }
                     }
                 });
@@ -1772,6 +1790,14 @@ function Pos($scope,$window,$rootScope,db)
                             }
                     
                             swal("Uyarı", "Hata Kodu : " + calbackstatus + "\n" + "Ödeme Başarısız.Lütfen Tekrar Deneyin." ,icon="warning");
+                        }
+                        else if(calbackstatus == 2067)
+                        {
+                            db.Ingenico.TicketClose();
+                            $scope.BtnTahBelgeIptal();
+                            $("#MdlAraToplam").modal("hide");
+                            $("#MdlKartOdeme").modal("hide");
+                            swal("Uyarı", "Hata Kodu : " + calbackstatus + "\n" + "Ödeme Başarısız.Fiş Limiti Yetersiz." ,icon="warning");
                         }
                     }
                 });
@@ -2451,6 +2477,19 @@ function Pos($scope,$window,$rootScope,db)
 
                         if(typeof require != 'undefined' && $scope.TahKalan <= 0)
                         {
+                            $scope.IngenicoInterval = setInterval(()=>
+                            {
+                                db.SafeApply($scope,function()
+                                {
+                                    $scope.Timeout -= 1;
+                                })
+
+                                if($scope.TimeoutControl == 1 && $scope.Timeout == 0)
+                                {
+                                    $scope.BtnTahBelgeIptal();
+                                }
+                            },1000);
+                         
                             if($scope.ErrorIngenico == 1)
                             {
                                 let TmpData = 
@@ -2489,7 +2528,6 @@ function Pos($scope,$window,$rootScope,db)
                                     TmpData.PAYMENT.push(TmpPayment);
                                 }
                             
-                                console.log(TmpData)
                                 await IngenicoSend(TmpData,2);
                             }
                             else
@@ -2576,8 +2614,6 @@ function Pos($scope,$window,$rootScope,db)
                                     await IngenicoSend(TmpData,1);
                                 }
                             }
-                          
-                            $scope.MsgLoading = true;
                         } 
                         else
                         {
@@ -3173,6 +3209,7 @@ function Pos($scope,$window,$rootScope,db)
                                             if(typeof(data.result.err) != 'undefined')
                                             {
                                                 console.log(data.result.err);
+                                                $scope.CheckPaymentList = [];
                                                 $scope.ErrorIngenico = 0;
                                             }
                                         });
@@ -3474,8 +3511,20 @@ function Pos($scope,$window,$rootScope,db)
                 if(typeof(data.result.err) == 'undefined')
                 {
                     $scope.TahList = [];
+             
                     TahSonYenile();
                     $("#MdlAraToplam").modal('hide');
+                    $("#MdlKartOdeme").modal("hide");    
+
+                    if(typeof require != 'undefined')
+                    {
+                        console.log(111)
+                        $scope.CheckPaymentList = [];
+                        $scope.ErrorIngenico = 0;
+                        $scope.Timeout = 120;
+                        db.Ingenico.TicketClose();
+                        clearInterval($scope.IngenicoInterval); //INTERVAL RESETLENIYOR
+                    }
                 }
                 else
                 {
@@ -4813,6 +4862,7 @@ function Pos($scope,$window,$rootScope,db)
     {
         db.Ingenico.EkuControl(function(pData)
         {
+            console.log(pData)
             if(pType == 0)
             {
                 swal("Uyarı", pData.msg.split("SUCCESS:")[1].split("[").join('').split("]").join('').split("{").join('').split("}").join(''),icon="warning");

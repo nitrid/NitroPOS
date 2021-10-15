@@ -16,4 +16,9 @@ namespace Ingenico
         public string Status;
         public string Guid;
     }
+    class TerpTaxList
+    {
+        public int Index;
+        public string Value;
+    }
 }

@@ -718,7 +718,7 @@ namespace GmpSampleSim
             ST_TICKET m_stTicket = new ST_TICKET();
 
             RetCode = GMPSmartDLL.FP3_OptionFlags(CurrentInterface, GetTransactionHandle(CurrentInterface), ref activeFlags, Defines.GMP3_OPTION_ECHO_PRINTER | Defines.GMP3_OPTION_ECHO_ITEM_DETAILS | Defines.GMP3_OPTION_ECHO_PAYMENT_DETAILS, 0, Defines.TIMEOUT_DEFAULT);
-            if (RetCode != Defines.TRAN_RESULT_OK)
+            if (RetCode != Defines.TRAN_RESULT_OK)  
                 return RetCode;
 
             RetCode = Json_GMPSmartDLL.FP3_GetTicket(CurrentInterface, GetTransactionHandle(CurrentInterface), ref m_stTicket, Defines.TIMEOUT_DEFAULT);
@@ -3542,6 +3542,8 @@ namespace GmpSampleSim
             int numberOfTotalTaxratesReceived = 0;
             int numberOfTotalDepartmentsReceived = 0;
 
+            MessageBox.Show(numberOfTotalTaxRates.ToString());
+
             UInt32 retcode = Json_GMPSmartDLL.FP3_GetTaxRates(CurrentInterface, ref numberOfTotalTaxRates, ref numberOfTotalTaxratesReceived, ref stTaxRates, 8);
 
             if (retcode != 0)
@@ -3563,11 +3565,13 @@ namespace GmpSampleSim
             for (int i = 0; i < numberOfTotalTaxratesReceived; i++)
             {
                 ListViewItem item1 = new ListViewItem(i.ToString());
+                
                 item1.SubItems.Add(String.Format("%{0}.{1}", stTaxRates[i].taxRate / 100, (stTaxRates[i].taxRate % 100).ToString().PadLeft(2, '0')));
-
+                MessageBox.Show("Index: " + i + " - " + String.Format("%{0}.{1}", stTaxRates[i].taxRate / 100, (stTaxRates[i].taxRate % 100).ToString().PadLeft(2, '0')));
                 m_listTax.Items.Add(item1);
 
             }
+
             dataGridView1.DataSource = null;
             dataGridView1.Rows.Clear();
             dataGridView1.Refresh();

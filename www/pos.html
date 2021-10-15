@@ -82,10 +82,11 @@
             font-size : 30px;
         }
     </style>
-    </head>
+</head>
     <body class="animsition site-navbar-small site-menubar-fold site-menubar-keep" ng-controller="Pos" ng-Init = "YeniEvrak()">
         <audio id="audio" src="sound/beep.mp3" autoplay="false" ></audio>
-    <div id="loading" style="display:none;z-index: 1800;"><div class="loader vertical-align-middle loader-circle"></div><div ng-show = "MsgLoading">Ödeme Bekleniyor...</div></div>
+
+    <div id="loading" style="display:none;z-index: 1800;"><div class="loader vertical-align-middle loader-circle">   </div><div>Yükleniyor...</div><button type="button" class="btn btn-primary"><i class="close" aria-hidden="true"></i>{{Timeout}}</button></div>
     <!--[if lt IE 8]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -94,7 +95,7 @@
             <!-- Navbar Collapse -->
             <div class="collapse navbar-collapse navbar-collapse-toolbar" id="site-navbar-collapse">
             <!-- Navbar Toolbar -->
-            <ul class="nav navbar-toolbar">
+            <ul class="nav navbar-toolbar"> 
                 <li class="nav-item hidden-sm-down" id="toggleFullscreen">
                     <a class="nav-link icon icon-fullscreen" data-toggle="fullscreen" href="#" role="button">
                         <span class="sr-only">Toggle fullscreen</span>
@@ -992,6 +993,12 @@
                                     <input type="radio" />
                                     FATURA
                                 </label>
+                            </div>
+                            <div class="btn-group btn-group-toggle col-3" data-toggle="buttons" role="group">
+                                <label id = "ChkFis" class="btn btn-outline btn-primary col-12" ng-click = "BtnIngenicoCiktiTip(0)">
+                                    <input type="radio" />
+                                    
+                                </label>
                             </div> 
                         </div>
                         <div class="row">
@@ -1343,9 +1350,6 @@
             <div class="modal-dialog modal-simple modal-primary modal-center modal-sm">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">X</span>
-                        </button>
                         <h4 class="modal-title">Kart Ödeme</h4>
                     </div>
                     <div class="modal-body">
@@ -1439,9 +1443,10 @@
                         </div>
                         <div class="row py-1">
                             <div class="col-6">
+                                <button type="text" class="form-control-lg btn-danger btn btn-block font-size-15" style="height:60px;" ng-click="BtnTahBelgeIptal()">Vazgeç</button>
                             </div>
                             <div class="col-6">
-                                <button type="text" class="form-control btn-danger btn btn-block font-size-15" style="height:60px;" ng-click="BtnKartOdemeGonder()">Gönder</button>
+                                <button type="text" class="form-control btn-success btn btn-block font-size-15" style="height:60px;" ng-click="BtnKartOdemeGonder()">Gönder</button>
                             </div>
                         </div>
                     </div>
