@@ -423,7 +423,7 @@
                                         <button role="menu-item" class="form-group btn btn-block btn-danger my-1" style="height:70px; font-size: 16px;" ng-click = "BtnKasaKilitle(0)">Kasa Kilitle</button>
                                     </div>            
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-info my-1" ng-click="BtnCekmeceAc(0)" style="height:70px; font-size: 16px;">Çekmece Aç</button>
+                                        <button class="form-group btn btn-block btn-info my-1" ng-click = "BtnIngTahList(0)" style="height:70px; font-size: 16px;">Tahsilat İptal</button>
                                     </div>
                                     <div class="col-2 px-1">
                                         <button class="form-group btn btn-warning btn-block my-1" style="height:70px;  font-size: 16px;" ng-click = "BtnXReport(0)">X Raporu</button>
@@ -432,7 +432,7 @@
                                         <button class="form-group btn btn-warning btn-block my-1" style="height:70px;  font-size: 16px;" ng-click = "BtnFisIptal()">Fiş İptal</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px;  font-size: 16px;"></button>
+                                        <button class="form-group btn btn-warning btn-block my-1" style="height:70px;  font-size: 16px;" ng-click="BtnCekmeceAc(0)">Çekmece Aç</button>
                                     </div>               
                                 </div>
                                 <div class="row">
@@ -451,8 +451,14 @@
                                     <div class="col-2 px-1">
                                         <button class="form-group btn btn-block btn-warning my-1" style="height:70px; font-size: 16px;" ng-click = "BtnAvans(0)">Avans</button>
                                     </div> 
-                                    <div class="col-2 px-1">
+                                    <!-- <div class="col-2 px-1">
                                         <button class="form-group btn btn-info btn-block my-1" style="height:70px;" ng-click="BtnKartOdeme()">
+                                            <i class="icon fa-credit-card row" aria-hidden="true" style="font-size: 24px;"></i>
+                                            <span><h6 class="text-center" style="color: white;">Kart</h6></span>
+                                        </button>
+                                    </div>  -->
+                                    <div class="col-2 px-1">
+                                        <button class="form-group btn btn-info btn-block my-1" style="height:70px;" ng-click="BtnAraToplam(1)">
                                             <i class="icon fa-credit-card row" aria-hidden="true" style="font-size: 24px;"></i>
                                             <span><h6 class="text-center" style="color: white;">Kart</h6></span>
                                         </button>
@@ -464,7 +470,7 @@
                                         <button class="form-group btn btn-warning btn-block my-1" style="height:70px; font-size: 16px;" ng-click = "BtnOkcEslesme(1)">Okc Eşleşme</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px; font-size: 16px;"></button>                                    
+                                        <button class="form-group btn btn-warning btn-block my-1" style="height:70px; font-size: 16px;" ng-click = "BtnKdvGetir()">Kdv Bilgi</button>                                    
                                     </div>                                
                                 </div>
                                 <div class="row">
@@ -477,7 +483,7 @@
                                         </button>
                                     </div> 
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-info btn-block my-1" ng-click = "BtnAraToplam()" style="height:70px;">
+                                        <button class="form-group btn btn-info btn-block my-1" ng-click = "BtnAraToplam(0)" style="height:70px;">
                                             <i class="icon fa-money" aria-hidden="true" style="font-size: 24px;"></i>
                                             <span><h6 class="text-center" style="color: white;">Nakit</h6></span>
                                         </button>
@@ -994,12 +1000,12 @@
                                     FATURA
                                 </label>
                             </div>
-                            <div class="btn-group btn-group-toggle col-3" data-toggle="buttons" role="group">
-                                <label id = "ChkFis" class="btn btn-outline btn-primary col-12" ng-click = "BtnIngenicoCiktiTip(0)">
-                                    <input type="radio" />
-                                    
-                                </label>
-                            </div> 
+                            <div class="col-3">
+                                <div class="float-left mr-5">
+                                    <input type="checkbox" id="IngenicoActive" ng-model = "IngenicoActive" name="inputiCheckBasicCheckboxes" ng-change = "BtnIngenicoChange()" data-plugin="switchery" checked/>
+                                </div>
+                                <label class="pt-3">INGENICO</label>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-2">
@@ -2779,6 +2785,63 @@
                         <div class="row py-1">
                             <div class="col-12">
                                 <button type="text" class="form-control btn-danger btn btn-block font-size-15" style="height:60px; font-size: 18px;" ng-click="BtnRefresh(1)">Giriş</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Ingenico Tahsilat İptal-->
+        <div class="modal fade" id="MdlIngTahList" aria-hidden="true" aria-labelledby="examplePositionCenter" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple modal-primary modal-center">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">X</span>
+                        </button>
+                        <h4 class="modal-title">Tahsilat İptal</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-lg-3 px-1">
+                                        <label><h5><span style="color:dodgerblue;">Toplam :</span></h5></label>
+                                    </div>
+                                    <div class="col-lg-3 px-1">
+                                        <label><h5><div class="float-left">{{(IngenicoList.TotalReceiptAmount | number:2) + " TL"}}</div></h5></label>
+                                    </div>
+                                    <div class="col-lg-3 px-1">
+                                        <label><h5><span style="color:dodgerblue;">Kalan :</span></h5></label>
+                                    </div>
+                                    <div class="col-lg-3 px-1">
+                                        <label><h5><div class="float-left">{{(IngenicoList.RemainingAmount | number:2) + " TL"}}</div></h5></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 my-2">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div style="border-width: 3px;border-color: #428bca;" id="TblIngTahList"></div>
+                                    </div>
+                                </div>
+                            </div>     
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <button type="text" class="form-control btn-danger btn btn-block font-size-18" style="height:60px;" ng-click="BtnIngTahList(1,0)">Tüm Fiş İptal</button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button type="text" class="form-control btn-primary btn btn-block font-size-18" style="height:60px;" ng-click="BtnIngTahList(2,0)">Kredi Kartı Kapat</button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button type="text" class="form-control btn-info btn btn-block font-size-18" style="height:60px;" ng-click="BtnIngTahList(3,0)">Nakit Kapat</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

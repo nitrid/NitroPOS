@@ -50,8 +50,7 @@ namespace Ingenico
                         ActiveTicket = null;
                         if (OpenHandle() != 0)
                         {
-                            string a = ReturnTicketToString();
-                            Console.WriteLine("ITEM_SALE|RELOAD:");
+                            Console.WriteLine("ITEM_SALE|RELOAD:9999~" + ReturnTicketToString());
                         }
                         else
                         {
@@ -83,15 +82,14 @@ namespace Ingenico
                             MFPrintBefore();
                             MFPrint();
                             CloseHandle();
-                            string result = JsonConvert.SerializeObject(CommandList);
 
                             if (ProcessBatchCommand())
                             {
-                                Console.WriteLine("ITEM_SALE|SUCCES");
+                                Console.WriteLine("ITEM_SALE|SUCCESS:" + ProcStatus.ToString() + '~' + ReturnTicketToString());
                             }
                             else
                             {
-                               Console.WriteLine("ITEM_SALE|FAULT:" + ProcStatus.ToString() + '~' + JsonConvert.SerializeObject(TerpItemList));
+                                Console.WriteLine("ITEM_SALE|FAULT:" + ProcStatus.ToString() + '~' + ReturnTicketToString());
                             }
 
                             ClearProcessBatchCommand();
@@ -124,13 +122,13 @@ namespace Ingenico
 
                         if (ProcessBatchCommand())
                         {
-                            Console.WriteLine("R_PAYMENT|SUCCES");
+                            Console.WriteLine("ITEM_SALE|SUCCESS:" + ProcStatus.ToString() + '~' + ReturnTicketToString());
                         }
                         else
                         {
                             if (ProcStatus != Defines.TRAN_RESULT_OK)
                             {
-                                Console.WriteLine("R_PAYMENT|FAULT:" + ProcStatus.ToString() + '~' + JsonConvert.SerializeObject(TerpItemList));
+                                Console.WriteLine("R_PAYMENT|FAULT:" + ProcStatus.ToString() + '~' + ReturnTicketToString());
                             }
                         }
 
@@ -197,13 +195,13 @@ namespace Ingenico
 
                         if (ProcessBatchCommand())
                         {
-                            Console.WriteLine("INVOICE|SUCCES");
+                            Console.WriteLine("INVOICE|SUCCESS:" + ProcStatus.ToString() + '~' + ReturnTicketToString());
                         }
                         else
                         {
                             if (ProcStatus != Defines.TRAN_RESULT_OK)
                             {
-                                Console.WriteLine("INVOICE|FAULT:" + ProcStatus.ToString() + '~' + JsonConvert.SerializeObject(TerpItemList));
+                                Console.WriteLine("INVOICE|FAULT:" + ProcStatus.ToString() + '~' + ReturnTicketToString());
                             }
                         }
 
@@ -233,7 +231,7 @@ namespace Ingenico
                 else if (tag == "TAXINFO")
                 {
                     line = TaxInfo();
-                    Console.WriteLine(line);
+                    Console.WriteLine("TAXINFO|SUCCESS:" + line);
                 }
                 else if (tag == "PAYMENTCANCEL")
                 {
@@ -244,7 +242,7 @@ namespace Ingenico
                         for (int i = 0; i < TmpIndex.Count; i++)
                         {
                             line = PaymentCancel((ushort)TmpIndex[i]);
-                            Console.WriteLine(line);
+                            Console.WriteLine(line + "~" + ReturnTicketToString());
                         }
                     }
                 }
@@ -254,6 +252,11 @@ namespace Ingenico
                     ClearTransactionUniqueId(CurrentInterface);
                     ProcessBatchCommand();
                     ClearProcessBatchCommand();
+                    Console.WriteLine(line);
+                }
+                else if (tag == "GETTICKET")
+                {
+                    line = "GETTICKET|SUCCESS:0000" + "~" + ReturnTicketToString();
                     Console.WriteLine(line);
                 }
                 if (tag == "exit") // Check string
@@ -388,7 +391,7 @@ namespace Ingenico
             Buffer.BlockCopy(buffer, 0, dataPtr, 6, bufferLen);
 
             TerpItemList.Add(new TerpItemList() { Name = commandName, Status = "", Guid = guid });
-            CommandList.Add(new CommandItem() { Name = commandName, Buffer = ByteArrayToString(dataPtr, bufferLen + 6)});
+            CommandList.Add(new CommandItem() { Name = commandName, Buffer = ByteArrayToString(dataPtr, bufferLen + 6), Guid = guid });
         }
         private static void StringToByteArray(string s, byte[] Out_byteArr, ref int Out_byteArrLen)
         {
@@ -661,10 +664,10 @@ namespace Ingenico
 
             if (RetCode == Defines.APP_ERR_ALREADY_DONE)
             {
-                RetCode = ReloadTransaction();
+                //RetCode = ReloadTransaction();
                 flag = 1;
 
-                return "PAIRING|SUCCES:" + RetCode.ToString() + "~" + ReturnTicketToString();
+                return "PAIRING|SUCCESS:" + RetCode.ToString() + "~" + ReturnTicketToString();
             }
 
             if (flag != 1)
@@ -683,7 +686,7 @@ namespace Ingenico
                 flag = 0;
             }
 
-            return "PAIRING|SUCCES:" + RetCode.ToString() + "~" + ReturnTicketToString();
+            return "PAIRING|SUCCESS:" + RetCode.ToString() + "~" + ReturnTicketToString();
         }
         static int OpenHandle()
         {
@@ -833,7 +836,7 @@ namespace Ingenico
                 stPaymentRequest[0].rawDataLen = (ushort)stPaymentRequest[0].rawData.Length;
             }
 
-
+            stPaymentRequest[0].batchNo =1;
             stPaymentRequest[0].payAmount = pAmount;
             stPaymentRequest[0].payAmountCurrencyCode = currencyOfPayment;
 
@@ -893,7 +896,7 @@ namespace Ingenico
             DeleteTrxHandles(CurrentInterface, GetTransactionHandle(CurrentInterface));
             ClearTransactionUniqueId(CurrentInterface);
 
-            return "TICKET CLOSE|SUCCES";
+            return "TICKET CLOSE|SUCCESS";
         }
         static string ZReports(string pPassword)
         {
@@ -1163,43 +1166,79 @@ namespace Ingenico
         }
         private static string ReturnTicketToString()
         {
+            ReloadTransaction();
+
             if (ActiveTicket == null)
             {
                 return "{}";
             }
 
-            string Tmp = "{";
-
-            Tmp = Tmp + "TotalReceiptAmount:" + ActiveTicket.TotalReceiptAmount;
-            Tmp = Tmp + ",TotalReceiptPayment:" + ActiveTicket.TotalReceiptPayment;
-            Tmp = Tmp + ",SaleInfo:[";
-
-            for (int i = 0; i < ActiveTicket.SaleInfo.Length; i++)
-            {
-                if (ActiveTicket.SaleInfo[i] != null)
-                {
-                    Tmp = Tmp + "{";
-                    Tmp = Tmp + "Name:'" + ActiveTicket.SaleInfo[i].Name + "'";
-                    Tmp = Tmp + ",ItemPrice:" + ActiveTicket.SaleInfo[i].ItemPrice;
-                    Tmp = Tmp + ",ItemCount:" + ActiveTicket.SaleInfo[i].ItemCount;
-                    Tmp = Tmp + ",ItemType:" + ActiveTicket.SaleInfo[i].ItemType;
-                    Tmp = Tmp + "}";
-                }
-            }
-            Tmp = Tmp + "]";
-
-            Tmp = Tmp + ",stPayment:[";
+            int FullPaymentLine = 0;
+            int FullSaleLine = 0;
 
             for (int i = 0; i < ActiveTicket.stPayment.Length; i++)
             {
                 if (ActiveTicket.stPayment[i] != null)
                 {
+                    FullPaymentLine += 1;
+                }
+            } //SATIŞ - TAHSİLAT GİRİŞMİŞ SATIRLARI SÜZME İŞLEMİ
+            for (int i = 0; i < ActiveTicket.SaleInfo.Length; i++)
+            {
+                if (ActiveTicket.SaleInfo[i] != null)
+                {
+                    FullSaleLine += 1;
+                }
+            }
+
+            string Tmp = "{";
+
+            Tmp = Tmp + "'TotalReceiptAmount':" + ActiveTicket.TotalReceiptAmount;
+            Tmp = Tmp + ",'TotalReceiptPayment':" + ActiveTicket.TotalReceiptPayment;
+            Tmp = Tmp + ",'RemainingAmount':" + (ActiveTicket.TotalReceiptAmount - ActiveTicket.TotalReceiptPayment);
+            Tmp = Tmp + ",'SaleInfo':[";
+
+            for (int i = 0; i < FullSaleLine; i++)
+            {
+                if (ActiveTicket.SaleInfo[i] != null)
+                {
                     Tmp = Tmp + "{";
-                    Tmp = Tmp + "payAmount:" + ActiveTicket.stPayment[i].payAmount;
-                    Tmp = Tmp + ",typeOfPayment:" + ActiveTicket.stPayment[i].typeOfPayment;
-                    Tmp = Tmp + ",flags:" + ActiveTicket.stPayment[i].flags;
-                    Tmp = Tmp + ",cardInfo:'" + ActiveTicket.stPayment[i].stBankPayment.stCard.pan + "'";
-                    Tmp = Tmp + "}";
+                    Tmp = Tmp + "'Name':'" + ActiveTicket.SaleInfo[i].Name + "'";
+                    Tmp = Tmp + ",'ItemPrice':" + ActiveTicket.SaleInfo[i].ItemPrice;
+                    Tmp = Tmp + ",'ItemCount':" + ActiveTicket.SaleInfo[i].ItemCount;
+                    Tmp = Tmp + ",'ItemType':" + ActiveTicket.SaleInfo[i].ItemType;
+
+                    if (i == FullSaleLine - 1)
+                    {
+                        Tmp = Tmp + "}";
+                    }
+                    else
+                    {
+                        Tmp = Tmp + "},";
+                    }
+                }
+            }
+            Tmp = Tmp + "]";
+            Tmp = Tmp + ",'stPayment':[";
+
+            for (int i = 0; i < FullPaymentLine; i++)
+            {
+                if (ActiveTicket.stPayment[i] != null && ActiveTicket.stPayment[i].flags == 0)
+                {
+                    Tmp = Tmp + "{";
+                    Tmp = Tmp + "'payAmount':" + ActiveTicket.stPayment[i].payAmount;
+                    Tmp = Tmp + ",'typeOfPayment':" + ActiveTicket.stPayment[i].typeOfPayment;
+                    Tmp = Tmp + ",'flags':" + ActiveTicket.stPayment[i].flags;
+                    Tmp = Tmp + ",'cardInfo':'" + ActiveTicket.stPayment[i].stBankPayment.stCard.pan + "'";
+
+                    if(i == FullPaymentLine - 1)
+                    {
+                        Tmp = Tmp + "}";
+                    }
+                    else
+                    {
+                        Tmp = Tmp + "},";
+                    }
                 }
             }
             Tmp = Tmp + "]";
@@ -1214,12 +1253,12 @@ namespace Ingenico
 
             RetCode = Json_GMPSmartDLL.FP3_VoidPayment(CurrentInterface, GetTransactionHandle(CurrentInterface), pIndex, ref m_stTicket, Defines.TIMEOUT_CARD_TRANSACTIONS);
 
-            if (RetCode == (uint)Defines.APP_ERR_FISCAL_INVALID_ENTRY)
+            if (RetCode == 0)
             {
-                return "PAYMENTCANCEL|FAULT";
+                return "PAYMENTCANCEL|SUCCESS:" + RetCode; 
             }
-
-            return "PAYMENTCANCEL|SUCCESS";
+            
+            return "PAYMENTCANCEL|FAULT:" + RetCode;
         }
         static string TicketOrHandleClose()
         {
@@ -1237,7 +1276,7 @@ namespace Ingenico
             bufferLen = GMPSmartDLL.prepare_Close(buffer, buffer.Length);
             AddIntoCommandBatch("prepare_Close", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen, "");
       
-            return "TICKETHANDLECLOSE|SUCCESS";
+            return "TICKETHANDLECLOSE|SUCCESS:0000~" + ReturnTicketToString();
         }
     }
-}
+} 
