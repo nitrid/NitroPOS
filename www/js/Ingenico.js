@@ -105,6 +105,10 @@ var Ingenico =
                 {
                     LocalEvent({tag:"TAXINFO",msg:data.toString().trim().split('|')[1]});
                 }
+                else if(data.toString().trim().split('|')[0] == "CLOSEHANDLE")
+                {
+                    LocalEvent({tag:"CLOSEHANDLE",msg:data.toString().trim().split('|')[1]});
+                }
             });
         }
 
@@ -261,6 +265,21 @@ var Ingenico =
                 if(data.toString().trim().split('|')[0] == "TAXINFO")
                 {
                     pCallBack({tag:"TAXINFO",msg:data.toString().trim().split('|')[1]});
+                    Terminal.stdout.removeListener('data',m);
+                }
+            }
+
+            Terminal.stdout.on('data', m);
+        }
+        Ingenico.prototype.CloseHandle = function(pCallBack)
+        {
+            Terminal.stdin.write('CLOSEHANDLE' + '\n');
+
+            let m = function(data)
+            {
+                if(data.toString().trim().split('|')[0] == "CLOSEHANDLE")
+                {
+                    pCallBack({tag:"CLOSEHANDLE",msg:data.toString().trim().split('|')[1]});
                     Terminal.stdout.removeListener('data',m);
                 }
             }

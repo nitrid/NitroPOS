@@ -495,14 +495,18 @@ function Pos($scope,$window,$rootScope,db)
 
         db.Ingenico.On("IngenicoEvent",async function(pData)
         {
-            if(pData.tag == "PAIRING" && pData.tag == "ITEM_SALE" && pData.tag == "INVOICE" && pData.tag == "PAYMENTCANCEL" && pData.tag == "TICKETHANDLECLOSE")
+            if(pData.tag == "PAIRING" || pData.tag == "ITEM_SALE" || pData.tag == "INVOICE" || pData.tag == "PAYMENTCANCEL" || pData.tag == "TICKETHANDLECLOSE" || pData.tag == "CLOSEHANDLE")
             {
-                console.log(pData.msg)
                 let data = (pData.msg.split("~",2).pop(1).split("'").join('"'))
 
                 if(data.length > 0)
                 {
                     $scope.IngenicoList = JSON.parse(data);
+                }
+                if(pData.tag == "PAIRING" && $scope.IngenicoList.RemainingAmount > 0)
+                {
+                    swal("Uyarı","Cihaz Üzerinde İşlem Mevcut Lütfen Tahsilat İptal Menüsünden İşlemi Kapatın","error");
+                    $scope.BtnIngTahList(0);
                 }
             }
             if(pData.tag == "PING")
@@ -600,6 +604,13 @@ function Pos($scope,$window,$rootScope,db)
                     $scope.IngenicoList.RemainingAmount = 0;
 
                     $("#MdlIngTahList").modal("hide");
+                }
+            }
+            else if(pData.tag == "CLOSEHANDLE")
+            {
+                if(pData.msg.split(":",1).pop(0) == "SUCCESS")
+                {
+                    SatisKapat();
                 }
             }
         });
@@ -1441,8 +1452,9 @@ function Pos($scope,$window,$rootScope,db)
                     title: "Uyarı!",
                     text : "Seçilen Satırın Tahsilatını İptal Etmek İstediğinize Emin Misiniz ?",
                     icon: "warning",
+                    closeOnClickOutside: false,
+                    closeOnEsc: false,
                     buttons: ["İşlemi İptal Et", "Devam Et"],
-                    dangerMode: false,
                     })
                     .then(async (willDelete) => 
                     {
@@ -1707,11 +1719,53 @@ function Pos($scope,$window,$rootScope,db)
         {
             if(pRetCode == 32)
             {
-                swal("Uyarı","Hata Kodu :"+ pRetCode + " Lütfen Cihaza Kağıt Takın.","error");
+                if($scope.IngenicoList.TotalReceiptAmount == 0)                                 
+                {
+                    swal("Uyarı","Hata Kodu :"+ pRetCode + " Lütfen Cihaza Kağıt Takın. Mevcut İşlemi Tekrar Cihaza Gönderin.","error");
+                    $scope.BtnTahBelgeIptal(0);
+                    $scope.BtnFisIptal();
+                }
+                else if($scope.IngenicoList.RemainingAmount == 0 && $scope.IngenicoList.stPayment.length > 0)
+                {
+                    swal({
+                        title: "Uyarı",
+                        text : "Hata Kodu :"+ pRetCode + " Lütfen Cihaza Kağıt Takın. Fişi Tamamlayın.",
+                        icon: "error",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false,
+                        buttons: ["İşlemi İptal Et", "Satışı Tamamla"],
+                        })
+                        .then(async (willDelete) => 
+                        {
+                        if (willDelete) 
+                        {
+                            $rootScope.LoadingShow();
+
+                            db.Ingenico.CloseHandle(function(pData)
+                            {
+                                $rootScope.LoadingHide();
+                            });
+                        }
+                        else 
+                        {
+                            
+                        }
+                    });
+                }
             }
             else if(pRetCode == 2067)
             {
                 swal("Uyarı","Hata Kodu :"+ pRetCode + " Fiş Limiti Yetersiz.","error");
+                if($scope.IngenicoList.stPayment.length == 0)                                 
+                {
+                    $scope.BtnTahBelgeIptal(0);
+                }
+            }
+            else if(pRetCode == 2021)
+            {
+                swal("Uyarı","Hata Kodu :"+ pRetCode + " Ödeme Başarısız. Satış Listesini Kontrol Edin.","error");
+                $scope.BtnTahBelgeIptal(0);
+                $scope.BtnFisIptal();
             }
             else if(pRetCode == 2085 || pRetCode == 2086 || pRetCode == 2087)
             {
@@ -2511,7 +2565,7 @@ function Pos($scope,$window,$rootScope,db)
                             {
                                 let TmpData = 
                                 {
-                                    PAYMENT : [] 
+                                    PAYMENT : []
                                 }
                                 for(let i = 0;i < $scope.TahList.length;i++)
                                 {
@@ -2658,7 +2712,7 @@ function Pos($scope,$window,$rootScope,db)
 
         if(typeof pType == 'undefined')
         {
-            if($scope.IngenicoList.stPayment.length > 0 && typeof require != 'undefined')
+            if($scope.IngenicoList.TotalReceiptPayment > 0 && typeof require != 'undefined')
             {   
                 for (let i = 0; i < $scope.TahList.length; i++) 
                 {
@@ -5035,5 +5089,16 @@ function Pos($scope,$window,$rootScope,db)
         {
            console.log(pData)
         });
+    }
+    $scope.BtnVazgec = async function()
+    {
+        if($scope.TahList.length == 0)
+        {
+            $('#MdlAraToplam').modal('hide');
+        }
+        else
+        {
+            swal("Dikkat","Tahsilat İşlemi Mevcut. Lütfen Tahsilatlarınızı İptal Edin.","warning")
+        }
     }
 }

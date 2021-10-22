@@ -259,6 +259,24 @@ namespace Ingenico
                     line = "GETTICKET|SUCCESS:0000" + "~" + ReturnTicketToString();
                     Console.WriteLine(line);
                 }
+                else if(tag == "CLOSEHANDLE")
+                {
+                    TotalPrint();
+                    MFPrintBefore();
+                    MFPrint();
+                    CloseHandle();
+
+                    if (ProcessBatchCommand())
+                    {
+                        Console.WriteLine("CLOSEHANDLE|SUCCESS:" + ProcStatus.ToString() + '~' + ReturnTicketToString());
+                    }
+                    else
+                    {
+                        Console.WriteLine("CLOSEHANDLE|FAULT:" + ProcStatus.ToString() + '~' + ReturnTicketToString());
+                    }
+
+                    ClearProcessBatchCommand();
+                }
                 if (tag == "exit") // Check string
                 {
                     break;
@@ -562,8 +580,6 @@ namespace Ingenico
                             {
                                 ProcStatus = (int)stReturnCodes[t].retcode;
                                 TerpItemList[t].Status = ProcStatus.ToString();
-
-                                //RefreshHandles();
                                 return false;
                             }
                         }
