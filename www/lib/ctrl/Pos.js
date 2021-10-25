@@ -1674,6 +1674,13 @@ function Pos($scope,$window,$rootScope,db)
                         $("#MdlParaUstu").modal("show");    
                         setTimeout(()=>{$("#MdlParaUstu").modal("hide")},5000);
                     }
+                    db.SafeApply($scope,function()
+                    {
+                        $scope.IngenicoActive = true;
+                        console.log(document.getElementById("IngenicoActive").checked)
+                        document.getElementById("IngenicoActive").checked = true;
+                        console.log(document.getElementById("IngenicoActive").checked)
+                    });
                                         
                     setTimeout(()=>
                     {
