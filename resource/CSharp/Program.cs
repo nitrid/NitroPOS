@@ -1194,11 +1194,11 @@ namespace Ingenico
 
             for (int i = 0; i < ActiveTicket.stPayment.Length; i++)
             {
-                if (ActiveTicket.stPayment[i] != null)
+                if (ActiveTicket.stPayment[i] != null && ActiveTicket.stPayment[i].stBankPayment.stPaymentErrMessage.ErrorCode == "")
                 {
                     FullPaymentLine += 1;
                 }
-            } //SATIŞ - TAHSİLAT GİRİŞMİŞ SATIRLARI SÜZME İŞLEMİ
+            } //SATIŞ - TAHSİLAT GİRİLMİŞ SATIRLARI SÜZME İŞLEMİ
             for (int i = 0; i < ActiveTicket.SaleInfo.Length; i++)
             {
                 if (ActiveTicket.SaleInfo[i] != null)
@@ -1239,15 +1239,17 @@ namespace Ingenico
 
             for (int i = 0; i < FullPaymentLine; i++)
             {
-                if (ActiveTicket.stPayment[i] != null && ActiveTicket.stPayment[i].flags == 0)
+                if (ActiveTicket.stPayment[i] != null && ActiveTicket.stPayment[i].flags == 0 && ActiveTicket.stPayment[i].stBankPayment.stPaymentErrMessage.ErrorCode == "")
                 {
                     Tmp = Tmp + "{";
                     Tmp = Tmp + "'payAmount':" + ActiveTicket.stPayment[i].payAmount;
                     Tmp = Tmp + ",'typeOfPayment':" + ActiveTicket.stPayment[i].typeOfPayment;
                     Tmp = Tmp + ",'flags':" + ActiveTicket.stPayment[i].flags;
+                    Tmp = Tmp + ",'ErrorCode':'" + ActiveTicket.stPayment[i].stBankPayment.stPaymentErrMessage.ErrorCode + "'";
+                    Tmp = Tmp + ",'ErrorMsg':'" + ActiveTicket.stPayment[i].stBankPayment.stPaymentErrMessage.ErrorMsg + "'";
                     Tmp = Tmp + ",'cardInfo':'" + ActiveTicket.stPayment[i].stBankPayment.stCard.pan + "'";
 
-                    if(i == FullPaymentLine - 1)
+                    if (i == FullPaymentLine - 1)
                     {
                         Tmp = Tmp + "}";
                     }
@@ -1257,6 +1259,7 @@ namespace Ingenico
                     }
                 }
             }
+
             Tmp = Tmp + "]";
             Tmp = Tmp + "}";
 

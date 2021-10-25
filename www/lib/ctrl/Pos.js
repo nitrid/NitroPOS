@@ -1819,7 +1819,15 @@ function Pos($scope,$window,$rootScope,db)
             }
             else if(pType == 1)
             {   
-                
+                db.Ingenico.Invoice(pTmpData,async function(pData)
+                {
+                    if(pData.msg.split(":",1).pop(1) == "FAULT")
+                    {   
+                        $scope.IngenicoList = JSON.parse(pData.msg.split("~",2).pop(1).split("'").join('"'));
+                        await IngenicoFaultCallback(pData.msg.split("~",1).pop(1).split(":",2).pop(1));
+                        resolve();
+                    }
+                });
             }
             else if(pType == 2)
             {   
