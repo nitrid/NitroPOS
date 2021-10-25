@@ -5095,6 +5095,7 @@ function Pos($scope,$window,$rootScope,db)
         if($scope.TahList.length == 0)
         {
             $('#MdlAraToplam').modal('hide');
+            $scope.BtnFisIptal();
         }
         else
         {
