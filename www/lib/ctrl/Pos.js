@@ -4878,9 +4878,10 @@ function Pos($scope,$window,$rootScope,db)
                 return;
             }
             
+            $rootScope.LoadingShow();
             db.Ingenico.TicketHandleClose(function(pData)
             {
-                
+                $rootScope.LoadingHide();
             });
         }
     }
@@ -5021,8 +5022,10 @@ function Pos($scope,$window,$rootScope,db)
     {
         if(pType == 0)
         {
+            $rootScope.LoadingShow();
             db.Ingenico.GetTicket(function(pData)
             {
+                $rootScope.LoadingHide();
                 if(pData.msg.split("~",2).pop(1).length > 2)
                 {
                     let data = (pData.msg.split("~",2).pop(1).split("'").join('"'))
@@ -5070,31 +5073,34 @@ function Pos($scope,$window,$rootScope,db)
                     return;
                 }
             }
-
+            $rootScope.LoadingShow();
             db.Ingenico.TicketHandleClose(function(pData)
             {
-
+                $rootScope.LoadingHide();
             });
         }
         else if(pType == 2)
         {
+            $rootScope.LoadingShow();
             db.Ingenico.RPayment({PAYMENT:[{"TYPE":1,"AMOUNT":$scope.IngenicoList.RemainingAmount,"GUID":""}]},async function(pData)
             {
-
+                $rootScope.LoadingHide();
             });
         }
         else if(pType == 3)
         {
+            $rootScope.LoadingShow();
             db.Ingenico.RPayment({PAYMENT:[{"TYPE":0,"AMOUNT":$scope.IngenicoList.RemainingAmount,"GUID":""}]},async function(pData)
             {
-                
+                $rootScope.LoadingHide();
             });
         }
         else if(pType == 4)
         {
+            $rootScope.LoadingShow();
             db.Ingenico.PaymentCancel([pIndex],async function(pData)
             {
-
+                $rootScope.LoadingHide();
             });
         }
     }

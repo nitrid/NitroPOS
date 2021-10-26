@@ -2810,13 +2810,13 @@
                                         <label><h5><span style="color:dodgerblue;">Toplam :</span></h5></label>
                                     </div>
                                     <div class="col-lg-3 px-1">
-                                        <label><h5><div class="float-left">{{(IngenicoList.TotalReceiptAmount | number:2) + " TL"}}</div></h5></label>
+                                        <label><h5><div class="float-left">{{(IngenicoList.TotalReceiptAmount | number:2) /100 + " TL"}}</div></h5></label>
                                     </div>
                                     <div class="col-lg-3 px-1">
                                         <label><h5><span style="color:dodgerblue;">Kalan :</span></h5></label>
                                     </div>
                                     <div class="col-lg-3 px-1">
-                                        <label><h5><div class="float-left">{{(IngenicoList.RemainingAmount | number:2) + " TL"}}</div></h5></label>
+                                        <label><h5><div class="float-left">{{(IngenicoList.RemainingAmount | number:2) / 100 + " TL"}}</div></h5></label>
                                     </div>
                                 </div>
                             </div>
