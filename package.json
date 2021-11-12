@@ -4,7 +4,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "moment": "^2.29.1",
-    "msnodesqlv8": "^2.2.0",
+    "msnodesqlv8": "^2.4.1",
     "mssql": "^7.2.1",
     "node-machine-id": "^1.1.12",
     "node-windows": "^1.0.0-beta.5",

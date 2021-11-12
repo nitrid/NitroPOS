@@ -32,9 +32,8 @@ var Ingenico =
                 if(data.toString().trim().split('|')[0] == "PING")
                 {
                     LocalEvent({tag:"PING",msg:data.toString().trim().split('|')[1]});
-                    console.log(data.toString().trim());
 
-                    if(data.toString().trim().split('|')[1] == "CONNECTED")
+                    if(data.toString().split("~",2)[0].split(":",2)[0] == "PING|SUCCESS")
                     {
                         Terminal.stdin.write('PAIRING\n');
                     }
@@ -50,10 +49,26 @@ var Ingenico =
                     LocalEvent({tag:"ITEM_SALE",msg:data.toString().trim().split('|')[1]});
                     console.log(data.toString().trim().split('|')[1]);
                 }
-                else if(data.toString().trim().split('|')[0] == "R_PAYMENT")
+                else if(data.toString().trim().split('|')[0] == "PAYMENT")
                 {
-                    LocalEvent({tag:"R_PAYMENT",msg:data.toString().trim().split('|')[1]});
+                    LocalEvent({tag:"PAYMENT",msg:data.toString().trim().split('|')[1]});
                     console.log(data.toString().trim().split('|')[1]);
+                }
+                else if(data.toString().trim().split('|')[0] == "PAYMENT_CANCEL")
+                {
+                    LocalEvent({tag:"PAYMENT_CANCEL",msg:data.toString().trim().split('|')[1]});
+                }
+                else if(data.toString().trim().split('|')[0] == "TIMEOUT_TICKET_CONTROL")
+                {
+                    LocalEvent({tag:"TIMEOUT_TICKET_CONTROL",msg:data.toString().trim().split('|')[1]});
+                }
+                else if(data.toString().trim().split('|')[0] == "HANDLE_CLOSE")
+                {
+                    LocalEvent({tag:"HANDLE_CLOSE",msg:data.toString().trim().split('|')[1]});
+                }
+                else if(data.toString().trim().split('|')[0] == "TICKET_CANCEL")
+                {
+                    LocalEvent({tag:"TICKET_CANCEL",msg:data.toString().trim().split('|')[1]});
                 }
                 else if(data.toString().trim().split('|')[0] == "ZREPORT")
                 {
@@ -93,60 +108,11 @@ var Ingenico =
                 {
                     LocalEvent({tag:"EKUCONTROL",msg:data.toString().trim().split('|')[1]});
                 }
-                else if(data.toString().trim().split('|')[0] == "TICKETHANDLECLOSE")
+                else if(data.toString().trim().split('|')[0] == "TAX_INFO")
                 {
-                    LocalEvent({tag:"TICKETHANDLECLOSE",msg:data.toString().trim().split('|')[1]});
-                }
-                else if(data.toString().trim().split('|')[0] == "PAYMENTCANCEL")
-                {
-                    LocalEvent({tag:"PAYMENTCANCEL",msg:data.toString().trim().split('|')[1]});
-                }
-                else if(data.toString().trim().split('|')[0] == "TAXINFO")
-                {
-                    LocalEvent({tag:"TAXINFO",msg:data.toString().trim().split('|')[1]});
-                }
-                else if(data.toString().trim().split('|')[0] == "CLOSEHANDLE")
-                {
-                    LocalEvent({tag:"CLOSEHANDLE",msg:data.toString().trim().split('|')[1]});
+                    LocalEvent({tag:"TAX_INFO",msg:data.toString().trim().split('|')[1]});
                 }
             });
-        }
-
-        Ingenico.prototype.SendData = function(pData,pCallBack)
-        {
-            //Terminal.stdin.write('ITEM_SALE|{"SALES":[{"NAME":"ÜLKER 100 GRM","QUANTITY":2,"AMOUNT":450,"TAX":1,"TYPE":0}],"PAYMENT":[{"TYPE":0,"AMOUNT":900}]}\n')
-            
-            console.log(JSON.stringify(pData))
-
-            Terminal.stdin.write('ITEM_SALE|' + JSON.stringify(pData) +'\n');
-
-            let m = function(data)
-            {
-                if(data.toString().trim().split('|')[0] == "ITEM_SALE")
-                {
-                    pCallBack({tag:"ITEM_SALE",msg:data.toString().trim().split('|')[1]});
-                    Terminal.stdout.removeListener('data',m);
-                }
-            }
-
-            Terminal.stdout.on('data', m);
-        }
-        Ingenico.prototype.RPayment = function(pData,pCallBack)
-        {
-            //console.log(pData);
-            
-            Terminal.stdin.write('R_PAYMENT|' + JSON.stringify(pData) +'\n');
-
-            let m = function(data)
-            {
-                if(data.toString().trim().split('|')[0] == "R_PAYMENT")
-                {
-                    pCallBack({tag:"R_PAYMENT",msg:data.toString().trim().split('|')[1]});
-                    Terminal.stdout.removeListener('data',m);
-                }
-            }
-
-            Terminal.stdout.on('data', m);
         }
         Ingenico.prototype.TicketClose = function()
         {
@@ -191,45 +157,39 @@ var Ingenico =
 
             Terminal.stdout.on('data', m);
         }
-        Ingenico.prototype.TicketHandleClose = function(pCallBack)
+        Ingenico.prototype.Pairing = function()
         {
-            Terminal.stdin.write('TICKETHANDLECLOSE' + '\n');
+            Terminal.stdin.write('PAIRING\n');
+        }
+        //
+        Ingenico.prototype.ItemSale = function(pData,pCallBack)
+        {
+            console.log(JSON.stringify(pData))
+
+            Terminal.stdin.write('ITEM_SALE|' + JSON.stringify(pData) +'\n');
 
             let m = function(data)
             {
-                if(data.toString().trim().split('|')[0] == "TICKETHANDLECLOSE")
+                if(data.toString().trim().split('|')[0] == "ITEM_SALE")
                 {
-                    pCallBack({tag:"TICKETHANDLECLOSE",msg:data.toString().trim().split('|')[1]});
+                    pCallBack({tag:"ITEM_SALE",msg:data.toString().trim().split('|')[1]});
                     Terminal.stdout.removeListener('data',m);
                 }
             }
 
             Terminal.stdout.on('data', m);
         }
-        Ingenico.prototype.GetTicket = function(pCallBack)
+        Ingenico.prototype.Payment = function(pData,pCallBack)
         {
-            Terminal.stdin.write('GETTICKET' + '\n');
+            console.log(pData);
+            
+            Terminal.stdin.write('PAYMENT|' + JSON.stringify(pData) +'\n');
 
             let m = function(data)
             {
-                if(data.toString().trim().split('|')[0] == "GETTICKET")
+                if(data.toString().trim().split('|')[0] == "PAYMENT")
                 {
-                    pCallBack({tag:"GETTICKET",msg:data.toString().trim().split('|')[1]});
-                    Terminal.stdout.removeListener('data',m);
-                }
-            }
-
-            Terminal.stdout.on('data', m);
-        }
-        Ingenico.prototype.PaymentCancel = function(pData,pCallBack)
-        {
-            Terminal.stdin.write('PAYMENTCANCEL|' + JSON.stringify(pData) +'\n');
-
-            let m = function(data)
-            {
-                if(data.toString().trim().split('|')[0] == "PAYMENTCANCEL")
-                {
-                    pCallBack({tag:"PAYMENTCANCEL",msg:data.toString().trim().split('|')[1]});
+                    pCallBack({tag:"PAYMENT",msg:data.toString().trim().split('|')[1]});
                     Terminal.stdout.removeListener('data',m);
                 }
             }
@@ -252,40 +212,82 @@ var Ingenico =
 
             Terminal.stdout.on('data', m);
         }
-        Ingenico.prototype.Pairing = function()
+        Ingenico.prototype.PaymentCancel = function(pData,pCallBack)
         {
-            Terminal.stdin.write('PAIRING\n');
-        }
-        Ingenico.prototype.TaxInfo = function(pCallBack)
-        {
-            Terminal.stdin.write('TAXINFO' + '\n');
+            Terminal.stdin.write('PAYMENT_CANCEL|' + JSON.stringify(pData) +'\n');
 
             let m = function(data)
             {
-                if(data.toString().trim().split('|')[0] == "TAXINFO")
+                if(data.toString().trim().split('|')[0] == "PAYMENT_CANCEL")
                 {
-                    pCallBack({tag:"TAXINFO",msg:data.toString().trim().split('|')[1]});
+                    pCallBack({tag:"PAYMENT_CANCEL",msg:data.toString().trim().split('|')[1]});
                     Terminal.stdout.removeListener('data',m);
                 }
             }
 
             Terminal.stdout.on('data', m);
         }
-        Ingenico.prototype.CloseHandle = function(pCallBack)
+        Ingenico.prototype.TimeOutTicketControl = function(pCallBack)
         {
-            Terminal.stdin.write('CLOSEHANDLE' + '\n');
+            Terminal.stdin.write('TIMEOUT_TICKET_CONTROL' + '\n');
 
             let m = function(data)
             {
-                if(data.toString().trim().split('|')[0] == "CLOSEHANDLE")
+                if(data.toString().trim().split('|')[0] == "TIMEOUT_TICKET_CONTROL")
                 {
-                    pCallBack({tag:"CLOSEHANDLE",msg:data.toString().trim().split('|')[1]});
+                    pCallBack({tag:"TIMEOUT_TICKET_CONTROL",msg:data.toString().trim().split('|')[1]});
                     Terminal.stdout.removeListener('data',m);
                 }
             }
 
             Terminal.stdout.on('data', m);
         }
+        Ingenico.prototype.HandleClose = function(pCallBack)
+        {
+            Terminal.stdin.write('HANDLE_CLOSE' + '\n');
+
+            let m = function(data)
+            {
+                if(data.toString().trim().split('|')[0] == "HANDLE_CLOSE")
+                {
+                    pCallBack({tag:"HANDLE_CLOSE",msg:data.toString().trim().split('|')[1]});
+                    Terminal.stdout.removeListener('data',m);
+                }
+            }
+
+            Terminal.stdout.on('data', m);
+        }
+        Ingenico.prototype.TicketCancel = function(pCallBack)
+        {
+            Terminal.stdin.write('TICKET_CANCEL' + '\n');
+
+            let m = function(data)
+            {
+                if(data.toString().trim().split('|')[0] == "TICKET_CANCEL")
+                {
+                    pCallBack({tag:"TICKET_CANCEL",msg:data.toString().trim().split('|')[1]});
+                    Terminal.stdout.removeListener('data',m);
+                }
+            }
+
+            Terminal.stdout.on('data', m);
+        }
+        Ingenico.prototype.TaxInfo = function(pData,pCallBack)
+        {
+            Terminal.stdin.write('TAX_INFO|' + JSON.stringify(pData) +'\n');
+
+            let m = function(data)
+            {
+                if(data.toString().trim().split('|')[0] == "TAX_INFO")
+                {
+                    pCallBack({tag:"TAX_INFO",msg:data.toString().trim().split('|')[1]});
+                    Terminal.stdout.removeListener('data',m);
+                }
+            }
+
+            Terminal.stdout.on('data', m);
+        }
+
         //#region "EVENT TRIGGER"        
         function LocalEvent(pData)
         {
