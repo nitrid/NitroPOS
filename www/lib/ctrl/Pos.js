@@ -5082,7 +5082,7 @@ function Pos($scope,$window,$rootScope,db)
 
         db.Ingenico.TaxInfo(KdvOran,function(pData)
         {
-
+            console.log(pData)
         });
     }
     $scope.BtnVazgec = async function()
