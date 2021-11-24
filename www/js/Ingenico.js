@@ -16,7 +16,6 @@ var Ingenico =
         {
            
         }        
-
         Ingenico.prototype.Init = function()
         {
             if(Pairing)
@@ -111,6 +110,10 @@ var Ingenico =
                 else if(data.toString().trim().split('|')[0] == "TAX_INFO")
                 {
                     LocalEvent({tag:"TAX_INFO",msg:data.toString().trim().split('|')[1]});
+                }
+                else if(data.toString().trim().split('|')[0] == "CLOSE")
+                {
+                    LocalEvent({tag:"CLOSE",msg:data.toString().trim().split('|')[1]});
                 }
             });
         }
@@ -281,6 +284,21 @@ var Ingenico =
                 if(data.toString().trim().split('|')[0] == "TAX_INFO")
                 {
                     pCallBack({tag:"TAX_INFO",msg:data.toString().trim().split('|')[1]});
+                    Terminal.stdout.removeListener('data',m);
+                }
+            }
+
+            Terminal.stdout.on('data', m);
+        }
+        Ingenico.prototype.Close = function(pCallBack)
+        {
+            Terminal.stdin.write('CLOSE' + '\n');
+
+            let m = function(data)
+            {
+                if(data.toString().trim().split('|')[0] == "CLOSE")
+                {
+                    pCallBack({tag:"CLOSE",msg:data.toString().trim().split('|')[1]});
                     Terminal.stdout.removeListener('data',m);
                 }
             }

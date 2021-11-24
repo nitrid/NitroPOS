@@ -1827,8 +1827,6 @@ function Pos($scope,$window,$rootScope,db)
             $scope.ParamListe = await db.GetPromiseTag($scope.Firma,'ParamGetir',[$scope.CihazID]);
             $scope.KullaniciListe = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',[$scope.Kullanici]);
 
-            clearInterval($scope.ClearInterval); //INTERVAL RESETLENIYOR
-
             setTimeout(function()
             { 
                 db.LCDPrint
@@ -1842,9 +1840,9 @@ function Pos($scope,$window,$rootScope,db)
                 );
             }, 1000);
 
-            if($scope.SatisList.length == 0) //30 DAKİKA DA BİR SATIŞ LİSTESİ BOŞSA ŞİFRE GİRİŞ EKRANI AÇILIYOR.
-            {
-                $scope.ClearInterval = setInterval(()=>
+            setTimeout(function()
+            { 
+                if($scope.SatisList.length == 0) //15 DAKİKA DA BİR SATIŞ LİSTESİ BOŞSA ŞİFRE GİRİŞ EKRANI AÇILIYOR.
                 {
                     db.SafeApply($scope,function()
                     {
@@ -1858,9 +1856,9 @@ function Pos($scope,$window,$rootScope,db)
                         FocusYetkiliSifre = false;
                         FocusKasaSifre = true;
                     })
-                },2800000);
-            }
-
+                }
+            },900000);
+            
             if($scope.ParamListe.length > 0)
             {
                 for (let i = 0; i < $scope.ParamListe.length; i++) 
@@ -2277,7 +2275,20 @@ function Pos($scope,$window,$rootScope,db)
             {
                 let TmpSale = {};
                 TmpSale.NAME = $scope.SatisList[i].ITEM_NAME.split("İ").join("I").split("ı").join("i").split("Ç").join("C").split("ç").join("c").split("Ğ").join("G").split("ğ").join("g").split("Ş").join("S").split("ş").join("s").split("Ö").join("O").split("ö").join("o").split("Ü").join("U").split("ü").join("u");
-                TmpSale.TAX = 1;
+                
+                if($scope.SatisList[i].RETAILPNTR == 3)
+                    TmpSale.TAX = 1;
+                else if($scope.SatisList[i].RETAILPNTR == 4)
+                    TmpSale.TAX = 2;
+                else if($scope.SatisList[i].RETAILPNTR == 5)
+                    TmpSale.TAX = 3;
+                else if($scope.SatisList[i].RETAILPNTR == 6)
+                    TmpSale.TAX = 4;
+                else if($scope.SatisList[i].RETAILPNTR == 7)
+                    TmpSale.TAX = 5;
+                else
+                    TmpSale.TAX = 0;
+
                 if($scope.SatisList[i].ITEM_UNIT == 2)
                 {
                     TmpSale.TYPE = 2;
@@ -2455,6 +2466,10 @@ function Pos($scope,$window,$rootScope,db)
             {
                 
             }
+            else if(EventName == "CLOSE")
+            {
+                
+            }
             if(EventName != "ITEM_SALE")
             {
                 $rootScope.LoadingHide();
@@ -2475,6 +2490,14 @@ function Pos($scope,$window,$rootScope,db)
             }
             else if(EventName == "ITEM_SALE")
             {
+                if(StatusCode == 61445)
+                {
+                    $rootScope.LoadingShow();
+                    db.Ingenico.Close(function(pData)
+                    {
+                        $rootScope.LoadingHide();
+                    });
+                }
                 $scope.BtnTahBelgeIptal(0);
             }
             else if(EventName == "PAYMENT")
@@ -2497,8 +2520,10 @@ function Pos($scope,$window,$rootScope,db)
                             {
                                 if(InfoText == "ISLEMI KAPAT")
                                 {
+                                    $rootScope.LoadingShow();
                                     db.Ingenico.HandleClose(function(pData)
                                     {
+                                        $rootScope.LoadingHide();
                                         SatisKapat();
                                     });
                                 }
@@ -2525,8 +2550,10 @@ function Pos($scope,$window,$rootScope,db)
                             {
                                 if(InfoText == "FIS IPTALI GERCEKLESTIR")
                                 {
+                                    $rootScope.LoadingShow();
                                     db.Ingenico.TicketCancel(function(pData)
                                     {
+                                        $rootScope.LoadingHide();
                                         $scope.BtnTahBelgeIptal(0);
                                     });
                                 }
@@ -2570,7 +2597,7 @@ function Pos($scope,$window,$rootScope,db)
             }
             else if(EventName == "PAYMENT_CANCEL")
             {
-                
+                  
             }
             else if(EventName == "TAXINFO")
             {
@@ -2588,7 +2615,10 @@ function Pos($scope,$window,$rootScope,db)
             {
                 
             }
-
+            else if(EventName == "CLOSE")
+            {
+                
+            }
             if(StatusCode != 61443)
             {
                 swal("Uyarı","Hata Kodu :"+ StatusCode + "\n" + InfoText,"error");
@@ -5078,7 +5108,7 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.BtnKdvGetir = async function()
     {
-        let KdvOran = [0,5,16,20];
+        let KdvOran = [0,1,8,18];
 
         db.Ingenico.TaxInfo(KdvOran,function(pData)
         {

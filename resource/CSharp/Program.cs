@@ -185,6 +185,13 @@ namespace Ingenico
                     ClearProcessBatchCommand();
                     Console.WriteLine("HANDLE_CLOSE|SUCCESS:" + 0 + "~" + CallBackInfo(0) + "!" + ReturnTicketToString());
                 }
+                else if (tag == "CLOSE")
+                {
+                    CloseHandle();
+                    ProcessBatchCommand();
+                    ClearProcessBatchCommand();
+                    Console.WriteLine("CLOSE|SUCCESS:" + 0 + "~" + CallBackInfo(0) + "!" + ReturnTicketToString());
+                }
                 else if (tag == "TICKET_CANCEL")
                 {
                     TicketCancel();
@@ -396,7 +403,7 @@ namespace Ingenico
                 return "ISLEM BASARILI";
             if (pInfo == 32)
                 return "CIHAZA KAGIT TAKIN";
-            else if(pInfo == 2317)
+            else if (pInfo == 2317)
                 return "HANDLE BILGISI HATALI CIHAZI YENIDEN ESLESTIRIN";
             else if (pInfo == 2080)
                 return "CIHAZ UZERINDE ISLEM MEVCUT, ISLEMI KAPATIN";
@@ -414,6 +421,12 @@ namespace Ingenico
                 return "BELIRTILEN SUREDE ISLEM YAPILMADI";
             else if (pInfo == 61468)
                 return "TERMINAL MESGUL";
+            else if (pInfo == 61445)
+                return "CIHAZA KAGIT TAKIN";
+            else if (pInfo == 2338)
+                return "ESLESME BASARISIZ";
+            else if (pInfo == 2310)
+                return "TARIH SAAT BILGISI YANLIS";
 
             return "ISLEM BASARISIZ";
         }
@@ -840,7 +853,7 @@ namespace Ingenico
 
             if (RetCode != Defines.TRAN_RESULT_OK)
             {
-                return "PAIRING|FAULT:" + CallBackInfo((int)RetCode) + "~" + ReturnTicketToString();
+                return "PAIRING|FAULT:" + RetCode.ToString() + "~" + CallBackInfo((int)RetCode) + "!" + ReturnTicketToString();
             }
 
             pairing.szExternalDeviceBrand = "INGENICO";
@@ -855,7 +868,7 @@ namespace Ingenico
 
             if (RetCode != Defines.TRAN_RESULT_OK)
             {
-                return "PAIRING|FAULT:" + RetCode.ToString() + CallBackInfo((int)RetCode) + "!" + ReturnTicketToString();
+                return "PAIRING|FAULT:" + RetCode.ToString() + "~" + CallBackInfo((int)RetCode) + "!" + ReturnTicketToString();
             }
 
             byte[] UniqueId = new byte[24] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
@@ -1314,10 +1327,10 @@ namespace Ingenico
         {
             UInt32 RetCode = 0;
 
-            ST_DEPARTMENT[] stDepartments = new ST_DEPARTMENT[12];
+            ST_DEPARTMENT[] stDepartments = new ST_DEPARTMENT[11];
             int numberOfTotalDepartmentsReceived = 0;
 
-            RetCode = Json_GMPSmartDLL.FP3_GetDepartments(CurrentInterface, ref numberOfTotalDepartments, ref numberOfTotalDepartmentsReceived, ref stDepartments, 12);
+            RetCode = Json_GMPSmartDLL.FP3_GetDepartments(CurrentInterface, ref numberOfTotalDepartments, ref numberOfTotalDepartmentsReceived, ref stDepartments, 11);
 
             if (RetCode != 0)
             {
