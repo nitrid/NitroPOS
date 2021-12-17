@@ -1826,8 +1826,7 @@ function Pos($scope,$window,$rootScope,db)
             
             $scope.ParamListe = await db.GetPromiseTag($scope.Firma,'ParamGetir',[$scope.CihazID]);
             $scope.KullaniciListe = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',[$scope.Kullanici]);
-
-            
+           
             if(typeof (pType) !="undefined")
             {
                 $('#MdlKasaSifre').modal({backdrop: 'static', keyboard: false});
@@ -1857,7 +1856,7 @@ function Pos($scope,$window,$rootScope,db)
             setTimeout(function()
             { 
                 console.log($scope.SatisList.length)
-                if($scope.SatisList.length == 0) //15 DAKİKA DA BİR SATIŞ LİSTESİ BOŞSA ŞİFRE GİRİŞ EKRANI AÇILIYOR.
+                if($scope.SatisList.length < 1 && $scope.Barkod == "" && $scope.GenelToplam == 0) //15 DAKİKA DA BİR SATIŞ LİSTESİ BOŞSA ŞİFRE GİRİŞ EKRANI AÇILIYOR.
                 {
                     db.SafeApply($scope,function()
                     {
