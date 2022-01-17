@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "escpos": "^3.0.0-alpha.6",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "moment": "^2.29.1",
+    "msnodesqlv8": "^2.4.1",
+    "mssql": "^7.2.1",
+    "node-machine-id": "^1.1.12",
+    "node-windows": "^1.0.0-beta.5",
+    "serialport": "^9.2.1",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^4.2.0"
+  }
+}

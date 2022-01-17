@@ -23,6 +23,10 @@ angular.module("app",
     {
         templateUrl : "html/kartlar/CariListesi.html"
     })
+    .when("/IptalSatis",
+    {
+        templateUrl : "html/rapor/IptalSatis.html"
+    })
     .when("/KullaniciParametre",
     {
         templateUrl : "html/ayarlar/KullaniciParametre.html"

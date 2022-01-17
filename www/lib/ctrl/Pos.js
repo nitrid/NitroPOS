@@ -1,11 +1,12 @@
 function Pos($scope,$window,$rootScope,db)
 {
     let IslemSelectedRow = null;
+    let ParkIslemSelectedRow = null;
+    let TahIslemSelectedRow = null;
+    let TahIngListSelectedRow = null;
     let CariSelectedRow = null;
     let StokSelectedRow = null;
     let BarkodSelectedRow = null;
-    let ParkIslemSelectedRow = null;
-    let TahIslemSelectedRow = null;
     let SonSatisSelectedRow = null;
     let FocusBarkod = true;
     let FocusAraToplam = false;
@@ -30,6 +31,7 @@ function Pos($scope,$window,$rootScope,db)
     let FocusSonKopya = false;
     let FocusIade = false;
     let FocusCekmeceAc = false;
+    let FocusRefresh = false;
 
     $('#MdlAraToplam').on('hide.bs.modal', function () 
     {
@@ -50,7 +52,6 @@ function Pos($scope,$window,$rootScope,db)
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
-        $scope.MsgLoading = false;
         $rootScope.LoadingHide();
     });
     $('#MdlMusteriListele').on('hide.bs.modal', function () 
@@ -156,7 +157,6 @@ function Pos($scope,$window,$rootScope,db)
         FocusSonKopya = false;
         FocusIade = false;
         FocusCekmeceAc = false;
-        $scope.MsgLoading = false;
     });
     $('#MdlParaUstu').on('hide.bs.modal', function () 
     {
@@ -438,6 +438,33 @@ function Pos($scope,$window,$rootScope,db)
         FocusIade = false;
         FocusCekmeceAc = false;
     });
+    $('#MdlRefreshSifre').on('hide.bs.modal', function () 
+    {
+        FocusBarkod = true;
+        FocusAraToplam = false;
+        FocusMusteri = false;
+        FocusStok = false;
+        FocusMiktarGuncelle = false;
+        FocusFiyatGuncelle = false;
+        FocusAvans = false;
+        FocusKartOdeme = false;
+        FocusYetkiliSifre = false;
+        FocusKasaSifre = false;
+        FocusXSifre = false;
+        FocusZSifre = false;
+        FocusBelgeIptal = false;
+        FocusSatirIptal = false;
+        FocusSonKopya = false;
+        FocusIade = false;
+        FocusCekmeceAc = false;
+        FocusRefresh = false;
+    });
+
+    let StatusCode = "";
+    let StatusName = "";
+    let InfoText = "";
+    let EventName = "";
+    let IngenicoCallbackData;
 
     if(typeof require != 'undefined')
     {
@@ -472,65 +499,42 @@ function Pos($scope,$window,$rootScope,db)
             }
         });
 
-        db.Ingenico.On("IngenicoEvent",function(pData)
+        db.Ingenico.On("IngenicoEvent",async function(pData)
         {
-            if(pData.tag == "PING")
+            if(typeof pData.msg != "undefined")
             {
-                if(pData.msg != "CONNECTED")
+                EventName = pData.tag;
+                if(typeof pData.msg.split("~",2)[0].split(":",2)[1] != "undefined")
                 {
-                    $scope.TxtOkcMesaj = "Bağlantı Başarısız.";
-                    $scope.BtnTxtOkcEslesme = "Tekrar";
+                    StatusCode = pData.msg.split("~",2)[0].split(":",2)[1];
+                }
+                if(typeof pData.msg.split("~",2)[0].split(":",2)[0] != "undefined")
+                {
+                    StatusName = pData.msg.split("~",2)[0].split(":",2)[0];
+                }
+                if(typeof pData.msg.split("!",2)[0].split("~",2)[1] != "undefined")
+                {
+                    InfoText = pData.msg.split("!",2)[0].split("~",2)[1];
+                }
+                if(typeof pData.msg.split("!",2)[1] != "undefined")
+                {
+                    IngenicoCallbackData = JSON.parse(pData.msg.split("!",2)[1].split("'").join('"'));
+                    $scope.IngenicoList = IngenicoCallbackData;
                 }
             }
-            else if(pData.tag == "PAIRING")
-            {
-                if(pData.msg == "SUCCES")
-                {
-                    $("#MdlIngenicoEslesme").modal("hide");  
-                }
-                else
-                {
-                    $scope.TxtOkcMesaj = "Eşleşme Başarısız.";
-                    $scope.BtnTxtOkcEslesme = "Tekrar";
-                }
-            }
-            else if(pData.tag == "ITEM_SALE")
-            {
-                if(pData.msg == "SUCCES")
-                {
-                    SatisKapat();
-                }
-                else if(pData.msg == "FAULT")
-                {
-                    db.Ingenico.TicketClose();
-                    $scope.BtnTahBelgeIptal(); //ÖDEME BAŞARISIZ OLURSA TAHSİLAT İPTAL EDİLİYOR.
-                    $("#MdlAraToplam").modal("hide");
-                    $("#MdlIngenicoEslesme").modal("show");
-                    $scope.TxtOkcMesaj = "Ödeme İşlemi Başarısız.";
-                    $scope.BtnTxtOkcEslesme = "İptal";  
-                    $scope.MsgLoading = false;
-                }
-            }
-            else if(pData.tag == "INVOICE")
-            {
-                if(pData.msg == "SUCCES")
-                {
-                    SatisKapat();
-                }
-                else if(pData.msg == "FAULT")
-                {
-                    db.Ingenico.TicketClose();
-                    $scope.BtnTahBelgeIptal();
-                    $("#MdlAraToplam").modal("hide");
-                    $("#MdlIngenicoEslesme").modal("show");
-                    $scope.TxtOkcMesaj = "Ödeme İşlemi Başarısız.";
-                    $scope.BtnTxtOkcEslesme = "İptal";
-                    $scope.MsgLoading = false;
-                }
-            }
-        });
 
-    }       
+            IngenicoCallbackEvent();
+        });
+    }
+    String.prototype.replaceAt = function(index, replacement) 
+    {
+        if (index >= this.length) 
+        {
+            return this.valueOf();
+        }
+     
+        return this.substring(0, index) + replacement + this.substring(index + 1);
+    }   
     $rootScope.LoadingShow = function() 
     {
         $("#loading").show();
@@ -543,6 +547,7 @@ function Pos($scope,$window,$rootScope,db)
     {
         alertify.alert(pMsg);
     }
+
     function Init()
     {
         $scope.Kullanici = $window.sessionStorage.getItem('User');
@@ -590,6 +595,7 @@ function Pos($scope,$window,$rootScope,db)
         $scope.TxtSatirIptalSifre = "";
         $scope.TxtSonKopyaSifre = "";
         $scope.TxtIadeSifre = "";
+        $scope.TxtRefreshSifre = "";
         $scope.TxtCekmeceAcSifre = "";
         $scope.TxtOkcMesaj = "OKC Cihazıyla Eşleşme Yapılıyor.";
         $scope.BtnTxtOkcEslesme = "İptal";
@@ -604,10 +610,10 @@ function Pos($scope,$window,$rootScope,db)
         $scope.LCDPORT = "";
         $scope.SCALEPORT = "";
         $scope.PRINTPORT = "";
-        $scope.MsgLoading = false;
         $scope.KiloBaslangic = 0;
         $scope.KiloUzunluk = 0;
         $scope.KiloFlag = 0;
+        $scope.IngenicoActive = true;
         
         $scope.KasaNo = 1;
         $scope.Saat = moment(new Date(),"HH:mm:ss").format("HH:mm:ss");
@@ -647,7 +653,9 @@ function Pos($scope,$window,$rootScope,db)
         $scope.KasaAraToplamRaporList = [];
         $scope.ParamListe = [];
         $scope.KullaniciListe = [];
-        
+        $scope.IngenicoList = [];
+        $scope.RPaymentList = [];
+
         setInterval(()=>
         {
             db.SafeApply($scope,function()
@@ -664,7 +672,8 @@ function Pos($scope,$window,$rootScope,db)
             })
         },21600000);
 
-        InitClass();        
+        InitClass();   
+             
     }
     function InitClass()
     {
@@ -1305,6 +1314,75 @@ function Pos($scope,$window,$rootScope,db)
             }
         });
     }
+    function InitIngTahGrid()
+    {
+        $("#TblIngTahList").jsGrid({
+            responsive: true,
+            width: "100%",
+            height: "250px",
+            updateOnResize: true,
+            heading: true,
+            selecting: true,
+            data : $scope.IngenicoList.stPayment,
+            rowClass: function (item, itemIndex)
+            {
+                return "rowheight";
+            },
+            fields: 
+            [
+                {
+                    name: "cardInfo",
+                    title: "KART BİLGİSİ",
+                    type: "text",
+                    align: "center",
+                    width: 100
+                },
+                {
+                    name: "SATISTIPI",
+                    title: "SATIŞ TİPİ",
+                    type: "text",
+                    align: "center",
+                    width: 50
+                },
+                {
+                    name: "STATUS",
+                    title: "DURUM",
+                    type: "text",
+                    align: "center",
+                    width: 80
+                },
+            ],
+            rowClick: function(args)
+            {
+                $scope.IngTahListRowClick(args.itemIndex,args.item);
+                $scope.$apply();
+
+                if(args.item.flags == "4")
+                {
+                    return;
+                }
+                swal({
+                    title: "Uyarı!",
+                    text : "Seçilen Satırın Tahsilatını İptal Etmek İstediğinize Emin Misiniz ?",
+                    icon: "warning",
+                    closeOnClickOutside: false,
+                    closeOnEsc: false,
+                    buttons: ["İşlemi İptal Et", "Devam Et"],
+                    })
+                    .then(async (willDelete) => 
+                    {
+                    if (willDelete) 
+                    {
+                        $scope.BtnIngTahList(4,args.itemIndex);
+                    }
+                    else 
+                    {
+
+                    }
+                });
+            }
+        });
+    }
     function InsertSonYenile(pData)
     {    
         $scope.SatisList = pData;
@@ -1509,10 +1587,16 @@ function Pos($scope,$window,$rootScope,db)
                         $("#MdlParaUstu").modal("show");    
                         setTimeout(()=>{$("#MdlParaUstu").modal("hide")},5000);
                     }
+                    db.SafeApply($scope,function()
+                    {
+                        $scope.IngenicoActive = true;
+                        document.getElementById("IngenicoActive").checked = true;
+                    });
                                         
                     setTimeout(()=>
                     {
                         $('#MdlAraToplam').modal('hide');
+                        $('#MdlIngTahList').modal('hide');
                         $scope.YeniEvrak();
                         $scope.TxtBarkod = "";
                         $scope.TahPanelKontrol = false;
@@ -1542,10 +1626,21 @@ function Pos($scope,$window,$rootScope,db)
                             );
                         }, 3000);
                     },500)
-                    
                 });                                  
             });
         }
+    }
+    function IngenicoTahIptal()
+    {
+        return new Promise(async resolve => 
+        {
+            $rootScope.LoadingShow();
+            db.Ingenico.PaymentCancel([$scope.TahIslemListeSelectedIndex],async function(pData)
+            {
+               resolve();
+               $rootScope.LoadingHide();
+            });
+        });
     }
     document.onkeydown = function(e)
     {
@@ -1620,6 +1715,10 @@ function Pos($scope,$window,$rootScope,db)
         {
             $window.document.getElementById("TxtIadeSifre").focus();
         }
+        else if(FocusRefresh)
+        {
+            $window.document.getElementById("TxtRefreshSifre").focus();
+        }
         else if(FocusCekmeceAc)
         {
             $window.document.getElementById("TxtCekmeceAcSifre").focus();
@@ -1632,6 +1731,13 @@ function Pos($scope,$window,$rootScope,db)
         $row.children('.jsgrid-cell').css('background-color','#2979FF').css('color','white');
         IslemSelectedRow = $row;
         $scope.IslemListeSelectedIndex = pIndex;
+    }
+    $scope.IngTahListRowClick = function(pIndex,pItem)
+    {
+        if ( TahIngListSelectedRow ) { TahIngListSelectedRow.children('.jsgrid-cell').css('background-color', '').css('color',''); }
+        var $row = $("#TblIngTahList").jsGrid("rowByItem", pItem);
+        $row.children('.jsgrid-cell').css('background-color','#2979FF').css('color','white');
+        TahIngListSelectedRow = $row;
     }
     $scope.TahIslemListeRowClick = function(pIndex,pItem)
     {
@@ -1700,7 +1806,7 @@ function Pos($scope,$window,$rootScope,db)
             $("#TblSonSatisTahDetay").jsGrid({data : $scope.SonSatisTahDetayList});
         });
     }
-    $scope.YeniEvrak = async function()
+    $scope.YeniEvrak = async function(pType)
     {
         db.Connection(async function(data)
         {            
@@ -1716,13 +1822,23 @@ function Pos($scope,$window,$rootScope,db)
             InitSonSatisTahDetayGrid();
             InitAraToplamGrid();
             InitKasaAraToplamGrid();
+            InitIngTahGrid();
             
             $scope.ParamListe = await db.GetPromiseTag($scope.Firma,'ParamGetir',[$scope.CihazID]);
             $scope.KullaniciListe = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',[$scope.Kullanici]);
-
-            console.log($scope.KullaniciListe)
-
-            clearInterval($scope.ClearInterval); //INTERVAL RESETLENIYOR
+           
+            if(typeof (pType) !="undefined")
+            {
+                $('#MdlKasaSifre').modal({backdrop: 'static', keyboard: false});
+                FocusBarkod = false;
+                FocusAraToplam = false;
+                FocusMusteri = false;
+                FocusStok = false;
+                FocusKartOdeme = false;
+                FirstKey = false;
+                FocusYetkiliSifre = false;
+                FocusKasaSifre = true;
+            }
 
             setTimeout(function()
             { 
@@ -1737,9 +1853,10 @@ function Pos($scope,$window,$rootScope,db)
                 );
             }, 1000);
 
-            if($scope.SatisList.length == 0) //30 DAKİKA DA BİR SATIŞ LİSTESİ BOŞSA ŞİFRE GİRİŞ EKRANI AÇILIYOR.
-            {
-                $scope.ClearInterval = setInterval(()=>
+            setTimeout(function()
+            { 
+                console.log($scope.SatisList.length)
+                if($scope.SatisList.length < 1 && $scope.Barkod == "" && $scope.GenelToplam == 0) //15 DAKİKA DA BİR SATIŞ LİSTESİ BOŞSA ŞİFRE GİRİŞ EKRANI AÇILIYOR.
                 {
                     db.SafeApply($scope,function()
                     {
@@ -1753,9 +1870,9 @@ function Pos($scope,$window,$rootScope,db)
                         FocusYetkiliSifre = false;
                         FocusKasaSifre = true;
                     })
-                },2800000);
-            }
-
+                }
+            },900000);
+            
             if($scope.ParamListe.length > 0)
             {
                 for (let i = 0; i < $scope.ParamListe.length; i++) 
@@ -1893,6 +2010,11 @@ function Pos($scope,$window,$rootScope,db)
 
                 $("#TblParkIslem").jsGrid({data : $scope.ParkList}); 
             });
+            //INGENICO AKTIFE
+            if($scope.IngenicoActive)
+            {
+                document.getElementById("IngenicoActive").checked = true;
+            }
             
             await db.MaxSira($scope.Firma,'MaxPosSatisSira',[$scope.Sube,$scope.Seri,$scope.EvrakTip],function(data){$scope.Sira = data});
             await db.MaxSira($scope.Firma,'MaxPosTahSira',[$scope.Sube,$scope.TahSeri,0],function(data){$scope.TahSira = data});
@@ -1992,50 +2114,49 @@ function Pos($scope,$window,$rootScope,db)
                     {
                         if(TmpKiloFlag[i] == pBarkod.substring(0,2))
                         {
-                            $scope.Miktar = await db.Scale.Send($scope.SCALEPORT);
+                            if(typeof db.KiloBarkod(pKiloBarkod,$scope.KiloBaslangic,$scope.KiloUzunluk,$scope.KiloFlag).Miktar !='undefined')
+                            {
+                                $scope.Miktar = db.KiloBarkod(pKiloBarkod,$scope.KiloBaslangic,$scope.KiloUzunluk,$scope.KiloFlag).Miktar;
 
-                            if($scope.Miktar.includes(".") == true)
-                            {
-                                $scope.Miktar = $scope.Miktar;
-                                if($scope.Miktar.includes("kg") == true)
+                                if($scope.Miktar == 0)
                                 {
-                                    $scope.Miktar = $scope.Miktar.split("kg").join("");
-                                }
-                            }
-                            else
-                            {
-                                alertify.alert("Lütfen Tartım Alınız");
-                                return;
-                            }
+                                    $scope.Miktar = await db.Scale.Send($scope.SCALEPORT);
 
-                            if($scope.ScaleType == "0")
-                            {
-                                if($scope.Miktar.includes("S ") == false)
-                                {
-                                    alertify.alert("Tartım başarısız lütfen tekrar tartım alınız.")
-                                    return;
-                                }
-                                if($scope.Miktar.includes("kg") == true)
-                                {
-                                    $scope.Miktar = $scope.Miktar.split("kg").join("");
-                                }
-                                if($scope.Miktar.includes("S ") == true)
-                                {
-                                    $scope.Miktar = $scope.Miktar.split("S ").join("");
-                                }
-                            }
-                          
-                            if($scope.Miktar <= 0)
-                            {
-                                if(typeof db.KiloBarkod(pKiloBarkod,$scope.KiloBaslangic,$scope.KiloUzunluk,$scope.KiloFlag).Miktar !='undefined')
-                                {
-                                    $scope.Miktar = db.KiloBarkod(pKiloBarkod,$scope.KiloBaslangic,$scope.KiloUzunluk,$scope.KiloFlag).Miktar;
-
-                                    if($scope.Miktar == 0)
+                                    if($scope.Miktar.includes(".") == true)
                                     {
-                                        alertify.alert("Lütfen Tartım Alınız.");
+                                        $scope.Miktar = $scope.Miktar;
+                                        if($scope.Miktar.includes("kg") == true)
+                                        {
+                                            $scope.Miktar = $scope.Miktar.split("kg").join("");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        alertify.alert("Lütfen Tartım Alınız");
+                                        return;
+                                    }
+                                    if($scope.Miktar <= 0)
+                                    {
+                                        alertify.alert("Lütfen Tartım Alınız");
                                         $scope.TxtBarkod = "";
                                         return;
+                                    }
+
+                                    if($scope.ScaleType == "0")
+                                    {
+                                        if($scope.Miktar.includes("S ") == false)
+                                        {
+                                            alertify.alert("Tartım başarısız lütfen tekrar tartım alınız.")
+                                            return;
+                                        }
+                                        if($scope.Miktar.includes("kg") == true)
+                                        {
+                                            $scope.Miktar = $scope.Miktar.split("kg").join("");
+                                        }
+                                        if($scope.Miktar.includes("S ") == true)
+                                        {
+                                            $scope.Miktar = $scope.Miktar.split("S ").join("");
+                                        }
                                     }
                                 }
                             }
@@ -2157,6 +2278,369 @@ function Pos($scope,$window,$rootScope,db)
         //     InsertFisYenile(PosFisData);   
         // });
     }
+    function IngenicoFisSend()
+    {
+        return new Promise(async resolve => 
+        {
+            let SaleData = {SALES : []};
+            let PaymentData = {PAYMENT : []}
+
+            for(let i = 0;i < $scope.SatisList.length;i++)
+            {
+                let TmpSale = {};
+                TmpSale.NAME = $scope.SatisList[i].ITEM_NAME.split("İ").join("I").split("ı").join("i").split("Ç").join("C").split("ç").join("c").split("Ğ").join("G").split("ğ").join("g").split("Ş").join("S").split("ş").join("s").split("Ö").join("O").split("ö").join("o").split("Ü").join("U").split("ü").join("u");
+                
+                if($scope.SatisList[i].RETAILPNTR == 3)
+                    TmpSale.TAX = 1;
+                else if($scope.SatisList[i].RETAILPNTR == 4)
+                    TmpSale.TAX = 2;
+                else if($scope.SatisList[i].RETAILPNTR == 5)
+                    TmpSale.TAX = 3;
+                else if($scope.SatisList[i].RETAILPNTR == 6)
+                    TmpSale.TAX = 4;
+                else if($scope.SatisList[i].RETAILPNTR == 7)
+                    TmpSale.TAX = 5;
+                else
+                    TmpSale.TAX = 0;
+
+                if($scope.SatisList[i].ITEM_UNIT == 2)
+                {
+                    TmpSale.TYPE = 2;
+                    TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY.toFixed(3) * 1000
+                }
+                else
+                {
+                    TmpSale.TYPE = 1;
+                    TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY;
+                }
+                TmpSale.AMOUNT =  parseFloat(($scope.SatisList[i].PRICE * 100).toFixed(2));
+                SaleData.SALES.push(TmpSale);
+            }
+            for(let i = 0;i < $scope.TahList.length;i++)
+            {
+                let TmpPayment = {};
+                TmpPayment.TYPE = $scope.TahList[i].TYPE;
+                TmpPayment.AMOUNT = 0;
+                TmpPayment.GUID = $scope.TahList[i].GUID;
+
+                if($scope.TahList[i].TYPE == 0)
+                {
+                    TmpPayment.AMOUNT = parseFloat((($scope.TahList[i].AMOUNT + $scope.TahList[i].CHANGE) * 100).toFixed(2));
+                }
+                else
+                {
+                    TmpPayment.AMOUNT = parseFloat(($scope.TahList[i].AMOUNT * 100).toFixed(2));
+                }
+                PaymentData.PAYMENT.push(TmpPayment);
+            }
+
+            db.Ingenico.ItemSale(SaleData,async function(pData)
+            {
+                if(StatusCode == 0)                                         //Satıştan sonraki status durumu
+                {
+                    db.Ingenico.Payment(PaymentData,async function(pData)
+                    {
+                        if(StatusCode == 0)                                 //Tahsilattan sonraki status durumu
+                        {
+                            resolve(true);
+                        }
+                        else
+                        {
+                            resolve(false);
+                        }
+                    });
+                }
+                else
+                {
+                    resolve(false);
+                }
+            });
+        });
+    }
+    function IngenicoFatSend()
+    {
+        return new Promise(async resolve => 
+        {
+            let Seri = $scope.Seri.split("İ").join("I").split("ı").join("i").split("Ç").join("C").split("ç").join("c").split("Ğ").join("G").split("ğ").join("g").split("Ş").join("S").split("ş").join("s").split("Ö").join("O").split("ö").join("o").split("Ü").join("U").split("ü").join("u");
+            let PaymentData = {INVOICE : [{NO : Seri + $scope.Sira,VKN : "11111111111",AMOUNT : $scope.GenelToplam * 100,TYPE : $scope.TahTip}]}
+           
+            db.Ingenico.Invoice(PaymentData,async function(pData)
+            {
+                if(StatusCode == 0)                         
+                {
+                    resolve(true);
+                }
+                else
+                {
+                    resolve(false);
+                }
+            });
+        });
+    }
+    function IngenicoPaymentSend(pType)
+    {
+        return new Promise(async resolve => 
+        {
+            let PaymentData = {PAYMENT : []}
+
+            if(pType == 0)
+            {
+                for (let i = 0; i < $scope.TahList.length; i++) 
+                {    
+                    if(typeof ($scope.RPaymentList[i]) == "undefined")                           //Ingenico Listesi ile Tahsilat Listesi Karşılaştırılıyor.
+                    {
+                        let TmpPayment = {};
+
+                        TmpPayment.TYPE = $scope.TahList[i].TYPE;
+                        TmpPayment.AMOUNT = 0;
+
+                        if($scope.TahList[i].TYPE == 0)
+                        {
+                            TmpPayment.AMOUNT = parseFloat((($scope.TahList[i].AMOUNT + $scope.TahList[i].CHANGE) * 100).toFixed(2));
+                        }
+                        else
+                        {
+                            TmpPayment.AMOUNT = parseFloat(($scope.TahList[i].AMOUNT * 100).toFixed(2));
+                        }
+
+                        PaymentData.PAYMENT.push(TmpPayment);
+                    }
+                }
+            }
+            else if(pType == 1)
+            {
+                for(let i = 0;i < $scope.TahList.length;i++)
+                {
+                    let TmpPayment = {};
+                    TmpPayment.TYPE = $scope.TahList[i].TYPE;
+                    TmpPayment.AMOUNT = 0;
+
+                    if($scope.TahList[i].TYPE == 0)
+                    {
+                        TmpPayment.AMOUNT = parseFloat((($scope.TahList[i].AMOUNT + $scope.TahList[i].CHANGE) * 100).toFixed(2));
+                    }
+                    else
+                    {
+                        TmpPayment.AMOUNT = parseFloat(($scope.TahList[i].AMOUNT * 100).toFixed(2));
+                    }
+                    PaymentData.PAYMENT.push(TmpPayment);
+                }
+            }
+
+            db.Ingenico.Payment(PaymentData,async function(pData)
+            {
+                if(StatusCode == 0)                                 //Tahsilattan sonraki status durumu
+                {
+                    resolve(true);
+                }
+                else
+                {
+                    resolve(false);
+                }
+            });
+        });
+    }
+    function IngenicoCallbackEvent()
+    {
+        if(StatusCode == 0)
+        {
+            if(EventName == "PAIRING")
+            {
+                $("#MdlIngenicoEslesme").modal("hide");
+            }
+            else if(EventName == "ITEM_SALE")
+            {
+
+            }
+            else if(EventName == "PAYMENT")
+            {
+                
+            }
+            else if(EventName == "INVOICE")
+            {
+                
+            }
+            else if(EventName == "PAYMENT_CANCEL")
+            {
+                
+            }
+            else if(EventName == "TAXINFO")
+            {
+
+            }
+            else if(EventName == "TIMEOUT_TICKET_CONTROL")
+            {
+                
+            }
+            else if(EventName == "HANDLE_CLOSE")
+            {
+                
+            }
+            else if(EventName == "TICKET_CANCEL")
+            {
+                
+            }
+            else if(EventName == "CLOSE")
+            {
+                
+            }
+            if(EventName != "ITEM_SALE")
+            {
+                $rootScope.LoadingHide();
+            }
+        }
+        else
+        {
+            if(EventName == "PAIRING")
+            {
+                if(StatusCode != 2080)
+                {
+                    $scope.TxtOkcMesaj = "Eşleşme Başarısız";
+                }
+                else
+                {
+                    $("#MdlIngenicoEslesme").modal("hide");
+                }
+            }
+            else if(EventName == "ITEM_SALE")
+            {
+                if(StatusCode == 61445)
+                {
+                    $rootScope.LoadingShow();
+                    db.Ingenico.Close(function(pData)
+                    {
+                        $rootScope.LoadingHide();
+                    });
+                }
+                $scope.BtnTahBelgeIptal(0);
+            }
+            else if(EventName == "PAYMENT")
+            {
+                if(StatusCode == 61443)
+                {
+                    swal({
+                    title: "Dikkat!",
+                    text : "Timeout hatasına düştünüz. Hangi işlemi yapmak istersiniz ?",
+                    icon: "error",
+                    closeOnClickOutside: false,
+                    closeOnEsc: false,
+                    buttons: ["Tüm Fişi İptal Et", "Satışı Kapat"],
+                    })
+                    .then(async (willDelete) => 
+                    {
+                        if (willDelete) 
+                        {
+                            db.Ingenico.TimeOutTicketControl(function(pData)
+                            {
+                                if(InfoText == "ISLEMI KAPAT")
+                                {
+                                    $rootScope.LoadingShow();
+                                    db.Ingenico.HandleClose(function(pData)
+                                    {
+                                        $rootScope.LoadingHide();
+                                        SatisKapat();
+                                    });
+                                }
+                                else if("TAHSILAT IPTALI VE FIS IPTALI YAP")
+                                {
+                                    swal("Uyarı!","İşlem Gerçekleştirilemedi, Tahsilat iptali ve Fiş iptali Gerçekleştirin.");
+                                    for (let i = 0; i < $scope.TahList.length; i++) 
+                                    {
+                                        if(typeof (IngenicoCallbackData.stPayment[i]) == "undefined")            //Ingenico Listesi ile Tahsilat Listesi Karşılaştırılıyor.
+                                        {
+                                            $scope.BtnTahSatirIptal(i,0);                                        //Başarısız Tahsilatlar siliniyor.
+                                        }
+                                        else
+                                        {
+                                            $scope.RPaymentList.push(i);                                         //Ingenico tarafındaki başarılı kayıtlar kendi listemizde check ediliyor.
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                        else 
+                        {
+                            db.Ingenico.TimeOutTicketControl(function(pData)
+                            {
+                                if(InfoText == "FIS IPTALI GERCEKLESTIR")
+                                {
+                                    $rootScope.LoadingShow();
+                                    db.Ingenico.TicketCancel(function(pData)
+                                    {
+                                        $rootScope.LoadingHide();
+                                        $scope.BtnTahBelgeIptal(0);
+                                    });
+                                }
+                                else if("TAHSILAT IPTALI VE FIS IPTALI YAP")
+                                {
+                                    swal("Uyarı!","İşlem Gerçekleştirilemedi, Tahsilat iptali ve Fiş iptali Gerçekleştirin.");
+                                    for (let i = 0; i < $scope.TahList.length; i++) 
+                                    {
+                                        if(typeof (IngenicoCallbackData.stPayment[i]) == "undefined")            //Ingenico Listesi ile Tahsilat Listesi Karşılaştırılıyor.
+                                        {
+                                            $scope.BtnTahSatirIptal(i,0);                                        //Başarısız Tahsilatlar siliniyor.
+                                        }
+                                        else
+                                        {
+                                            $scope.RPaymentList.push(i);                                         //Ingenico tarafındaki başarılı kayıtlar kendi listemizde check ediliyor.
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+                else
+                {
+                    for (let i = 0; i < $scope.TahList.length; i++) 
+                    {
+                        if(typeof (IngenicoCallbackData.stPayment[i]) == "undefined")            //Ingenico Listesi ile Tahsilat Listesi Karşılaştırılıyor.
+                        {
+                            $scope.BtnTahSatirIptal(i,0);                                        //Başarısız Tahsilatlar siliniyor.
+                        }
+                        else
+                        {
+                            $scope.RPaymentList.push(i);                                         //Ingenico tarafındaki başarılı kayıtlar kendi listemizde check ediliyor.
+                        }
+                    }
+                }
+            }
+            else if(EventName == "INVOICE")
+            {
+                
+            }
+            else if(EventName == "PAYMENT_CANCEL")
+            {
+                  
+            }
+            else if(EventName == "TAXINFO")
+            {
+
+            }
+            else if(EventName == "TIMEOUT_TICKET_CONTROL")
+            {
+                
+            }
+            else if(EventName == "HANDLE_CLOSE")
+            {
+                
+            }
+            else if(EventName == "TICKET_CANCEL")
+            {
+                
+            }
+            else if(EventName == "CLOSE")
+            {
+                
+            }
+            if(StatusCode != 61443)
+            {
+                swal("Uyarı","Hata Kodu :"+ StatusCode + "\n" + InfoText,"error");
+            }
+
+            $rootScope.LoadingHide();
+        }
+    }
     $scope.PosTahInsert = function(pCallBack)
     {   
         let TahTutar = 0
@@ -2201,11 +2685,11 @@ function Pos($scope,$window,$rootScope,db)
         ];
         if($scope.TxtAraToplamTutar.toString().replace(',','.') > 0)
         {
-            db.ExecuteTag($scope.Firma,'PosTahInsert',InsertData,function(InsertResult)
+            db.ExecuteTag($scope.Firma,'PosTahInsert',InsertData,async function(InsertResult)
             {   
                 if(typeof(InsertResult.result.err) == 'undefined')
                 {                
-                    db.GetData($scope.Firma,'PosTahGetir',[$scope.Sube,$scope.EvrakTip,$scope.TahSeri,$scope.TahSira],function(PosTahData)
+                    db.GetData($scope.Firma,'PosTahGetir',[$scope.Sube,$scope.EvrakTip,$scope.TahSeri,$scope.TahSira],async function(PosTahData)
                     {   
                         $scope.TahList = PosTahData;
                         TahSonYenile();  
@@ -2215,93 +2699,37 @@ function Pos($scope,$window,$rootScope,db)
                             $rootScope.LoadingShow();
                         }
 
-                        if(typeof require != 'undefined' && $scope.TahKalan <= 0)
+                        if(typeof require != 'undefined' && $scope.TahKalan <= 0 && $scope.IngenicoActive)
                         {
-                            let TmpData = 
+                            let Status;
+                            if(IngenicoCallbackData.RemainingAmount > 0 && IngenicoCallbackData.stPayment.length > 0)           //Tahsilatı alınmış tahsilat varsa 
                             {
-                                SALES : [],
-                                PAYMENT : [] 
+                                Status = await IngenicoPaymentSend(0);
                             }
-
-                            for(let i = 0;i < $scope.SatisList.length;i++)
+                            else if(IngenicoCallbackData.RemainingAmount > 0 && IngenicoCallbackData.stPayment.length == 0)      //Tahsilat hiç alınmamışsa
                             {
-                                let TmpSale = {};
-                                TmpSale.NAME = $scope.SatisList[i].ITEM_NAME.split("İ").join("I").split("ı").join("i").split("Ç").join("C").split("ç").join("c").split("Ğ").join("G").split("ğ").join("g").split("Ş").join("S").split("ş").join("s").split("Ö").join("O").split("ö").join("o").split("Ü").join("U").split("ü").join("u");
-                                
-                                if($scope.SatisList[i].ITEM_UNIT == 2)
-                                {
-                                    TmpSale.TYPE = 2;
-                                    TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY.toFixed(3) * 1000
-                                }
-                                else
-                                {
-                                    TmpSale.TYPE = 1;
-                                    TmpSale.QUANTITY = $scope.SatisList[i].QUANTITY;
-                                }
-
-                                if($scope.SatisList[i].RETAILPNTR == 3)
-                                {
-                                    TmpSale.TAX = 1;
-                                }
-                                else if($scope.SatisList[i].RETAILPNTR == 4)
-                                {
-                                    TmpSale.TAX = 2;
-                                }
-                                else if($scope.SatisList[i].RETAILPNTR == 5)
-                                {
-                                    TmpSale.TAX = 3;
-                                }
-                                else if($scope.SatisList[i].RETAILPNTR == 6)
-                                {
-                                    TmpSale.TAX = 4;
-                                }
-                                else if($scope.SatisList[i].RETAILPNTR == 7)
-                                {
-                                    TmpSale.TAX = 5;
-                                }
-                                else
-                                {
-                                    TmpSale.TAX = 0;
-                                }
-
-                                TmpSale.AMOUNT =  parseFloat(($scope.SatisList[i].PRICE * 100).toFixed(2));
-                                TmpData.SALES.push(TmpSale);
+                                Status = await IngenicoPaymentSend(1);
                             }
-                            
-                            for(let i = 0;i < $scope.TahList.length;i++)
+                            else
                             {
-                                let TmpPayment = {};
-                                TmpPayment.TYPE = $scope.TahList[i].TYPE;
-                                TmpPayment.AMOUNT = 0;
-
-                                if($scope.TahList[i].TYPE == 0)
+                                if($scope.ChkFis)
                                 {
-                                    TmpPayment.AMOUNT = parseFloat((($scope.TahList[i].AMOUNT + $scope.TahList[i].CHANGE) * 100).toFixed(2));
+                                    Status = await IngenicoFisSend();
                                 }
-                                else
+                                else if($scope.ChkFatura)
                                 {
-                                    TmpPayment.AMOUNT = parseFloat(($scope.TahList[i].AMOUNT * 100).toFixed(2));
+                                    Status = await IngenicoFatSend();
                                 }
-                                TmpData.PAYMENT.push(TmpPayment);
                             }
-
-                            if($scope.ChkFis)
+                            if(Status)
                             {
-                                db.Ingenico.SendData(TmpData);
+                                SatisKapat();  
                             }
-                            else if($scope.ChkFatura)
-                            {   
-                                let Seri = $scope.Seri.split("İ").join("I").split("ı").join("i").split("Ç").join("C").split("ç").join("c").split("Ğ").join("G").split("ğ").join("g").split("Ş").join("S").split("ş").join("s").split("Ö").join("O").split("ö").join("o").split("Ü").join("U").split("ü").join("u");
-                                let FaturaData = { NO : Seri + $scope.Sira,VKN : "11111111111" , AMOUNT : $scope.GenelToplam * 100 , TYPE : $scope.TahTip}
-
-                                db.Ingenico.Invoice(FaturaData); 
-                            }
-                            $scope.MsgLoading = true;
-                        } 
+                        }
                         else
                         {
                             SatisKapat();
-                        }                                                
+                        }
                                            
                         $scope.TahPanelKontrol = false;
                     });
@@ -2317,6 +2745,63 @@ function Pos($scope,$window,$rootScope,db)
         }
     
         localStorage.KasaKodu = $scope.Kasa
+    }
+    $scope.BtnTahSatirIptal = async function(pIndex,pType)
+    {
+        let Guid = "";
+        if(typeof pIndex == 'undefined')
+        {
+            if($scope.TahIslemListeSelectedIndex > -1)
+            {
+                Guid = $scope.TahList[$scope.TahIslemListeSelectedIndex].GUID;
+            }
+            else
+            {
+                return;
+            }
+        }
+        else
+        {
+            Guid = $scope.TahList[pIndex].GUID;
+        }
+
+        if(typeof pType == 'undefined')
+        {
+            if(IngenicoCallbackData.TotalReceiptPayment > 0 && typeof require != 'undefined')
+            {   
+                for (let i = 0; i < $scope.TahList.length; i++) 
+                {
+                    if(($scope.TahIslemListeSelectedIndex + 1) == i)                           //Ingenico ile kendi tahsilat tablomuzdaki indexi kaybetmemek için kontrol.
+                    {
+                        swal("Uyarı","Seçmiş Olduğunuz Satırdan Önce İptal Edilecek Satırlar Mevcut.","warning")
+                        return;
+                    }
+                }
+
+                await IngenicoTahIptal(pIndex);
+    
+                if(StatusCode != 0)
+                {
+                    return;
+                }
+            }
+        }
+
+        db.ExecuteTag($scope.Firma,'PosTahSatirIptal',[Guid],function(data)
+        {
+            if(typeof(data.result.err) == 'undefined')
+            {
+                db.GetData($scope.Firma,'PosTahGetir',[$scope.Sube,0,$scope.TahSeri,$scope.TahSira],function(data)
+                {
+                    $scope.TahList = data;
+                    TahSonYenile();
+                });
+            }
+            else
+            {
+                console.log(data.result.err);
+            }                                        
+        });
     }
     $scope.PosSatisMiktarUpdate = function(pData,pMiktar)
     {   
@@ -2492,6 +2977,10 @@ function Pos($scope,$window,$rootScope,db)
         else if(FocusIade)
         {
             $scope.TxtIadeSifre = $scope.TxtIadeSifre.substring(0,$scope.TxtIadeSifre.length-1);
+        }
+        else if(FocusRefresh)
+        {
+            $scope.TxtRefreshSifre = $scope.TxtRefreshSifre.substring(0,$scope.TxtRefreshSifre.length-1);
         }
         else if(FocusCekmeceAc)
         {
@@ -2733,6 +3222,18 @@ function Pos($scope,$window,$rootScope,db)
                 FirstKey = true;
             }
         }
+        else if(FocusRefresh)
+        {
+            if(FirstKey)
+            {
+                $scope.TxtRefreshSifre = $scope.TxtRefreshSifre + Key; 
+            }
+            else
+            {
+                $scope.TxtRefreshSifre = Key; 
+                FirstKey = true;
+            }
+        }
         else if(FocusCekmeceAc)
         {
             if(FirstKey)
@@ -2821,26 +3322,38 @@ function Pos($scope,$window,$rootScope,db)
                     }
                     if(GirisOnay)
                     {
-                        db.ExecuteTag($scope.Firma,'PosSatisBelgeIptal',[$scope.Seri,$scope.Sira,$scope.EvrakTip],function(data)
+                        db.ExecuteTag($scope.Firma,'PosSatisBelgeIptalLog',[$scope.Seri,$scope.Sira,$scope.EvrakTip],function(data)
                         {
                             if(typeof(data.result.err) == 'undefined')
                             {
-                                db.ExecuteTag($scope.Firma,'PosTahIptal',[$scope.Seri,$scope.Sira,0],function(data)
+                                db.ExecuteTag($scope.Firma,'PosSatisBelgeIptal',[$scope.Seri,$scope.Sira,$scope.EvrakTip],function(data)
                                 {
-                                    if(typeof(data.result.err) != 'undefined')
+                                    if(typeof(data.result.err) == 'undefined')
+                                    {
+                                        db.ExecuteTag($scope.Firma,'PosTahIptal',[$scope.Seri,$scope.Sira,0],function(data)
+                                        {
+                                            if(typeof(data.result.err) != 'undefined')
+                                            {
+                                                console.log(data.result.err);
+                                            }
+                                        });
+                                        $scope.TxtBelgeIptalSifre = "";
+                                        $("#MdlBelgeIptalSifre").modal("hide");
+                                        $scope.YeniEvrak();
+                                    }
+                                    else
                                     {
                                         console.log(data.result.err);
                                     }
                                 });
-                                $scope.TxtBelgeIptalSifre = "";
-                                $("#MdlBelgeIptalSifre").modal("hide");
-                                $scope.YeniEvrak();
                             }
                             else
                             {
                                 console.log(data.result.err);
+                                alertify.alert("Loglama İşleminde Hata Oluştu.")
                             }
                         });
+                       
                     }
                     else
                     {
@@ -2905,51 +3418,62 @@ function Pos($scope,$window,$rootScope,db)
                 {
                     if($scope.IslemListeSelectedIndex > -1)
                     {
-                        db.ExecuteTag($scope.Firma,'PosSatisSatirIptal',[$scope.SatisList[$scope.IslemListeSelectedIndex].GUID],async function(data)
+                        db.ExecuteTag($scope.Firma,'PosSatisSatirIptalLog',[$scope.SatisList[$scope.IslemListeSelectedIndex].GUID,1],function(data)
                         {
                             if(typeof(data.result.err) == 'undefined')
                             {
-                                if($scope.SatisList.length <= 1)
+                                db.ExecuteTag($scope.Firma,'PosSatisSatirIptal',[$scope.SatisList[$scope.IslemListeSelectedIndex].GUID],async function(data)
                                 {
-                                    db.ExecuteTag($scope.Firma,'PosTahIptal',[$scope.Seri,$scope.Sira,0],function(data)
+                                    if(typeof(data.result.err) == 'undefined')
                                     {
-                                        if(typeof(data.result.err) != 'undefined')
+                                        if($scope.SatisList.length <= 1)
                                         {
-                                            console.log(data.result.err);
+                                            db.ExecuteTag($scope.Firma,'PosTahIptal',[$scope.Seri,$scope.Sira,0],function(data)
+                                            {
+                                                if(typeof(data.result.err) != 'undefined')
+                                                {
+                                                    console.log(data.result.err);
+                                                }
+                                            });
+                                            
+                                            $scope.TxtSatirIptalSifre = "";
+                                            $("#MdlSatirIptalSifre").modal("hide");
+                                            $scope.YeniEvrak();
                                         }
-                                    });
-                                    
-                                    $scope.TxtSatirIptalSifre = "";
-                                    $("#MdlSatirIptalSifre").modal("hide");
-                                    $scope.YeniEvrak();
-                                }
-                                else
-                                {
-                                    //*********** BİRDEN FAZLA MİKTARLI FİYAT GÜNCELLEME İÇİN YAPILDI. */
-                                    let TmpSatisData = await db.GetPromiseTag($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira]);
-                                    $scope.SatisList = TmpSatisData;
-    
-                                    for (let i = 0; i < $scope.SatisList.length; i++) 
-                                    {               
-                                        await FiyatUpdate($scope.SatisList[i]);
-                                    }  
-                                    /***************************************************************** */
-                                    db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(data)
+                                        else
+                                        {
+                                            //*********** BİRDEN FAZLA MİKTARLI FİYAT GÜNCELLEME İÇİN YAPILDI. */
+                                            let TmpSatisData = await db.GetPromiseTag($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira]);
+                                            $scope.SatisList = TmpSatisData;
+            
+                                            for (let i = 0; i < $scope.SatisList.length; i++) 
+                                            {               
+                                                await FiyatUpdate($scope.SatisList[i]);
+                                            }  
+                                            /***************************************************************** */
+                                            db.GetData($scope.Firma,'PosSatisGetir',[$scope.Sube,$scope.EvrakTip,$scope.Seri,$scope.Sira],function(data)
+                                            {
+                                                $scope.SatisList = data;
+                                                $("#TblIslem").jsGrid({data : $scope.SatisList});                                    
+                                                DipToplamHesapla();
+                                                $scope.TxtBarkod = ""; 
+                                                $scope.IslemListeRowClick($scope.SatisList.length-1,$scope.SatisList[$scope.SatisList.length-1]);   
+                                            });
+                                            $scope.TxtSatirIptalSifre = "";
+                                            $("#MdlSatirIptalSifre").modal("hide");
+                                        }
+                                    }
+                                    else
                                     {
-                                        $scope.SatisList = data;
-                                        $("#TblIslem").jsGrid({data : $scope.SatisList});                                    
-                                        DipToplamHesapla();
-                                        $scope.TxtBarkod = ""; 
-                                        $scope.IslemListeRowClick($scope.SatisList.length-1,$scope.SatisList[$scope.SatisList.length-1]);   
-                                    });
-                                    $scope.TxtSatirIptalSifre = "";
-                                    $("#MdlSatirIptalSifre").modal("hide");
-                                }
+                                        console.log(data.result.err);
+                                    }                                        
+                                });
                             }
                             else
                             {
                                 console.log(data.result.err);
-                            }                                        
+                                alertify.alert("Loglama İşleminde Hata Oluştu.")
+                            }
                         });
                     }
                     else
@@ -3008,7 +3532,7 @@ function Pos($scope,$window,$rootScope,db)
             $scope.ToplamSatir =  $scope.SatisList.length
         });
     }
-    $scope.BtnAraToplam = function()
+    $scope.BtnAraToplam = function(pType)
     {   
         if(($scope.Class.BtnIadeAl == "form-group btn btn-primary btn-block my-1") == false)
         {
@@ -3025,17 +3549,23 @@ function Pos($scope,$window,$rootScope,db)
             FocusMusteri = false;
             FocusStok = false;
             FocusKartOdeme = false;
-
             FirstKey = false;
 
-            //EKRANA GİRDİĞİNDE OTOMATİK NAKİT SEÇİLİ GELSİN
-            if($scope.TahTip != 2)
+            if(pType == 0)
             {
-                TahTip = 0;
+                $scope.BtnTahTip(0);
                 angular.element('#ChkNakit').trigger('click');
                 angular.element('#ChkFis').trigger('click');
                 $scope.BtnIngenicoCiktiTip(0);
             }
+            else if(pType == 1)
+            {
+                $scope.BtnTahTip(1);
+                angular.element('#ChkKredi').trigger('click');
+                angular.element('#ChkFis').trigger('click');
+                $scope.BtnIngenicoCiktiTip(0);
+            }
+
             //INGENICO CIHAZI İÇİN YAPILDI İLERİDE PARAMETREYE BAĞLANACAK
             if($scope.GenelToplam >= 3000) 
             {
@@ -3103,29 +3633,7 @@ function Pos($scope,$window,$rootScope,db)
             });
         }
     }
-    $scope.BtnTahSatirIptal = function()
-    {
-        if($scope.TahIslemListeSelectedIndex > -1)
-        {
-            db.ExecuteTag($scope.Firma,'PosTahSatirIptal',[$scope.TahList[$scope.TahIslemListeSelectedIndex].GUID],function(data)
-            {
-                if(typeof(data.result.err) == 'undefined')
-                {
-                    db.GetData($scope.Firma,'PosTahGetir',[$scope.Sube,0,$scope.TahSeri,$scope.TahSira],function(data)
-                    {
-                        $scope.TahList = data;
-                        TahSonYenile();
-                    });
-                 
-                }
-                else
-                {
-                    console.log(data.result.err);
-                }                                        
-            });
-        }
-    }
-    $scope.BtnTahBelgeIptal = function()
+    $scope.BtnTahBelgeIptal = function(pType)
     {   
         if($scope.SatisList.length > 0)
         {
@@ -3134,8 +3642,13 @@ function Pos($scope,$window,$rootScope,db)
                 if(typeof(data.result.err) == 'undefined')
                 {
                     $scope.TahList = [];
+             
                     TahSonYenile();
-                    $("#MdlAraToplam").modal('hide');
+
+                    if(typeof (pType) == "undefined")
+                    {
+                        $("#MdlAraToplam").modal('hide');
+                    }
                 }
                 else
                 {
@@ -3277,7 +3790,6 @@ function Pos($scope,$window,$rootScope,db)
                 $scope.BtnIngenicoCiktiTip(0);
             }
 
-            $("#MdlKartOdeme").modal({backdrop: 'static', keyboard: false});
             FocusBarkod = false;
             FocusAraToplam = false;
             FocusMusteri = false;
@@ -3296,9 +3808,8 @@ function Pos($scope,$window,$rootScope,db)
     }
     $scope.BtnKartOdemeGonder = function()
     {
-        $("#MdlKartOdeme").modal("hide");
         $scope.TahTip = 1;
-        $scope.PosTahInsert();     
+        $scope.PosTahInsert(); 
     }    
     $scope.BtnTahOnay = function()
     {
@@ -4042,7 +4553,7 @@ function Pos($scope,$window,$rootScope,db)
                     $scope.TxtOkcMesaj = "OKC Cihazıyla Eşleşme Yapılıyor.";
                     $scope.BtnTxtOkcEslesme = "İptal"
                     $("#MdlIngenicoEslesme").modal("show"); 
-                    db.Ingenico.Init();
+                    db.Ingenico.Pairing();
                 }
             }
         }
@@ -4053,7 +4564,7 @@ function Pos($scope,$window,$rootScope,db)
                 $scope.TxtOkcMesaj = "OKC Cihazıyla Eşleşme Yapılıyor.";
                 $scope.BtnTxtOkcEslesme = "İptal"
                 $("#MdlIngenicoEslesme").modal("show");  
-                db.Ingenico.Init();
+                db.Ingenico.Pairing();
             }
         }
     }
@@ -4136,7 +4647,7 @@ function Pos($scope,$window,$rootScope,db)
                 FocusZSifre = false;
                 FocusXSifre = false;
             }
-            }
+        }
         else
         {
             alertify.alert("Satış Listesi Ve Park Listesi Doluyken X Raporu Alınamaz.")
@@ -4396,7 +4907,17 @@ function Pos($scope,$window,$rootScope,db)
     {
         if(typeof require != 'undefined')
         {
-            db.Ingenico.TicketClose();
+            if($scope.IngenicoList.stPayment.length > 0)
+            {
+                swal("Uyarı","Fiş Üzerinde Tahsilat Mevcut, Tahsilat İptal İşlemi Gerçekleştiriniz.","warning");
+                return;
+            }
+            
+            $rootScope.LoadingShow();
+            db.Ingenico.TicketCancel(function(pData)
+            {
+                $rootScope.LoadingHide();
+            });
         }
     }
     $scope.BtnIngenicoCiktiTip = async function(pTip)
@@ -4466,6 +4987,158 @@ function Pos($scope,$window,$rootScope,db)
         else
         {
             alertify.alert("Satış Listesi Doluyken Çekmece Açma İşlemi Yapılamaz.")
+        }
+    }
+    $scope.BtnEkuControl = async function(pType)
+    {
+        db.Ingenico.EkuControl(function(pData)
+        {
+            if(pType == 0)
+            {
+                swal("Uyarı", pData.msg.split("SUCCESS:")[1].split("[").join('').split("]").join('').split("{").join('').split("}").join(''),icon="warning");
+            }
+            else if(pType == 1)
+            {
+                let callback = JSON.parse(pData.msg.split("SUCCESS:")[1].split("'").join('"'));
+
+                if(callback[1] <= 10000)
+                {
+                    swal("Dikkat EKU Kritik Seviyede", pData.msg.split("SUCCESS:")[1].split("[").join('').split("]").join('').split("{").join('').split("}").join(''),icon="warning");
+                }
+            }
+        });
+    }
+    $scope.BtnRefresh = async function(pTip)
+    {
+        if(pTip == 0)
+        {
+            $('#MdlRefreshSifre').modal({backdrop: 'static', keyboard: false});
+            FocusBarkod = false;
+            FocusAraToplam = false;
+            FocusMusteri = false;
+            FocusStok = false;
+            FocusKartOdeme = false;
+            FirstKey = false;
+            FocusYetkiliSifre = false;
+            FocusKasaSifre = false;
+            FocusIade = false;
+            FocusCekmeceAc = false;
+            FocusRefresh = true;
+        }
+        else
+        {
+            let YetkiliList = await db.GetPromiseTag($scope.Firma,'KullaniciGetir',['']);
+            let GirisOnay = false;
+            for (let i = 0; i < YetkiliList.length; i++) 
+            {
+                if(YetkiliList[i].TAG == 1)
+                {
+                    if(YetkiliList[i].PASSWORD == $scope.TxtRefreshSifre)
+                    {
+                        GirisOnay = true;
+                    }
+                }
+            }
+            if(GirisOnay)
+            {
+                $scope.TxtRefreshSifre = "";
+                $("#MdlRefreshSifre").modal("hide");
+                window.location.reload();
+            }
+            else
+            {
+                $scope.TxtRefreshSifre = "";
+                $("#MdlRefreshSifre").modal("hide");
+                alertify.alert("Yetkili Şifre Yanlış.")
+            }
+        }
+    }
+    $scope.BtnIngTahList = async function(pType,pIndex)
+    {
+        if(pType == 0)
+        {
+            for (let i = 0; i < IngenicoCallbackData.stPayment.length; i++) 
+            {
+                if(IngenicoCallbackData.stPayment[i].flags == 0)
+                {
+                    IngenicoCallbackData.stPayment[i].STATUS = "Ödeme Alınmış";
+                }
+                else if(IngenicoCallbackData.stPayment[i].flags == 4)
+                {
+                    IngenicoCallbackData.stPayment[i].STATUS = "İptal Edilmiş";
+                }
+                if(IngenicoCallbackData.stPayment[i].typeOfPayment == 4)
+                {
+                    IngenicoCallbackData.stPayment[i].SATISTIPI = "Kart";
+                }
+                else if(IngenicoCallbackData.stPayment[i].typeOfPayment == 0)
+                {
+                    IngenicoCallbackData.stPayment[i].SATISTIPI = "Nakit";
+                }
+            }
+            $("#TblIngTahList").jsGrid({data : IngenicoCallbackData.stPayment});
+            $("#MdlIngTahList").modal("show");
+        }
+        else if(pType == 1)
+        {
+            for (let i = 0; i < IngenicoCallbackData.stPayment.length; i++) 
+            {
+                if(IngenicoCallbackData.stPayment[i].flags == 0)
+                {
+                    swal("İşlem Başarısız.","Lütfen Tüm Tahsilatları İptal Edin.","warning");
+                    return;
+                }
+            }
+            $rootScope.LoadingShow();
+            db.Ingenico.TicketCancel(function(pData)
+            {
+                $rootScope.LoadingHide();
+            });
+        }
+        else if(pType == 2)
+        {
+            $rootScope.LoadingShow();
+            db.Ingenico.Payment({PAYMENT:[{"TYPE":1,"AMOUNT":IngenicoCallbackData.RemainingAmount}]},async function(pData)
+            {
+                $rootScope.LoadingHide();
+            });
+        }
+        else if(pType == 3)
+        {
+            $rootScope.LoadingShow();
+            db.Ingenico.Payment({PAYMENT:[{"TYPE":0,"AMOUNT":IngenicoCallbackData.RemainingAmount}]},async function(pData)
+            {
+                $rootScope.LoadingHide();
+            });
+        }
+        else if(pType == 4)
+        {
+            $rootScope.LoadingShow();
+            db.Ingenico.PaymentCancel([pIndex],async function(pData)
+            {
+                $rootScope.LoadingHide();
+            });
+        }
+    }
+    $scope.BtnKdvGetir = async function()
+    {
+        let KdvOran = [0,1,8,18];
+
+        db.Ingenico.TaxInfo(KdvOran,function(pData)
+        {
+            console.log(pData)
+        });
+    }
+    $scope.BtnVazgec = async function()
+    {
+        if($scope.TahList.length == 0)
+        {
+            $('#MdlAraToplam').modal('hide');
+            $scope.BtnFisIptal();
+        }
+        else
+        {
+            swal("Dikkat","Tahsilat İşlemi Mevcut. Lütfen Tahsilatlarınızı İptal Edin.","warning")
         }
     }
 }

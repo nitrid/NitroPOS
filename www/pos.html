@@ -82,10 +82,11 @@
             font-size : 30px;
         }
     </style>
-    </head>
-    <body class="animsition site-navbar-small site-menubar-fold site-menubar-keep" ng-controller="Pos" ng-Init = "YeniEvrak()">
+</head>
+    <body class="animsition site-navbar-small site-menubar-fold site-menubar-keep" ng-controller="Pos" ng-Init = "YeniEvrak(0)">
         <audio id="audio" src="sound/beep.mp3" autoplay="false" ></audio>
-    <div id="loading" style="display:none;z-index: 1800;"><div class="loader vertical-align-middle loader-circle"></div><div ng-show = "MsgLoading">Ödeme Bekleniyor...</div></div>
+
+    <div id="loading" style="display:none;z-index: 1800;"><div class="loader vertical-align-middle loader-circle">   </div><div>Yükleniyor...</div></div>
     <!--[if lt IE 8]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -94,7 +95,7 @@
             <!-- Navbar Collapse -->
             <div class="collapse navbar-collapse navbar-collapse-toolbar" id="site-navbar-collapse">
             <!-- Navbar Toolbar -->
-            <ul class="nav navbar-toolbar">
+            <ul class="nav navbar-toolbar"> 
                 <li class="nav-item hidden-sm-down" id="toggleFullscreen">
                     <a class="nav-link icon icon-fullscreen" data-toggle="fullscreen" href="#" role="button">
                         <span class="sr-only">Toggle fullscreen</span>
@@ -128,11 +129,11 @@
             <!-- End Navbar Toolbar -->
             <!-- Navbar Toolbar Right -->
             <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
-                <!-- <li class="nav-item" style="width: 80px;">
+                <li class="nav-item" style="width: 80px;" ng-click = "BtnRefresh(0)">
                     <a class="nav-link">
-                    <i class="icon wb-signal" aria-hidden="true"><div class="row" style="font-family: 'Roboto', sans-serif;">Online</div></i>                    
+                    <i class="icon wb-refresh" aria-hidden="true"><div class="row" style="font-family: 'Roboto', sans-serif;"></div></i>                    
                     </a>
-                </li> -->
+                </li>
                 <li class="nav-item" style="width: 80px;" ng-click = "BtnEdit()">
                     <a class="nav-link">
                     <i ng-class="Class.BtnEdit" aria-hidden="true"><div class="row" style="font-family: 'Roboto', sans-serif;"></div></i>                    
@@ -411,7 +412,7 @@
                                         <button class="form-group btn btn-warning btn-block my-1" style="height:70px; font-size: 16px;" ng-click = "BtnSonKopya(0)">Son Kopya</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px; font-size: 16px;"></button>
+                                        <button class="form-group btn btn-warning btn-block my-1" style="height:70px; font-size: 16px;" ng-click = "BtnEkuControl(0)">Ekü Kontrol</button>
                                     </div>  
                                 </div>
                                 <div class="row">
@@ -422,7 +423,7 @@
                                         <button role="menu-item" class="form-group btn btn-block btn-danger my-1" style="height:70px; font-size: 16px;" ng-click = "BtnKasaKilitle(0)">Kasa Kilitle</button>
                                     </div>            
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-block btn-info my-1" ng-click="BtnCekmeceAc(0)" style="height:70px; font-size: 16px;">Çekmece Aç</button>
+                                        <button class="form-group btn btn-block btn-info my-1" ng-click = "BtnIngTahList(0)" style="height:70px; font-size: 16px;">Tahsilat İptal</button>
                                     </div>
                                     <div class="col-2 px-1">
                                         <button class="form-group btn btn-warning btn-block my-1" style="height:70px;  font-size: 16px;" ng-click = "BtnXReport(0)">X Raporu</button>
@@ -431,7 +432,7 @@
                                         <button class="form-group btn btn-warning btn-block my-1" style="height:70px;  font-size: 16px;" ng-click = "BtnFisIptal()">Fiş İptal</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px;  font-size: 16px;"></button>
+                                        <button class="form-group btn btn-warning btn-block my-1" style="height:70px;  font-size: 16px;" ng-click="BtnCekmeceAc(0)">Çekmece Aç</button>
                                     </div>               
                                 </div>
                                 <div class="row">
@@ -450,8 +451,14 @@
                                     <div class="col-2 px-1">
                                         <button class="form-group btn btn-block btn-warning my-1" style="height:70px; font-size: 16px;" ng-click = "BtnAvans(0)">Avans</button>
                                     </div> 
-                                    <div class="col-2 px-1">
+                                    <!-- <div class="col-2 px-1">
                                         <button class="form-group btn btn-info btn-block my-1" style="height:70px;" ng-click="BtnKartOdeme()">
+                                            <i class="icon fa-credit-card row" aria-hidden="true" style="font-size: 24px;"></i>
+                                            <span><h6 class="text-center" style="color: white;">Kart</h6></span>
+                                        </button>
+                                    </div>  -->
+                                    <div class="col-2 px-1">
+                                        <button class="form-group btn btn-info btn-block my-1" style="height:70px;" ng-click="BtnAraToplam(1)">
                                             <i class="icon fa-credit-card row" aria-hidden="true" style="font-size: 24px;"></i>
                                             <span><h6 class="text-center" style="color: white;">Kart</h6></span>
                                         </button>
@@ -463,7 +470,7 @@
                                         <button class="form-group btn btn-warning btn-block my-1" style="height:70px; font-size: 16px;" ng-click = "BtnOkcEslesme(1)">Okc Eşleşme</button>
                                     </div>
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-default btn-block my-1" style="height:70px; font-size: 16px;"></button>                                    
+                                        <button class="form-group btn btn-warning btn-block my-1" style="height:70px; font-size: 16px;" ng-click = "BtnKdvGetir()">Kdv Bilgi</button>                                    
                                     </div>                                
                                 </div>
                                 <div class="row">
@@ -476,7 +483,7 @@
                                         </button>
                                     </div> 
                                     <div class="col-2 px-1">
-                                        <button class="form-group btn btn-info btn-block my-1" ng-click = "BtnAraToplam()" style="height:70px;">
+                                        <button class="form-group btn btn-info btn-block my-1" ng-click = "BtnAraToplam(0)" style="height:70px;">
                                             <i class="icon fa-money" aria-hidden="true" style="font-size: 24px;"></i>
                                             <span><h6 class="text-center" style="color: white;">Nakit</h6></span>
                                         </button>
@@ -992,7 +999,13 @@
                                     <input type="radio" />
                                     FATURA
                                 </label>
-                            </div> 
+                            </div>
+                            <div class="col-3">
+                                <div class="float-left mr-5">
+                                    <input type="checkbox" id="IngenicoActive" ng-model = "IngenicoActive" name="inputiCheckBasicCheckboxes"  data-plugin="switchery" checked/>
+                                </div>
+                                <label class="pt-3">INGENICO</label>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-2">
@@ -1066,7 +1079,7 @@
                                 <button type="text" class="form-control btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('9')">9</button>
                             </div>
                             <div class="col-3">
-                                
+                                <button type="text" class="form-control-lg btn-danger btn btn-block font-size-15" style="height:60px;" ng-click="BtnOkcEslesme(1)">OKC Eşleşme</button>
                             </div>
                             <div class="col-3">
                                 <button type="text" class="form-control btn-primary btn btn-block font-size-15" style="height:60px;background-image: url(img/20TL.jpg); background-size: cover;" ng-click="BtnPara('20')"></button>
@@ -1084,7 +1097,7 @@
                                 <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('6')">6</button>
                             </div>
                             <div class="col-lg-3">
-                                <button type="text" class="form-control btn-danger btn btn-block font-size-15" style="height:60px;" ng-click="BtnTahSatirIptal()">Satır İptal</button>
+                               <button type="text" class="form-control-lg btn-danger btn btn-block font-size-15" style="height:60px;" ng-click="BtnVazgec()">Vazgeç</button>
                             </div>
                             <div class="col-3">
                                 <button type="text" class="form-control btn-primary btn btn-block font-size-15" style="height:60px;background-image: url(img/50TL.jpg); background-size: cover;" ng-click="BtnPara('50')"></button>
@@ -1101,7 +1114,8 @@
                                 <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('3')">3</button>
                             </div>
                             <div class="col-lg-3">
-                                <button type="text" class="form-control-lg btn-danger btn btn-block font-size-15" style="height:60px;" ng-click="BtnTahBelgeIptal()">Vazgeç</button>
+                                <button type="text" class="form-control btn-danger btn btn-block font-size-15" style="height:60px;" ng-click="BtnTahSatirIptal()">Satır İptal</button>
+                                <!-- <button type="text" class="form-control-lg btn-danger btn btn-block font-size-15" style="height:60px;" ng-click="BtnTahBelgeIptal()">Vazgeç</button> -->
                             </div>
                             <div class="col-3">
                                 <button type="text" class="form-control btn-primary btn btn-block font-size-15" style="height:60px;background-image: url(img/100TL.jpg); background-size: cover;" ng-click="BtnPara('100')"></button>
@@ -1343,9 +1357,6 @@
             <div class="modal-dialog modal-simple modal-primary modal-center modal-sm">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">X</span>
-                        </button>
                         <h4 class="modal-title">Kart Ödeme</h4>
                     </div>
                     <div class="modal-body">
@@ -1439,9 +1450,10 @@
                         </div>
                         <div class="row py-1">
                             <div class="col-6">
+                                <button type="text" class="form-control-lg btn-danger btn btn-block font-size-15" style="height:60px;" ng-click="BtnTahBelgeIptal()">Vazgeç</button>
                             </div>
                             <div class="col-6">
-                                <button type="text" class="form-control btn-danger btn btn-block font-size-15" style="height:60px;" ng-click="BtnKartOdemeGonder()">Gönder</button>
+                                <button type="text" class="form-control btn-success btn btn-block font-size-15" style="height:60px;" ng-click="BtnKartOdemeGonder()">Gönder</button>
                             </div>
                         </div>
                     </div>
@@ -2702,6 +2714,141 @@
                 </div>
             </div>
         </div>
+        <!--Sayfa Yenile Yetkili Giriş Modal -->
+        <div class="modal fade" id="MdlRefreshSifre" aria-hidden="true" aria-labelledby="examplePositionCenter" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple modal-primary modal-center modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">X</span>
+                        </button>
+                        <h4 class="modal-title">Şifre Giriş</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group my-5">
+                                            <div class="input-group">
+                                                <input type="password" class="form-control h-50" id="TxtRefreshSifre" ng-model="TxtRefreshSifre" 
+                                                style="font-size: 20pt;font-weight: bold; border-width: 3px;border-color: #428bca;" ng-click="TxtRefreshSifrePress($event)">
+                                            </div>
+                                        </div>
+                                    </div>                                                     
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row py-1">
+                            <div class="col-4">
+                                <button type="text" class="form-control btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('7')">7</button>
+                            </div>
+                            <div class="col-4">
+                                <button type="text" class="form-control btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('8')">8</button>
+                            </div>
+                            <div class="col-4">
+                                <button type="text" class="form-control btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('9')">9</button>
+                            </div>
+                        </div>
+                        <div class="row py-1">
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('4')">4</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('5')">5</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('6')">6</button>
+                            </div>
+                        </div>
+                        <div class="row py-1">
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('1')">1</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('2')">2</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('3')">3</button>
+                            </div>
+                        </div>
+                        <div class="row py-1">
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('0')">0</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('.')">.</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg  btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnSilClick()"><i class="fas fa-backspace fa-lg" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row py-1">
+                            <div class="col-12">
+                                <button type="text" class="form-control btn-danger btn btn-block font-size-15" style="height:60px; font-size: 18px;" ng-click="BtnRefresh(1)">Giriş</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Ingenico Tahsilat İptal-->
+        <div class="modal fade" id="MdlIngTahList" aria-hidden="true" aria-labelledby="examplePositionCenter" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple modal-primary modal-center">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">X</span>
+                        </button>
+                        <h4 class="modal-title">Tahsilat İptal</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-lg-3 px-1">
+                                        <label><h5><span style="color:dodgerblue;">Toplam :</span></h5></label>
+                                    </div>
+                                    <div class="col-lg-3 px-1">
+                                        <label><h5><div class="float-left">{{(IngenicoList.TotalReceiptAmount | number:2) /100 + " TL"}}</div></h5></label>
+                                    </div>
+                                    <div class="col-lg-3 px-1">
+                                        <label><h5><span style="color:dodgerblue;">Kalan :</span></h5></label>
+                                    </div>
+                                    <div class="col-lg-3 px-1">
+                                        <label><h5><div class="float-left">{{(IngenicoList.RemainingAmount | number:2) / 100 + " TL"}}</div></h5></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 my-2">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div style="border-width: 3px;border-color: #428bca;" id="TblIngTahList"></div>
+                                    </div>
+                                </div>
+                            </div>     
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <button type="text" class="form-control btn-danger btn btn-block font-size-18" style="height:60px;" ng-click="BtnIngTahList(1,0)">Tüm Fiş İptal</button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button type="text" class="form-control btn-primary btn btn-block font-size-18" style="height:60px;" ng-click="BtnIngTahList(2,0)">Kredi Kartı Kapat</button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button type="text" class="form-control btn-info btn btn-block font-size-18" style="height:60px;" ng-click="BtnIngTahList(3,0)">Nakit Kapat</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- Sayfa Bitir -->
     
@@ -2721,6 +2868,7 @@
     <script src="theme/global/vendor/asscrollbar/jquery-asScrollbar.js"></script>
     <script src="theme/global/vendor/asscrollable/jquery-asScrollable.js"></script>
     <script src="theme/global/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
+    <script src="theme/global/sweetalert.min.js"></script>
     
     <!-- Plugins -->
     <script src="theme/global/vendor/switchery/switchery.js"></script>

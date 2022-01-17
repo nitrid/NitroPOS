@@ -35,7 +35,7 @@
     <link rel="stylesheet" href="theme/global/fonts/font-awesome/font-awesome.css">
     <link rel="stylesheet" href="theme/global/vendor/bootstrap-select/bootstrap-select.css">
     <link rel="stylesheet" href="theme/global/vendor/bootstrap-tokenfield/bootstrap-tokenfield.css">
-    
+
     <!-- Datatables -->
     <!-- <link rel="stylesheet" href="theme/global/vendor/datatables.net-bs4/dataTables.bootstrap4.css">
     <link rel="stylesheet" href="theme/global/vendor/datatables.net-fixedheader-bs4/dataTables.fixedheader.bootstrap4.css">
@@ -150,7 +150,7 @@
             </div>
       </nav>
     <!-- Navigasyon Basla -->
-      <div class="site-menubar site-menubar-light">
+      <div class="site-menubar site-menubar-light" >
         <div class="site-menubar-body">
           <div>
             <ul class="site-menu">
@@ -182,6 +182,20 @@
                 </ul>
               </li>
               <li class="site-menu-item has-sub">
+                <a href="#!">
+                  <i class='site-menu-icon fa-bars'></i>
+                  <span class='site-menu-title'>Rapor</span>
+                  <span class='site-menu-arrow'></span>
+                </a>
+                <ul class='site-menu-sub'>
+                  <li class='site-menu-item'>
+                    <a class='animsition-link' href='#!IptalSatis'>
+                      <span class='site-menu-title'>Iptal Satışlar Raporu</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="site-menu-item has-sub">
                 <a href="#!CariListesi">
                   <i class='site-menu-icon fa-user'></i>
                   <span class='site-menu-title'>Cari</span>
@@ -206,7 +220,7 @@
             </ul>
           </div>
         </div>
-        <div class="site-menubar-footer">
+        <div class="site-menubar-footer" ng-show="false">
           <a href="index.html" class="fold-show" data-placement="top" data-toggle="tooltip"
             data-original-title="Settings">
             <span class="icon wb-power" aria-hidden="true" style="color:red"></span>
@@ -249,6 +263,7 @@
     <script src="theme/global/vendor/asscrollbar/jquery-asScrollbar.js"></script>
     <script src="theme/global/vendor/asscrollable/jquery-asScrollable.js"></script>
     <script src="theme/global/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
+    <script src="theme/global/sweetalert.min.js"></script>
     
     <!-- Plugins -->
     <script src="theme/global/vendor/switchery/switchery.js"></script>
@@ -338,6 +353,7 @@
     <script src="lib/ctrl/CariCtrl.js"></script>
     <script src="lib/ctrl/StokListeCtrl.js"></script>
     <script src="lib/ctrl/CariListeCtrl.js"></script>
+    <script src="lib/ctrl/IptalSatisCtrl.js"></script>
     
     <script src="lib/QuerySql.js"></script>    
 

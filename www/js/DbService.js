@@ -13,9 +13,7 @@ angular.module('app.db', []).service('db',function($rootScope)
 
     if (typeof(localStorage.host) !== "undefined") 
     {
-        _Host = 'http://' + localStorage.host + ':' + localStorage.socketport;
-        //_Host = 'http://' + localStorage.host;
-        console.log(_Host)
+        _Host = window.location.origin;
     }
     if (typeof(localStorage.mode) !== "undefined")
     {
@@ -34,7 +32,7 @@ angular.module('app.db', []).service('db',function($rootScope)
         {
             _Socket = io.connect(_Host,{autoConnect: false,reconnectionDelay:10});
             _Socket.open();
-            console.log(_Host)
+    
             _Socket.on('MaxUserCounted',function(MenuData)
             {               
                 if (typeof(MenuData) !== "undefined")
@@ -64,7 +62,6 @@ angular.module('app.db', []).service('db',function($rootScope)
             });
             _Socket.on('connect_error',(error) => 
             {
-                console.log(error)
                 this.SocketConnected = false;                    
                 console.log('connect_error');
 
@@ -75,7 +72,6 @@ angular.module('app.db', []).service('db',function($rootScope)
             });
             _Socket.on('error', (error) => 
             {
-                console.log(error)
                 this.SocketConnected = false;
                 if(typeof pCallback != 'undefined')
                 {
@@ -465,10 +461,11 @@ angular.module('app.db', []).service('db',function($rootScope)
             pScope.$apply(pFn);
         }
     };     
-    this.SetHost = function(host,port)
+    this.SetHost = function(host)
     {
-        _Host = 'http://' + host + ":" + port;
-        //_Socket.io.uri = _Host;
+        _Host = _Host;
+
+        _Socket.io.uri = _Host;
     }
     this.On = function(eventName,callback)
     {   
@@ -817,10 +814,21 @@ angular.module('app.db', []).service('db',function($rootScope)
         TmpData.push({font:"b",style:"bu",align:"lt",data:_PrintText(" ",42)});
 
         //DİP TOPLAM
+
+        let a = parseFloat(_SumColumn(pTData,"CHANGE")).toFixed(2);
+        let b = parseFloat(_SumColumn(pTData,"AMOUNT")).toFixed(2);
+
+        TmpLine = 
+        {
+            data: _PrintText("Alınan Para",17) + 
+                  _PrintText(parseFloat(a) + parseFloat(b) + " TL",15,"Start")
+        }
+        console.log(TmpLine)
+        TmpData.push(TmpLine);
         TmpLine = 
         {
             data: _PrintText("Para Üstü",17) + 
-                  _PrintText(parseFloat(_SumColumn(pSData,"CHANGE")).toFixed(2) + " TL",15,"Start")
+                  _PrintText(parseFloat(_SumColumn(pTData,"CHANGE")).toFixed(2) + " TL",15,"Start")
         }
         TmpData.push(TmpLine);
         TmpLine = 
@@ -840,6 +848,7 @@ angular.module('app.db', []).service('db',function($rootScope)
             data: _PrintText("Genel Toplam",17) + 
                   _PrintText(parseFloat(_SumColumn(pSData,"AMOUNT")).toFixed(2) + " TL",15,"Start")
         }
+        console.log(TmpLine)
         TmpData.push(TmpLine);
 
         _EscposSerialPrint(TmpData,pSerial,function()

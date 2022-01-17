@@ -876,10 +876,47 @@ var QuerySql =
         param: ['REF','REF_NO','TYPE'],
         type:  ['string|25','int','int']
     },
+    PosSatisBelgeIptalLog : 
+    {
+        query: "INSERT INTO POS_SALES_LOG SELECT *,GETDATE() AS DATE FROM POS_SALES WHERE REF = @REF AND REF_NO = @REF_NO AND TYPE = @TYPE",
+        param: ['REF','REF_NO','TYPE'],
+        type:  ['string|25','int','int']
+    },
     PosSatisSatirIptal : 
     {
         query: "DELETE FROM POS_SALES WHERE GUID = @GUID",
         param: ['GUID'],
+        type:  ['string|50']
+    },
+    PosSatisSatirIptalLog : 
+    {
+        query: "INSERT INTO POS_SALES_LOG " +
+               "SELECT  " +
+               "GUID AS GUID, " +
+               "CUSER AS CUSER, " +
+               "CDATE AS CDATE, " +
+               "LUSER AS LUSER, " +
+               "LDATE AS LDATE, " +
+               "DEVICE AS DEVICE, " +
+               "DEPARTMENT AS DEPARTMENT, " +
+               "1 AS TYPE, " +
+               "DOC_DATE AS DOC_DATE, " +
+               "REF AS REF, " +
+               "REF_NO AS REFNO, " +
+               "LINE_NO AS LINE_NO, " +
+               "CUSTOMER_CODE AS CUSTOMER_CODE, " +
+               "ITEM_CODE AS ITEM_CODE, " +
+               "BARCODE AS BARCODE, " +
+               "QUANTITY AS QUANTITY, " +
+               "UNIT AS UNIT, " +
+               "PRICE AS PRICE, " +
+               "DISCOUNT AS DISCOUNT, " +
+               "VAT AS VAT, " +
+               "STATUS AS STATUS, " +
+               "GETDATE() AS DATE " +
+               "FROM POS_SALES " +
+               "WHERE GUID = @GUID ", 
+        param: ['GUID'], 
         type:  ['string|50']
     },
     PosTahInsert : 

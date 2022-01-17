@@ -9,5 +9,17 @@ namespace Ingenico
     {
         public string Name;
         public string Buffer;
+        public string Guid;
+    }
+    class TerpItemList
+    {
+        public string Name;
+        public string Status;
+        public string Guid;
+    }
+    class TerpTaxList
+    {
+        public int Index;
+        public string Value;
     }
 }
