@@ -25,7 +25,8 @@ app.on('ready',function()
                 nodeIntegration: true,
                 nodeIntegrationInWorker: true,
                 enableRemoteModule: true
-            }
+            },
+           
         });
 
         mainWindow.maximize();
