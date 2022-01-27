@@ -2135,12 +2135,6 @@ function Pos($scope,$window,$rootScope,db)
                                         alertify.alert("Lütfen Tartım Alınız");
                                         return;
                                     }
-                                    if($scope.Miktar <= 0)
-                                    {
-                                        alertify.alert("Lütfen Tartım Alınız");
-                                        $scope.TxtBarkod = "";
-                                        return;
-                                    }
 
                                     if($scope.ScaleType == "0")
                                     {
@@ -2157,6 +2151,13 @@ function Pos($scope,$window,$rootScope,db)
                                         {
                                             $scope.Miktar = $scope.Miktar.split("S ").join("");
                                         }
+                                    }
+
+                                    if($scope.Miktar <= 0)
+                                    {
+                                        alertify.alert("Lütfen Tartım Alınız");
+                                        $scope.TxtBarkod = "";
+                                        return;
                                     }
                                 }
                             }
