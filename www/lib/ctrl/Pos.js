@@ -32,6 +32,7 @@ function Pos($scope,$window,$rootScope,db)
     let FocusIade = false;
     let FocusCekmeceAc = false;
     let FocusRefresh = false;
+    let FocusIngenicoSifre = false;
 
     $('#MdlAraToplam').on('hide.bs.modal', function () 
     {
@@ -459,6 +460,29 @@ function Pos($scope,$window,$rootScope,db)
         FocusCekmeceAc = false;
         FocusRefresh = false;
     });
+    $('#MdlIngenicoSifre').on('hide.bs.modal', function () 
+    {
+        FocusBarkod = true;
+        FocusAraToplam = false;
+        FocusMusteri = false;
+        FocusStok = false;
+        FocusMiktarGuncelle = false;
+        FocusFiyatGuncelle = false;
+        FocusAvans = false;
+        FocusKartOdeme = false;
+        FocusYetkiliSifre = false;
+        FocusKasaSifre = false;
+        FocusXSifre = false;
+        FocusZSifre = false;
+        FocusBelgeIptal = false;
+        FocusSatirIptal = false;
+        FocusSonKopya = false;
+        FocusIade = false;
+        FocusCekmeceAc = false;
+        FocusRefresh = false;
+        FocusIngenicoSifre=false;
+
+    });
 
     if(typeof require != 'undefined')
     {
@@ -685,6 +709,7 @@ function Pos($scope,$window,$rootScope,db)
         $scope.TxtIadeSifre = "";
         $scope.TxtRefreshSifre = "";
         $scope.TxtCekmeceAcSifre = "";
+        $scope.TxtIngenicoSifre = "";
         $scope.TxtOkcMesaj = "OKC Cihazıyla Eşleşme Yapılıyor.";
         $scope.BtnTxtOkcEslesme = "İptal";
         $scope.TxtCariTcNo = "";
@@ -1942,6 +1967,10 @@ function Pos($scope,$window,$rootScope,db)
         {
             $window.document.getElementById("TxtCekmeceAcSifre").focus();
         }
+        else if(FocusIngenicoSifre)
+        {
+            $window.document.getElementById("TxtIngenicoSifre").focus();
+        }
     }
     $scope.IslemListeRowClick = function(pIndex,pItem)
     {
@@ -2724,7 +2753,6 @@ function Pos($scope,$window,$rootScope,db)
         {
             Guid = $scope.TahList[pIndex].GUID;
         }
-
         if(typeof pType == 'undefined')
         {
             if($scope.IngenicoList.TotalReceiptPayment > 0 && typeof require != 'undefined')
@@ -2947,6 +2975,10 @@ function Pos($scope,$window,$rootScope,db)
         else if(FocusCekmeceAc)
         {
             $scope.TxtCekmeceAcSifre = $scope.TxtCekmeceAcSifre.substring(0,$scope.TxtCekmeceAcSifre.length-1);
+        }
+        else if(FocusIngenicoSifre)
+        {
+            $scope.TxtIngenicoSifre = $scope.TxtIngenicoSifre.substring(0,$scope.TxtRefreshSifre.length-1);
         }
     }
     $scope.BtnOnayClick = function()
@@ -3205,6 +3237,18 @@ function Pos($scope,$window,$rootScope,db)
             else
             {
                 $scope.TxtCekmeceAcSifre = Key; 
+                FirstKey = true;
+            }
+        }
+        else if(FocusIngenicoSifre)
+        {
+            if(FirstKey)
+            {
+                $scope.TxtIngenicoSifre = $scope.TxtIngenicoSifre + Key; 
+            }
+            else
+            {
+                $scope.TxtIngenicoSifre = Key; 
                 FirstKey = true;
             }
         }
@@ -3495,7 +3539,8 @@ function Pos($scope,$window,$rootScope,db)
         });
     }
     $scope.BtnAraToplam = function(pType)
-    {   
+    {
+        document.getElementById("IngenicoActive").value='a'   
         if(($scope.Class.BtnIadeAl == "form-group btn btn-primary btn-block my-1") == false)
         {
             if($scope.SatisList.length < 1)
@@ -5017,6 +5062,56 @@ function Pos($scope,$window,$rootScope,db)
                 alertify.alert("Yetkili Şifre Yanlış.")
             }
         }
+    }
+    $scope.BtnMdlIngenicoModalClose = function()
+    {
+        db.SafeApply($scope,function()
+        {
+            document.getElementById("IngenicoActive").value='a';
+        })
+    }
+    $scope.ChgIngenicoActive = function()
+    {
+        if ($scope.IngenicoActive) {
+            $('#MdlIngenicoSifre').modal({backdrop: 'static', keyboard: false});
+            FocusBarkod = false;
+            FocusAraToplam = false;
+            FocusMusteri = false;
+            FocusStok = false;
+            FocusKartOdeme = false;
+            FirstKey = false;
+            FocusYetkiliSifre = false;
+            FocusKasaSifre = false;
+            FocusIade = false;
+            FocusCekmeceAc = false;
+            FocusRefresh = false;
+            FocusIngenicoSifre=true;
+        }
+            let GirisOnayi = false;
+
+            if('08022022' == $scope.TxtIngenicoSifre)
+            {
+                GirisOnayi = true;
+            }
+            if (GirisOnayi==true) 
+            {
+                if (document.getElementById("IngenicoActive").value='a')
+                {
+                    db.SafeApply($scope,function()
+                    {
+                        $("#MdlIngenicoSifre").modal("hide");
+                        document.getElementById("IngenicoActive").value='p';
+                    });
+                }
+            }
+            else
+            {
+                $scope.TxtIngenicoSifre="";
+                db.SafeApply($scope,function()
+                {
+                    document.getElementById("IngenicoActive").value='a';
+                });
+            }
     }
     $scope.BtnIngTahList = async function(pType,pIndex)
     {

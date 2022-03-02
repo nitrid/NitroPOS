@@ -1001,11 +1001,14 @@
                                 </label>
                             </div>
                             <div class="col-3">
-                                <div class="float-left mr-5">
-                                    <input type="checkbox" id="IngenicoActive" ng-model = "IngenicoActive" name="inputiCheckBasicCheckboxes"  data-plugin="switchery" checked/>
-                                </div>
-                                <label class="pt-3">INGENICO</label>
-                            </div>
+                                <select class="form-control form-control-sm ng-pristine ng-untouched ng-valid ng-not-empty" ng-click="ChgIngenicoActive()" ng-model="IngenicoActive" id="IngenicoActive">
+                                    <option value="a" selected="selected">AKTİF</option>
+                                    <option value="p">PASİF</option>
+                                </select>
+                            <!-- <div class="float-left mr-5">
+                                <input type="checkbox" id="IngenicoActive" ng-change="ChgIngenicoActive(IngenicoActive)"  ng-model ="IngenicoActive" name="inputiCheckBasicCheckboxes"  data-plugin="switchery" checked=/>
+                            </div> -->
+                        </div>
                         </div>
                         <div class="row">
                             <div class="col-2">
@@ -2786,6 +2789,85 @@
                         <div class="row py-1">
                             <div class="col-12">
                                 <button type="text" class="form-control btn-danger btn btn-block font-size-15" style="height:60px; font-size: 18px;" ng-click="BtnRefresh(1)">Giriş</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Ingenico şifre -->
+        <div class="modal fade" id="MdlIngenicoSifre" aria-hidden="true" aria-labelledby="examplePositionCenter" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple modal-primary modal-center modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click = "BtnMdlIngenicoModalClose()">
+                            <span aria-hidden="true">X</span>
+                        </button>
+                        <h4 class="modal-title">Şifre Giriş</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group my-5">
+                                            <div class="input-group">
+                                                <input type="password" class="form-control h-50" id="TxtIngenicoSifre" ng-model="TxtIngenicoSifre" 
+                                                style="font-size: 20pt;font-weight: bold; border-width: 3px;border-color: #428bca;" ng-click="TxtIngenicoSifrePress($event)">
+                                            </div>
+                                        </div>
+                                    </div>                                                     
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row py-1">
+                            <div class="col-4">
+                                <button type="text" class="form-control btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('7')">7</button>
+                            </div>
+                            <div class="col-4">
+                                <button type="text" class="form-control btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('8')">8</button>
+                            </div>
+                            <div class="col-4">
+                                <button type="text" class="form-control btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('9')">9</button>
+                            </div>
+                        </div>
+                        <div class="row py-1">
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('4')">4</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('5')">5</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('6')">6</button>
+                            </div>
+                        </div>
+                        <div class="row py-1">
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('1')">1</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('2')">2</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('3')">3</button>
+                            </div>
+                        </div>
+                        <div class="row py-1">
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('0')">0</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnTusClick('.')">.</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="text" class="form-control-lg  btn-primary btn btn-secondary btn-block font-size-20" style="height:60px;" ng-click="BtnSilClick()"><i class="fas fa-backspace fa-lg" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row py-1">
+                            <div class="col-12">
+                                <button type="text" class="form-control btn-danger btn btn-block font-size-15" style="height:60px; font-size: 18px;" ng-click="ChgIngenicoActive(IngenicoActive)">Giriş</button>
                             </div>
                         </div>
                     </div>
