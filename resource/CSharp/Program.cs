@@ -23,6 +23,7 @@ namespace Ingenico
         static List<TerpTaxList> TerpTaxList = new List<TerpTaxList>();
         static int ProcStatus = 0;
         static int numberOfTotalTaxRates;
+        static int numberOfTotalDepartments;
         static ST_TICKET ActiveTicket = null;
         Dictionary<UInt32, ST_TAX_RATE[]> TransactionTaxRateList;
         ST_TAX_RATE[] stTaxRates;
@@ -32,11 +33,27 @@ namespace Ingenico
             {
                 string line = Console.ReadLine();
                 string tag = line.Split('|')[0];
-                
+
                 if (tag == "PING")
                 {
                     line = Ping();
-                    Console.WriteLine(line);
+
+                    if(line == "0")
+                    {
+                        Console.WriteLine("PING|SUCCESS:" + line + "~" + "ISLEM BASARILI" + "!" + "{}");
+                    }
+                    else if (line == "-1")
+                    {
+                        Console.WriteLine("PING|BUSY:" + line + "~" + "CIHAZ MESGUL" + "!" + "{}");
+                    }
+                    else if (line == "-2")
+                    {
+                        Console.WriteLine("PING|TIMEOUT:" + line + "~" + "ZAMAN ASIMI" + "!" + "{}");
+                    }
+                    else if (line == "-3")
+                    {
+                        Console.WriteLine("PING|ERROR:" + line + "~" + "ESLESME YAPILAMADI" + "!" + "{}");
+                    }
                 }
                 else if (tag == "PAIRING")
                 {
@@ -47,98 +64,167 @@ namespace Ingenico
                 {
                     if (line.Split('|').Length > 0)
                     {
-                        ActiveTicket = null;
-                        if (OpenHandle() != 0)
+                        bool BatchStatus;
+                        ProcStatus = TicketControl();
+
+                        if (ProcStatus == 0)
                         {
-                            Console.WriteLine("ITEM_SALE|RELOAD:9999~" + ReturnTicketToString());
+                            OpenHandle();
+                            TicketHeader();
+                            OptionFlag();
+                            ItemSend(line.Split('|')[1]);
+                            BatchStatus = ProcessBatchCommand();
+                            ClearProcessBatchCommand();
+
+                            if (BatchStatus == false)
+                            {
+                                Console.WriteLine("ITEM_SALE|FAULT:" + ProcStatus.ToString() + "~" + CallBackInfo(ProcStatus) + "!" + ReturnTicketToString());
+                                TicketCancel();
+                                ProcessBatchCommand();
+                                ClearProcessBatchCommand();
+                            }
+                            else
+                            {
+                                Console.WriteLine("ITEM_SALE|SUCCESS:" + ProcStatus.ToString() + "~" + CallBackInfo(ProcStatus) + "!" + ReturnTicketToString());
+                            }
                         }
                         else
                         {
-                            TicketHeader();
-                            OptionFlag();
+                            Console.WriteLine("ITEM_SALE|FAULT:" + ProcStatus.ToString() + "~" + CallBackInfo(ProcStatus) + "!" + ReturnTicketToString());
+                        }
+                    }
+                }
+                else if (tag == "PAYMENT")
+                {
+                    if (line.Split('|').Length > 0)
+                    {
+                        bool BatchStatus;
+                      
+                        PaymentSend(line.Split('|')[1]);
+                        BatchStatus = ProcessBatchCommand();
+                        ClearProcessBatchCommand();
 
-                            JObject TmpMaster = JObject.Parse(line.Split('|')[1]);
-                            foreach (JProperty MasterItem in TmpMaster.Properties())
-                            {
-                                if (MasterItem.Name == "SALES")
-                                {
-                                    JArray TmpSales = JArray.Parse(MasterItem.Value.ToString());
-                                    foreach (JObject SalesItem in TmpSales.Children<JObject>())
-                                    {
-                                        AddItem(SalesItem.Property("NAME").Value.ToString(), (UInt32)SalesItem.Property("QUANTITY").Value, (uint)SalesItem.Property("AMOUNT").Value, (int)SalesItem.Property("TAX").Value, (int)SalesItem.Property("TYPE").Value, (string)SalesItem.Property("GUID").Value );
-                                    }
-                                }
-                                else if (MasterItem.Name == "PAYMENT")
-                                {
-                                    JArray TmpPayment = JArray.Parse(MasterItem.Value.ToString());
-                                    foreach (JObject PaymentItem in TmpPayment.Children<JObject>())
-                                    {
-                                        CashPayment((int)PaymentItem.Property("TYPE").Value, (UInt32)PaymentItem.Property("AMOUNT").Value, (string)PaymentItem.Property("GUID"));
-                                    }
-                                }
-                            }
-
+                        if (BatchStatus)
+                        {
                             TotalPrint();
                             MFPrintBefore();
                             MFPrint();
                             CloseHandle();
-
-                            if (ProcessBatchCommand())
-                            {
-                                Console.WriteLine("ITEM_SALE|SUCCESS:" + ProcStatus.ToString() + '~' + ReturnTicketToString());
-                            }
-                            else
-                            {
-                                Console.WriteLine("ITEM_SALE|FAULT:" + ProcStatus.ToString() + '~' + ReturnTicketToString());
-                            }
-
-                            ClearProcessBatchCommand();
-                        }
-                    }
-                }
-                else if (tag == "R_PAYMENT")
-                {
-                    if (line.Split('|').Length > 0)
-                    {
-                        ActiveTicket = null;
-
-                        JObject TmpMaster = JObject.Parse(line.Split('|')[1]);
-                        foreach (JProperty MasterItem in TmpMaster.Properties())
-                        {   
-                            if (MasterItem.Name == "PAYMENT")
-                            {
-                                JArray TmpPayment = JArray.Parse(MasterItem.Value.ToString());
-                                foreach (JObject PaymentItem in TmpPayment.Children<JObject>())
-                                {
-                                    CashPayment((int)PaymentItem.Property("TYPE").Value, (UInt32)PaymentItem.Property("AMOUNT").Value, (string)PaymentItem.Property("GUID").Value);
-                                }
-                            }
-                        }
-
-                        TotalPrint();
-                        MFPrintBefore();
-                        MFPrint();
-                        CloseHandle();
-
-                        if (ProcessBatchCommand())
-                        {
-                            Console.WriteLine("ITEM_SALE|SUCCESS:" + ProcStatus.ToString() + '~' + ReturnTicketToString());
+                            ProcessBatchCommand();
+                            Console.WriteLine("PAYMENT|SUCCESS:" + ProcStatus.ToString() + "~" + CallBackInfo(ProcStatus) + "!" + ReturnTicketToString());
                         }
                         else
                         {
-                            if (ProcStatus != Defines.TRAN_RESULT_OK)
-                            {
-                                Console.WriteLine("R_PAYMENT|FAULT:" + ProcStatus.ToString() + '~' + ReturnTicketToString());
-                            }
+                            Console.WriteLine("PAYMENT|FAULT:" + ProcStatus.ToString() + "~" + CallBackInfo(ProcStatus) + "!" + ReturnTicketToString());
                         }
-
                         ClearProcessBatchCommand();
                     }
                 }
-                else if (tag == "TICKET_CLOSE")
+                else if (tag == "INVOICE")
                 {
-                    line = TicketClose();
-                    Console.WriteLine(line);
+                    if (line.Split('|').Length > 0)
+                    {
+                        bool BatchStatus;
+                        ProcStatus = TicketControl();
+
+                        if (ProcStatus == 0)
+                        {
+                            OpenHandle();
+                            InvoiceSend(line.Split('|')[1]);
+                            BatchStatus = ProcessBatchCommand();
+                            ClearProcessBatchCommand();
+
+                            if (BatchStatus == false)
+                            {
+                                Console.WriteLine("INVOICE|FAULT:" + ProcStatus.ToString() + "~" + CallBackInfo(ProcStatus));
+                            }
+                            else
+                            {
+                                TotalPrint();
+                                MFPrintBefore();
+                                MFPrint();
+                                CloseHandle();
+                                ProcessBatchCommand();
+                                ClearProcessBatchCommand();
+                                Console.WriteLine("INVOICE|SUCCESS:" + ProcStatus.ToString() + "~" + CallBackInfo(ProcStatus));
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("INVOICE|FAULT:" + ProcStatus.ToString() + "~" + CallBackInfo(ProcStatus));
+                        }
+                    }
+                }
+                else if (tag == "PAYMENT_CANCEL")
+                {
+                    if (line.Split('|').Length > 0)
+                    {
+                        UInt32 Status = PaymentCancel(line.Split('|')[1]);
+
+                        if (Status == 0)
+                        {
+                            Console.WriteLine("PAYMENT_CANCEL|SUCCESS:" + Status + "~" + CallBackInfo((int)Status) + "!" + ReturnTicketToString());
+                        }
+                        else
+                        {
+                            Console.WriteLine("PAYMENT_CANCEL|FAULT:" + Status + "~" + CallBackInfo((int)Status) + "!" + ReturnTicketToString());
+                        }
+                    }
+                }
+                else if (tag == "TIMEOUT_TICKET_CONTROL")
+                {
+                    Console.WriteLine("TIMEOUT_TICKET_CONTROL|SUCCESS:" + 0 + "~" + TimeOutTicketControl() + "!" + ReturnTicketToString());
+                }
+                else if (tag == "HANDLE_CLOSE")
+                {
+                    TotalPrint();
+                    MFPrintBefore();
+                    MFPrint();
+                    CloseHandle();
+                    ProcessBatchCommand();
+                    ClearProcessBatchCommand();
+                    Console.WriteLine("HANDLE_CLOSE|SUCCESS:" + 0 + "~" + CallBackInfo(0) + "!" + ReturnTicketToString());
+                }
+                else if (tag == "CLOSE")
+                {
+                    CloseHandle();
+                    ProcessBatchCommand();
+                    ClearProcessBatchCommand();
+                    Console.WriteLine("CLOSE|SUCCESS:" + 0 + "~" + CallBackInfo(0) + "!" + ReturnTicketToString());
+                }
+                else if (tag == "TICKET_CANCEL")
+                {
+                    TicketCancel();
+                    ProcessBatchCommand();
+                    ClearProcessBatchCommand();
+                    Console.WriteLine("TICKET_CANCEL|SUCCESS:" + 0 + "~" + CallBackInfo(0) + "!" + ReturnTicketToString());
+                }
+                else if (tag == "TAX_INFO")
+                {
+                    if (line.Split('|').Length > 0)
+                    {
+                        JArray TmpIndex = JArray.Parse(line.Split('|')[1]);
+                        string TmpTax = "[";
+
+                        for (int i = 0; i < TmpIndex.Count; i++)
+                        {
+                            TmpTax = TmpTax + "{";
+
+                            TmpTax = TmpTax + TmpIndex[i] + ":" + (TaxInfo((int)TmpIndex[i]));
+
+                            if (i == TmpIndex.Count - 1)
+                            {
+                                TmpTax = TmpTax + "}";
+                            }
+                            else
+                            {
+                                TmpTax = TmpTax + "},";
+                            }
+                        }
+
+                        TmpTax = TmpTax + "]";
+                        Console.WriteLine("TAX_INFO|SUCCESS:" + 0 + "~" + TmpTax + "!" + ReturnTicketToString());
+                    }
                 }
                 else if (tag == "Z_REPORT")
                 {
@@ -177,37 +263,6 @@ namespace Ingenico
                         Console.WriteLine(line);
                     }
                 }
-                else if (tag == "INVOICE")
-                {
-                    if (line.Split('|').Length > 0)
-                    {
-                        OpenHandle();
-
-                        JObject TmpMaster = JObject.Parse(line.Split('|')[1]);
-                        Invoice(TmpMaster.Property("NO").Value.ToString(), TmpMaster.Property("VKN").Value.ToString(), (UInt32)TmpMaster.Property("AMOUNT").Value, (int)TmpMaster.Property("TYPE").Value, (string)TmpMaster.Property("GUID").Value);
-
-                        TotalPrint();
-                        MFPrintBefore();
-                        MFPrint();
-                        CloseHandle();
-
-                        string result = JsonConvert.SerializeObject(CommandList);
-
-                        if (ProcessBatchCommand())
-                        {
-                            Console.WriteLine("INVOICE|SUCCESS:" + ProcStatus.ToString() + '~' + ReturnTicketToString());
-                        }
-                        else
-                        {
-                            if (ProcStatus != Defines.TRAN_RESULT_OK)
-                            {
-                                Console.WriteLine("INVOICE|FAULT:" + ProcStatus.ToString() + '~' + ReturnTicketToString());
-                            }
-                        }
-
-                        ClearProcessBatchCommand();
-                    }
-                }
                 else if (tag == "ENDCOPY")
                 {
                     if (line.Split('|').Length > 0)
@@ -228,60 +283,206 @@ namespace Ingenico
                     line = OpenSafe();
                     Console.WriteLine(line);
                 }
-                else if (tag == "TAXINFO")
-                {
-                    line = TaxInfo();
-                    Console.WriteLine("TAXINFO|SUCCESS:" + line);
-                }
-                else if (tag == "PAYMENTCANCEL")
-                {
-                    if (line.Split('|').Length > 0)
-                    {
-                        JArray TmpIndex = JArray.Parse(line.Split('|')[1]);
-
-                        for (int i = 0; i < TmpIndex.Count; i++)
-                        {
-                            line = PaymentCancel((ushort)TmpIndex[i]);
-                            Console.WriteLine(line + "~" + ReturnTicketToString());
-                        }
-                    }
-                }
-                else if (tag == "TICKETHANDLECLOSE")
-                {
-                    line = TicketOrHandleClose();
-                    ClearTransactionUniqueId(CurrentInterface);
-                    ProcessBatchCommand();
-                    ClearProcessBatchCommand();
-                    Console.WriteLine(line);
-                }
-                else if (tag == "GETTICKET")
-                {
-                    line = "GETTICKET|SUCCESS:0000" + "~" + ReturnTicketToString();
-                    Console.WriteLine(line);
-                }
-                else if(tag == "CLOSEHANDLE")
-                {
-                    TotalPrint();
-                    MFPrintBefore();
-                    MFPrint();
-                    CloseHandle();
-
-                    if (ProcessBatchCommand())
-                    {
-                        Console.WriteLine("CLOSEHANDLE|SUCCESS:" + ProcStatus.ToString() + '~' + ReturnTicketToString());
-                    }
-                    else
-                    {
-                        Console.WriteLine("CLOSEHANDLE|FAULT:" + ProcStatus.ToString() + '~' + ReturnTicketToString());
-                    }
-
-                    ClearProcessBatchCommand();
-                }
                 if (tag == "exit") // Check string
                 {
                     break;
                 }
             }
+        }
+        private static string ItemSend(string pData)
+        {
+            if (ActiveTicket.TotalReceiptAmount == 0)
+            {
+                JObject TmpMaster = JObject.Parse(pData);
+
+                foreach (JProperty MasterItem in TmpMaster.Properties())
+                {
+                    if (MasterItem.Name == "SALES")
+                    {
+                        JArray TmpSales = JArray.Parse(MasterItem.Value.ToString());
+                        foreach (JObject SalesItem in TmpSales.Children<JObject>())
+                        {
+                            AddItem(SalesItem.Property("NAME").Value.ToString(), (UInt32)SalesItem.Property("QUANTITY").Value, (uint)SalesItem.Property("AMOUNT").Value, (int)SalesItem.Property("TAX").Value, (int)SalesItem.Property("TYPE").Value);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                return "ADDITEM|FAULT:9999~RECEIPT AMOUNT";
+            }
+
+            return "ADDITEM|SUCCESS";
+        }
+        private static string PaymentSend(string pData)
+        {
+            JObject TmpMaster = JObject.Parse(pData);
+
+            foreach (JProperty MasterItem in TmpMaster.Properties())
+            {
+                if (MasterItem.Name == "PAYMENT")
+                {
+                    JArray TmpPayment = JArray.Parse(MasterItem.Value.ToString());
+                    foreach (JObject PaymentItem in TmpPayment.Children<JObject>())
+                    {
+                        CashPayment((int)PaymentItem.Property("TYPE").Value, (UInt32)PaymentItem.Property("AMOUNT").Value);
+                    }
+                }
+            }
+
+            return "ADDPAYMENT|SUCCESS";
+        }
+        private static string InvoiceSend(string pData)
+        {
+            JObject TmpMaster = JObject.Parse(pData);
+
+            foreach (JProperty MasterItem in TmpMaster.Properties())
+            {
+                if (MasterItem.Name == "INVOICE")
+                {
+                    JArray TmpInvoice = JArray.Parse(MasterItem.Value.ToString());
+                    foreach (JObject PaymentItem in TmpInvoice.Children<JObject>())
+                    {
+                        Invoice(PaymentItem.Property("NO").Value.ToString(), PaymentItem.Property("VKN").Value.ToString(), (UInt32)PaymentItem.Property("AMOUNT").Value, (int)PaymentItem.Property("TYPE").Value);
+                    }
+                }
+            }
+
+            return "INVOICE|SUCCESS";
+        }
+        private static UInt32 PaymentCancel(string pData)
+        {
+            JArray TmpIndex = JArray.Parse(pData);
+
+            UInt32 RetCode = 0;
+
+            for (int i = 0; i < TmpIndex.Count; i++)
+            {
+                RetCode = Json_GMPSmartDLL.FP3_VoidPayment(CurrentInterface, GetTransactionHandle(CurrentInterface), (ushort)TmpIndex[i], ref ActiveTicket, Defines.TIMEOUT_CARD_TRANSACTIONS);
+
+                if(RetCode != 0)
+                {
+                    return RetCode;
+                }
+            }
+
+            return RetCode;
+        }
+        private static string TimeOutTicketControl()
+        {
+            Json_GMPSmartDLL.FP3_GetTicket(CurrentInterface, GetTransactionHandle(CurrentInterface), ref ActiveTicket, Defines.TIMEOUT_DEFAULT);
+            
+            if (ActiveTicket.TotalReceiptAmount == ActiveTicket.TotalReceiptPayment)
+            {
+                return "ISLEMI KAPAT";
+            }
+            else if(ActiveTicket.TotalReceiptPayment > 0)
+            {
+                return "TAHSILAT IPTALI VE FIS IPTALI YAP";
+            }
+            else if(ActiveTicket.TotalReceiptPayment == 0)
+            {
+                return "FIS IPTALI GERCEKLESTIR";
+            }
+
+            return "ISLEM BASARISIZ";
+        }
+        static int TicketControl()
+        {
+            byte[] UniqueId = new byte[24] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+            UInt32 RetCode;
+            UInt64 TranHandle = 0;
+
+            RetCode = GMPSmartDLL.FP3_Start(CurrentInterface, ref TranHandle, 0, UniqueId, UniqueId.Length, null, 0, null, 0, Defines.TIMEOUT_DEFAULT);
+
+            return (int)RetCode;
+        }
+        private static string CallBackInfo(int pInfo)
+        {
+            if (pInfo == 0)
+                return "ISLEM BASARILI";
+            if (pInfo == 32)
+                return "CIHAZA KAGIT TAKIN";
+            else if (pInfo == 2317)
+                return "HANDLE BILGISI HATALI CIHAZI YENIDEN ESLESTIRIN";
+            else if (pInfo == 2080)
+                return "CIHAZ UZERINDE ISLEM MEVCUT, ISLEMI KAPATIN";
+            else if (pInfo == 2067)
+                return "FIS LIMITI ASILAMAZ";
+            else if (pInfo == 2085 || pInfo == 2086 || pInfo == 2087)
+                return "TAHSILAT ALINAMADI";
+            else if (pInfo == 2001)
+                return "IPTAL EDILECEK SATIR BULUNAMADI";
+            else if (pInfo == 2069)
+                return "CIHAZ UZERINDE ODEME MEVCUT, ODEMEYI IPTAL EDIN";
+            else if (pInfo == 2358)
+                return "BILINMEYEN HATA OLUSTU, CIHAZI SIFIRLAYIP TEKRAR ESLESTIRIN";
+            else if (pInfo == 61443)
+                return "BELIRTILEN SUREDE ISLEM YAPILMADI";
+            else if (pInfo == 61468)
+                return "TERMINAL MESGUL";
+            else if (pInfo == 61445)
+                return "CIHAZA KAGIT TAKIN";
+            else if (pInfo == 2338)
+                return "ESLESME BASARISIZ";
+            else if (pInfo == 2310)
+                return "TARIH SAAT BILGISI YANLIS";
+
+            return "ISLEM BASARISIZ";
+        }
+        static string Invoice(string pNo, string pVkn, UInt32 pAmount, int pType)
+        {
+            ST_TICKET m_stTicket = new ST_TICKET();
+            ST_INVIOCE_INFO stInvoiceInfo = new ST_INVIOCE_INFO();
+            stInvoiceInfo.source = (byte)0;
+            stInvoiceInfo.amount = pAmount;
+            stInvoiceInfo.currency = 949;
+            stInvoiceInfo.no = new byte[25];
+            ConvertAscToBcdArray(pNo, ref stInvoiceInfo.no, stInvoiceInfo.no.Length);
+            stInvoiceInfo.tck_no = new byte[12];
+            ConvertAscToBcdArray(pVkn, ref stInvoiceInfo.tck_no, stInvoiceInfo.tck_no.Length);
+            stInvoiceInfo.vk_no = new byte[12];
+            ConvertAscToBcdArray(pVkn, ref stInvoiceInfo.vk_no, stInvoiceInfo.vk_no.Length);
+
+            stInvoiceInfo.date = new byte[3];
+            DateTime TmpDate = DateTime.Now;
+            string dateStr = TmpDate.Day.ToString().PadLeft(2, '0') + TmpDate.Month.ToString().PadLeft(2, '0') + TmpDate.Year.ToString().Substring(2, 2).PadLeft(2, '0');
+            ConvertStringToHexArray(dateStr, ref stInvoiceInfo.date, 3);
+            Array.Reverse(stInvoiceInfo.date);
+
+            byte[] buffer = new byte[1024];
+            int bufferLen = 0;
+
+            bufferLen = Json_GMPSmartDLL.prepare_SetInvoice(buffer, buffer.Length, ref stInvoiceInfo);
+            AddIntoCommandBatch("prepare_SetInvoice", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen);
+
+            Array.Clear(buffer, 0, buffer.Length);
+            bufferLen = 0;
+            bufferLen = GMPSmartDLL.prepare_TicketHeader(buffer, buffer.Length, TTicketType.TInvoice);
+            AddIntoCommandBatch("prepare_TicketHeader", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen);
+
+            CashPayment(pType, pAmount);
+
+
+            return "INVOICE";
+        }
+        static string TicketCancel()
+        {
+            UInt32 RetCode = 0;
+
+            byte[] buffer = new byte[1024];
+            int bufferLen = 0;
+
+            bufferLen = GMPSmartDLL.prepare_VoidAll(buffer, buffer.Length);
+            AddIntoCommandBatch("prepare_VoidAll", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen);
+
+            Array.Clear(buffer, 0, buffer.Length);
+            bufferLen = 0;
+
+            bufferLen = GMPSmartDLL.prepare_Close(buffer, buffer.Length);
+            AddIntoCommandBatch("prepare_Close", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen);
+
+            return "TICKETCLOSE|SUCCESS";
         }
         private static string GenerateUniqueId()
         {
@@ -388,7 +589,7 @@ namespace Ingenico
             UInt32 InterfaceCount = GMPSmartDLL.FP3_GetInterfaceHandleList(InterfaceList, (UInt32)InterfaceList.Length);
             return InterfaceList[0];
         }
-        private static void AddIntoCommandBatch(string commandName, int commandType, byte[] buffer, int bufferLen, string guid)
+        private static void AddIntoCommandBatch(string commandName, int commandType, byte[] buffer, int bufferLen)
         {
             byte[] dataPtr = new byte[bufferLen + 6];
             byte[] type = new byte[4];
@@ -408,8 +609,8 @@ namespace Ingenico
 
             Buffer.BlockCopy(buffer, 0, dataPtr, 6, bufferLen);
 
-            TerpItemList.Add(new TerpItemList() { Name = commandName, Status = "", Guid = guid });
-            CommandList.Add(new CommandItem() { Name = commandName, Buffer = ByteArrayToString(dataPtr, bufferLen + 6), Guid = guid });
+            TerpItemList.Add(new TerpItemList() { Name = commandName, Status = ""});
+            CommandList.Add(new CommandItem() { Name = commandName, Buffer = ByteArrayToString(dataPtr, bufferLen + 6)});
         }
         private static void StringToByteArray(string s, byte[] Out_byteArr, ref int Out_byteArrLen)
         {
@@ -629,17 +830,16 @@ namespace Ingenico
             UInt32 retcode;
             retcode = GMPSmartDLL.FP3_Ping(CurrentInterface, 1100);
 
-
             switch (retcode)
             {
                 case Defines.TRAN_RESULT_OK:
-                    return "PING|CONNECTED";
+                    return "0";
                 case Defines.DLL_RETCODE_RECV_BUSY:
-                    return "PING|BUSY";
+                    return "-1";
                 case Defines.DLL_RETCODE_TIMEOUT:
-                    return "PING|TIMEOUT";
+                    return "-2";
                 default:
-                    return "PING|ERROR";
+                    return "-3";
             }
         }
         static string StartPairing()
@@ -653,7 +853,7 @@ namespace Ingenico
 
             if (RetCode != Defines.TRAN_RESULT_OK)
             {
-                return "PAIRING|FAULT:" + RetCode.ToString() + "~" + ReturnTicketToString();
+                return "PAIRING|FAULT:" + RetCode.ToString() + "~" + CallBackInfo((int)RetCode) + "!" + ReturnTicketToString();
             }
 
             pairing.szExternalDeviceBrand = "INGENICO";
@@ -668,7 +868,7 @@ namespace Ingenico
 
             if (RetCode != Defines.TRAN_RESULT_OK)
             {
-                return "PAIRING|FAULT:" + RetCode.ToString() + "~" + ReturnTicketToString();
+                return "PAIRING|FAULT:" + RetCode.ToString() + "~" + CallBackInfo((int)RetCode) + "!" + ReturnTicketToString();
             }
 
             byte[] UniqueId = new byte[24] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
@@ -683,7 +883,7 @@ namespace Ingenico
                 //RetCode = ReloadTransaction();
                 flag = 1;
 
-                return "PAIRING|SUCCESS:" + RetCode.ToString() + "~" + ReturnTicketToString();
+                return "PAIRING|SUCCESS:" + RetCode.ToString() + "~" + CallBackInfo((int)RetCode) + "!" + ReturnTicketToString();
             }
 
             if (flag != 1)
@@ -702,7 +902,7 @@ namespace Ingenico
                 flag = 0;
             }
 
-            return "PAIRING|SUCCESS:" + RetCode.ToString() + "~" + ReturnTicketToString();
+            return "PAIRING|SUCCESS:" + RetCode.ToString() + "~" + CallBackInfo((int)RetCode) + "!" + ReturnTicketToString();
         }
         static int OpenHandle()
         {
@@ -718,13 +918,14 @@ namespace Ingenico
             {
                 //Eğer cihaz üzerinde işlem varsa getiriliyor.
                 RetCode = ReloadTransaction();
-                if(RetCode == Defines.TRAN_RESULT_OK)
+                ProcStatus = (int)RetCode;
+                if (RetCode == Defines.TRAN_RESULT_OK)
                 {
-                    return 1; //Cihaz üzerindeki işlem başarılı bir şekilde getiriliyorsa
+                    return (int)RetCode; //Cihaz üzerindeki işlem başarılı bir şekilde getiriliyorsa
                 }
                 else
                 {
-                    return 2; //Cihaz üzerindeki işlem getirilemiyorsa.
+                    return (int)RetCode; //Cihaz üzerindeki işlem getirilemiyorsa.
                 }
             }
             else
@@ -745,7 +946,7 @@ namespace Ingenico
             int bufferLen = 0;
 
             bufferLen = GMPSmartDLL.prepare_Start(buffer, buffer.Length, GetUniqueIdByInterface(CurrentInterface), 24, null, 0, null, 0);
-            AddIntoCommandBatch("prepare_Start", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen, "");
+            AddIntoCommandBatch("prepare_Start", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen);
 
             return 0;
         }
@@ -755,7 +956,7 @@ namespace Ingenico
             int bufferLen = 0;
 
             bufferLen = GMPSmartDLL.prepare_Close(buffer, buffer.Length);
-            AddIntoCommandBatch("prepare_Close", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen, "");
+            AddIntoCommandBatch("prepare_Close", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen);
 
             return "CLOSE HANDLE";
         }
@@ -765,7 +966,7 @@ namespace Ingenico
             int bufferLen = 0;
 
             bufferLen = GMPSmartDLL.prepare_TicketHeader(buffer, buffer.Length, TTicketType.TProcessSale);
-            AddIntoCommandBatch("prepare_TicketHeader", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen, "");
+            AddIntoCommandBatch("prepare_TicketHeader", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen);
 
             return "TICKET HEADER";
         }
@@ -775,16 +976,15 @@ namespace Ingenico
             int bufferLen = 0;
 
             bufferLen = GMPSmartDLL.prepare_OptionFlags(buffer, buffer.Length, Defines.GMP3_OPTION_ECHO_PRINTER | Defines.GMP3_OPTION_ECHO_ITEM_DETAILS | Defines.GMP3_OPTION_ECHO_PAYMENT_DETAILS, 0);
-            AddIntoCommandBatch("prepare_OptionFlags", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen, "");
+            AddIntoCommandBatch("prepare_OptionFlags", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen);
 
             return "OPTION FLAG";
         }
-        static string AddItem(string pName, UInt32 pQuantity, uint pAmount, int pTax, int pType, string pGuid)
+        static string AddItem(string pName, UInt32 pQuantity, uint pAmount, int pTax, int pType)
         {
             UInt16 currency = 949;
             UInt32 itemCount = pQuantity;
             UInt32 precition = 0;
-            byte unitType = 0;//(byte)EItemUnitTypes.ITEM_KILOGRAM; 0 adet, 2 kilogram
             ST_TICKET m_stTicket = new ST_TICKET();
             ST_ITEM stItem = new ST_ITEM();
 
@@ -821,11 +1021,11 @@ namespace Ingenico
             int bufferLen = 0;
 
             bufferLen = Json_GMPSmartDLL.prepare_ItemSale(buffer, buffer.Length, ref stItem);
-            AddIntoCommandBatch("prepare_ItemSale", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen, pGuid);
+            AddIntoCommandBatch("prepare_ItemSale", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen);
 
             return "ADD ITEM";
         }
-        static string CashPayment(int pType, UInt32 pAmount, string pGuid)
+        static string CashPayment(int pType, UInt32 pAmount)
         {
             UInt16 currencyOfPayment = (UInt16)ECurrency.CURRENCY_TL;
             ST_PAYMENT_REQUEST[] stPaymentRequest = new ST_PAYMENT_REQUEST[1];
@@ -860,7 +1060,7 @@ namespace Ingenico
             int bufferLen = 0;
 
             bufferLen = Json_GMPSmartDLL.prepare_Payment(buffer, buffer.Length, ref stPaymentRequest[0]);
-            AddIntoCommandBatch("prepare_Payment", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen, pGuid);
+            AddIntoCommandBatch("prepare_Payment", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen);
             return "PAYMENT";
         }
         static string TotalPrint()
@@ -869,7 +1069,7 @@ namespace Ingenico
             int bufferLen = 0;
 
             bufferLen = GMPSmartDLL.prepare_PrintTotalsAndPayments(buffer, buffer.Length);
-            AddIntoCommandBatch("prepare_PrintTotalsAndPayments", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen, "");
+            AddIntoCommandBatch("prepare_PrintTotalsAndPayments", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen);
 
             return "TOTAL PRINT";
         }
@@ -879,7 +1079,7 @@ namespace Ingenico
             int bufferLen = 0;
 
             bufferLen = GMPSmartDLL.prepare_PrintBeforeMF(buffer, buffer.Length);
-            AddIntoCommandBatch("prepare_PrintBeforeMF", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen, "");
+            AddIntoCommandBatch("prepare_PrintBeforeMF", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen);
 
             return "MF PRINT BEFORE";
         }
@@ -889,30 +1089,9 @@ namespace Ingenico
             int bufferLen = 0;
 
             bufferLen = GMPSmartDLL.prepare_PrintMF(buffer, buffer.Length);
-            AddIntoCommandBatch("prepare_PrintMF", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen, "");
+            AddIntoCommandBatch("prepare_PrintMF", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen);
 
             return "MF PRINT";
-        }
-        static string TicketClose()
-        {
-            UInt32 RetCode = 0;
-
-            RetCode = Json_GMPSmartDLL.FP3_VoidAll(CurrentInterface, GetTransactionHandle(CurrentInterface), ref ActiveTicket, Defines.TIMEOUT_DEFAULT);
-            if (RetCode != 0)
-            {
-                return "TICKET CLOSE|FAULT";
-            }
-
-            uint resp = GMPSmartDLL.FP3_Close(CurrentInterface, GetTransactionHandle(CurrentInterface), Defines.TIMEOUT_DEFAULT);
-            if (RetCode != 0)
-            {
-                return "TICKET CLOSE|FAULT";
-            }
-
-            DeleteTrxHandles(CurrentInterface, GetTransactionHandle(CurrentInterface));
-            ClearTransactionUniqueId(CurrentInterface);
-
-            return "TICKET CLOSE|SUCCESS";
         }
         static string ZReports(string pPassword)
         {
@@ -1091,42 +1270,6 @@ namespace Ingenico
 
             return "TPAYMENT";
         }
-        static string Invoice(string pNo, string pVkn, UInt32 pAmount, int pType, string pGuid)
-        {
-            ST_TICKET m_stTicket = new ST_TICKET();
-            ST_INVIOCE_INFO stInvoiceInfo = new ST_INVIOCE_INFO();
-            stInvoiceInfo.source = (byte)0;
-            stInvoiceInfo.amount = pAmount;
-            stInvoiceInfo.currency = 949;
-            stInvoiceInfo.no = new byte[25];
-            ConvertAscToBcdArray(pNo, ref stInvoiceInfo.no, stInvoiceInfo.no.Length);
-            stInvoiceInfo.tck_no = new byte[12];
-            ConvertAscToBcdArray(pVkn, ref stInvoiceInfo.tck_no, stInvoiceInfo.tck_no.Length);
-            stInvoiceInfo.vk_no = new byte[12];
-            ConvertAscToBcdArray(pVkn, ref stInvoiceInfo.vk_no, stInvoiceInfo.vk_no.Length);
-
-            stInvoiceInfo.date = new byte[3];
-            DateTime TmpDate = DateTime.Now;
-            string dateStr = TmpDate.Day.ToString().PadLeft(2, '0') + TmpDate.Month.ToString().PadLeft(2, '0') + TmpDate.Year.ToString().Substring(2, 2).PadLeft(2, '0');
-            ConvertStringToHexArray(dateStr, ref stInvoiceInfo.date, 3);
-            Array.Reverse(stInvoiceInfo.date);
-
-            byte[] buffer = new byte[1024];
-            int bufferLen = 0;
-
-            bufferLen = Json_GMPSmartDLL.prepare_SetInvoice(buffer, buffer.Length, ref stInvoiceInfo);
-            AddIntoCommandBatch("prepare_SetInvoice", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen, pGuid);
-
-            Array.Clear(buffer, 0, buffer.Length);
-            bufferLen = 0;
-            bufferLen = GMPSmartDLL.prepare_TicketHeader(buffer, buffer.Length, TTicketType.TInvoice);
-            AddIntoCommandBatch("prepare_TicketHeader", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen, pGuid);
-
-            CashPayment(pType, pAmount, pGuid);
-
-
-            return "INVOICE";
-        }
         static string OpenSafe()
         {
             UInt32 RetCode = 0;
@@ -1155,9 +1298,10 @@ namespace Ingenico
 
             return "EKUCONTROL|SUCCESS:[{'DATA USED':" + pstEkuModuleInfo.Eku.DataUsedArea.ToString() + "},{'DATA FREE':" + pstEkuModuleInfo.Eku.DataFreeArea.ToString() + "}]";
         }
-        static string TaxInfo()
+        static string TaxInfo(int pTax)
         {
             UInt32 RetCode = 0;
+            pTax = pTax * 100;
 
             ST_TAX_RATE[] stTaxRates = new ST_TAX_RATE[8];
             int numberOfTotalTaxratesReceived = 0;
@@ -1171,14 +1315,37 @@ namespace Ingenico
 
             for (int i = 0; i < numberOfTotalTaxratesReceived; i++)
             {
-                TerpTaxList Tmp = new TerpTaxList();
-                Tmp.Index = i;
-                Tmp.Value = String.Format("%{0}.{1}", stTaxRates[i].taxRate / 100, (stTaxRates[i].taxRate % 100).ToString().PadLeft(2, '0'));
-
-                TerpTaxList.Add(Tmp);
+                if(stTaxRates[i].taxRate == pTax)
+                {
+                    return TaxDepartmentsInfo(i);
+                }
             }
 
-            return JsonConvert.SerializeObject(TerpTaxList);
+            return "TAXINFO|ERROR";
+        }
+        static string TaxDepartmentsInfo(int pTaxIndex)
+        {
+            UInt32 RetCode = 0;
+
+            ST_DEPARTMENT[] stDepartments = new ST_DEPARTMENT[11];
+            int numberOfTotalDepartmentsReceived = 0;
+
+            RetCode = Json_GMPSmartDLL.FP3_GetDepartments(CurrentInterface, ref numberOfTotalDepartments, ref numberOfTotalDepartmentsReceived, ref stDepartments, 11);
+
+            if (RetCode != 0)
+            {
+                return "TAXDEPINFO|ERROR";
+            }
+
+            for (int i = 0; i < numberOfTotalDepartmentsReceived; i++)
+            {
+                if (i == pTaxIndex)
+                {
+                    return stDepartments[i].u8TaxIndex.ToString();
+                }
+            }
+
+            return "TAXDEPINFO|ERROR";
         }
         private static string ReturnTicketToString()
         {
@@ -1264,38 +1431,6 @@ namespace Ingenico
             Tmp = Tmp + "}";
 
             return Tmp;
-        }
-        static string PaymentCancel(ushort pIndex)
-        {
-            UInt32 RetCode = 0;
-            ST_TICKET m_stTicket = new ST_TICKET();
-
-            RetCode = Json_GMPSmartDLL.FP3_VoidPayment(CurrentInterface, GetTransactionHandle(CurrentInterface), pIndex, ref m_stTicket, Defines.TIMEOUT_CARD_TRANSACTIONS);
-
-            if (RetCode == 0)
-            {
-                return "PAYMENTCANCEL|SUCCESS:" + RetCode; 
-            }
-            
-            return "PAYMENTCANCEL|FAULT:" + RetCode;
-        }
-        static string TicketOrHandleClose()
-        {
-            UInt32 RetCode = 0;
-
-            byte[] buffer = new byte[1024];
-            int bufferLen = 0;
-
-            bufferLen = GMPSmartDLL.prepare_VoidAll(buffer, buffer.Length);
-            AddIntoCommandBatch("prepare_VoidAll", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen, "");
-
-            Array.Clear(buffer, 0, buffer.Length);
-            bufferLen = 0;
-
-            bufferLen = GMPSmartDLL.prepare_Close(buffer, buffer.Length);
-            AddIntoCommandBatch("prepare_Close", Defines.GMP3_FISCAL_PRINTER_MODE_REQ, buffer, bufferLen, "");
-      
-            return "TICKETHANDLECLOSE|SUCCESS:0000~" + ReturnTicketToString();
         }
     }
 } 
