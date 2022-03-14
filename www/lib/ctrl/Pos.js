@@ -5128,6 +5128,7 @@ function Pos($scope,$window,$rootScope,db)
             if('08022022' == $scope.TxtIngenicoSifre)
             {
                 GirisOnayi = true;
+                $scope.TxtIngenicoSifre="";
             }
             if (GirisOnayi==true) 
             {
