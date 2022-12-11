@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "escpos": "^3.0.0-alpha.6",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-session": "^1.17.2",
     "moment": "^2.29.1",
     "msnodesqlv8": "^2.4.1",
